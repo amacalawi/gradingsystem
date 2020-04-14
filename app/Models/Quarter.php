@@ -8,7 +8,7 @@ class Quarter extends Model
 {	
     protected $guarded = ['id'];
 
-    protected $table = 'Quarters';
+    protected $table = 'quarters';
     
     public $timestamps = false;
 
