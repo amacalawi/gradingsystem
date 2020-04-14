@@ -1,0 +1,9 @@
+@media (max-width: 1366px) {
+  .m-wizard.m-wizard--1 .m-wizard__head .m-wizard__nav .m-wizard__steps .m-wizard__step .m-wizard__step-info .m-wizard__step-number > span {
+    width: 3rem;
+    height: 3rem;
+  }
+  .m-wizard.m-wizard--1 .m-wizard__head .m-wizard__nav .m-wizard__steps .m-wizard__step .m-wizard__step-line > span {
+    width: 1.5rem;
+  }
+}
