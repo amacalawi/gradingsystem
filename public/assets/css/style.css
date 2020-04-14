@@ -1,0 +1,309 @@
+@font-face {
+    font-family: AvenirLTStd-Book;
+    src: url("../fonts/AvenirLTStd-Book.woff");
+}
+@font-face {
+    font-family: Poppins-BoldItalic;
+    src: url("../fonts/Poppins-BoldItalic.ttf");
+}
+@font-face {
+    font-family: Poppins-Medium;
+    src: url("../fonts/Poppins-Medium.ttf");
+}
+@font-face {
+    font-family: Poppins-Regular;
+    src: url("../fonts/Poppins-Regular.ttf");
+}
+@font-face {
+    font-family: Poppins-SemiBold;
+    src: url("../fonts/Poppins-SemiBold.ttf");
+}
+@font-face {
+    font-family: Poppins-Light;
+    src: url("../fonts/Poppins-Light.ttf");
+}
+@font-face {
+    font-family: Poppins-LightItalic;
+    src: url("../fonts/Poppins-LightItalic.ttf");
+}
+@font-face {
+    font-family: Roboto;
+    src: url("../fonts/Roboto-Black.ttf");
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: Poppins-Regular;
+}
+
+.hidden {
+    display: none;
+}
+
+.add-btn,
+button:not([data-dismiss="alert"]) {
+    font-family: Poppins-Regular !important;
+}
+
+.m-checkbox.m-checkbox--solid > span:after {
+    border: solid #22b9ff;
+}
+
+.m-menu__subnav.school-year {
+    max-width: 160px;
+}
+
+.m-menu__subnav.school-year a.active {
+    background: #fdfaeb !important;
+}
+
+.m-menu__subnav.school-year a.active span {
+    color: #22b9ff !important;
+}
+
+.m-menu__link.m-menu__toggle.active span.m-menu__link-text {
+    color: #22b9ff !important;
+}
+
+.m-bottom-2 {
+    margin-bottom: 2.2rem;
+}
+
+.m-bottom-1 {
+    margin-bottom: 1.2rem;
+}
+
+.m-top-1 {
+    margin-top: 1.2rem;
+}
+
+.m-top-2 {
+    margin-top: 2.2rem;
+}
+
+.m-right-1 {
+    margin-right: 1.1rem;
+}
+
+.m-left-2 {
+    margin-left: 2.2rem;
+}
+
+.m-subheader.fix {
+    position: fixed;
+    z-index: 99;
+    width: calc(100% - 110px);
+    margin-bottom: 100px;
+    padding-bottom: 30px;   
+    background: #FAFAFC;
+    -webkit-box-shadow: 0px 2px 0px 0px rgba(69, 65, 78, 0.1);
+    -moz-box-shadow: 0px 2px 0px 0px rgba(69, 65, 78, 0.1);
+    box-shadow: 0px 2px 0px 0px rgba(69, 65, 78, 0.1);
+}
+
+.m-body .m-content.fix {
+    margin-top: 70px;
+}
+
+.minus-sibling,
+.minus-activity {
+    margin-top: 35px;
+}
+
+.m-login__logo img {
+    height: 100px;
+}
+
+.blockUI.blockMsg.blockElement {
+    left: 50% !important;
+    margin-left: -79.2px !important;
+}
+
+.closed-bg {
+    color: #fff;
+    text-shadow: 1px 1px #333;
+    background: #9E9E9E !important;
+    width: 88px !important;
+}
+
+.open-bg {
+    color: #444;
+    text-shadow: 1px 1px #eaeaea;
+    background: #eaeaea;
+    width: 88px !important;
+}
+
+.current-bg {
+    color: #fff;
+    text-shadow: 1px 1px #333;
+    background: #42A5F5 !important;
+    width: 88px !important;
+}
+
+.childhood-bg {
+    color: #444;
+    text-shadow: 1px 1px #eaeaea;
+    background: #eaeaea;
+    width: 88px !important;
+}
+
+.primary-bg {
+    color: #fff;
+    text-shadow: 1px 1px #333;
+    background: #34bfa3 !important;
+    width: 88px !important;
+}
+
+.secondary-bg {
+    color: #fff;
+    text-shadow: 1px 1px #333;
+    background: #42A5F5 !important;
+    width: 88px !important;
+}
+
+.higher-bg {
+    color: #fff;
+    text-shadow: 1px 1px #333;
+    background: #f12143 !important;
+    width: 88px !important;
+}
+
+/* AVATAR CSS */
+.avatar-upload {
+    position: relative;
+    max-width: 205px;
+    margin: auto;
+}
+.avatar-upload .avatar-edit {
+    position: absolute;
+    right: 30px;
+    z-index: 1;
+    top: 10px;
+}
+.avatar-upload .avatar-edit input {
+    display: none;
+}
+.avatar-upload .avatar-edit input + label {
+    display: inline-block;
+    width: 34px;
+    height: 34px;
+    margin-bottom: 0;
+    border-radius: 100%;
+    background: #FFFFFF;
+    border: 1px solid transparent;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+    font-weight: normal;
+    transition: all .2s ease-in-out;
+}
+.avatar-upload .avatar-edit input + label:hover {
+    background: #f1f1f1;
+    border-color: #d6d6d6;
+}
+.avatar-upload .avatar-edit input + label:after {
+    content: "\f040";
+    font-family: 'FontAwesome';
+    color: #757575;
+    position: absolute;
+    top: 7px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    margin: auto;
+}
+.avatar-preview {
+      width: 192px;
+      height: 192px;
+      position: relative;
+      border-radius: 100%;
+      border: 6px solid #F8F8F8;
+      box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+}
+.avatar-preview > div {
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.close-file {
+    display: inline-block;
+    width: 34px;
+    height: 34px;
+    margin-bottom: 0;
+    border-radius: 100%;
+    background: #FFFFFF;
+    border: 1px solid transparent;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.12) !important;
+    cursor: pointer;
+    font-weight: normal;
+    transition: all .2s ease-in-out;
+    position: relative;
+    margin-top: -270px;
+    margin-left: 169px;
+}
+
+.close-file:active,
+.close-file:focus,
+.close-file:hover {
+    background: #f1f1f1 !important;
+    border-color: #d6d6d6 !important;
+}
+
+.close-file i {
+    color: #757575;
+    position: absolute;
+    top: 15px;
+    right: 10px;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+.module-icons {
+    display: inline-block;
+    width: 20px;
+    text-align: center;
+    margin-right: 5px;
+}
+
+.btn-brand {
+    color: #fff !important;
+    background-color: #22b9ff !important;
+    border-color: #22b9ff !important;
+}
+
+.full-width {
+    width: 100% !important;
+}
+
+.pull-right {
+    float: right !important;
+}
+
+.m-portlet__head-title {
+    display: block !important;
+}
+
+.m-portlet .m-portlet__head .m-portlet__head-caption .m-portlet__head-title .m-portlet__head-text {
+    display: inline-block !important;
+    margin-top: 25px !important;
+}
+
+.moves {
+    margin-top: -27px;
+    vertical-align: middle;
+}
+
+.moves:hover {
+    text-decoration: none;
+}
+
+.moves i {
+    display: inline-block;
+    vertical-align: middle;
+}
