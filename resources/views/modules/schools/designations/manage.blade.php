@@ -67,5 +67,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('js/datatables/quarter.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/datatables/designation.js') }}" type="text/javascript"></script>
 @endpush

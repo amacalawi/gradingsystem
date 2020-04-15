@@ -2,7 +2,7 @@
 
 var DatatableDataLocalDemo = function () {
 	//== Private functions
- 	console.log(base_url + 'schools/quarters/all-inactive');
+ 	console.log(base_url + 'schools/departments/all-active');
 	
 	var datatable = $('.m_datatable').mDatatable({
 		// datasource definition
@@ -12,7 +12,7 @@ var DatatableDataLocalDemo = function () {
 			  read: {
 				// sample GET method
 				method: 'GET',
-				url: base_url + 'schools/quarters/all-inactive',
+				url: base_url + 'schools/departments/all-active',
 				map: function(raw) {
 				  // sample data mapping
 				  var dataSet = raw;
@@ -51,32 +51,26 @@ var DatatableDataLocalDemo = function () {
 
 		// columns definition
 		columns: [{
-			field: "quarterID",
+			field: "departmentID",
 			title: "#",
 			width: 50,
 			sortable: false,
 			textAlign: 'center',
 			selector: {class: 'm-checkbox--solid m-checkbox--brand'}
 		}, {
-			field: "quarterCode",
+			field: "departmentCode",
 			title: "Code"
 		}, {
-			field: "quarterName",
+			field: "departmentName",
 			title: "Name",
 		}, {
-			field: "quarterDescription",
+			field: "departmentDescription",
 			title: "Description"
         }, {
-			field: "quarterStart",
-			title: "Quarter Start"
-		}, {
-			field: "quarterEnd",
-			title: "Quarter End"
-		}, {
-			field: "quarterModified",
+			field: "departmentModified",
 			title: "Last Modified",
 		}, {
-			field: "quarterType",
+			field: "departmentType",
 			title: "Type",
 			// callback function support for column rendering
 			template: function (row) {
@@ -86,11 +80,11 @@ var DatatableDataLocalDemo = function () {
                     "secondary-education": {'title': 'Secondary', 'class': 'secondary-bg'},
                     "higher-education": {'title': 'Higher', 'class': 'higher-bg'}
 				};
-				return '<span class="m-badge ' + type[row.quarterType].class + ' m-badge--wide">' + type[row.quarterType].title + '</span>';
+				return '<span class="m-badge ' + type[row.departmentType].class + ' m-badge--wide">' + type[row.departmentType].title + '</span>';
 			}
 		}, {
 			field: "Actions",
-			width: 70,
+			width: 90,
 			title: "Actions",
 			sortable: false,
 			ordering: false,
@@ -98,10 +92,9 @@ var DatatableDataLocalDemo = function () {
 			template: function (row, index, datatable) {
 				var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
 
-				return '\
-                    <a data-row-id="' + row.quarterID + '" action="Active" href="javascript:;" class="toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="activate this">\
-                        <i class="la la-undo"></i>\
-                    </a>\
+                return '\
+                    <a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'schools/departments/edit/' + row.departmentID + '"><i class="la la-edit"></i></a>\
+                    <a title="remove this" data-row-id="' + row.departmentID + '" action="Remove" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-remove"></i></a>\
 				';
 			}
 		}]
@@ -114,8 +107,8 @@ var DatatableDataLocalDemo = function () {
 		var query = datatable.getDataSourceQuery();
 
 		$('#m_form_type').on('change', function () {
-			datatable.search($(this).val(), 'quarterType');
-		}).val(typeof query.quarterType !== 'undefined' ? query.quarterType : '');
+			datatable.search($(this).val(), 'departmentType');
+		}).val(typeof query.departmentType !== 'undefined' ? query.departmentType : '');
 
 		// $('#m_form_type').on('change', function () {
 		// 	datatable.search($(this).val(), 'Type');
@@ -151,7 +144,7 @@ jQuery(document).ready(function () {
 		var $rowID = $(this).attr('data-row-id');
 		console.log($rowID);
 		var $action = $(this).attr('action');
-		var $url = base_url + 'schools/quarters/update-status/' + $rowID;
+		var $url = base_url + 'schools/departments/update-status/' + $rowID;
 		var items = []; items.push({ action: $action });
 
 		console.log($url);

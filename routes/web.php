@@ -50,6 +50,34 @@ Route::prefix('schools')->group(function () {
     Route::get('quarters/all-inactive', 'QuartersController@all_inactive')->name('quarters.all.inactive');
     Route::put('quarters/update-status/{id}', 'QuartersController@update_status')->name('quarters.update.status');
     /* End Batches Routes */
+
+    /* Departments */
+    Route::get('departments/add', 'DepartmentsController@add')->name('departments.add');
+    Route::get('departments/edit/{id?}', 'DepartmentsController@edit')->name('departments.edit');
+    Route::post('departments/store', 'DepartmentsController@store')->name('departments.store');
+    Route::put('departments/update/{id}', 'DepartmentsController@update')->name('departments.update');
+    Route::get('departments', 'DepartmentsController@manage')->name('departments.manage.active');
+    Route::get('departments/inactive', 'DepartmentsController@inactive')->name('departments.manage.inactive');
+    Route::post('departments/remove', 'DepartmentsController@remove')->name('departments.remove');
+    Route::post('departments/restore', 'DepartmentsController@restore')->name('departments.restore');
+    Route::get('departments/all-active', 'DepartmentsController@all_active')->name('departments.all.active');
+    Route::get('departments/all-inactive', 'DepartmentsController@all_inactive')->name('departments.all.inactive');
+    Route::put('departments/update-status/{id}', 'DepartmentsController@update_status')->name('departments.update.status');
+    /* End Departments Routes */
+
+    /* Designations */
+    Route::get('designations/add', 'DesignationsController@add')->name('designations.add');
+    Route::get('designations/edit/{id?}', 'DesignationsController@edit')->name('designations.edit');
+    Route::post('designations/store', 'DesignationsController@store')->name('designations.store');
+    Route::put('designations/update/{id}', 'DesignationsController@update')->name('designations.update');
+    Route::get('designations', 'DesignationsController@manage')->name('designations.manage.active');
+    Route::get('designations/inactive', 'DesignationsController@inactive')->name('designations.manage.inactive');
+    Route::post('designations/remove', 'DesignationsController@remove')->name('designations.remove');
+    Route::post('designations/restore', 'DesignationsController@restore')->name('designations.restore');
+    Route::get('designations/all-active', 'DesignationsController@all_active')->name('designations.all.active');
+    Route::get('designations/all-inactive', 'DesignationsController@all_inactive')->name('designations.all.inactive');
+    Route::put('designations/update-status/{id}', 'DesignationsController@update_status')->name('designations.update.status');
+    /* End Designations Routes */
 });
 
 Route::prefix('memberships')->group(function () {
