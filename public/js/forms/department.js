@@ -1,13 +1,13 @@
 !function($) {
     "use strict";
 
-    var quarter = function() {
+    var department = function() {
         this.$body = $("body");
     };
 
     var $required = 0; var files = []; var filesName = [];
 
-    quarter.prototype.validate = function($form, $required)
+    department.prototype.validate = function($form, $required)
     {   
         $required = 0;
 
@@ -36,7 +36,7 @@
         return $required;
     },
 
-    quarter.prototype.required_fields = function() {
+    department.prototype.required_fields = function() {
         
         $.each(this.$body.find(".form-group"), function(){
             if ($(this).hasClass('required')) {       
@@ -52,7 +52,7 @@
 
     },
 
-    quarter.prototype.price_separator = function (input) {
+    department.prototype.price_separator = function (input) {
         var output = input
         if (parseFloat(input)) {
             input = new String(input); // so you can perform string operations
@@ -64,7 +64,7 @@
         return output;
     },
 
-    quarter.prototype.do_uploads = function($id) {
+    department.prototype.do_uploads = function($id) {
         var data = new FormData();
         $.each(files, function(key, value)
         {   
@@ -87,7 +87,7 @@
         return true;
     },
 
-    quarter.prototype.init = function()
+    department.prototype.init = function()
     {   
         /*
         | ---------------------------------
@@ -149,8 +149,8 @@
         this.$body.on('click', '.submit-btn', function (e){
             e.preventDefault();
             var $self = $(this);
-            var $form = $('form[name="quarter_form"]');
-            var $error = $.quarter.validate($form, 0);
+            var $form = $('form[name="department_form"]');
+            var $error = $.department.validate($form, 0);
 
             if ($error != 0) {
                 swal({
@@ -163,7 +163,7 @@
                 });
                 window.onkeydown = null;
                 window.onfocus = null;   
-                $.quarter.required_fields();
+                $.department.required_fields();
             } else {
                 $self.prop('disabled', true).html('wait.....').addClass('m-btn--custom m-loader m-loader--light m-loader--right');
                 $.ajax({
@@ -183,7 +183,7 @@
                                     confirmButtonClass: "btn " + data.class + " btn-focus m-btn m-btn--pill m-btn--air m-btn--custom",
                                     onClose: () => {
                                         if ($form.find("input[name='method']").val() == 'add') {
-                                            window.location.replace(base_url + 'schools/quarters');
+                                            window.location.replace(base_url + 'schools/departments');
                                         }
                                     }
                                 });
@@ -211,14 +211,14 @@
         
     }
 
-    //init quarter
-    $.quarter = new quarter, $.quarter.Constructor = quarter
+    //init department
+    $.department = new department, $.department.Constructor = department
 
 }(window.jQuery),
 
-//initializing quarter
+//initializing department
 function($) {
     "use strict";
-    $.quarter.required_fields();
-    $.quarter.init();
+    $.department.required_fields();
+    $.department.init();
 }(window.jQuery);

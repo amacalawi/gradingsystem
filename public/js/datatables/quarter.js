@@ -112,9 +112,9 @@ var DatatableDataLocalDemo = function () {
 
 		var query = datatable.getDataSourceQuery();
 
-		$('#m_form_status').on('change', function () {
-			datatable.search($(this).val(), 'Status');
-		}).val(typeof query.Status !== 'undefined' ? query.Status : '');
+		$('#m_form_type').on('change', function () {
+			datatable.search($(this).val(), 'quarterType');
+		}).val(typeof query.quarterType !== 'undefined' ? query.quarterType : '');
 
 		// $('#m_form_type').on('change', function () {
 		// 	datatable.search($(this).val(), 'Type');

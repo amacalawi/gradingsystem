@@ -10,12 +10,12 @@
                         <div class="flex align-items-center">
                             <div class="mr-auto">
                                 <h3 class="m-portlet__head-text">
-                                    All Active {{ ucfirst(Request::segment(2)) }} 
+                                    All Inactive {{ ucfirst(Request::segment(2)) }} 
                                 </h3> 
                             </div>
                             <div>
-                                <a title="move to inactive {{ strtolower(Request::segment(2)) }}" href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/inactive') }}" class="pull-right moves m--font-danger">
-                                    INACTIVE {{ strtoupper(Request::segment(2)) }} <i class="la la-angle-double-right"></i>
+                                <a title="move to active {{ strtolower(Request::segment(2)) }}" href="{{ url('/'.Request::segment(1).'/'.Request::segment(2)) }}" class="pull-right moves moves-back m--font-info">
+                                    <i class="la la-angle-double-left"></i> ACTIVE {{ strtoupper(Request::segment(2)) }} 
                                 </a>
                             </div>
                         </div>
@@ -67,5 +67,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('js/datatables/quarter.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/datatables/inactive-designation.js') }}" type="text/javascript"></script>
 @endpush
