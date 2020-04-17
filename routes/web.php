@@ -85,6 +85,22 @@ Route::prefix('memberships')->group(function () {
     Route::get('students/edit/{id?}', 'StudentsController@edit')->name('students.edit');
     Route::post('students/store', 'StudentsController@store')->name('students.store');
     Route::put('students/update/{id}', 'StudentsController@update')->name('students.update');
+
+    /* Staffs */
+    Route::post('staffs/uploads', 'StaffsController@uploads')->name('staffs.uploads');
+    Route::get('staffs/downloads', 'StaffsController@downloads')->name('staffs.downloads');
+    Route::get('staffs/add', 'StaffsController@add')->name('staffs.add');
+    Route::get('staffs/edit/{id?}', 'StaffsController@edit')->name('staffs.edit');
+    Route::post('staffs/store', 'StaffsController@store')->name('staffs.store');
+    Route::put('staffs/update/{id}', 'StaffsController@update')->name('staffs.update');
+    Route::get('staffs', 'StaffsController@manage')->name('staffs.manage.active');
+    Route::get('staffs/inactive', 'StaffsController@inactive')->name('staffs.manage.inactive');
+    Route::post('staffs/remove', 'StaffsController@remove')->name('staffs.remove');
+    Route::post('staffs/restore', 'StaffsController@restore')->name('staffs.restore');
+    Route::get('staffs/all-active', 'StaffsController@all_active')->name('staffs.all.active');
+    Route::get('staffs/all-inactive', 'StaffsController@all_inactive')->name('staffs.all.inactive');
+    Route::put('staffs/update-status/{id}', 'StaffsController@update_status')->name('staffs.update.status');
+    /* End Staffs Routes */
 });
 
 

@@ -5,17 +5,21 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class CreateUsersTable extends Migration
-{
+{   
+    protected $table = 'users';
     /**
      * Run the migrations.
      *
      * @return void
      */
     public function up()
-    {
+    {   
+        if (Schema::hasTable($this->table)) {
+            return;
+        }
+
         Schema::create('users', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('member_id')->unsigned();
+            $table->increments('id', 11);
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

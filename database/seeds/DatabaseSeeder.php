@@ -16,7 +16,6 @@ class DatabaseSeeder extends Seeder
         DB::table('users')->insert([
             'name' => 'Super Admin',
             'email' => 'superadmin',
-            'member_id' => 1,
             'username' => 'superadmin',
             'password' => '$2y$10$mEzN8zr327/0Qp/GebqspOik64vXbnfiuala5n6bnUxpAvvS9Ndni',
         ]);
@@ -35,15 +34,21 @@ class DatabaseSeeder extends Seeder
                 'created_by' => 1
             ],
             [
-                'code' => 'teacher',
-                'name' => 'Teacher',
-                'description' => 'Teacher Role',
+                'code' => 'staff',
+                'name' => 'Staff',
+                'description' => 'Staff Role',
                 'created_by' => 1
             ],
             [
                 'code' => 'student',
                 'name' => 'Student',
                 'description' => 'Student Role',
+                'created_by' => 1
+            ],
+            [
+                'code' => 'parent',
+                'name' => 'Parent',
+                'description' => 'Parent Role',
                 'created_by' => 1
             ]
         ];

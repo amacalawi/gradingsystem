@@ -40,5 +40,28 @@ class Department extends Model
         $types = array('' => 'select a type', 'childhood-education' => 'Childhood Education', 'primary-education' => 'Primary Education', 'secondary-education' => 'Secondary Education', 'higher-education' => 'Higher Education');
         return $types;
     }
+
+    public function all_departments()
+    {	
+    	$departments = self::where('is_active', 1)->orderBy('id', 'asc')->get();
+
+        $deps = array();
+        $deps[] = array('' => 'select a department');
+        foreach ($departments as $department) {
+            $deps[] = array(
+                $department->id => $department->name
+            );
+        }
+
+        $departments = array();
+        foreach($deps as $dep) {
+            foreach($dep as $key => $val) {
+                $departments[$key] = $val;
+            }
+        }
+
+        return $departments;
+    }
+
 }
 

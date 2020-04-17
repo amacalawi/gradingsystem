@@ -14,7 +14,7 @@ class CreateQuartersTable extends Migration
     public function up()
     {
         Schema::create('quarters', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
             $table->string('code', 40);
             $table->string('name', 100);
             $table->text('description')->nullable();
@@ -22,9 +22,9 @@ class CreateQuartersTable extends Migration
             $table->date('date_start');
             $table->date('date_end');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->integer('created_by');
+            $table->integer('created_by')->unsigned();
             $table->timestamp('updated_at')->nullable();
-            $table->integer('updated_by')->nullable();
+            $table->integer('updated_by')->unsigned()->nullable();
             $table->boolean('is_active')->default(1);
         });
     }

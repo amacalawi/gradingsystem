@@ -14,15 +14,15 @@ class CreateDesignationsTable extends Migration
     public function up()
     {
         Schema::create('designations', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
             $table->string('code', 40);
             $table->string('name', 100);
             $table->text('description')->nullable();
             $table->string('type', 40);
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->integer('created_by');
+            $table->integer('created_by')->unsigned();
             $table->timestamp('updated_at')->nullable();
-            $table->integer('updated_by')->nullable();
+            $table->integer('updated_by')->unsigned()->nullable();
             $table->boolean('is_active')->default(1);
         });
     }

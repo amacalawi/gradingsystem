@@ -313,7 +313,7 @@
                                     <span class="m-menu__arrow"></span>
                                     <ul class="m-menu__subnav">
                                         <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
-                                            <a  href="inner.html" class="m-menu__link ">
+                                            <a  href="{{ url('/memberships/students') }}" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
                                                 </i>
@@ -323,7 +323,7 @@
                                             </a>
                                         </li>
                                         <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
-                                            <a  href="inner.html" class="m-menu__link ">
+                                            <a  href="{{ url('/memberships/students/inactive') }}" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
                                                 </i>
@@ -346,7 +346,7 @@
                                     <span class="m-menu__arrow"></span>
                                     <ul class="m-menu__subnav">
                                         <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
-                                            <a  href="inner.html" class="m-menu__link ">
+                                            <a  href="{{ url('/memberships/staffs') }}" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
                                                 </i>
@@ -356,7 +356,7 @@
                                             </a>
                                         </li>
                                         <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
-                                            <a  href="inner.html" class="m-menu__link ">
+                                            <a  href="{{ url('/memberships/staffs/inactive') }}" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
                                                 </i>
@@ -369,7 +369,7 @@
                                 </div>
                             </li>
                             <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
-                                <a  href="inner.html" class="m-menu__link ">
+                                <a  href="{{ url('/memberships/users') }}" class="m-menu__link ">
                                     <span class="m-menu__link-text">
                                         <i class="la la-users module-icons"></i> Users
                                     </span>

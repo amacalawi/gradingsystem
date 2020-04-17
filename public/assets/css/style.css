@@ -307,3 +307,8 @@ button:not([data-dismiss="alert"]) {
     display: inline-block;
     vertical-align: middle;
 }
+
+input[type="text"].bold {
+    font-weight: bold;
+    color: #333 !important;
+}
