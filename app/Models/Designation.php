@@ -40,5 +40,27 @@ class Designation extends Model
         $types = array('' => 'select a type', 'childhood-education' => 'Childhood Education', 'primary-education' => 'Primary Education', 'secondary-education' => 'Secondary Education', 'higher-education' => 'Higher Education');
         return $types;
     }
+
+    public function all_designations()
+    {	
+    	$designations = self::where('is_active', 1)->orderBy('id', 'asc')->get();
+
+        $desigs = array();
+        $desigs[] = array('' => 'select a designation');
+        foreach ($designations as $designation) {
+            $desigs[] = array(
+                $designation->id => $designation->name
+            );
+        }
+
+        $designations = array();
+        foreach($desigs as $desig) {
+            foreach($desig as $key => $val) {
+                $designations[$key] = $val;
+            }
+        }
+
+        return $designations;
+    }
 }
 
