@@ -104,6 +104,52 @@ Route::prefix('memberships')->group(function () {
 });
 
 
+Route::prefix('academics')->group(function () {
+    /* Sections */
+    Route::get('sections/add', 'SectionsController@add')->name('sections.add');
+    Route::get('sections/edit/{id?}', 'SectionsController@edit')->name('sections.edit');
+    Route::post('sections/store', 'SectionsController@store')->name('sections.store');
+    Route::put('sections/update/{id}', 'SectionsController@update')->name('sections.update');
+    Route::get('sections', 'SectionsController@manage')->name('sections.manage.active');
+    Route::get('sections/inactive', 'SectionsController@inactive')->name('sections.manage.inactive');
+    Route::post('sections/remove', 'SectionsController@remove')->name('sections.remove');
+    Route::post('sections/restore', 'SectionsController@restore')->name('sections.restore');
+    Route::get('sections/all-active', 'SectionsController@all_active')->name('sections.all.active');
+    Route::get('sections/all-inactive', 'SectionsController@all_inactive')->name('sections.all.inactive');
+    Route::put('sections/update-status/{id}', 'SectionsController@update_status')->name('sections.update.status');
+    /* End Sections Routes */
+
+    /* Levels */
+    Route::get('levels/add', 'LevelsController@add')->name('levels.add');
+    Route::get('levels/edit/{id?}', 'LevelsController@edit')->name('levels.edit');
+    Route::post('levels/store', 'LevelsController@store')->name('levels.store');
+    Route::put('levels/update/{id}', 'LevelsController@update')->name('levels.update');
+    Route::get('levels', 'LevelsController@manage')->name('levels.manage.active');
+    Route::get('levels/inactive', 'LevelsController@inactive')->name('levels.manage.inactive');
+    Route::post('levels/remove', 'LevelsController@remove')->name('levels.remove');
+    Route::post('levels/restore', 'LevelsController@restore')->name('levels.restore');
+    Route::get('levels/all-active', 'LevelsController@all_active')->name('levels.all.active');
+    Route::get('levels/all-inactive', 'LevelsController@all_inactive')->name('levels.all.inactive');
+    Route::put('levels/update-status/{id}', 'LevelsController@update_status')->name('levels.update.status');
+    /* End Levels Routes */
+
+    /* Subjects */
+    Route::get('subjects/add', 'SubjectsController@add')->name('subjects.add');
+    Route::get('subjects/edit/{id?}', 'SubjectsController@edit')->name('subjects.edit');
+    Route::post('subjects/store', 'SubjectsController@store')->name('subjects.store');
+    Route::put('subjects/update/{id}', 'SubjectsController@update')->name('subjects.update');
+    Route::get('subjects', 'SubjectsController@manage')->name('subjects.manage.active');
+    Route::get('subjects/inactive', 'SubjectsController@inactive')->name('subjects.manage.inactive');
+    Route::post('subjects/remove', 'SubjectsController@remove')->name('subjects.remove');
+    Route::post('subjects/restore', 'SubjectsController@restore')->name('subjects.restore');
+    Route::get('subjects/all-active', 'SubjectsController@all_active')->name('subjects.all.active');
+    Route::get('subjects/all-inactive', 'SubjectsController@all_inactive')->name('subjects.all.inactive');
+    Route::put('subjects/update-status/{id}', 'SubjectsController@update_status')->name('subjects.update.status');
+    /* End Subjects Routes */
+});
+
+
+
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 
 Route::get('/send-mail', function () {
