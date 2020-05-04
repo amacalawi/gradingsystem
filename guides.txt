@@ -5,6 +5,7 @@ php artisan migrate
 php artisan migrate:reset
 php artisan migrate:refresh
 php artisan migrate:refresh --seed
+composer dump-autoload
 
 ***** SEEDS *****
 php artisan db:seed

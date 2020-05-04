@@ -9,40 +9,9 @@
     
     var $student_layer = '<div class="row siblings-panel-layout">' +
         '<div class="col-md-11">' +
-        '<div class="row">' +
-        '<div class="col-md-4">' +
         '<div class="form-group m-form__group">' +
-        '<label>' +
-        'Firstname' +
-        '</label>' +
-        '<input type="email" class="form-control form-control-lg m-input m-input--solid" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">' +
-        '<span class="m-form__help m--font-danger">' +
-        'this field is required.' +
-        '</span>' +
-        '</div>' +
-        '</div>' +
-        '<div class="col-md-4">' +
-        '<div class="form-group m-form__group">' +
-        '<label for="name">' +
-        'Middlename' +
-        '</label>' +
-        '<input type="text" id="name" name="name" class="form-control form-control-lg m-input m-input--solid" aria-describedby="emailHelp" placeholder="">' +
-        '<span class="m-form__help m--font-danger">' +
-        'this field is required.' +
-        '</span>' +
-        '</div>' +
-        '</div>' +
-        '<div class="col-md-4">' +
-        '<div class="form-group m-form__group">' +
-        '<label for="name">' +
-        'Lastname' +
-        '</label>' +
-        '<input type="text" id="name" name="name" class="form-control form-control-lg m-input m-input--solid" aria-describedby="emailHelp" placeholder="">' +
-        '<span class="m-form__help m--font-danger">' +
-        'this field is required.' +
-        '</span>' +
-        '</div>' +
-        '</div>' +
+        '<input placeholder="search for student number, firstname or lastname" class="typeahead form-control form-control-lg m-input m-input--solid" name="sibling[]" type="text" value="">' +
+        '<span class="m-form__help m--font-danger"></span>' +
         '</div>' +
         '</div>' +
         '<div class="col-md-1">' +
@@ -60,21 +29,24 @@
     {   
         $required = 0;
 
-        $.each(this.$body.find("input[type='date'], input[type='text'], select, textarea"), function(){
-               
-            if (!($(this).attr("name") === undefined || $(this).attr("name") === null)) {
-                if($(this).hasClass("required")){
-                    if($(this).is("[multiple]")){
-                        if( !$(this).val() || $(this).find('option:selected').length <= 0 ){
-                            $(this).closest(".form-group").find(".m-form__help").text("this field is required.");
+        $.each(this.$body.find("input[type='radio'], input[type='password'], input[type='date'], input[type='text'], select, textarea"), function(){
+            var $self = $(this);
+            if (!($self.attr("name") === undefined || $self.attr("name") === null)) {
+                if($self.hasClass("required")){
+                    if ($self.attr('type') == "radio" && $self.val() == "") {
+                        $self.closest(".form-group").find(".m-form__help").text("this field is required.");
+                        $required++;
+                    } else if($self.is("[multiple]")){
+                        if( !$self.val() || $self.find('option:selected').length <= 0 ){
+                            $self.closest(".form-group").find(".m-form__help").text("this field is required.");
                             $required++;
                         }
-                    } else if($(this).val()=="" || $(this).val()=="0"){
-                        if(!$(this).is("select")) {
-                            $(this).closest(".form-group").find(".m-form__help").text("this field is required.");
+                    } else if($self.val()=="" || $self.val()=="0"){
+                        if(!$self.is("select")) {
+                            $self.closest(".form-group").find(".m-form__help").text("this field is required.");
                             $required++;
                         } else {
-                            $(this).closest(".form-group").find(".m-form__help").text("this field is required.");
+                            $self.closest(".form-group").find(".m-form__help").text("this field is required.");
                             $required++;                                          
                         }
                     } 
@@ -90,8 +62,14 @@
         $.each(this.$body.find(".form-group"), function(){
             if ($(this).hasClass('required')) {       
                 var $input = $(this).find("input[type='radio'], input[type='password'], input[type='date'], input[type='text'], select, textarea");
-                if ($input.val() == '' || $input.is(":not(:checked)")) {
-                    $(this).find('.m-form__help').text('this field is required.');       
+                if ($input.attr('type') == 'radio') {
+                    if ( !$input.is(':checked') ) {
+                        $(this).find('.m-form__help').text('this field is required.');    
+                    }
+                } else {
+                    if ($input.val() == '') {
+                        $(this).find('.m-form__help').text('this field is required.');   
+                    }
                 }
                 $input.addClass('required');
             } else {
@@ -123,11 +101,12 @@
         console.log(data);
         $.ajax({
             type: "POST",
-            url: base_url + 'applications/uploads?files=copyrights&id=' + $id,
+            url: base_url + 'memberships/students/uploads?files=students&id=' + $id,
             data: data,
             cache: false,
             processData: false,
             contentType: false,
+            async: false,
             success: function (data) {
                 console.log(data);                       
             }
@@ -158,8 +137,84 @@
         }
     }
 
+    /*
+    | ---------------------------------
+    | # sibling typeahead display
+    | ---------------------------------
+    */
+   student.prototype.get_all_siblings = function() {
+        
+        $('.typeahead').typeahead('destroy');
+        console.log(base_url + 'memberships/students/get-all-siblings?id=' + $('#identification_no').val());
+        $.ajax({
+            type: "GET",
+            url: base_url + 'memberships/students/get-all-siblings?id=' + $('#identification_no').val(),
+            success: function (data) {
+                var data = $.parseJSON( data );
+                if($('.typeahead')[0]) {
+
+                    var siblingsArray = data;
+                    
+                    var siblings = new Bloodhound({
+                        datumTokenizer: Bloodhound.tokenizers.whitespace,
+                        queryTokenizer: Bloodhound.tokenizers.whitespace,
+                        local: siblingsArray
+                    });
+
+                    $('.typeahead').typeahead({
+                        hint: true,
+                        highlight: true,
+                        minLength: 1
+                    },
+                    {
+                    name: 'siblings',
+                    source: siblings
+                    });
+                }
+            },
+            async: false
+        });  
+
+    },
+
+    $('input[type="file"]').on('change', prepareUpload);                 
+    function prepareUpload(event)
+    {       
+        var self = event.target;
+        if (event.target.files[0] != '' && event.target.files[0] !== undefined) {
+            var found = false;
+            for (var i = 0; i < filesName.length; i++) {
+                if (filesName[i] == event.target.name) {
+                    found = true;
+                    break; break;
+                }
+            }
+
+            if (found == true) {
+                files[i] = event.target.files[0];
+            } else {
+                filesName.push(event.target.name);
+                files.push(event.target.files[0]);
+            }
+        } else {
+            $.each(filesName, function (ix) {
+                if (filesName[ix] == event.target.name) {
+                    filesName.splice(ix, 1);
+                    files.splice(ix, 1);
+                    console.log(self);
+                    return false;
+                }
+            });
+        }
+
+        console.log(filesName);
+        console.log(files);
+    } 
+
     student.prototype.init = function()
     {   
+        $.student.get_all_siblings();
+
         /*
         | ---------------------------------
         | # select, input, and textarea on change or keyup remove error
@@ -222,14 +277,72 @@
             var $self = $(this);
             var $form = $('form[name="student_form"]');
             var $error = $.student.validate($form, 0);
+            var $identification = ($('input[name="method"]').val() == 'add') ? '' : $('input[name="identification_no"]').val();
+            var $avatar = ($('input[name="avatar"]').val() != '') ? $('input[name="avatar"]').get(0).files[0].name : '';
+            var $motherAvatar = ($('input[name="mother_avatar"]').val() != '') ? $('input[name="mother_avatar"]').get(0).files[0].name : '';
+            var $fatherAvatar = ($('input[name="father_avatar"]').val() != '') ? $('input[name="father_avatar"]').get(0).files[0].name : '';
 
             if ($error != 0) {
+                swal({
+                    title: "Oops...",
+                    text: "Something went wrong! \nPlease fill in the required fields first.",
+                    type: "warning",
+                    showCancelButton: false,
+                    closeOnConfirm: true,
+                    confirmButtonClass: "btn btn-warning btn-focus m-btn m-btn--pill m-btn--air m-btn--custom"
+                });
+                window.onkeydown = null;
+                window.onfocus = null;   
                 $.student.required_fields();
             } else {
-                $self.prop('disabled', true).text('wait... ').addClass('m-btn--custom m-loader m-loader--light m-loader--right');
-                setTimeout(function(){ 
-                    $form.submit();
-                }, 1000);
+                $self.prop('disabled', true).html('wait.....').addClass('m-btn--custom m-loader m-loader--light m-loader--right');
+                var d1 = $.student.do_uploads($identification);
+                $.when( d1 ).done(function ( v1 ) 
+                {
+                    // do uploads then submit data
+                    if (v1 > 0) {
+                        $.ajax({
+                            type: $form.attr('method'),
+                            url: $form.attr('action') + '?avatar=' + $avatar + '&mother_avatar=' + $motherAvatar + '&father_avatar=' + $fatherAvatar,
+                            data: $form.serialize(),
+                            success: function(response) {
+                                var data = $.parseJSON(response);   
+                                console.log(data);
+                                if (data.type == 'success') {
+                                    setTimeout(function () {
+                                        $self.html('<i class="la la-save"></i> Save Changes').removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
+                                        swal({
+                                            title: data.title,
+                                            text: data.text,
+                                            type: data.type,
+                                            confirmButtonClass: "btn " + data.class + " btn-focus m-btn m-btn--pill m-btn--air m-btn--custom",
+                                            onClose: () => {
+                                                if ($form.find("input[name='method']").val() == 'add') {
+                                                    window.location.replace(base_url + 'memberships/students');
+                                                }
+                                            }
+                                        });
+                                    }, 500 + 300 * (Math.random() * 5));
+                                } else {
+                                    $self.html('<i class="la la-save"></i> Save Changes').removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
+                                    $form.find('input[name="code"]').next().text('This is an existing code.');
+                                    swal({
+                                        title: data.title,
+                                        text: data.text,
+                                        type: data.type,
+                                        showCancelButton: false,
+                                        closeOnConfirm: true,
+                                        confirmButtonClass: "btn " + data.class + " btn-focus m-btn m-btn--pill m-btn--air m-btn--custom",
+                                    });
+                                }
+                            }, 
+                            complete: function() {
+                                window.onkeydown = null;
+                                window.onfocus = null;
+                            }
+                        });
+                    }
+                });
             }
         });
         
@@ -243,6 +356,7 @@
             var $self = $(this);
             var $panel = $('#siblings-panel');
             $panel.append($student_layer);
+            $.student.get_all_siblings();
         });
 
         this.$body.on('click', '.minus-sibling', function (e) {
@@ -287,9 +401,9 @@
             var $self = $(this);
 
             if ($self.is(":checked")) {
-                $('#guardian_selected, #mother_firstname, #mother_lastname, #mother_contact_no, #father_firstname, #father_lastname, #father_contact_no').addClass('required').closest('.form-group').addClass('required');
+                $('#guardian_selected, #mother_firstname, #mother_lastname, #mother_contact_no, #mother_email, #father_firstname, #father_lastname, #father_contact_no, #father_email').addClass('required').closest('.form-group').addClass('required');
             } else {
-                $('#guardian_selected, #mother_firstname, #mother_lastname, #mother_contact_no, #father_firstname, #father_lastname, #father_contact_no').removeClass('required').closest('.form-group').removeClass('required');
+                $('#guardian_selected, #mother_firstname, #mother_lastname, #mother_contact_no, #mother_email, #father_firstname, #father_lastname, #father_contact_no, #father_email').removeClass('required').closest('.form-group').removeClass('required');
             }
             $.student.required_fields();
         });

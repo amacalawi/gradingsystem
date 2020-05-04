@@ -314,7 +314,8 @@
                                         'id' => 'password',
                                         'class' => 'form-control form-control-lg m-input m-input--solid'
                                     )) 
-                                }}<span class="m-form__help m--font-danger">
+                                }}
+                                <span class="m-form__help m--font-danger">
                                 </span>
                             </div>
                         </div>

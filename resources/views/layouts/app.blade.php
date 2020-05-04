@@ -79,6 +79,7 @@
         <script src="{{ asset('assets/custom/components/forms/widgets/bootstrap-datepicker.js') }}" type="text/javascript"></script>
         <script src="{{ asset('assets/custom/components/base/sweetalert2.js') }}" type="text/javascript"></script>
         <script src="{{ asset('assets/custom/components/forms/widgets/select2.js') }}" type="text/javascript"></script>
+        <!-- <script src="{{ asset('assets/custom/components/forms/widgets/typeahead.js') }}" type="text/javascript"></script> -->
         <script src="{{ asset('js/moment.js') }}" type="text/javascript"></script>
         @if (\Request::is('dashboard') || \Request::is('applications/*'))  
         @else

@@ -81,10 +81,20 @@ Route::prefix('schools')->group(function () {
 });
 
 Route::prefix('memberships')->group(function () {
+    Route::post('students/uploads', 'StudentsController@uploads')->name('students.uploads');
+    Route::get('students/downloads', 'StudentsController@downloads')->name('students.downloads');
+    Route::get('students/get-all-siblings', 'StudentsController@get_all_siblings')->name('students.siblings');
     Route::get('students/add', 'StudentsController@add')->name('students.add');
     Route::get('students/edit/{id?}', 'StudentsController@edit')->name('students.edit');
     Route::post('students/store', 'StudentsController@store')->name('students.store');
     Route::put('students/update/{id}', 'StudentsController@update')->name('students.update');
+    Route::get('students', 'StudentsController@manage')->name('students.manage.active');
+    Route::get('students/inactive', 'StudentsController@inactive')->name('students.manage.inactive');
+    Route::post('students/remove', 'StudentsController@remove')->name('students.remove');
+    Route::post('students/restore', 'StudentsController@restore')->name('students.restore');
+    Route::get('students/all-active', 'StudentsController@all_active')->name('students.all.active');
+    Route::get('students/all-inactive', 'StudentsController@all_inactive')->name('students.all.inactive');
+    Route::put('students/update-status/{id}', 'StudentsController@update_status')->name('students.update.status');
 
     /* Staffs */
     Route::post('staffs/uploads', 'StaffsController@uploads')->name('staffs.uploads');

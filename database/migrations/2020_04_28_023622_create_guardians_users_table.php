@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMembersTypesTable extends Migration
+class CreateGuardiansUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,14 @@ class CreateMembersTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('members_types', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('code', 40);
-            $table->string('name', 100);
-            $table->text('description')->nullable();
+        Schema::create('guardians_users', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('guardian_id')->unsigned();
+            $table->integer('user_id')->unsigned();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->integer('created_by');
+            $table->integer('created_by')->unsigned();
             $table->timestamp('updated_at')->nullable();
-            $table->integer('updated_by')->nullable();
+            $table->integer('updated_by')->unsigned()->nullable();
             $table->boolean('is_active')->default(1);
         });
     }
@@ -33,6 +32,6 @@ class CreateMembersTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('members_types');
+        Schema::dropIfExists('guardians_users');
     }
 }

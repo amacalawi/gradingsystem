@@ -1,4 +1,5 @@
-@if ( (!empty($flashMessage) && $flashMessage[0]['module'] == 'student') || $segment == 'edit' )
+@inject('students', 'App\Http\Controllers\StudentsController')
+@if ( $segment == 'edit' )
     {{ Form::open(array('url' => 'memberships/students/update/'.$student->id, 'name' => 'student_form', 'method' => 'PUT')) }}
 @else
     {{ Form::open(array('url' => 'memberships/students/store', 'name' => 'student_form', 'method' => 'POST')) }}
@@ -7,7 +8,6 @@
         <div class="col-md-9">
             <!-- BASIC INFOS START -->
             <div class="m-portlet m-portlet--tab">
-                @include('partials.messages')
                 <div class="m-portlet__body">
                     <div class="row">
                         <div class="col-md-12">
@@ -27,13 +27,14 @@
                     </div>    
                     <div class="row">
                         <div class="offset-md-6 col-md-6">
-                            <div class="form-group m-form__group required">
+                            <div class="form-group m-form__group">
                                 {{ Form::label('identification_no', 'Student Number', ['class' => '']) }}
                                 {{ 
-                                    Form::text($name = 'identification_no', $value = $student->identification_no ? $student->identification_no : '', 
+                                    Form::text($name = 'identification_no', $value = !empty($student) ? $student->identification_no : '', 
                                     $attributes = array(
                                         'id' => 'identification_no',
-                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                        'disabled' => 'disabled',
+                                        'class' => 'bold form-control form-control-lg m-input m-input--solid'
                                     )) 
                                 }}
                                 <span class="m-form__help m--font-danger">
@@ -46,7 +47,7 @@
                             <div class="form-group m-form__group required">
                                 {{ Form::label('firstname', 'Firstname', ['class' => '']) }}
                                 {{ 
-                                    Form::text($name = 'firstname', $value = $student->firstname ? $student->firstname : '', 
+                                    Form::text($name = 'firstname', $value =!empty($student) ? $student->firstname : '', 
                                     $attributes = array(
                                         'id' => 'firstname',
                                         'class' => 'form-control form-control-lg m-input m-input--solid'
@@ -60,7 +61,7 @@
                             <div class="form-group m-form__group">
                                 {{ Form::label('middlename', 'Middlename', ['class' => '']) }}
                                 {{ 
-                                    Form::text($name = 'middlename', $value = $student->middlename ? $student->middlename : '', 
+                                    Form::text($name = 'middlename', $value = !empty($student) ? $student->middlename : '', 
                                     $attributes = array(
                                         'id' => 'middlename',
                                         'class' => 'form-control form-control-lg m-input m-input--solid'
@@ -74,7 +75,7 @@
                             <div class="form-group m-form__group required">
                                 {{ Form::label('lastname', 'Lastname', ['class' => '']) }}
                                 {{ 
-                                    Form::text($name = 'lastname', $value = $student->lastname ? $student->lastname : '', 
+                                    Form::text($name = 'lastname', $value = !empty($student) ? $student->lastname : '', 
                                     $attributes = array(
                                         'id' => 'lastname',
                                         'class' => 'form-control form-control-lg m-input m-input--solid'
@@ -88,7 +89,7 @@
                             <div class="form-group m-form__group">
                                 {{ Form::label('suffix', 'Suffix', ['class' => '']) }}
                                 {{ 
-                                    Form::text($name = 'suffix', $value = $student->suffix ? $student->suffix : '', 
+                                    Form::text($name = 'suffix', $value = !empty($student) ? $student->suffix : '', 
                                     $attributes = array(
                                         'id' => 'suffix',
                                         'class' => 'form-control form-control-lg m-input m-input--solid'
@@ -101,8 +102,8 @@
                         <div class="col-md-6">
                             <div class="form-group m-form__group required">
                                 {{ Form::label('marital_status', 'Marital Status', ['class' => '']) }}
-                                {{
-                                    Form::select('marital_status', $civils, null, ['class' => 'form-control form-control-lg m-input m-input--solid'])
+                                {{  
+                                    Form::select('marital_status', $civils, !empty($student) ? $student->marital_status : '', ['class' => 'form-control form-control-lg m-input m-input--solid'])
                                 }}
                                 <span class="m-form__help m--font-danger">
                                 </span>
@@ -112,7 +113,7 @@
                             <div class="form-group m-form__group required">
                                 {{ Form::label('birthdate', 'Birth Date', ['class' => '']) }}
                                 {{ 
-                                    Form::date($name = 'birthdate', $value = $student->birthdate ? $student->birthdate : '', 
+                                    Form::date($name = 'birthdate', $value = !empty($student) ? $student->birthdate : '', 
                                     $attributes = array(
                                         'id' => 'birthdate',
                                         'class' => 'form-control form-control-lg m-input m-input--solid'
@@ -127,26 +128,41 @@
                         <div class="col-md-6">
                             <div class="m-form__group form-group required">
                                 {{ Form::label('gender', 'Gender', ['class' => '']) }}
-                                <div class="m-radio-inline">
-                                    <label class="col-md-3 m-radio m-radio--solid">
-                                        @if ($student->gender == 'Male')
-                                            {{ Form::radio('gender', 'Male', true) }}
-                                        @else
+                                @if (!empty($student))
+                                    <div class="m-radio-inline">
+                                        <label class="col-md-3 m-radio m-radio--solid">
+                                            @if ($student->gender == 'Male')
+                                                {{ Form::radio('gender', 'Male', true) }}
+                                            @else
+                                                {{ Form::radio('gender', 'Male') }}
+                                            @endif
+                                            Male
+                                            <span></span>
+                                        </label>
+                                        <label class="m-radio m-radio--solid">
+                                            @if ($student->gender == 'Female')
+                                                {{ Form::radio('gender', 'Female', true) }}
+                                            @else
+                                                {{ Form::radio('gender', 'Female') }}
+                                            @endif
+                                            Female
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                @else
+                                    <div class="m-radio-inline">
+                                        <label class="col-md-3 m-radio m-radio--solid">
                                             {{ Form::radio('gender', 'Male') }}
-                                        @endif
-                                        Male
-                                        <span></span>
-                                    </label>
-                                    <label class="m-radio m-radio--solid">
-                                        @if ($student->gender == 'Female')
-                                            {{ Form::radio('gender', 'Female', true) }}
-                                        @else
+                                            Male
+                                            <span></span>
+                                        </label>
+                                        <label class="m-radio m-radio--solid">
                                             {{ Form::radio('gender', 'Female') }}
-                                        @endif
-                                        Female
-                                        <span></span>
-                                    </label>
-                                </div>
+                                            Female
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                @endif
                                 <span class="m-form__help m--font-danger">
                                 </span>
                             </div>
@@ -169,9 +185,9 @@
                             {{ Form::label('current_address', 'Current Address', ['class' => '']) }}
                         </div>
                         <div class="col-md-9">
-                            <div class="form-group m-form__group">
+                            <div class="form-group m-form__group required">
                                 {{ 
-                                    Form::text($name = 'current_address', $value = $student->current_address ? $student->current_address : '', 
+                                    Form::text($name = 'current_address', $value = !empty($student) ? $student->current_address : '', 
                                     $attributes = array(
                                         'id' => 'current_address',
                                         'class' => 'form-control form-control-lg m-input m-input--solid'
@@ -189,7 +205,7 @@
                         <div class="col-md-9">
                             <div class="form-group m-form__group">
                                 {{ 
-                                    Form::text($name = 'permanent_address', $value = $student->permanent_address ? $student->permanent_address : '', 
+                                    Form::text($name = 'permanent_address', $value = !empty($student) ? $student->permanent_address : '', 
                                     $attributes = array(
                                         'id' => 'permanent_address',
                                         'class' => 'form-control form-control-lg m-input m-input--solid'
@@ -207,7 +223,7 @@
                         <div class="col-md-9">
                             <div class="form-group m-form__group">
                                 {{ 
-                                    Form::text($name = 'telephone_no', $value = $student->telephone_no ? $student->telephone_no : '', 
+                                    Form::text($name = 'telephone_no', $value = !empty($student) ? $student->telephone_no : '', 
                                     $attributes = array(
                                         'id' => 'telephone_no',
                                         'class' => 'form-control form-control-lg m-input m-input--solid'
@@ -225,7 +241,7 @@
                         <div class="col-md-9">
                             <div class="form-group m-form__group">
                                 {{ 
-                                    Form::text($name = 'mobile_no', $value = $student->mobile_no ? $student->mobile_no : '', 
+                                    Form::text($name = 'mobile_no', $value = !empty($student) ? $student->mobile_no : '', 
                                     $attributes = array(
                                         'id' => 'mobile_no',
                                         'class' => 'form-control form-control-lg m-input m-input--solid'
@@ -251,7 +267,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             {{ 
-                                Form::textarea($name = 'special_remarks', $value = $student->special_remarks, 
+                                Form::textarea($name = 'special_remarks', $value = !empty($student) ? $student->special_remarks : '', 
                                 $attributes = array(
                                     'id' => 'special_remarks',
                                     'class' => 'form-control form-control-lg m-input m-input--solid',
@@ -297,7 +313,7 @@
                                         <div class="form-group m-form__group">
                                             {{ Form::label('mother_firstname', 'Firstname', ['class' => '']) }}
                                             {{ 
-                                                Form::text($name = 'mother_firstname', $value = $student->mother_firstname ? $student->mother_firstname : '', 
+                                                Form::text($name = 'mother_firstname', $value = !empty($student) ? $student->mother_firstname : '', 
                                                 $attributes = array(
                                                     'id' => 'mother_firstname',
                                                     'class' => 'form-control form-control-lg m-input m-input--solid'
@@ -311,7 +327,7 @@
                                         <div class="form-group m-form__group">
                                             {{ Form::label('mother_middlename', 'Middlename', ['class' => '']) }}
                                             {{ 
-                                                Form::text($name = 'mother_middlename', $value = $student->mother_middlename ? $student->mother_middlename : '', 
+                                                Form::text($name = 'mother_middlename', $value = !empty($student) ? $student->mother_middlename : '', 
                                                 $attributes = array(
                                                     'id' => 'mother_middlename',
                                                     'class' => 'form-control form-control-lg m-input m-input--solid'
@@ -327,7 +343,7 @@
                                         <div class="form-group m-form__group">
                                             {{ Form::label('mother_lastname', 'Lastname', ['class' => '']) }}
                                             {{ 
-                                                Form::text($name = 'mother_lastname', $value = $student->mother_lastname ? $student->mother_lastname : '', 
+                                                Form::text($name = 'mother_lastname', $value = !empty($student) ? $student->mother_lastname : '', 
                                                 $attributes = array(
                                                     'id' => 'mother_lastname',
                                                     'class' => 'form-control form-control-lg m-input m-input--solid'
@@ -341,9 +357,26 @@
                                         <div class="form-group m-form__group">
                                             {{ Form::label('mother_contact_no', 'Contact Number', ['class' => '']) }}
                                             {{ 
-                                                Form::text($name = 'mother_contact_no', $value = $student->mother_contact_no ? $student->mother_contact_no : '', 
+                                                Form::text($name = 'mother_contact_no', $value = !empty($student) ? $student->mother_contact_no : '', 
                                                 $attributes = array(
                                                     'id' => 'mother_contact_no',
+                                                    'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                )) 
+                                            }}
+                                            <span class="m-form__help m--font-danger">
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group m-form__group">
+                                            {{ Form::label('mother_email', 'Email', ['class' => '']) }}
+                                            {{ 
+                                                Form::text($name = 'mother_email', $value = !empty($student) ? $student->mother_email : '', 
+                                                $attributes = array(
+                                                    'type' => 'email',
+                                                    'id' => 'mother_email',
                                                     'class' => 'form-control form-control-lg m-input m-input--solid'
                                                 )) 
                                             }}
@@ -360,15 +393,20 @@
                                         <label for="mother_avatar"></label>
                                     </div>
                                     <div class="avatar-preview">
-                                        @if ($student->mother_avatar != '')
-                                            <div class="avatar_preview" id="motherPreview" style="background-image: url({{ asset('images/guardians/mother/'.$student->id.'/'.$student->mother_avatar) }})">
-                                            </div>
+                                        @if (!empty($student))
+                                            @if ($student->mother_avatar!= '')
+                                                <div class="avatar_preview" id="motherPreview" style="background-image: url({{ asset('images/students/'.$student->identification_no.'/'.$student->mother_avatar) }})">
+                                                </div>
+                                            @else
+                                                <div class="avatar_preview" id="motherPreview">
+                                                </div>
+                                            @endif
                                         @else
                                             <div class="avatar_preview" id="motherPreview">
                                             </div>
                                         @endif
                                     </div>
-                                    <a href="#" class="btn btn-danger close-file {{ ($student->mother_avatar != '') ? '' : 'invisible' }}"><i class="fa fa-close"></i></a>
+                                    <a href="#" class="btn btn-danger close-file {{ (!empty($student) && $student->mother_avatar != '') ? '' : 'invisible' }}"><i class="fa fa-close"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -386,7 +424,7 @@
                                         <div class="form-group m-form__group">
                                             {{ Form::label('father_firstname', 'Firstname', ['class' => '']) }}
                                             {{ 
-                                                Form::text($name = 'father_firstname', $value = $student->father_firstname ? $student->father_firstname : '', 
+                                                Form::text($name = 'father_firstname', $value = !empty($student) ? $student->father_firstname : '', 
                                                 $attributes = array(
                                                     'id' => 'father_firstname',
                                                     'class' => 'form-control form-control-lg m-input m-input--solid'
@@ -400,7 +438,7 @@
                                         <div class="form-group m-form__group">
                                             {{ Form::label('father_middlename', 'Middlename', ['class' => '']) }}
                                             {{ 
-                                                Form::text($name = 'father_middlename', $value = $student->father_middlename ? $student->father_middlename : '', 
+                                                Form::text($name = 'father_middlename', $value = !empty($student) ? $student->father_middlename : '', 
                                                 $attributes = array(
                                                     'id' => 'father_middlename',
                                                     'class' => 'form-control form-control-lg m-input m-input--solid'
@@ -416,7 +454,7 @@
                                         <div class="form-group m-form__group">
                                             {{ Form::label('father_lastname', 'Lastname', ['class' => '']) }}
                                             {{ 
-                                                Form::text($name = 'father_lastname', $value = $student->father_lastname ? $student->father_lastname : '', 
+                                                Form::text($name = 'father_lastname', $value = !empty($student) ? $student->father_lastname : '', 
                                                 $attributes = array(
                                                     'id' => 'father_lastname',
                                                     'class' => 'form-control form-control-lg m-input m-input--solid'
@@ -430,9 +468,26 @@
                                         <div class="form-group m-form__group">
                                             {{ Form::label('father_contact_no', 'Contact Number', ['class' => '']) }}
                                             {{ 
-                                                Form::text($name = 'father_contact_no', $value = $student->father_contact_no ? $student->father_contact_no : '', 
+                                                Form::text($name = 'father_contact_no', $value = !empty($student) ? $student->father_contact_no : '', 
                                                 $attributes = array(
                                                     'id' => 'father_contact_no',
+                                                    'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                )) 
+                                            }}
+                                            <span class="m-form__help m--font-danger">
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group m-form__group">
+                                            {{ Form::label('father_email', 'Email', ['class' => '']) }}
+                                            {{ 
+                                                Form::text($name = 'father_email', $value = !empty($student) ? $student->father_email : '', 
+                                                $attributes = array(
+                                                    'type' => 'email',
+                                                    'id' => 'father_email',
                                                     'class' => 'form-control form-control-lg m-input m-input--solid'
                                                 )) 
                                             }}
@@ -449,15 +504,20 @@
                                         <label for="father_avatar"></label>
                                     </div>
                                     <div class="avatar-preview">
-                                        @if ($student->father_avatar!= '')
-                                            <div class="avatar_preview" id="fatherPreview" style="background-image: url({{ asset('images/guardians/father/'.$student->id.'/'.$student->father_avatar) }})">
-                                            </div>
+                                        @if (!empty($student))
+                                            @if ($student->father_avatar!= '')
+                                                <div class="avatar_preview" id="fatherPreview" style="background-image: url({{ asset('images/students/'.$student->identification_no.'/'.$student->father_avatar) }})">
+                                                </div>
+                                            @else
+                                                <div class="avatar_preview" id="fatherPreview">
+                                                </div>
+                                            @endif
                                         @else
                                             <div class="avatar_preview" id="fatherPreview">
                                             </div>
                                         @endif
                                     </div>
-                                    <a href="#" class="btn btn-danger close-file {{ ($student->father_avatar!= '') ? '' : 'invisible' }}"><i class="fa fa-close"></i></a>
+                                    <a href="#" class="btn btn-danger close-file {{ (!empty($student) && $student->father_avatar != '') ? '' : 'invisible' }}"><i class="fa fa-close"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -476,7 +536,7 @@
                                             <span></span>
                                         </label>
                                         <label class="m-radio m-radio--solid">
-                                         @if ($student->father_selected == 1)
+                                            @if ($student->father_selected == 1)
                                                 {{ Form::radio('guardian_selected', 'Father', true) }}
                                             @else
                                                 {{ Form::radio('guardian_selected', 'Father') }}
@@ -515,177 +575,56 @@
                     </div>
                     <div id="siblings-panel" class="{{ ($student->is_sibling > 0) ? '' : 'hidden' }}">
                         @if (!empty($student->siblings))
-                            @php 
-                                $i = 1;           
-                            @endphp
+                            @php $i = 1; @endphp
                             @foreach ($student->siblings as $sibling)
-                                @if ($i == 1)
-                                    <div class="row siblings-panel-layout">
-                                        <div class="col-md-11">
-                                            <div class="row">
-                                                <div class="hidden">
-                                                    <div class="form-group m-form__group required">
-                                                        {{ Form::label('sibling_id', 'ID', ['class' => '']) }}
-                                                        {{ 
-                                                            Form::text($name = 'sibling_id[]', $value = $sibling->id, 
-                                                            $attributes = array(
-                                                                'class' => 'sibling_id form-control form-control-lg m-input m-input--solid'
-                                                            )) 
-                                                        }}
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group m-form__group required">
-                                                        {{ Form::label('sibling_firstname', 'Firstname', ['class' => '']) }}
-                                                        {{ 
-                                                            Form::text($name = 'sibling_firstname[]', $value = $sibling->firstname, 
-                                                            $attributes = array(
-                                                                'class' => 'sibling_firstname form-control form-control-lg m-input m-input--solid'
-                                                            )) 
-                                                        }}
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group m-form__group">
-                                                        {{ Form::label('sibling_middlename', 'Middlename', ['class' => '']) }}
-                                                        {{ 
-                                                            Form::text($name = 'sibling_middlename[]', $value = $sibling->middlename, 
-                                                            $attributes = array(
-                                                                'class' => 'sibling_middlename form-control form-control-lg m-input m-input--solid'
-                                                            )) 
-                                                        }}
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group m-form__group required">
-                                                        {{ Form::label('sibling_lastname', 'Lastname', ['class' => '']) }}
-                                                        {{ 
-                                                            Form::text($name = 'sibling_lastname[]', $value = $sibling->lastname, 
-                                                            $attributes = array(
-                                                                'class' => 'sibling_lastname form-control form-control-lg m-input m-input--solid'
-                                                            )) 
-                                                        }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-1">
+                                <div class="row">
+                                    <div class="col-md-11">
+                                        <div class="form-group m-form__group">
+                                            {{ 
+                                                Form::text($name = 'sibling[]', $value = 
+                                                $students->get_column_via_id($sibling->sibling_id, 'identification_no') . 
+                                                ' - ' . ucfirst($students->get_column_via_id($sibling->sibling_id, 'lastname')) .
+                                                ', ' . ucfirst($students->get_column_via_id($sibling->sibling_id, 'firstname')) .
+                                                ' ' . ucfirst($students->get_column_via_id($sibling->sibling_id, 'middlename')[0]) . '.'
+                                                , 
+                                                $attributes = array(
+                                                    'class' => 'full-width typeahead sibling form-control form-control-lg m-input m-input--solid',
+                                                    'placeholder' => 'search for student number, firstname or lastname'
+                                                )) 
+                                            }}
+                                            <span class="m-form__help m--font-danger"></span>
                                         </div>
                                     </div>
-                                @else
-                                    <div class="row siblings-panel-layout">
-                                        <div class="col-md-11">
-                                            <div class="row">
-                                                <div class="hidden">
-                                                    <div class="form-group m-form__group required">
-                                                        {{ Form::label('sibling_id', 'ID', ['class' => '']) }}
-                                                        {{ 
-                                                            Form::text($name = 'sibling_id[]', $value = $sibling->id, 
-                                                            $attributes = array(
-                                                                'class' => 'sibling_id form-control form-control-lg m-input m-input--solid'
-                                                            )) 
-                                                        }}
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group m-form__group required">
-                                                        {{ Form::label('sibling_firstname', 'Firstname', ['class' => '']) }}
-                                                        {{ 
-                                                            Form::text($name = 'sibling_firstname[]', $value = $sibling->firstname, 
-                                                            $attributes = array(
-                                                                'class' => 'sibling_firstname form-control form-control-lg m-input m-input--solid'
-                                                            )) 
-                                                        }}
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group m-form__group">
-                                                        {{ Form::label('sibling_middlename', 'Middlename', ['class' => '']) }}
-                                                        {{ 
-                                                            Form::text($name = 'sibling_middlename[]', $value = $sibling->middlename, 
-                                                            $attributes = array(
-                                                                'class' => 'sibling_middlename form-control form-control-lg m-input m-input--solid'
-                                                            )) 
-                                                        }}
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group m-form__group required">
-                                                        {{ Form::label('sibling_lastname', 'Lastname', ['class' => '']) }}
-                                                        {{ 
-                                                            Form::text($name = 'sibling_lastname[]', $value = $sibling->lastname, 
-                                                            $attributes = array(
-                                                                'class' => 'sibling_lastname form-control form-control-lg m-input m-input--solid'
-                                                            )) 
-                                                        }}
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <button type="button" class="minus-sibling btn">
-                                                        <i class="la la-minus"></i>
-                                                    </button>
-                                                </div>
+                                    @if ($i > 1)
+                                    <div class="col-md-1">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <button type="button" class="minus-sibling btn"><i class="la la-minus"></i></button>
                                             </div>
                                         </div>
                                     </div>
-                                @endif
-                                @php 
-                                    $i0++;           
-                                @endphp
+                                    @endif
+                                </div>
+                            @php $i++; @endphp
                             @endforeach
                         @else
-                            <div class="row siblings-panel-layout">
+                            <div class="row">
                                 <div class="col-md-11">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group m-form__group">
-                                                {{ Form::label('sibling_firstname', 'Firstname', ['class' => '']) }}
-                                                {{ 
-                                                    Form::text($name = 'sibling_firstname[]', $value = '', 
-                                                    $attributes = array(
-                                                        'class' => 'sibling_firstname form-control form-control-lg m-input m-input--solid'
-                                                    )) 
-                                                }}
-                                                <span class="m-form__help m--font-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group m-form__group">
-                                                {{ Form::label('sibling_middlename', 'Middlename', ['class' => '']) }}
-                                                {{ 
-                                                    Form::text($name = 'sibling_middlename[]', $value = '', 
-                                                    $attributes = array(
-                                                        'class' => 'sibling_middlename form-control form-control-lg m-input m-input--solid'
-                                                    )) 
-                                                }}
-                                                <span class="m-form__help m--font-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group m-form__group">
-                                                {{ Form::label('sibling_lastname', 'Lastname', ['class' => '']) }}
-                                                {{ 
-                                                    Form::text($name = 'sibling_lastname[]', $value = '', 
-                                                    $attributes = array(
-                                                        'class' => 'sibling_lastname form-control form-control-lg m-input m-input--solid'
-                                                    )) 
-                                                }}
-                                                <span class="m-form__help m--font-danger"></span>
-                                            </div>
-                                        </div>
+                                    <div class="form-group m-form__group">
+                                        {{ 
+                                            Form::text($name = 'sibling[]', $value = '', 
+                                            $attributes = array(
+                                                'class' => 'full-width typeahead sibling form-control form-control-lg m-input m-input--solid',
+                                                'placeholder' => 'search for student number, firstname or lastname'
+                                            )) 
+                                        }}
+                                        <span class="m-form__help m--font-danger"></span>
                                     </div>
-                                </div>
-                                <div class="col-md-1">
                                 </div>
                             </div>
                         @endif
                     </div>
-                    <div id="siblings-panel-button" class="row m-bottom-1 hidden">
+                    <div id="siblings-panel-button" class="row m-bottom-1 {{ ($student->is_sibling > 0) ? '' : 'hidden' }}">
                         <div class="col-md-12">
                             <button id="add-sibling" type="button" class="btn btn-brand">
                                 <i class="la la-plus"></i>&nbsp;Add Sibling
@@ -711,10 +650,10 @@
                         <div class="col-md-9">
                             <div class="form-group m-form__group required">
                                 {{ 
-                                    Form::text($name = 'username', $value = $student->username ? $student->username : '', 
+                                    Form::text($name = 'email', $value = !empty($student) ? $student->email : '', 
                                     $attributes = array(
                                         'type' => 'email',
-                                        'id' => 'username',
+                                        'id' => 'email',
                                         'class' => 'form-control form-control-lg m-input m-input--solid'
                                     )) 
                                 }}
@@ -733,7 +672,8 @@
                                     Form::text($name = 'username', $value = $student->username ? $student->username : '', 
                                     $attributes = array(
                                         'id' => 'username',
-                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                        'disabled' => 'disabled',
+                                        'class' => 'bold form-control form-control-lg m-input m-input--solid'
                                     )) 
                                 }}
                                 <span class="m-form__help m--font-danger">
@@ -747,7 +687,13 @@
                         </div>
                         <div class="col-md-9">
                             <div class="form-group m-form__group required">
-                                <input id="password" class="form-control form-control-lg m-input m-input--solid required" name="password" type="password" value="">
+                                {{ 
+                                    Form::text($name = 'password', $value = !empty($student) ? $student->password : '', 
+                                    $attributes = array(
+                                        'id' => 'password',
+                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    )) 
+                                }}
                                 <span class="m-form__help m--font-danger">
                                 </span>
                             </div>
@@ -772,15 +718,20 @@
                                     <label for="avatar"></label>
                                 </div>
                                 <div class="avatar-preview">
-                                    @if ($student->avatar!= '')
-                                        <div class="avatar_preview" id="studentPreview" style="background-image: url({{ asset('images/students/'.$student->id.'/'.$student->avatar) }})">
-                                        </div>
+                                    @if (!empty($student))
+                                        @if ($student->avatar!= '')
+                                            <div class="avatar_preview" id="studentPreview" style="background-image: url({{ asset('images/students/'.$student->identification_no.'/'.$student->avatar) }})">
+                                            </div>
+                                        @else
+                                            <div class="avatar_preview" id="studentPreview">
+                                            </div>
+                                        @endif
                                     @else
                                         <div class="avatar_preview" id="studentPreview">
                                         </div>
                                     @endif
                                 </div>
-                                <a href="#" class="btn btn-danger close-file {{ ($student->avatar!= '') ? '' : 'invisible' }}"><i class="fa fa-close"></i></a>
+                                <a href="#" class="btn btn-danger close-file {{ (!empty($student) && $student->avatar != '') ? '' : 'invisible' }}"><i class="fa fa-close"></i></a>
                             </div>
                         </div>
                     </div>
