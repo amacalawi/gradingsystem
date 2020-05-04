@@ -106,7 +106,10 @@ button:not([data-dismiss="alert"]) {
     margin-top: 70px;
 }
 
-.minus-sibling,
+.minus-sibling {
+    margin-top: 10px;
+}
+
 .minus-activity {
     margin-top: 35px;
 }
@@ -311,4 +314,15 @@ button:not([data-dismiss="alert"]) {
 input[type="text"].bold {
     font-weight: bold;
     color: #333 !important;
+}
+
+.twitter-typeahead {
+    width: 100%;
+}
+.twitter-typeahead .tt-menu {
+    background: #f4f5f8 !important;
+    width: 100% !important;
+}
+.twitter-typeahead .tt-suggestion {
+    padding: 10px 1.5rem !important;
 }

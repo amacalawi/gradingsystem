@@ -112,7 +112,7 @@ class StaffsController extends Controller
         if ($request->get('id') != '') {
             $folderID = $request->get('id');
         } else {
-            Storage::disk('local')->makeDirectory($request->get('files').'/'.$this->generate_staff_no());
+            Storage::disk('uploads')->makeDirectory($request->get('files').'/'.$this->generate_staff_no());
             $folderID = $this->generate_staff_no();
         }
 
@@ -138,11 +138,27 @@ class StaffsController extends Controller
     {    
         $timestamp = date('Y-m-d H:i:s');
 
+        $rows = User::where([
+            'email' => $request->email
+        ])->count();
+
+        if ($rows > 0) {
+            $data = array(
+                'title' => 'Oh snap!',
+                'text' => 'The email is already in use.',
+                'type' => 'error',
+                'class' => 'btn-danger'
+            );
+    
+            echo json_encode( $data ); exit();
+        }
+        
         $user = User::create([
             'name' => $request->firstname.' '.$request->lastname,
             'username' => $this->generate_staff_no(),
             'email' => $request->email,
-            'password' => $request->password
+            'password' => $request->password,
+            'type' => 'staff'
         ]);
 
         if (!$user) {
@@ -216,7 +232,7 @@ class StaffsController extends Controller
         $staff->date_joined =  date('Y-m-d', strtotime($request->date_joined));
         $staff->date_resigned = ($request->date_resigned !== NULL) ? date('Y-m-d', strtotime($request->date_resigned)) : NULL;
         if ($request->get('avatar') !== NULL) {
-            $application->avatar = $request->get('avatar');
+            $staff->avatar = $request->get('avatar');
         }
         $staff->updated_at = $timestamp;
         $staff->updated_by = Auth::user()->id;
@@ -255,7 +271,7 @@ class StaffsController extends Controller
         $action = $request->input('items')[0]['action'];
 
         if ($action == 'Remove') {
-            $quarters = Staff::where([
+            $staffs = Staff::where([
                 'id' => $id,
             ])
             ->update([
@@ -266,7 +282,7 @@ class StaffsController extends Controller
             
             $data = array(
                 'title' => 'Well done!',
-                'text' => 'The quarter has been successfully removed.',
+                'text' => 'The staff has been successfully removed.',
                 'type' => 'success',
                 'class' => 'btn-brand'
             );
@@ -274,7 +290,7 @@ class StaffsController extends Controller
             echo json_encode( $data ); exit();
         }    
         else {
-            $batches = Staff::where([
+            $staffs = Staff::where([
                 'id' => $id,
             ])
             ->update([
@@ -285,7 +301,7 @@ class StaffsController extends Controller
             
             $data = array(
                 'title' => 'Well done!',
-                'text' => 'The quarter has been successfully activated.',
+                'text' => 'The staff has been successfully activated.',
                 'type' => 'success',
                 'class' => 'btn-brand'
             );

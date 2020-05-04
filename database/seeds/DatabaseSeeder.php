@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'superadmin',
             'username' => 'superadmin',
             'password' => '$2y$10$mEzN8zr327/0Qp/GebqspOik64vXbnfiuala5n6bnUxpAvvS9Ndni',
+            'type' => 'administrator'
         ]);
 
         $roles = [
@@ -61,29 +62,5 @@ class DatabaseSeeder extends Seeder
             'role_id' => 1,
             'created_by' => 1
         ]);
-
-        $members_types = [
-            [
-                'code' => 'student',
-                'name' => 'Student',
-                'description' => 'Student Type',
-                'created_by' => 1
-            ], 
-            [
-                'code' => 'staff',
-                'name' => 'Staff',
-                'description' => 'Staff Type',
-                'created_by' => 1
-            ],
-            [
-                'code' => 'parent',
-                'name' => 'Parent',
-                'description' => 'Parent Type',
-                'created_by' => 1
-            ]
-        ];
-        foreach ($members_types as $members_type) {
-            DB::table('members_types')->insert($members_type);
-        }
     }
 }

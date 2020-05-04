@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MemberInformation extends Model
+class Sibling extends Model
 {	
     protected $guarded = ['id'];
 
-    protected $table = 'members_informations';
+    protected $table = 'siblings';
     
     public $timestamps = false;
 }
