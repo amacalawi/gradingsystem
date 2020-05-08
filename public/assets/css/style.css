@@ -319,10 +319,39 @@ input[type="text"].bold {
 .twitter-typeahead {
     width: 100%;
 }
+
 .twitter-typeahead .tt-menu {
     background: #f4f5f8 !important;
     width: 100% !important;
 }
+
 .twitter-typeahead .tt-suggestion {
     padding: 10px 1.5rem !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    padding: 1rem 1.5rem;
+    background-color: #f4f5f8;
+    border-color: #f4f5f8;
+    color: #575962;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    border-radius: 0.3rem;
+}
+
+.margin-top-bottom-10 {
+    margin: 10px 0;
+}
+
+.m-accordion__item-icon .m-checkbox {
+    float: left;
+    margin-top: -11px;
+}
+
+.toggle-crud:hover,
+.toggle-crud:active,
+.toggle-crud:focus,
+.toggle-crud {
+    color: #a4a6ae;
+    text-decoration: none !important;
 }

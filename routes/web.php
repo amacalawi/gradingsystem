@@ -80,6 +80,50 @@ Route::prefix('schools')->group(function () {
     /* End Designations Routes */
 });
 
+Route::prefix('components')->group(function () {
+    /* Headers */
+    Route::get('menus/headers/add', 'HeadersController@add')->name('menus.headers.add');
+    Route::get('menus/headers/edit/{id?}', 'HeadersController@edit')->name('menus.headers.edit');
+    Route::post('menus/headers/store', 'HeadersController@store')->name('menus.headers.store');
+    Route::put('menus/headers/update/{id}', 'HeadersController@update')->name('menus.headers.update');
+    Route::get('menus/headers', 'HeadersController@manage')->name('menus.headers.manage.active');
+    Route::get('menus/headers/inactive', 'HeadersController@inactive')->name('menus.headers.manage.inactive');
+    Route::post('menus/headers/remove', 'HeadersController@remove')->name('menus.headers.remove');
+    Route::post('menus/headers/restore', 'HeadersController@restore')->name('menus.headers.restore');
+    Route::get('menus/headers/all-active', 'HeadersController@all_active')->name('menus.headers.all.active');
+    Route::get('menus/headers/all-inactive', 'HeadersController@all_inactive')->name('menus.headers.all.inactive');
+    Route::put('menus/headers/update-status/{id}', 'HeadersController@update_status')->name('menus.headers.update.status');
+    /* End Headers Routes */
+
+    /* Modules */
+    Route::get('menus/modules/add', 'ModulesController@add')->name('menus.modules.add');
+    Route::get('menus/modules/edit/{id?}', 'ModulesController@edit')->name('menus.modules.edit');
+    Route::post('menus/modules/store', 'ModulesController@store')->name('menus.modules.store');
+    Route::put('menus/modules/update/{id}', 'ModulesController@update')->name('menus.modules.update');
+    Route::get('menus/modules', 'ModulesController@manage')->name('menus.modules.manage.active');
+    Route::get('menus/modules/inactive', 'ModulesController@inactive')->name('menus.modules.manage.inactive');
+    Route::post('menus/modules/remove', 'ModulesController@remove')->name('menus.modules.remove');
+    Route::post('menus/modules/restore', 'ModulesController@restore')->name('menus.modules.restore');
+    Route::get('menus/modules/all-active', 'ModulesController@all_active')->name('menus.modules.all.active');
+    Route::get('menus/modules/all-inactive', 'ModulesController@all_inactive')->name('menus.modules.all.inactive');
+    Route::put('menus/modules/update-status/{id}', 'ModulesController@update_status')->name('menus.modules.update.status');
+    /* End Modules Routes */
+
+    /* Sub Modules */
+    Route::get('menus/sub-modules/add', 'SubModulesController@add')->name('menus.sub-modules.add');
+    Route::get('menus/sub-modules/edit/{id?}', 'SubModulesController@edit')->name('menus.sub-modules.edit');
+    Route::post('menus/sub-modules/store', 'SubModulesController@store')->name('menus.sub-modules.store');
+    Route::put('menus/sub-modules/update/{id}', 'SubModulesController@update')->name('menus.sub-modules.update');
+    Route::get('menus/sub-modules', 'SubModulesController@manage')->name('menus.sub-modules.manage.active');
+    Route::get('menus/sub-modules/inactive', 'SubModulesController@inactive')->name('menus.sub-modules.manage.inactive');
+    Route::post('menus/sub-modules/remove', 'SubModulesController@remove')->name('menus.sub-modules.remove');
+    Route::post('menus/sub-modules/restore', 'SubModulesController@restore')->name('menus.sub-modules.restore');
+    Route::get('menus/sub-modules/all-active', 'SubModulesController@all_active')->name('menus.sub-modules.all.active');
+    Route::get('menus/sub-modules/all-inactive', 'SubModulesController@all_inactive')->name('menus.sub-modules.all.inactive');
+    Route::put('menus/sub-modules/update-status/{id}', 'SubModulesController@update_status')->name('menus.modules.update.status');
+    /* End Sub Modules Routes */
+});
+
 Route::prefix('memberships')->group(function () {
     Route::post('students/uploads', 'StudentsController@uploads')->name('students.uploads');
     Route::get('students/downloads', 'StudentsController@downloads')->name('students.downloads');
@@ -111,6 +155,32 @@ Route::prefix('memberships')->group(function () {
     Route::get('staffs/all-inactive', 'StaffsController@all_inactive')->name('staffs.all.inactive');
     Route::put('staffs/update-status/{id}', 'StaffsController@update_status')->name('staffs.update.status');
     /* End Staffs Routes */
+
+    /* User Accounts */
+    Route::get('users/accounts/add', 'UserAccountsController@add')->name('users.accounts.add');
+    Route::get('users/accounts/edit/{id?}', 'UserAccountsController@edit')->name('users.accounts.edit');
+    Route::post('users/accounts/store', 'UserAccountsController@store')->name('users.accounts.store');
+    Route::put('users/accounts/update/{id}', 'UserAccountsController@update')->name('users.accounts.update');
+    Route::get('users/accounts', 'UserAccountsController@manage')->name('users.accounts.manage.active');
+    Route::get('users/accounts/inactive', 'UserAccountsController@inactive')->name('users.accounts.manage.inactive');
+    Route::post('users/accounts/remove', 'UserAccountsController@remove')->name('users.accounts.remove');
+    Route::post('users/accounts/restore', 'UserAccountsController@restore')->name('users.accounts.restore');
+    Route::get('users/accounts/all-active', 'UserAccountsController@all_active')->name('users.accounts.all.active');
+    Route::get('users/accounts/all-inactive', 'UserAccountsController@all_inactive')->name('users.accounts.all.inactive');
+    Route::put('users/accounts/update-status/{id}', 'UserAccountsController@update_status')->name('users.accounts.update.status');
+    
+    /* Roles and Permission */
+    Route::get('users/roles/add', 'UserRoleController@add')->name('users.roles.add');
+    Route::get('users/roles/edit/{id?}', 'UserRoleController@edit')->name('users.roles.edit');
+    Route::post('users/roles/store', 'UserRoleController@store')->name('users.roles.store');
+    Route::put('users/roles/update/{id}', 'UserRoleController@update')->name('users.roles.update');
+    Route::get('users/roles', 'UserRoleController@manage')->name('users.roles.manage.active');
+    Route::get('users/roles/inactive', 'UserRoleController@inactive')->name('users.roles.manage.inactive');
+    Route::post('users/roles/remove', 'UserRoleController@remove')->name('users.roles.remove');
+    Route::post('users/roles/restore', 'UserRoleController@restore')->name('users.roles.restore');
+    Route::get('users/roles/all-active', 'UserRoleController@all_active')->name('users.roles.all.active');
+    Route::get('users/roles/all-inactive', 'UserRoleController@all_inactive')->name('users.roles.all.inactive');
+    Route::put('users/roles/update-status/{id}', 'UserRoleController@update_status')->name('users.roles.update.status');
 });
 
 
