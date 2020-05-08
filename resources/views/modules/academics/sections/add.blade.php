@@ -1,16 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="row">
-    <div class="col-md-12">
-        <div class="m-portlet m-portlet--tab">
-            @include('partials.messages')
-            <div class="m-portlet__body">
-                @include('forms.section')
-            </div>
-        </div>
-    </div>
-</div>
+    @include('partials.messages')
+    @include('forms.section')
 @endsection
 
 @push('scripts')
