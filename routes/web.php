@@ -155,6 +155,9 @@ Route::prefix('academics')->group(function () {
     Route::get('subjects/all-active', 'SubjectsController@all_active')->name('subjects.all.active');
     Route::get('subjects/all-inactive', 'SubjectsController@all_inactive')->name('subjects.all.inactive');
     Route::put('subjects/update-status/{id}', 'SubjectsController@update_status')->name('subjects.update.status');
+    //Route::get('students/get-all-siblings', 'StudentsController@get_all_siblings')->name('students.siblings');
+    Route::get('subjects/get-all-subjects', 'SubjectsController@get_all_subjects');
+    Route::get('subjects/get-all-teachers', 'SubjectsController@get_all_teachers'); 
     /* End Subjects Routes */
 });
 

@@ -33,4 +33,26 @@ class Level extends Model
         return (object) $results;
     }
 
+    public function all_levels()
+    {	
+    	$levels = self::where('is_active', 1)->orderBy('id', 'asc')->get();
+
+        $lvls = array();
+        $lvls[] = array('' => 'select a level');
+        foreach ($levels as $level) {
+            $lvls[] = array(
+                $level->id => $level->name
+            );
+        }
+
+        $levels = array();
+        foreach($lvls as $lvl) {
+            foreach($lvl as $key => $val) {
+                $levels[$key] = $val;
+            }
+        }
+
+        return $levels;
+    }
+
 }
