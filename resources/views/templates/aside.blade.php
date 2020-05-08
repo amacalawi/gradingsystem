@@ -17,7 +17,7 @@
         data-menu-scrollable="true" data-menu-dropdown-timeout="500"  
         >
         <ul class="m-menu__nav  m-menu__nav--dropdown-submenu-arrow ">
-            <li class="m-menu__item  m-menu__item--submenu m-menu__item--submenu-fullheight" aria-haspopup="true"  data-menu-submenu-toggle="click" data-menu-dropdown-toggle-class="m-aside-menu-overlay--on">
+            <li class="m-menu__item m-menu__item--submenu m-menu__item--submenu-fullheight" aria-haspopup="true"  data-menu-submenu-toggle="click" data-menu-dropdown-toggle-class="m-aside-menu-overlay--on">
                 <a  href="#" class="m-menu__link m-menu__toggle">
                     <i class="m-menu__link-icon flaticon-menu"></i>
                     <span class="m-menu__link-text">
@@ -29,7 +29,7 @@
                     <span class="m-menu__arrow"></span>
                     <div class="m-menu__wrapper">
                         <ul class="m-menu__subnav">
-                            <li class="m-menu__item  m-menu__item--parent m-menu__item--submenu-fullheight" aria-haspopup="true" >
+                            <li class="m-menu__item m-menu__item--parent m-menu__item--submenu-fullheight" aria-haspopup="true" >
                                 <span class="m-menu__link">
                                     <span class="m-menu__link-text">
                                         Applications
@@ -42,7 +42,7 @@
                                 </h4>
                                 <i class="m-menu__section-icon flaticon-more-v3"></i>
                             </li>
-                            <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion">
+                            <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion">
                                 <a  href="#" class="m-menu__link m-menu__toggle">
                                     <span class="m-menu__link-text">
                                         <i class="fa fa-mortar-board module-icons"></i> Academics
@@ -52,7 +52,7 @@
                                 <div class="m-menu__submenu ">
                                     <span class="m-menu__arrow"></span>
                                     <ul class="m-menu__subnav">
-                                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                             <a  href="{{ url('/academics/sections') }}" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
@@ -62,7 +62,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                             <a  href="{{ url('/academics/levels') }}" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
@@ -72,7 +72,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                             <a  href="{{ url('/academics/subjects') }}" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
@@ -85,7 +85,7 @@
                                     </ul>
                                 </div>
                             </li>
-                            <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion">
+                            <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion">
                                 <a  href="#" class="m-menu__link m-menu__toggle">
                                     <span class="m-menu__link-text">
                                         <i class="fa fa-file-text-o module-icons"></i> Grading Sheets
@@ -95,7 +95,7 @@
                                 <div class="m-menu__submenu ">
                                     <span class="m-menu__arrow"></span>
                                     <ul class="m-menu__subnav">
-                                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                             <a  href="inner.html" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
@@ -105,7 +105,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                             <a  href="inner.html" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
@@ -115,7 +115,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                             <a  href="inner.html" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
@@ -128,7 +128,7 @@
                                     </ul>
                                 </div>
                             </li>
-                            <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion">
+                            <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion">
                                 <a  href="#" class="m-menu__link m-menu__toggle">
                                     <span class="m-menu__link-text">
                                         <i class="fa fa-calendar-check-o module-icons"></i> Attendance Sheet
@@ -138,7 +138,7 @@
                                 <div class="m-menu__submenu ">
                                     <span class="m-menu__arrow"></span>
                                     <ul class="m-menu__subnav">
-                                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                             <a  href="inner.html" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
@@ -148,7 +148,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                             <a  href="inner.html" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
@@ -158,7 +158,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                             <a  href="inner.html" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
@@ -177,7 +177,7 @@
                                 </h4>
                                 <i class="m-menu__section-icon flaticon-more-v3"></i>
                             </li>
-                            <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion">
+                            <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion">
                                 <a  href="#" class="m-menu__link m-menu__toggle">
                                     <span class="m-menu__link-text">
                                         <i class="fa fa-university module-icons"></i> Schools
@@ -187,7 +187,7 @@
                                 <div class="m-menu__submenu ">
                                     <span class="m-menu__arrow"></span>
                                     <ul class="m-menu__subnav">
-                                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                             <a  href="{{ url('/schools/batches') }}" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
@@ -197,7 +197,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                             <a  href="{{ url('/schools/quarters') }}" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
@@ -207,7 +207,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                             <a  href="{{ url('/schools/departments') }}" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
@@ -217,7 +217,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                             <a  href="{{ url('/schools/designations') }}" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
@@ -230,7 +230,7 @@
                                     </ul>
                                 </div>
                             </li>
-                            <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion">
+                            <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion">
                                 <a  href="#" class="m-menu__link m-menu__toggle">
                                     <span class="m-menu__link-text">
                                         <i class="fa fa-group module-icons"></i> Groups
@@ -240,7 +240,7 @@
                                 <div class="m-menu__submenu ">
                                     <span class="m-menu__arrow"></span>
                                     <ul class="m-menu__subnav">
-                                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                             <a  href="inner.html" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
@@ -250,7 +250,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                             <a  href="inner.html" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
@@ -263,7 +263,7 @@
                                     </ul>
                                 </div>
                             </li>
-                            <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion">
+                            <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion">
                                 <a  href="#" class="m-menu__link m-menu__toggle">
                                     <span class="m-menu__link-text">
                                         <i class="fa fa-calendar module-icons"></i> Schedules
@@ -273,7 +273,7 @@
                                 <div class="m-menu__submenu ">
                                     <span class="m-menu__arrow"></span>
                                     <ul class="m-menu__subnav">
-                                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                             <a  href="inner.html" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
@@ -283,7 +283,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                             <a  href="inner.html" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
@@ -296,13 +296,56 @@
                                     </ul>
                                 </div>
                             </li>
+                            <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion">
+                                <a  href="#" class="m-menu__link m-menu__toggle">
+                                    <span class="m-menu__link-text">
+                                        <i class="fa fa-list module-icons"></i> Menus
+                                    </span>
+                                    <i class="m-menu__ver-arrow la la-angle-right"></i>
+                                </a>
+                                <div class="m-menu__submenu ">
+                                    <span class="m-menu__arrow"></span>
+                                    <ul class="m-menu__subnav">
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
+                                            <a  href="{{ url('/components/menus/headers') }}" class="m-menu__link ">
+                                                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                                    <span></span>
+                                                </i>
+                                                <span class="m-menu__link-text">
+                                                    Headers
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
+                                            <a  href="{{ url('/components/menus/modules') }}" class="m-menu__link ">
+                                                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                                    <span></span>
+                                                </i>
+                                                <span class="m-menu__link-text">
+                                                    Modules
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
+                                            <a  href="{{ url('/components/menus/sub-modules') }}" class="m-menu__link ">
+                                                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                                    <span></span>
+                                                </i>
+                                                <span class="m-menu__link-text">
+                                                    Sub Modules
+                                                </span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
                             <li class="m-menu__section">
                                 <h4 class="m-menu__section-text">
                                     Memberships
                                 </h4>
                                 <i class="m-menu__section-icon flaticon-more-v3"></i>
                             </li>
-                            <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion">
+                            <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion">
                                 <a  href="#" class="m-menu__link m-menu__toggle">
                                     <span class="m-menu__link-text">
                                         <i class="la la-user module-icons"></i> Students
@@ -312,7 +355,7 @@
                                 <div class="m-menu__submenu ">
                                     <span class="m-menu__arrow"></span>
                                     <ul class="m-menu__subnav">
-                                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                             <a  href="{{ url('/memberships/students') }}" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
@@ -322,7 +365,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                             <a  href="{{ url('/memberships/students/inactive') }}" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
@@ -335,7 +378,7 @@
                                     </ul>
                                 </div>
                             </li>
-                            <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion">
+                            <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion">
                                 <a  href="#" class="m-menu__link m-menu__toggle">
                                     <span class="m-menu__link-text">
                                         <i class="fa fa-user-secret module-icons"></i> Staffs
@@ -345,7 +388,7 @@
                                 <div class="m-menu__submenu ">
                                     <span class="m-menu__arrow"></span>
                                     <ul class="m-menu__subnav">
-                                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                             <a  href="{{ url('/memberships/staffs') }}" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
@@ -355,7 +398,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                             <a  href="{{ url('/memberships/staffs/inactive') }}" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
@@ -368,12 +411,38 @@
                                     </ul>
                                 </div>
                             </li>
-                            <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
-                                <a  href="{{ url('/memberships/users') }}" class="m-menu__link ">
+                            <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion">
+                                <a  href="#" class="m-menu__link m-menu__toggle">
                                     <span class="m-menu__link-text">
                                         <i class="la la-users module-icons"></i> Users
                                     </span>
+                                    <i class="m-menu__ver-arrow la la-angle-right"></i>
                                 </a>
+                                <div class="m-menu__submenu ">
+                                    <span class="m-menu__arrow"></span>
+                                    <ul class="m-menu__subnav">
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
+                                            <a  href="{{ url('/memberships/users/accounts') }}" class="m-menu__link ">
+                                                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                                    <span></span>
+                                                </i>
+                                                <span class="m-menu__link-text">
+                                                    Accounts
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
+                                            <a  href="{{ url('/memberships/users/roles') }}" class="m-menu__link ">
+                                                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                                    <span></span>
+                                                </i>
+                                                <span class="m-menu__link-text">
+                                                    Roles And Permissions
+                                                </span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </li>
                             <li class="m-menu__section">
                                 <h4 class="m-menu__section-text">
@@ -381,7 +450,7 @@
                                 </h4>
                                 <i class="m-menu__section-icon flaticon-more-v3"></i>
                             </li>
-                            <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion">
+                            <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion">
                                 <a  href="#" class="m-menu__link m-menu__toggle">
                                     <span class="m-menu__link-title">
                                         <span class="m-menu__link-wrap">
@@ -400,7 +469,7 @@
                                 <div class="m-menu__submenu ">
                                     <span class="m-menu__arrow"></span>
                                     <ul class="m-menu__subnav">
-                                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                             <a  href="inner.html" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
@@ -417,7 +486,7 @@
                     </div>
                 </div>
             </li>
-            <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="click" data-redirect="true">
+            <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="click" data-redirect="true">
                 <a  href="#" class="m-menu__link m-menu__toggle">
                     <i class="m-menu__link-icon flaticon-add"></i>
                     <span class="m-menu__link-text">
@@ -428,14 +497,14 @@
                 <div class="m-menu__submenu ">
                     <span class="m-menu__arrow"></span>
                     <ul class="m-menu__subnav">
-                        <li class="m-menu__item  m-menu__item--parent" aria-haspopup="true"  data-redirect="true">
+                        <li class="m-menu__item m-menu__item--parent" aria-haspopup="true"  data-redirect="true">
                             <span class="m-menu__link">
                                 <span class="m-menu__link-text">
                                     Add
                                 </span>
                             </span>
                         </li>
-                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                             <a  href="inner.html" class="m-menu__link ">
                                 <i class="m-menu__link-icon fa fa-file-text-o"></i>
                                 <span class="m-menu__link-text">
@@ -443,7 +512,7 @@
                                 </span>
                             </a>
                         </li>
-                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                             <a  href="inner.html" class="m-menu__link ">
                                 <i class="m-menu__link-icon fa fa-calendar-check-o"></i>
                                 <span class="m-menu__link-text">
@@ -451,7 +520,7 @@
                                 </span>
                             </a>
                         </li>
-                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                             <a  href="inner.html" class="m-menu__link ">
                                 <i class="m-menu__link-icon la la-comments"></i>
                                 <span class="m-menu__link-text">
@@ -459,7 +528,7 @@
                                 </span>
                             </a>
                         </li>
-                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                             <a  href="inner.html" class="m-menu__link ">
                                 <i class="m-menu__link-icon la la-user"></i>
                                 <span class="m-menu__link-text">
@@ -470,7 +539,7 @@
                     </ul>
                 </div>
             </li>
-            <li class="m-menu__item  m-menu__item--submenu m-menu__item--bottom" aria-haspopup="true"  data-menu-submenu-toggle="click" data-redirect="true">
+            <li class="m-menu__item m-menu__item--submenu m-menu__item--bottom" aria-haspopup="true"  data-menu-submenu-toggle="click" data-redirect="true">
                 <a  href="#" class="m-menu__link m-menu__toggle">
                     <i class="m-menu__link-icon flaticon-stopwatch"></i>
                     <span class="m-menu__link-text">
@@ -481,14 +550,14 @@
                 <div class="m-menu__submenu ">
                     <span class="m-menu__arrow"></span>
                     <ul class="m-menu__subnav">
-                        <li class="m-menu__item  m-menu__item--parent m-menu__item--bottom" aria-haspopup="true"  data-redirect="true">
+                        <li class="m-menu__item m-menu__item--parent m-menu__item--bottom" aria-haspopup="true"  data-redirect="true">
                             <span class="m-menu__link">
                                 <span class="m-menu__link-text">
                                     Customers
                                 </span>
                             </span>
                         </li>
-                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                             <a  href="inner.html" class="m-menu__link ">
                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                     <span></span>
@@ -498,7 +567,7 @@
                                 </span>
                             </a>
                         </li>
-                        <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="hover" data-redirect="true">
+                        <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="hover" data-redirect="true">
                             <a  href="#" class="m-menu__link m-menu__toggle">
                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                     <span></span>
@@ -511,7 +580,7 @@
                             <div class="m-menu__submenu ">
                                 <span class="m-menu__arrow"></span>
                                 <ul class="m-menu__subnav">
-                                    <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                    <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                         <a  href="inner.html" class="m-menu__link ">
                                             <i class="m-menu__link-icon flaticon-computer"></i>
                                             <span class="m-menu__link-title">
@@ -528,7 +597,7 @@
                                             </span>
                                         </a>
                                     </li>
-                                    <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                    <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                         <a  href="inner.html" class="m-menu__link ">
                                             <i class="m-menu__link-icon flaticon-signs-2"></i>
                                             <span class="m-menu__link-title">
@@ -545,7 +614,7 @@
                                             </span>
                                         </a>
                                     </li>
-                                    <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                    <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                         <a  href="inner.html" class="m-menu__link ">
                                             <i class="m-menu__link-icon flaticon-clipboard"></i>
                                             <span class="m-menu__link-title">
@@ -562,7 +631,7 @@
                                             </span>
                                         </a>
                                     </li>
-                                    <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                    <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                         <a  href="inner.html" class="m-menu__link ">
                                             <i class="m-menu__link-icon flaticon-multimedia-2"></i>
                                             <span class="m-menu__link-title">
@@ -582,7 +651,7 @@
                                 </ul>
                             </div>
                         </li>
-                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                             <a  href="inner.html" class="m-menu__link ">
                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                     <span></span>
@@ -592,7 +661,7 @@
                                 </span>
                             </a>
                         </li>
-                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                             <a  href="inner.html" class="m-menu__link ">
                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                     <span></span>
@@ -605,7 +674,7 @@
                     </ul>
                 </div>
             </li>
-            <li class="m-menu__item  m-menu__item--submenu m-menu__item--bottom-2" aria-haspopup="true"  data-menu-submenu-toggle="click">
+            <li class="m-menu__item m-menu__item--submenu m-menu__item--bottom-2" aria-haspopup="true"  data-menu-submenu-toggle="click">
                 <a  href="#" class="m-menu__link m-menu__toggle">
                     <i class="m-menu__link-icon flaticon-settings"></i>
                     <span class="m-menu__link-text">
@@ -616,14 +685,14 @@
                 <div class="m-menu__submenu m-menu__submenu--up">
                     <span class="m-menu__arrow"></span>
                     <ul class="m-menu__subnav">
-                        <li class="m-menu__item  m-menu__item--parent m-menu__item--bottom-2" aria-haspopup="true" >
+                        <li class="m-menu__item m-menu__item--parent m-menu__item--bottom-2" aria-haspopup="true" >
                             <span class="m-menu__link">
                                 <span class="m-menu__link-text">
                                     Settings
                                 </span>
                             </span>
                         </li>
-                        <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="hover" data-redirect="true">
+                        <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="hover" data-redirect="true">
                             <a  href="inner.html" class="m-menu__link m-menu__toggle">
                                 <i class="m-menu__link-bullet m-menu__link-bullet--line">
                                     <span></span>
@@ -636,7 +705,7 @@
                             <div class="m-menu__submenu ">
                                 <span class="m-menu__arrow"></span>
                                 <ul class="m-menu__subnav">
-                                    <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                    <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                         <a  href="inner.html" class="m-menu__link ">
                                             <i class="m-menu__link-icon flaticon-computer"></i>
                                             <span class="m-menu__link-title">
@@ -653,7 +722,7 @@
                                             </span>
                                         </a>
                                     </li>
-                                    <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                    <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                         <a  href="inner.html" class="m-menu__link ">
                                             <i class="m-menu__link-icon flaticon-signs-2"></i>
                                             <span class="m-menu__link-title">
@@ -670,7 +739,7 @@
                                             </span>
                                         </a>
                                     </li>
-                                    <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                    <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                         <a  href="inner.html" class="m-menu__link ">
                                             <i class="m-menu__link-icon flaticon-clipboard"></i>
                                             <span class="m-menu__link-title">
@@ -687,7 +756,7 @@
                                             </span>
                                         </a>
                                     </li>
-                                    <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                                    <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                         <a  href="inner.html" class="m-menu__link ">
                                             <i class="m-menu__link-icon flaticon-multimedia-2"></i>
                                             <span class="m-menu__link-title">
@@ -707,7 +776,7 @@
                                 </ul>
                             </div>
                         </li>
-                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                             <a  href="inner.html" class="m-menu__link ">
                                 <i class="m-menu__link-bullet m-menu__link-bullet--line">
                                     <span></span>
@@ -717,7 +786,7 @@
                                 </span>
                             </a>
                         </li>
-                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                             <a  href="inner.html" class="m-menu__link ">
                                 <i class="m-menu__link-bullet m-menu__link-bullet--line">
                                     <span></span>
@@ -727,7 +796,7 @@
                                 </span>
                             </a>
                         </li>
-                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                             <a  href="inner.html" class="m-menu__link ">
                                 <i class="m-menu__link-bullet m-menu__link-bullet--line">
                                     <span></span>
@@ -740,7 +809,7 @@
                     </ul>
                 </div>
             </li>
-            <li class="m-menu__item  m-menu__item--submenu m-menu__item--bottom-1" aria-haspopup="true"  data-menu-submenu-toggle="click">
+            <li class="m-menu__item m-menu__item--submenu m-menu__item--bottom-1" aria-haspopup="true"  data-menu-submenu-toggle="click">
                 <a  href="#" class="m-menu__link m-menu__toggle">
                     <i class="m-menu__link-icon flaticon-info"></i>
                     <span class="m-menu__link-text">
@@ -751,14 +820,14 @@
                 <div class="m-menu__submenu m-menu__submenu--up">
                     <span class="m-menu__arrow"></span>
                     <ul class="m-menu__subnav">
-                        <li class="m-menu__item  m-menu__item--parent m-menu__item--bottom-1" aria-haspopup="true" >
+                        <li class="m-menu__item m-menu__item--parent m-menu__item--bottom-1" aria-haspopup="true" >
                             <span class="m-menu__link">
                                 <span class="m-menu__link-text">
                                     Help
                                 </span>
                             </span>
                         </li>
-                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                             <a  href="inner.html" class="m-menu__link ">
                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                     <span></span>
@@ -768,7 +837,7 @@
                                 </span>
                             </a>
                         </li>
-                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                             <a  href="inner.html" class="m-menu__link ">
                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                     <span></span>
@@ -778,7 +847,7 @@
                                 </span>
                             </a>
                         </li>
-                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                             <a  href="inner.html" class="m-menu__link ">
                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                     <span></span>
@@ -788,7 +857,7 @@
                                 </span>
                             </a>
                         </li>
-                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                             <a  href="inner.html" class="m-menu__link ">
                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                     <span></span>
@@ -798,7 +867,7 @@
                                 </span>
                             </a>
                         </li>
-                        <li class="m-menu__item " aria-haspopup="true"  data-redirect="true">
+                        <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                             <a  href="inner.html" class="m-menu__link ">
                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                     <span></span>
