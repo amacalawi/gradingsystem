@@ -181,21 +181,117 @@ class UserRoleController extends Controller
     public function update(Request $request, $id)
     {    
         $timestamp = date('Y-m-d H:i:s');
-        $header = Role::find($id);
+        $role = Role::find($id);
 
-        if(!$header) {
+        if(!$role) {
             throw new NotFoundHttpException();
         }
 
-        $header->code = $request->code;
-        $header->name = $request->name;
-        $header->description = $request->description;
-        $header->slug = str_replace(' ', '-', strtolower($request->name));
-        $header->updated_at = $timestamp;
-        $header->updated_by = Auth::user()->id;
+        $role->code = $request->code;
+        $role->name = $request->name;
+        $role->description = $request->description;
+        $role->updated_at = $timestamp;
+        $role->updated_by = Auth::user()->id;
 
-        if ($header->update()) {
+        RoleHeader::where('role_id', $role->id)->update(['is_active' => 0, 'updated_at' => $timestamp, 'updated_by' => Auth::user()->id]);
+        $headers = $request->input('headers');
+        foreach($headers as $headerID){
+            if ($headerID !== NULL) {
+                $headerCount = RoleHeader::where([
+                    'role_id' => $role->id,
+                    'header_id' => $headerID,
+                ])->get();
 
+                if ($headerCount->count() > 0) {
+                    $role_header = RoleHeader::where([
+                        'id' => $headerCount->first()->id
+                    ])->update([
+                        'role_id' => $role->id,
+                        'header_id' => $headerID,
+                        'updated_at' => $timestamp,
+                        'updated_by' => Auth::user()->id,
+                        'is_active' => 1
+                    ]);
+                } else {
+                    $role_header = RoleHeader::create([
+                        'role_id' => $role->id,
+                        'header_id' => $headerID,
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+                }
+            }
+        }
+
+        RoleModule::where('role_id', $role->id)->update(['is_active' => 0, 'updated_at' => $timestamp, 'updated_by' => Auth::user()->id]);
+        $modules = $request->input('modules');
+        foreach ($modules as $moduleID) {
+            if ($moduleID !== NULL) {
+                $moduleCount = RoleModule::where([
+                    'role_id' => $role->id,
+                    'module_id' => $moduleID,
+                ])->get();
+                
+                if ($moduleCount->count() > 0) {
+                    $role_module = RoleModule::where([
+                        'id' => $moduleCount->first()->id
+                    ])->update([
+                        'role_id' => $role->id,
+                        'module_id' => $moduleID,
+                        'updated_at' => $timestamp,
+                        'updated_by' => Auth::user()->id,
+                        'is_active' => 1
+                    ]);
+                } else {
+                    $role_module = RoleModule::create([
+                        'role_id' => $role->id,
+                        'module_id' => $moduleID,
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+                }
+            }
+        }
+
+        RoleSubModule::where('role_id', $role->id)->update(['is_active' => 0, 'updated_at' => $timestamp, 'updated_by' => Auth::user()->id]);
+        $sub_modules = $request->input('sub_modules');
+        foreach ($sub_modules as $sub_moduleID) {
+            if ($sub_moduleID !== NULL) {
+                $permissions   = [];
+                $permissions[] = !empty($request->input('crud')[$sub_moduleID][1]) ? 1 : 0;
+                $permissions[] = !empty($request->input('crud')[$sub_moduleID][2]) ? 1 : 0;
+                $permissions[] = !empty($request->input('crud')[$sub_moduleID][3]) ? 1 : 0;
+                $permissions[] = !empty($request->input('crud')[$sub_moduleID][4]) ? 1 : 0;
+
+                $subModuleCount = RoleSubModule::where([
+                    'role_id' => $role->id,
+                    'sub_module_id' => $sub_moduleID,
+                ])->get();
+                
+                if ($subModuleCount->count() > 0) {
+                    $role_sub_module = RoleSubModule::where([
+                        'id' => $subModuleCount->first()->id
+                    ])->update([
+                        'role_id' => $role->id,
+                        'sub_module_id' => $sub_moduleID,
+                        'permissions' => implode(",", $permissions),
+                        'updated_at' => $timestamp,
+                        'updated_by' => Auth::user()->id,
+                        'is_active' => 1
+                    ]);
+                } else {
+                    $role_sub_module = RoleSubModule::create([
+                        'role_id' => $role->id,
+                        'sub_module_id' => $sub_moduleID,
+                        'permissions' => implode(",", $permissions),
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+                }
+            }
+        }
+
+        if ($role->update()) {
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The header has been successfully updated.',
@@ -304,4 +400,21 @@ class UserRoleController extends Controller
         }   
     }
 
+    public function check_header_if_checked($headerID, $roleID)
+    {
+        $result = (new RoleHeader)->check_header_if_checked($headerID, $roleID);
+        return $result;
+    }
+
+    public function check_module_if_checked($moduleID, $roleID)
+    {
+        $result = (new RoleModule)->check_module_if_checked($moduleID, $roleID);
+        return $result;
+    }
+
+    public function check_sub_module_if_checked($subModuleID, $roleID)
+    {
+        $result = (new RoleSubModule)->check_sub_module_if_checked($subModuleID, $roleID);
+        return $result;
+    }
 }

@@ -11,5 +11,16 @@ class RoleModule extends Model
     protected $table = 'roles_modules';
     
     public $timestamps = false;
+
+    public function check_module_if_checked($moduleID, $roleID)
+    {
+        $count = self::where([
+            'module_id' => $moduleID,
+            'role_id' => $roleID,
+            'is_active' => 1
+        ])->count();
+
+        return $count;
+    }
 }
 
