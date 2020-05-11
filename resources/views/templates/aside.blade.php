@@ -53,7 +53,7 @@
                                     <span class="m-menu__arrow"></span>
                                     <ul class="m-menu__subnav">
                                         <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
-                                            <a  href="{{ url('/academics/sections') }}" class="m-menu__link ">
+                                            <a  href="{{ url('academics/academics/sections') }}" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
                                                 </i>
@@ -63,7 +63,7 @@
                                             </a>
                                         </li>
                                         <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
-                                            <a  href="{{ url('/academics/levels') }}" class="m-menu__link ">
+                                            <a  href="{{ url('academics/academics/levels') }}" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
                                                 </i>
@@ -73,7 +73,7 @@
                                             </a>
                                         </li>
                                         <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
-                                            <a  href="{{ url('/academics/subjects') }}" class="m-menu__link ">
+                                            <a  href="{{ url('academics/academics/subjects') }}" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
                                                 </i>

@@ -1,7 +1,7 @@
 @if ( $segment == 'edit' )
-    {{ Form::open(array('url' => 'academics/sections/update/'.$section->id, 'name' => 'section_form', 'method' => 'PUT')) }}
+    {{ Form::open(array('url' => 'academics/academics/sections/update/'.$section->id, 'name' => 'section_form', 'method' => 'PUT')) }}
 @else
-    {{ Form::open(array('url' => 'academics/sections/store', 'name' => 'section_form', 'method' => 'POST')) }}
+    {{ Form::open(array('url' => 'academics/academics/sections/store', 'name' => 'section_form', 'method' => 'POST')) }}
 @endif
     <div class="row">
         <div class="col-md-9">

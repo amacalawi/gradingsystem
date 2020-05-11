@@ -152,7 +152,7 @@
             
             $.ajax({
                 type: "GET",
-                url: base_url + 'academics/subjects/get-all-subjects',
+                url: base_url + 'academics/academics/subjects/get-all-subjects',
                 success: function (data) {
                     var data = $.parseJSON( data );
 
@@ -169,7 +169,7 @@
 
             $.ajax({
                 type: "GET",
-                url: base_url + 'academics/subjects/get-all-teachers',
+                url: base_url + 'academics/academics/subjects/get-all-teachers',
                 success: function (data) {
                     var data = $.parseJSON( data );
                     
@@ -223,7 +223,7 @@
                                     confirmButtonClass: "btn " + data.class + " btn-focus m-btn m-btn--pill m-btn--air m-btn--custom",
                                     onClose: () => {
                                         if ($form.find("input[name='method']").val() == 'add') {
-                                            window.location.replace(base_url + 'academics/sections');
+                                            window.location.replace(base_url + 'academics/academics/sections');
                                         }
                                     }
                                 });
@@ -268,7 +268,7 @@ function loadSubjects()
 {
     $.ajax({
         type: "GET",
-        url: base_url + 'academics/subjects/get-all-subjects',
+        url: base_url + 'academics/academics/subjects/get-all-subjects',
         success: function (data) {
             var data = $.parseJSON( data );
 
@@ -288,7 +288,7 @@ function loadTeacher()
 {
     $.ajax({
         type: "GET",
-        url: base_url + 'academics/subjects/get-all-teachers',
+        url: base_url + 'academics/academics/subjects/get-all-teachers',
         success: function (data) {
             var data = $.parseJSON( data );
             
