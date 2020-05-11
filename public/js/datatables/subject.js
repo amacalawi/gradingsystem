@@ -2,7 +2,7 @@
 
 var DatatableDataLocalDemo = function () {
 	//== Private functions
- 	console.log(base_url + 'academics/subjects/all-active');
+ 	console.log(base_url + 'academics/academics/subjects/all-active');
 	
 	var datatable = $('.m_datatable').mDatatable({
 		// datasource definition
@@ -12,7 +12,7 @@ var DatatableDataLocalDemo = function () {
 			  read: {
 				// sample GET method
 				method: 'GET',
-				url: base_url + 'academics/subjects/all-active',
+				url: base_url + 'academics/academics/subjects/all-active',
 				map: function(raw) {
 				  // sample data mapping
 				  var dataSet = raw;
@@ -86,7 +86,7 @@ var DatatableDataLocalDemo = function () {
 							<i class="la la-ellipsis-h"></i>\
 						</a>\
 						  <div class="dropdown-menu dropdown-menu-right">\
-							<a title="edit this" class="dropdown-item" href="' + base_url + 'academics/subjects/edit/' + row.subjectID + '"><i class="la la-edit"></i> Edit Details</a>\
+							<a title="edit this" class="dropdown-item" href="' + base_url + 'academics/academics/subjects/edit/' + row.subjectID + '"><i class="la la-edit"></i> Edit Details</a>\
 							<a title="remove this" data-row-id="' + row.subjectID + '" action="Remove" class="dropdown-item toggle-status" href="javascript:;"><i class="la la-remove"></i> Remove Details</a>\
 							\
 						  </div>\
@@ -137,7 +137,7 @@ jQuery(document).ready(function () {
 		var $rowID = $(this).attr('data-row-id');
 		console.log($rowID);
 		var $action = $(this).attr('action');
-		var $url = base_url + 'academics/subjects/update-status/' + $rowID;
+		var $url = base_url + 'academics/academics/subjects/update-status/' + $rowID;
 		var items = []; items.push({ action: $action });
 
 		console.log($url);

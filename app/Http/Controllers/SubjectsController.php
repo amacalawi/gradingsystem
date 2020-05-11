@@ -65,7 +65,7 @@ class SubjectsController extends Controller
     public function add(Request $request, $id = '')
     {   
         $flashMessage = self::messages();
-        $segment = request()->segment(3);
+        $segment = request()->segment(4);
         if (count($flashMessage) && $flashMessage[0]['module'] == 'subject') {
             $subject = (new Subject)->fetch($flashMessage[0]['id']);
         } else {
@@ -77,7 +77,7 @@ class SubjectsController extends Controller
     public function edit(Request $request, $id)
     {   
         $flashMessage = self::messages();
-        $segment = request()->segment(3);
+        $segment = request()->segment(4);
         $subject = (new Subject)->find($id);
         return view('modules/academics/subjects/edit')->with(compact('subject', 'segment', 'flashMessage'));
     }
