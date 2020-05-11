@@ -67,7 +67,7 @@ class SectionsController extends Controller
     public function add(Request $request, $id = '')
     {   
         $flashMessage = self::messages();
-        $segment = request()->segment(3);
+        $segment = request()->segment(4);
         $levels = (new Level)->all_levels();
         $subjects = (new Subject)->all_subjects();
         
@@ -95,7 +95,7 @@ class SectionsController extends Controller
     public function edit(Request $request, $id)
     {   
         $flashMessage = self::messages();
-        $segment = request()->segment(3);
+        $segment = request()->segment(4);
         $levels = (new Level)->all_levels();
         $subjects = (new Subject)->all_subjects();
         
