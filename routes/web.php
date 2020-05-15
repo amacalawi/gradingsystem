@@ -204,6 +204,11 @@ Route::prefix('academics')->group(function () {
     Route::put('academics/sections/update-status/{id}', 'SectionsController@update_status')->name('sections.update.status');
     /* End Sections Routes */
 
+    /* Admissions */
+    Route::get('academics/admission/all-admitted', 'AdmissionController@all_admitted')->name('admission.all.admitted');
+    Route::get('academics/admission/get-this-admitted/{id?}', 'AdmissionController@get_this_admitted');
+    /* End Admissions Routes */
+
     /* Levels */
     Route::get('academics/levels/add', 'LevelsController@add')->name('levels.add');
     Route::get('academics/levels/edit/{id?}', 'LevelsController@edit')->name('levels.edit');
