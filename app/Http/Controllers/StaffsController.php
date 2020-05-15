@@ -33,18 +33,21 @@ class StaffsController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
-    {
-        return view('modules/memberships/staffs/manage');
+    {   
+        $menus = $this->load_menus();
+        return view('modules/memberships/staffs/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
-        return view('modules/memberships/staffs/manage');
+        $menus = $this->load_menus();
+        return view('modules/memberships/staffs/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
-    {
-        return view('modules/memberships/staffs/inactive');
+    {   
+        $menus = $this->load_menus();
+        return view('modules/memberships/staffs/inactive')->with(compact('menus'));
     }
 
     public function all_active(Request $request)
@@ -87,24 +90,26 @@ class StaffsController extends Controller
 
     public function add(Request $request, $id = '')
     {   
+        $menus = $this->load_menus();
         $segment = request()->segment(3);
         $staff = (new Staff)->fetch($id);
         $civils = (new Staff)->marital_status();
         $types = (new Staff)->types();
         $departments = (new Department)->all_departments();
         $designations = (new Designation)->all_designations();
-        return view('modules/memberships/staffs/add')->with(compact('staff', 'civils', 'types', 'departments', 'designations', 'segment'));
+        return view('modules/memberships/staffs/add')->with(compact('menus', 'staff', 'civils', 'types', 'departments', 'designations', 'segment'));
     }
     
     public function edit(Request $request, $id)
     {   
+        $menus = $this->load_menus();
         $segment = request()->segment(3);
         $staff = (new Staff)->fetch($id);
         $civils = (new Staff)->marital_status();
         $types = (new Staff)->types();
         $departments = (new Department)->all_departments();
         $designations = (new Designation)->all_designations();
-        return view('modules/memberships/staffs/edit')->with(compact('staff', 'civils', 'types', 'departments', 'designations', 'segment'));
+        return view('modules/memberships/staffs/edit')->with(compact('menus', 'staff', 'civils', 'types', 'departments', 'designations', 'segment'));
     }
     
     public function uploads(Request $request)

@@ -34,18 +34,21 @@ class StudentsController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
-    {
-        return view('modules/memberships/students/manage');
+    {   
+        $menus = $this->load_menus();
+        return view('modules/memberships/students/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
-        return view('modules/memberships/students/manage');
+        $menus = $this->load_menus();
+        return view('modules/memberships/students/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {
-        return view('modules/memberships/students/inactive');
+        $menus = $this->load_menus();
+        return view('modules/memberships/students/inactive')->with(compact('menus'));
     }
 
     public function all_active(Request $request)
@@ -136,18 +139,20 @@ class StudentsController extends Controller
 
     public function add(Request $request, $id = '')
     {   
+        $menus = $this->load_menus();
         $segment = request()->segment(3);
         $student = (new Student)->fetch($id);
         $civils = (new Student)->marital_status();
-        return view('modules/memberships/students/add')->with(compact('student', 'civils', 'segment'));
+        return view('modules/memberships/students/add')->with(compact('menus', 'student', 'civils', 'segment'));
     }
     
     public function edit(Request $request, $id)
     {   
+        $menus = $this->load_menus();
         $segment = request()->segment(3);
         $student = (new Student)->fetch($id);
         $civils = (new Student)->marital_status();
-        return view('modules/memberships/students/edit')->with(compact('student', 'civils', 'segment'));
+        return view('modules/memberships/students/edit')->with(compact('menus', 'student', 'civils', 'segment'));
     }
     
     public function store(Request $request)

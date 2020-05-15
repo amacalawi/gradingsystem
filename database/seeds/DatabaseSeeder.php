@@ -535,6 +535,262 @@ class DatabaseSeeder extends Seeder
             DB::table('sub_modules')->insert($sub_module);
         }
 
+        $roles_headers = [
+            [   
+                'role_id' => '1',
+                'header_id' => '1',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'header_id' => '2',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'header_id' => '3',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'header_id' => '4',
+                'created_by' => 1
+            ]
+        ];
+
+        foreach ($roles_headers as $roles_header) {
+            DB::table('roles_headers')->insert($roles_header);
+        }
+
+        $roles_modules = [
+            [   
+                'role_id' => '1',
+                'module_id' => '1',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'module_id' => '2',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'module_id' => '3',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'module_id' => '4',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'module_id' => '5',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'module_id' => '6',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'module_id' => '7',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'module_id' => '8',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'module_id' => '9',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'module_id' => '10',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'module_id' => '11',
+                'created_by' => 1
+            ]
+        ];
+
+        foreach ($roles_modules as $roles_module) {
+            DB::table('roles_modules')->insert($roles_module);
+        }
         
+        $roles_sub_modules = [
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '1',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '2',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '3',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '4',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '5',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '6',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '7',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '8',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '9',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '10',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '11',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '12',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '13',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '14',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '15',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '16',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '17',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '18',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '19',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '20',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '21',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '22',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '23',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '24',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '25',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '26',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '27',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ]
+        ];
+
+        foreach ($roles_sub_modules as $roles_sub_module) {
+            DB::table('roles_sub_modules')->insert($roles_sub_module);
+        }
     }
 }

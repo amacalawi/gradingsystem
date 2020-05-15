@@ -30,17 +30,20 @@ class DesignationsController extends Controller
      */
     public function index()
     {
-        return view('modules/schools/designations/manage');
+        $menus = $this->load_menus();
+        return view('modules/schools/designations/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
-        return view('modules/schools/designations/manage');
+        $menus = $this->load_menus();
+        return view('modules/schools/designations/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
-        return view('modules/schools/designations/inactive');
+        $menus = $this->load_menus();
+        return view('modules/schools/designations/inactive')->with(compact('menus'));
     }
 
     public function all_active(Request $request)
@@ -77,6 +80,7 @@ class DesignationsController extends Controller
 
     public function add(Request $request, $id = '')
     {   
+        $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(3);
         if (count($flashMessage) && $flashMessage[0]['module'] == 'designation') {
@@ -85,16 +89,17 @@ class DesignationsController extends Controller
             $designation = (new designation)->fetch($id);
         }
         $types = (new designation)->types();
-        return view('modules/schools/designations/add')->with(compact('designation', 'types', 'segment', 'flashMessage'));
+        return view('modules/schools/designations/add')->with(compact('menus', 'designation', 'types', 'segment', 'flashMessage'));
     }
     
     public function edit(Request $request, $id)
     {   
+        $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(3);
         $designation = (new designation)->find($id);
         $types = (new designation)->types();
-        return view('modules/schools/designations/edit')->with(compact('designation', 'types', 'segment', 'flashMessage'));
+        return view('modules/schools/designations/edit')->with(compact('menus', 'designation', 'types', 'segment', 'flashMessage'));
     }
     
     public function store(Request $request)
