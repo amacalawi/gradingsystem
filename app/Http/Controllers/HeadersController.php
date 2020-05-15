@@ -29,18 +29,21 @@ class HeadersController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
-    {
-        return view('modules/components/menus/headers/manage');
+    {   
+        $menus = $this->load_menus();
+        return view('modules/components/menus/headers/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
-        return view('modules/components/menus/headers/manage');
+        $menus = $this->load_menus();
+        return view('modules/components/menus/headers/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
-        return view('modules/components/menus/headers/inactive');
+        $menus = $this->load_menus();
+        return view('modules/components/menus/headers/inactive')->with(compact('menus'));
     }
 
     public function all_active(Request $request)
@@ -79,6 +82,7 @@ class HeadersController extends Controller
 
     public function add(Request $request, $id = '')
     {   
+        $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
         if (count($flashMessage) && $flashMessage[0]['module'] == 'header') {
@@ -86,15 +90,16 @@ class HeadersController extends Controller
         } else {
             $header = (new Header)->fetch($id);
         }
-        return view('modules/components/menus/headers/add')->with(compact('header', 'segment', 'flashMessage'));
+        return view('modules/components/menus/headers/add')->with(compact('menus', 'header', 'segment', 'flashMessage'));
     }
     
     public function edit(Request $request, $id)
     {   
+        $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
         $header = (new Header)->find($id);
-        return view('modules/components/menus/headers/edit')->with(compact('header', 'segment', 'flashMessage'));
+        return view('modules/components/menus/headers/edit')->with(compact('menus', 'header', 'segment', 'flashMessage'));
     }
     
     public function store(Request $request)

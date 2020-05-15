@@ -22,5 +22,10 @@ class RoleModule extends Model
 
         return $count;
     }
+
+    public function module()
+    {   
+        return $this->belongsTo('App\Models\Module');
+    }
 }
 

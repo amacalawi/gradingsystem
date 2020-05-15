@@ -32,4 +32,26 @@ class Subject extends Model
         }
         return (object) $results;
     }
+
+    public function all_subjects()
+    {	
+    	$subjects = self::where('is_active', 1)->orderBy('id', 'asc')->get();
+
+        $subjectx = array();
+        $subjectx[] = array('' => 'select a subject');
+        foreach ($subjects as $subject) {
+            $subjectx[] = array(
+                $subject->id => $subject->name
+            );
+        }
+
+        $subjects = array();
+        foreach($subjectx as $subject) {
+            foreach($subject as $key => $val) {
+                $subjects[$key] = $val;
+            }
+        }
+
+        return $subjects;
+    }
 }

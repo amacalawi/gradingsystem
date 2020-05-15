@@ -34,17 +34,20 @@ class UserAccountsController extends Controller
      */
     public function index()
     {
-        return view('modules/memberships/users/accounts/manage');
+        $menus = $this->load_menus();
+        return view('modules/memberships/users/accounts/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
-        return view('modules/memberships/users/accounts/manage');
+        $menus = $this->load_menus();
+        return view('modules/memberships/users/accounts/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
-        return view('modules/memberships/users/accounts/inactive');
+        $menus = $this->load_menus();
+        return view('modules/memberships/users/accounts/inactive')->with(compact('menus'));
     }
 
     public function all_active(Request $request)
@@ -89,20 +92,22 @@ class UserAccountsController extends Controller
 
     public function add(Request $request, $id = '')
     {   
+        $menus = $this->load_menus();
         $segment = request()->segment(4);
         $user = (new User)->fetch($id);
         $secrets = (new SecretQuestion)->all_secrets();
         $roles = (new Role)->all_roles();
-        return view('modules/memberships/users/accounts/add')->with(compact('user', 'secrets', 'roles', 'segment'));
+        return view('modules/memberships/users/accounts/add')->with(compact('menus', 'user', 'secrets', 'roles', 'segment'));
     }
     
     public function edit(Request $request, $id)
     {   
+        $menus = $this->load_menus();
         $segment = request()->segment(4);
         $user = (new User)->fetch($id);
         $secrets = (new SecretQuestion)->all_secrets();
         $roles = (new Role)->all_roles();
-        return view('modules/memberships/users/accounts/edit')->with(compact('user', 'secrets', 'roles', 'segment'));
+        return view('modules/memberships/users/accounts/edit')->with(compact('menus', 'user', 'secrets', 'roles', 'segment'));
     }
     
     public function store(Request $request)

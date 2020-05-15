@@ -34,17 +34,20 @@ class UserRoleController extends Controller
      */
     public function index()
     {
-        return view('modules/memberships/users/roles/manage');
+        $menus = $this->load_menus();
+        return view('modules/memberships/users/roles/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
-        return view('modules/memberships/users/roles/manage');
+        $menus = $this->load_menus();
+        return view('modules/memberships/users/roles/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
-        return view('modules/memberships/users/roles/inactive');
+        $menus = $this->load_menus();
+        return view('modules/memberships/users/roles/inactive')->with(compact('menus'));
     }
 
     public function all_active(Request $request)
@@ -79,18 +82,20 @@ class UserRoleController extends Controller
 
     public function add(Request $request, $id = '')
     {   
+        $menus = $this->load_menus();
         $segment = request()->segment(4);
         $role = (new Role)->fetch($id);
         $headers = (new Header)->all_modules();
-        return view('modules/memberships/users/roles/add')->with(compact('role', 'headers', 'segment'));
+        return view('modules/memberships/users/roles/add')->with(compact('menus', 'role', 'headers', 'segment'));
     }
     
     public function edit(Request $request, $id)
     {   
+        $menus = $this->load_menus();
         $segment = request()->segment(4);
         $role = (new Role)->fetch($id);
         $headers = (new Header)->all_modules();
-        return view('modules/memberships/users/roles/edit')->with(compact('role', 'headers', 'segment'));
+        return view('modules/memberships/users/roles/edit')->with(compact('menus', 'role', 'headers', 'segment'));
     }
     
     public function store(Request $request)

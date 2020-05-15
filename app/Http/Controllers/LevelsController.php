@@ -18,18 +18,21 @@ class LevelsController extends Controller
     }
 
     public function index()
-    {
-        return view('modules/academics/levels/manage');
+    {   
+        $menus = $this->load_menus();
+        return view('modules/academics/levels/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
-        return view('modules/academics/levels/manage');
+        $menus = $this->load_menus();
+        return view('modules/academics/levels/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
-        return view('modules/academics/levels/inactive');
+        $menus = $this->load_menus();
+        return view('modules/academics/levels/inactive')->with(compact('menus'));
     }
 
     public function all_active(Request $request)
@@ -64,6 +67,7 @@ class LevelsController extends Controller
 
     public function add(Request $request, $id = '')
     {   
+        $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(3);
         if (count($flashMessage) && $flashMessage[0]['module'] == 'level') {
@@ -71,15 +75,16 @@ class LevelsController extends Controller
         } else {
             $level = (new Level)->fetch($id);
         }
-        return view('modules/academics/levels/add')->with(compact('level', 'segment', 'flashMessage'));
+        return view('modules/academics/levels/add')->with(compact('menus', 'level', 'segment', 'flashMessage'));
     }
     
     public function edit(Request $request, $id)
     {   
+        $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(3);
         $level = (new Level)->find($id);
-        return view('modules/academics/levels/edit')->with(compact('level', 'segment', 'flashMessage'));
+        return view('modules/academics/levels/edit')->with(compact('menus', 'level', 'segment', 'flashMessage'));
     }
     
     public function store(Request $request)

@@ -22,7 +22,8 @@ class DashboardController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
-    {
-        return view('dashboard');
+    {   
+        $menus = $this->load_menus();
+        return view('dashboard')->with(compact('menus'));
     }
 }
