@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Section;
+use App\Models\Subject;
+use App\Models\Staff;
+use App\Models\Level;
 
 class SectionsController extends Controller
 {
@@ -68,22 +71,57 @@ class SectionsController extends Controller
     {   
         $menus = $this->load_menus();
         $flashMessage = self::messages();
-        $segment = request()->segment(3);
-        if (count($flashMessage) && $flashMessage[0]['module'] == 'section') {
-            $section = (new Section)->fetch($flashMessage[0]['id']);
-        } else {
-            $section = (new Section)->fetch($id);
+        $segment = request()->segment(4);
+        $levels = (new Level)->all_levels();
+        $subjects = (new Subject)->all_subjects();
+        
+        $staffs = Staff::select('id', 'lastname', 'firstname', 'middlename', 'identification_no')->where('type','Teacher')->orderBy('lastname', 'asc')->get();
+        $stfs = array();
+        $stfs[] = array('' => 'select a teacher');
+        foreach ($staffs as $staff) {
+            $stfs[] = array(
+                $staff->id => $staff->lastname.', '.$staff->firstname.' '.$staff->firstname.' ('.$staff->identification_no.')'
+            );
         }
-        return view('modules/academics/sections/add')->with(compact('menus', 'section', 'segment', 'flashMessage'));
+
+        $staffs = array();
+        foreach($stfs as $stf) {
+            foreach($stf as $key => $val) {
+                $staffs[$key] = $val;
+            }
+        }
+
+        $section = (new Section)->fetch($id); 
+        //die( var_dump($staffs) );
+        return view('modules/academics/sections/add')->with(compact('menus', 'section', 'levels', 'staffs', 'subjects', 'segment', 'flashMessage'));
     }
     
     public function edit(Request $request, $id)
     {   
         $menus = $this->load_menus();
         $flashMessage = self::messages();
-        $segment = request()->segment(3);
+        $segment = request()->segment(4);
+        $levels = (new Level)->all_levels();
+        $subjects = (new Subject)->all_subjects();
+        
+        $staffs = Staff::select('id', 'lastname', 'firstname', 'middlename', 'identification_no')->where('is_active', 1)->where('type','Teacher')->orderBy('lastname', 'asc')->get();
+        $stfs = array();
+        $stfs[] = array('' => 'select a teacher');
+        foreach ($staffs as $staff) {
+            $stfs[] = array(
+                $staff->id => $staff->lastname.', '.$staff->firstname.' '.$staff->firstname.' ('.$staff->identification_no.')'
+            );
+        }
+        
+        $staffs = array();
+        foreach($stfs as $stf) {
+            foreach($stf as $key => $val) {
+                $staffs[$key] = $val;
+            }
+        }
+
         $section = (new Section)->find($id);
-        return view('modules/academics/sections/edit')->with(compact('menus', 'section', 'segment', 'flashMessage'));
+        return view('modules/academics/sections/edit')->with(compact('menus', 'section', 'staffs', 'subjects', 'levels', 'segment', 'flashMessage'));
     }
     
     public function store(Request $request)
@@ -95,14 +133,11 @@ class SectionsController extends Controller
             'code' => $request->code,
             'name' => $request->name,
             'description' => $request->description,
+            'level_id' => $request->level_id,
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
-        /* 
-        if (!$section) {
-            throw new NotFoundHttpException();
-        }
-        */
+ 
         $data = array(
             'title' => 'Well done!',
             'text' => 'The section has been successfully saved.',
@@ -126,6 +161,7 @@ class SectionsController extends Controller
         $section->code = $request->code;
         $section->name = $request->name;
         $section->description = $request->description;
+        $section->level_id = $request->level_id;
         $section->updated_at = $timestamp;
         $section->updated_by = Auth::user()->id;
 
@@ -288,5 +324,6 @@ class SectionsController extends Controller
 
             echo json_encode( $data ); exit();
         }
-    }    
+    }  
+
 }

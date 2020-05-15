@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Subject;
+use App\Models\Staff;
 
 class SubjectsController extends Controller
 {
@@ -68,7 +69,7 @@ class SubjectsController extends Controller
     {   
         $menus = $this->load_menus();
         $flashMessage = self::messages();
-        $segment = request()->segment(3);
+        $segment = request()->segment(4);
         if (count($flashMessage) && $flashMessage[0]['module'] == 'subject') {
             $subject = (new Subject)->fetch($flashMessage[0]['id']);
         } else {
@@ -81,7 +82,7 @@ class SubjectsController extends Controller
     {   
         $menus = $this->load_menus();
         $flashMessage = self::messages();
-        $segment = request()->segment(3);
+        $segment = request()->segment(4);
         $subject = (new Subject)->find($id);
         return view('modules/academics/subjects/edit')->with(compact('menus', 'subject', 'segment', 'flashMessage'));
     }
@@ -288,5 +289,36 @@ class SubjectsController extends Controller
 
             echo json_encode( $data ); exit();
         }
-    }      
+    } 
+
+        
+    public function get_all_subjects()
+    {
+        $subjects = (new Subject)->get_all_subjects();
+        echo json_encode( $subjects ); exit();
+    }
+
+    public function get_all_teachers()
+    {
+        $teachers = Staff::where('is_active', 1)->where('type','Teacher')->orderBy('id', 'asc')->get();
+        //die( var_dump($teachers) );
+        $staffs = array();
+        $staffs[] = array('0' => 'select a teacher');
+
+        foreach ($teachers as $teacher) {
+            $staffs[] = array(
+                $teacher->id  => $teacher->lastname.', '.$teacher->firstname.' '.$teacher->middlename.' ('.$teacher->identification_no.')' ,
+            );
+        }
+
+        $teachers = array();
+        foreach($staffs as $staff) {
+            foreach($staff as $key => $val) {
+                $teachers[$key] = $val;
+            }
+        }
+
+        echo json_encode( $teachers ); exit();
+    }
+
 }

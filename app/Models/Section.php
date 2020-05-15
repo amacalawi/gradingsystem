@@ -20,14 +20,18 @@ class Section extends Model
                 'id' => ($section->id) ? $section->id : '',
                 'code' => ($section->code) ? $section->code : '',
                 'name' => ($section->name) ? $section->name : '',
-                'description' => ($section->description) ? $section->description : ''
+                'description' => ($section->description) ? $section->description : '',
+                'level_id' => ($section->level_id) ? $section->level_id : '',
+                'schoolyear_id' => ($section->schoolyear_id) ? $section->schoolyear_id : '',
             );
         } else {
             $results = array(
                 'id' => '',
                 'code' => '',
                 'name' => '',
-                'description' => ''
+                'description' => '',
+                'level_id' => '',
+                'schoolyear_id' => ''
             );
         }
         return (object) $results;
