@@ -156,12 +156,19 @@
                 success: function (data) {
                     var data = $.parseJSON( data );
 
-                    var subject = $("<select></select>").attr("id", "subjects").attr("name", "subjects").attr("class", "form-control form-control-lg m-input m-input--solid");
+                    var subject = $("<select></select>").attr("id", "subjects").attr("name", "subjects[]").attr("class", "form-control form-control-lg m-input m-input--solid");
                     $.each(data,function(index, data){
-                        subject.append($("<option></option>").attr("value", index).text(data));
+                        if(index == '0'){
+                            subject.append($("<option></option>").attr( { value:"NULL", selected:"true" } ).text(data));
+                        }
+                        else
+                        {
+                            subject.append($("<option></option>").attr("value", index).text(data));
+                        }
                     });
                     $("#option-subject").append('<label> Subject: </label>');
                     $("#option-subject").append(subject);
+                    $("#option-subject").css("display","block");
 
                 },
                 async: false
@@ -173,12 +180,19 @@
                 success: function (data) {
                     var data = $.parseJSON( data );
                     
-                    var teacher = $("<select></select>").attr("id", "teachers").attr("name", "teachers").attr("class", "form-control form-control-lg m-input m-input--solid");
+                    var teacher = $("<select></select>").attr("id", "teachers").attr("name", "teachers[]").attr("class", "form-control form-control-lg m-input m-input--solid");
                     $.each(data,function(index, data){
-                        teacher.append($("<option></option>").attr("value", index).text(data));
+                        if(index == '0'){
+                            teacher.append($("<option></option>").attr( { value:"NULL", selected:"true" } ).text(data));
+                        } 
+                        else 
+                        {
+                            teacher.append($("<option></option>").attr("value", index).text(data));
+                        }
                     });
                     $("#option-teacher").append('<label> Teacher: </label>');
                     $("#option-teacher").append(teacher);
+                    $("#option-teacher").css("display","block");
                 
                 },
                 async: false
@@ -272,7 +286,7 @@ function loadSubjects()
         success: function (data) {
             var data = $.parseJSON( data );
 
-            var subject = $("<select></select>").attr("id", "subjects").attr("name", "subjects").attr("class", "form-control form-control-lg m-input m-input--solid");
+            var subject = $("<select></select>").attr("id", "subjects").attr("name", "subjects[]").attr("class", "form-control form-control-lg m-input m-input--solid");
             $.each(data,function(index, data){
                 subject.append($("<option></option>").attr("value", index).text(data));
             });
@@ -292,7 +306,7 @@ function loadTeacher()
         success: function (data) {
             var data = $.parseJSON( data );
             
-            var teacher = $("<select></select>").attr("id", "teachers").attr("name", "teachers").attr("class", "form-control form-control-lg m-input m-input--solid");
+            var teacher = $("<select></select>").attr("id", "teachers").attr("name", "teachers[]").attr("class", "form-control form-control-lg m-input m-input--solid");
             $.each(data,function(index, data){
                 teacher.append($("<option></option>").attr("value", index).text(data));
             });
@@ -306,7 +320,11 @@ function loadTeacher()
 
 $(document).ready(function(){
 
-    loadSubjects();
-    loadTeacher();
-  
+    if ( $('#option-subject').css('display') == 'block' ){
+        loadSubjects();
+    }
+    if ($('#option-teacher').css('display') == 'block' ){
+        loadTeacher();
+    }
+
 });
