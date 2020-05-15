@@ -22,5 +22,11 @@ class RoleHeader extends Model
 
         return $count;
     }
+
+    public function header()
+    {   
+        return $this->belongsTo('App\Models\Header');
+    }
+
 }
 

@@ -39,17 +39,17 @@ class Subject extends Model
     {	
     	$subjects = self::where('is_active', 1)->orderBy('id', 'asc')->get();
 
-        $subs = array();
-        $subs[] = array('' => 'select a subject');
+        $subjectx = array();
+        $subjectx[] = array('' => 'select a subject');
         foreach ($subjects as $subject) {
-            $subs[] = array(
+            $subjectx[] = array(
                 $subject->id => $subject->name
             );
         }
 
         $subjects = array();
-        foreach($subs as $sub) {
-            foreach($sub as $key => $val) {
+        foreach($subjectx as $subject) {
+            foreach($subject as $key => $val) {
                 $subjects[$key] = $val;
             }
         }
@@ -79,5 +79,4 @@ class Subject extends Model
 
         return $subjects;  
     }
-
 }

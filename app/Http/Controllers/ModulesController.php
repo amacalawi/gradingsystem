@@ -30,18 +30,21 @@ class ModulesController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
-    {
-        return view('modules/components/menus/modules/manage');
+    {   
+        $menus = $this->load_menus();
+        return view('modules/components/menus/modules/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
-        return view('modules/components/menus/modules/manage');
+        $menus = $this->load_menus();
+        return view('modules/components/menus/modules/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
-        return view('modules/components/menus/modules/inactive');
+        $menus = $this->load_menus();
+        return view('modules/components/menus/modules/inactive')->with(compact('menus'));
     }
 
     public function all_active(Request $request)
@@ -86,18 +89,20 @@ class ModulesController extends Controller
 
     public function add(Request $request, $id = '')
     {   
+        $menus = $this->load_menus();
         $segment = request()->segment(4);
         $module = (new Module)->fetch($id);
         $headers = (new Header)->all_headers();
-        return view('modules/components/menus/modules/add')->with(compact('module', 'headers', 'segment'));
+        return view('modules/components/menus/modules/add')->with(compact('menus', 'module', 'headers', 'segment'));
     }
     
     public function edit(Request $request, $id)
     {   
+        $menus = $this->load_menus();
         $segment = request()->segment(4);
         $module = (new Module)->fetch($id);
         $headers = (new Header)->all_headers();
-        return view('modules/components/menus/modules/edit')->with(compact('module', 'headers', 'segment'));
+        return view('modules/components/menus/modules/edit')->with(compact('menus', 'module', 'headers', 'segment'));
     }
     
     public function store(Request $request)

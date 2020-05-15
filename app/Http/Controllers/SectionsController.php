@@ -23,18 +23,21 @@ class SectionsController extends Controller
     }
 
     public function index()
-    {
-        return view('modules/academics/sections/manage');
+    {   
+        $menus = $this->load_menus();
+        return view('modules/academics/sections/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
-        return view('modules/academics/sections/manage');
+        $menus = $this->load_menus();
+        return view('modules/academics/sections/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
-        return view('modules/academics/sections/inactive');
+        $menus = $this->load_menus();
+        return view('modules/academics/sections/inactive')->with(compact('menus'));
     }
 
     public function all_active(Request $request)
@@ -69,6 +72,7 @@ class SectionsController extends Controller
 
     public function add(Request $request, $id = '')
     {   
+        $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
         $levels = (new Level)->all_levels();
@@ -93,13 +97,14 @@ class SectionsController extends Controller
             }
         }
 
-        $section = (new Section)->fetch($id);
-
-        return view('modules/academics/sections/add')->with(compact('section', 'sections_subjects', 'admitted', 'levels', 'staffs', 'subjects', 'segment', 'flashMessage'));
+        $section = (new Section)->fetch($id); 
+        //die( var_dump($staffs) );
+        return view('modules/academics/sections/add')->with(compact('menus', 'section', 'sections_subjects', 'admitted', 'levels', 'staffs', 'subjects', 'segment', 'flashMessage'));
     }
     
     public function edit(Request $request, $id)
     {   
+        $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
         $allSubjects = Subject::all();
@@ -128,7 +133,9 @@ class SectionsController extends Controller
         }
 
         $section = (new Section)->find($id);
-        return view('modules/academics/sections/edit')->with(compact('section', 'sections_students', 'allTeachers', 'allSubjects', 'staffs', 'sections_subjects', 'sections_teachers', 'subjects', 'levels', 'segment', 'flashMessage'));
+
+        return view('modules/academics/sections/edit')->with(compact('menus', 'section', 'sections_students', 'allTeachers', 'allSubjects', 'staffs', 'sections_subjects', 'sections_teachers', 'subjects', 'levels', 'segment', 'flashMessage'));
+
     }
     
     public function store(Request $request)

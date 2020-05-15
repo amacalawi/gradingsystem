@@ -41,5 +41,10 @@ class RoleSubModule extends Model
 
         return $res;
     }
+
+    public function sub_module()
+    {   
+        return $this->belongsTo('App\Models\SubModule');
+    }
 }
 

@@ -44,5 +44,27 @@ class Quarter extends Model
         $types = array('' => 'select a type', 'childhood-education' => 'Childhood Education', 'primary-education' => 'Primary Education', 'secondary-education' => 'Secondary Education', 'higher-education' => 'Higher Education');
         return $types;
     }
+
+    public function all_quarters()
+    {	
+    	$quarters = self::where('is_active', 1)->orderBy('id', 'asc')->get();
+
+        $quarterx = array();
+        $quarterx[] = array('' => 'select a quarter');
+        foreach ($quarters as $quarter) {
+            $quarterx[] = array(
+                $quarter->id => $quarter->name
+            );
+        }
+
+        $quarters = array();
+        foreach($quarterx as $quarter) {
+            foreach($quarter as $key => $val) {
+                $quarters[$key] = $val;
+            }
+        }
+
+        return $quarters;
+    }
 }
 

@@ -30,17 +30,20 @@ class QuartersController extends Controller
      */
     public function index()
     {
-        return view('modules/schools/quarters/manage');
+        $menus = $this->load_menus();
+        return view('modules/schools/quarters/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
-        return view('modules/schools/quarters/manage');
+        $menus = $this->load_menus();
+        return view('modules/schools/quarters/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
-        return view('modules/schools/quarters/inactive');
+        $menus = $this->load_menus();
+        return view('modules/schools/quarters/inactive')->with(compact('menus'));
     }
 
     public function all_active(Request $request)
@@ -81,6 +84,7 @@ class QuartersController extends Controller
 
     public function add(Request $request, $id = '')
     {   
+        $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(3);
         if (count($flashMessage) && $flashMessage[0]['module'] == 'quarter') {
@@ -89,16 +93,17 @@ class QuartersController extends Controller
             $quarter = (new Quarter)->fetch($id);
         }
         $types = (new Quarter)->types();
-        return view('modules/schools/quarters/add')->with(compact('quarter', 'types', 'segment', 'flashMessage'));
+        return view('modules/schools/quarters/add')->with(compact('menus', 'quarter', 'types', 'segment', 'flashMessage'));
     }
     
     public function edit(Request $request, $id)
     {   
+        $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(3);
         $quarter = (new Quarter)->find($id);
         $types = (new Quarter)->types();
-        return view('modules/schools/quarters/edit')->with(compact('quarter', 'types', 'segment', 'flashMessage'));
+        return view('modules/schools/quarters/edit')->with(compact('menus', 'quarter', 'types', 'segment', 'flashMessage'));
     }
     
     public function store(Request $request)

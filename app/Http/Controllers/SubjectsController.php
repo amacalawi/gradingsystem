@@ -18,18 +18,21 @@ class SubjectsController extends Controller
     }
 
     public function index()
-    {
-        return view('modules/academics/subjects/manage');
+    {   
+        $menus = $this->load_menus();
+        return view('modules/academics/subjects/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
-        return view('modules/academics/subjects/manage');
+        $menus = $this->load_menus();
+        return view('modules/academics/subjects/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
-        return view('modules/academics/subjects/inactive');
+        $menus = $this->load_menus();
+        return view('modules/academics/subjects/inactive')->with(compact('menus'));
     }
 
     public function all_active(Request $request)
@@ -64,6 +67,7 @@ class SubjectsController extends Controller
 
     public function add(Request $request, $id = '')
     {   
+        $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
         if (count($flashMessage) && $flashMessage[0]['module'] == 'subject') {
@@ -71,15 +75,16 @@ class SubjectsController extends Controller
         } else {
             $subject = (new Subject)->fetch($id);
         }
-        return view('modules/academics/subjects/add')->with(compact('subject', 'segment', 'flashMessage'));
+        return view('modules/academics/subjects/add')->with(compact('menus', 'subject', 'segment', 'flashMessage'));
     }
     
     public function edit(Request $request, $id)
     {   
+        $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
         $subject = (new Subject)->find($id);
-        return view('modules/academics/subjects/edit')->with(compact('subject', 'segment', 'flashMessage'));
+        return view('modules/academics/subjects/edit')->with(compact('menus', 'subject', 'segment', 'flashMessage'));
     }
     
     public function store(Request $request)

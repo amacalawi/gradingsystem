@@ -30,17 +30,20 @@ class DepartmentsController extends Controller
      */
     public function index()
     {
-        return view('modules/schools/departments/manage');
+        $menus = $this->load_menus();
+        return view('modules/schools/departments/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
-        return view('modules/schools/departments/manage');
+        $menus = $this->load_menus();
+        return view('modules/schools/departments/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
-        return view('modules/schools/departments/inactive');
+        $menus = $this->load_menus();
+        return view('modules/schools/departments/inactive')->with(compact('menus'));
     }
 
     public function all_active(Request $request)
@@ -77,6 +80,7 @@ class DepartmentsController extends Controller
 
     public function add(Request $request, $id = '')
     {   
+        $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(3);
         if (count($flashMessage) && $flashMessage[0]['module'] == 'department') {
@@ -85,16 +89,17 @@ class DepartmentsController extends Controller
             $department = (new Department)->fetch($id);
         }
         $types = (new Department)->types();
-        return view('modules/schools/departments/add')->with(compact('department', 'types', 'segment', 'flashMessage'));
+        return view('modules/schools/departments/add')->with(compact('menus', 'department', 'types', 'segment', 'flashMessage'));
     }
     
     public function edit(Request $request, $id)
     {   
+        $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(3);
         $department = (new Department)->find($id);
         $types = (new Department)->types();
-        return view('modules/schools/departments/edit')->with(compact('department', 'types', 'segment', 'flashMessage'));
+        return view('modules/schools/departments/edit')->with(compact('menus', 'department', 'types', 'segment', 'flashMessage'));
     }
     
     public function store(Request $request)
