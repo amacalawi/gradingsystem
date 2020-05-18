@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Component;
 use App\Models\Activity;
+use App\Models\Batch;
 use App\Models\Quarter;
 use App\Models\Subject;
 use App\Models\UserRole;
@@ -52,7 +53,7 @@ class ComponentsController extends Controller
         return $res->map(function($component) {
             return [
                 'componentID' => $component->id,
-                'componentCode' => $component->code,
+                'componentPercentage' => $component->percentage,
                 'componentName' => $component->name,
                 'componentDescription' => $component->description,
                 'componentOrder' => $component->order,
@@ -68,7 +69,7 @@ class ComponentsController extends Controller
         return $res->map(function($component) {
             return [
                 'componentID' => $component->id,
-                'componentCode' => $component->code,
+                'componentPercentage' => $component->percentage,
                 'componentName' => $component->name,
                 'componentDescription' => $component->description,
                 'componentOrder' => $component->order,
@@ -104,7 +105,7 @@ class ComponentsController extends Controller
         $timestamp = date('Y-m-d H:i:s');
 
         $rows = Component::where([
-            'code' => $request->code
+            'percentage' => $request->percentage
         ])->count();
 
         if ($rows > 0) {
@@ -121,9 +122,10 @@ class ComponentsController extends Controller
         $count = Component::all()->count() + 1;
 
         $component = Component::create([
+            'batch_id' => (new Batch)->get_current_batch(),
             'quarter_id' => $request->quarter_id,
             'subject_id' => $request->subject_id,
-            'code' => $request->code,
+            'percentage' => $request->percentage,
             'name' => $request->name,
             'description' => $request->description,
             'order' => $count,
@@ -170,7 +172,7 @@ class ComponentsController extends Controller
         $timestamp = date('Y-m-d H:i:s');
 
         $rows = Component::where('id', '!=', $id)->where([
-            'code' => $request->code
+            'percentage' => $request->percentage
         ])->count();
 
         if ($rows > 0) {
@@ -192,7 +194,7 @@ class ComponentsController extends Controller
 
         $component->quarter_id = $request->quarter_id;
         $component->subject_id = $request->subject_id;
-        $component->code = $request->code;
+        $component->percentage = $request->percentage;
         $component->name = $request->name;
         $component->description = $request->description;
         $component->is_sum_cell = ($request->is_sum_cell !== NULL) ? 1 : 0;

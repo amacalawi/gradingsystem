@@ -18,9 +18,10 @@ class Component extends Model
         if ($component) {
             $results = array(
                 'id' => ($component->id) ? $component->id : '',
+                'batch_id' => ($component->batch_id) ? $component->batch_id : '',
                 'quarter_id' => ($component->quarter_id) ? $component->quarter_id : '',
                 'subject_id' => ($component->subject_id) ? $component->subject_id : '',
-                'code' => ($component->code) ? $component->code : '',
+                'percentage' => ($component->percentage) ? $component->percentage : '',
                 'name' => ($component->name) ? $component->name : '',
                 'description' => ($component->description) ? $component->description : '',
                 'order' => ($component->order) ? $component->order : '',
@@ -36,9 +37,10 @@ class Component extends Model
         } else {
             $results = array(
                 'id' => '',
+                'batch_id' => '',
                 'quarter_id' => '',
                 'subject_id' => '',
-                'code' => '',
+                'percentage' => '',
                 'name' => '',
                 'description' => '',
                 'order' => '',

@@ -2,7 +2,7 @@
 
 var DatatableDataLocalDemo = function () {
 	//== Private functions
- 	console.log(base_url + 'academics/grading-sheets/components/all-active');
+ 	console.log(base_url + 'academics/grading-sheets/components/all-inactive');
 	
 	var datatable = $('.m_datatable').mDatatable({
 		// datasource definition
@@ -12,7 +12,7 @@ var DatatableDataLocalDemo = function () {
 			  read: {
 				// sample GET method
 				method: 'GET',
-				url: base_url + 'academics/grading-sheets/components/all-active',
+				url: base_url + 'academics/grading-sheets/components/all-inactive',
 				map: function(raw) {
 				  // sample data mapping
 				  var dataSet = raw;
@@ -74,7 +74,7 @@ var DatatableDataLocalDemo = function () {
 			title: "Last Modified",
 		}, {
 			field: "Actions",
-			width: 90,
+			width: 70,
 			title: "Actions",
 			sortable: false,
 			ordering: false,
@@ -82,11 +82,10 @@ var DatatableDataLocalDemo = function () {
 			template: function (row, index, datatable) {
 				var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
 
-                return '\
-                    <a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/grading-sheets/components/edit/' + row.componentID + '"><i class="la la-edit"></i></a>\
-					<a title="remove this" data-row-id="' + row.componentID + '" action="Remove" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-remove"></i></a>\
-					<a title="move up this" data-row-id="' + row.componentID + '" action="Up" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-arrow-up"></i></a>\
-					<a title="move down this" data-row-id="' + row.componentID + '" action="Down" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-arrow-down"></i></a>\
+				return '\
+                    <a data-row-id="' + row.componentID + '" action="Active" href="javascript:;" class="toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="activate this">\
+                        <i class="la la-undo"></i>\
+                    </a>\
 				';
 			}
 		}]
@@ -99,8 +98,8 @@ var DatatableDataLocalDemo = function () {
 		var query = datatable.getDataSourceQuery();
 
 		$('#m_form_type').on('change', function () {
-			datatable.search($(this).val(), 'designationType');
-		}).val(typeof query.designationType !== 'undefined' ? query.designationType : '');
+			datatable.search($(this).val(), 'headerType');
+		}).val(typeof query.headerType !== 'undefined' ? query.headerType : '');
 
 		// $('#m_form_type').on('change', function () {
 		// 	datatable.search($(this).val(), 'Type');
