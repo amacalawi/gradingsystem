@@ -10,12 +10,12 @@
                         <div class="flex align-items-center">
                             <div class="mr-auto">
                                 <h3 class="m-portlet__head-text">
-                                    All Active {{ ucfirst(Request::segment(2)) }} 
+                                    All Active {{ ucfirst(Request::segment(3)) }} 
                                 </h3> 
                             </div>
                             <div>
-                                <a title="move to inactive {{ strtolower(Request::segment(2)) }}" href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/inactive') }}" class="pull-right moves m--font-danger">
-                                    INACTIVE {{ strtoupper(Request::segment(2)) }} <i class="la la-angle-double-right"></i>
+                                <a title="move to inactive {{ strtolower(Request::segment(3)) }}" href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/'.Request::segment(3).'/inactive') }}" class="pull-right moves m--font-danger">
+                                    INACTIVE {{ strtoupper(Request::segment(3)) }} <i class="la la-angle-double-right"></i>
                                 </a>
                             </div>
                         </div>
@@ -40,6 +40,7 @@
         </div>
     </div>
 </div>
+
 @endsection
 
 @push('scripts')

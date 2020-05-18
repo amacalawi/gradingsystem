@@ -69,7 +69,7 @@ class LevelsController extends Controller
     {   
         $menus = $this->load_menus();
         $flashMessage = self::messages();
-        $segment = request()->segment(3);
+        $segment = request()->segment(4);
         if (count($flashMessage) && $flashMessage[0]['module'] == 'level') {
             $level = (new Level)->fetch($flashMessage[0]['id']);
         } else {
@@ -82,7 +82,7 @@ class LevelsController extends Controller
     {   
         $menus = $this->load_menus();
         $flashMessage = self::messages();
-        $segment = request()->segment(3);
+        $segment = request()->segment(4);
         $level = (new Level)->find($id);
         return view('modules/academics/levels/edit')->with(compact('menus', 'level', 'segment', 'flashMessage'));
     }

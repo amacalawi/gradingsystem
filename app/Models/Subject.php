@@ -20,14 +20,16 @@ class Subject extends Model
                 'id' => ($subject->id) ? $subject->id : '',
                 'code' => ($subject->code) ? $subject->code : '',
                 'name' => ($subject->name) ? $subject->name : '',
-                'description' => ($subject->description) ? $subject->description : ''
+                'description' => ($subject->description) ? $subject->description : '',
+                'schoolyear_id' => ($subject->schoolyear_id) ? $subject->schoolyear_id : '',
             );
         } else {
             $results = array(
                 'id' => '',
                 'code' => '',
                 'name' => '',
-                'description' => ''
+                'description' => '',
+                'schoolyear_id' => '',
             );
         }
         return (object) $results;
@@ -53,5 +55,28 @@ class Subject extends Model
         }
 
         return $subjects;
+    }
+
+    public function get_all_subjects()
+    {
+        $subjects = self::where('is_active', 1)->orderBy('id', 'asc')->get();
+
+        $subs = array();
+        $subs[] = array('0' => 'select a subject');
+
+        foreach ($subjects as $subject) {
+            $subs[] = array(
+                $subject->id  => $subject->name,
+            );
+        }
+
+        $subjects = array();
+        foreach($subs as $sub) {
+            foreach($sub as $key => $val) {
+                $subjects[$key] = $val;
+            }
+        }
+
+        return $subjects;  
     }
 }
