@@ -15,10 +15,11 @@ class CreateComponentsTable extends Migration
     {
         Schema::create('components', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('batch_id')->unsigned();
             $table->integer('quarter_id')->unsigned();
             $table->integer('subject_id')->unsigned(); 
-            $table->string('code', 40);
-            $table->string('name', 100);
+            $table->string('name', 40);
+            $table->double('percentage');
             $table->text('description')->nullable();
             $table->integer('order')->unsigned();
             $table->boolean('is_sum_cell')->default(0);

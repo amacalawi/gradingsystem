@@ -19,13 +19,18 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col-md-12">
+                        <h5 class="m-bottom-1">Component Information</h5>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-md-6">
                         <div class="form-group m-form__group required">
-                            {{ Form::label('code', 'Code', ['class' => '']) }}
+                            {{ Form::label('name', 'Name', ['class' => '']) }}
                             {{ 
-                                Form::text($name = 'code', $value = $component->code, 
+                                Form::text($name = 'name', $value = $component->name, 
                                 $attributes = array(
-                                    'id' => 'code',
+                                    'id' => 'name',
                                     'class' => 'form-control form-control-lg m-input m-input--solid'
                                 )) 
                             }}
@@ -35,12 +40,12 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group m-form__group required">
-                            {{ Form::label('name', 'Name', ['class' => '']) }}
+                            {{ Form::label('percentage', 'Percentage', ['class' => '']) }}
                             {{ 
-                                Form::text($name = 'name', $value = $component->name, 
+                                Form::text($name = 'percentage', $value = $component->percentage, 
                                 $attributes = array(
-                                    'id' => 'name',
-                                    'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    'id' => 'percentage',
+                                    'class' => 'numeric form-control form-control-lg m-input m-input--solid'
                                 )) 
                             }}
                             <span class="m-form__help m--font-danger">
@@ -65,7 +70,11 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="row">
+                    <div class="col-md-12">
+                        <h5 class="m-top-1 m-bottom-1">Activity Cells</h5>
+                    </div>
+                </div>
                 @if (!empty($activities))
                     @php $i = 0; @endphp
                     <div id="activity-panel">

@@ -38,5 +38,10 @@ class Batch extends Model
         }
         return (object) $results;
     }
+
+    public function get_current_batch()
+    {
+        return self::where('status', 'Current')->first()->id;
+    }
 }
 
