@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Subject;
 use App\Models\Staff;
+use App\Models\Quarter;
 
 class SubjectsController extends Controller
 {
@@ -70,12 +71,13 @@ class SubjectsController extends Controller
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
+        $types = (new Quarter)->types();
         if (count($flashMessage) && $flashMessage[0]['module'] == 'subject') {
             $subject = (new Subject)->fetch($flashMessage[0]['id']);
         } else {
             $subject = (new Subject)->fetch($id);
         }
-        return view('modules/academics/subjects/add')->with(compact('menus', 'subject', 'segment', 'flashMessage'));
+        return view('modules/academics/subjects/add')->with(compact('menus', 'types', 'subject', 'segment', 'flashMessage'));
     }
     
     public function edit(Request $request, $id)
@@ -83,8 +85,9 @@ class SubjectsController extends Controller
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
+        $types = (new Quarter)->types();
         $subject = (new Subject)->find($id);
-        return view('modules/academics/subjects/edit')->with(compact('menus', 'subject', 'segment', 'flashMessage'));
+        return view('modules/academics/subjects/edit')->with(compact('menus', 'types', 'subject', 'segment', 'flashMessage'));
     }
     
     public function store(Request $request)
@@ -96,6 +99,7 @@ class SubjectsController extends Controller
             'code' => $request->code,
             'name' => $request->name,
             'description' => $request->description,
+            'type' => $request->type,
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
@@ -127,6 +131,7 @@ class SubjectsController extends Controller
         $subject->code = $request->code;
         $subject->name = $request->name;
         $subject->description = $request->description;
+        $subject->type = $request->type;
         $subject->updated_at = $timestamp;
         $subject->updated_by = Auth::user()->id;
 

@@ -9,29 +9,27 @@ use App\Models\Admission;
 
 class AdmissionController extends Controller
 {
+
     private $models;
-
-    public function __construct()
-    {   
-        date_default_timezone_set('Asia/Manila');
-        $this->middleware('auth');
-    }
-
+    
     public function all_admitted(Request $request)
     {
         
-        $res = Admission::where('is_active', 1)->where('status', 'admit')->where('schoolyear_id', '1')->orderBy('id', 'DESC')->get();
-        //die( var_dump($res) );
-        return $res->map(function($admmit) {
+        $res = Admission::select('admissions.id as admin_id','admissions.*','students.id as stud_id', 'students.*')
+            ->join('students', 'students.id', '=', 'admissions.user_id')
+            ->where('admissions.is_active', 1)
+            ->where('admissions.status', '')
+            ->orderBy('admin_id', 'desc')->get();
+   
+        return $res->map(function($admit) {
             return [
-                'admmitID' => $admmit->id,
-                'admmitUserId' => $admmit->user_id,
-                'admmitFirstname' => $admmit->firstname,
-                'admmitMiddlename' => $admmit->middlename,
-                'admmitLastname' => $admmit->lastname,
-                'admmitSchoolyear' => $admmit->schoolyear_id,
-                'admmitStatus' => $admmit->status,
-                'admmitModified' => ($admmit->updated_at !== NULL) ? date('d-M-Y', strtotime($admmit->updated_at)).'<br/>'. date('h:i A', strtotime($admmit->updated_at)) : date('d-M-Y', strtotime($admmit->created_at)).'<br/>'. date('h:i A', strtotime($admmit->created_at))
+                'admitID' => $admit->id,
+                'admitUserId' => $admit->user_id,
+                'admitName' => $admit->lastname . ', ' .$admit->firstname.' '.$admit->middlename,
+                'admitBatchId' => $admit->batch_id,
+                'admitStatus' => $admit->status,
+                'admitSectionStudentId' => $admit->section_student_id,
+                'admitModified' => ($admit->updated_at !== NULL) ? date('d-M-Y', strtotime($admit->updated_at)).'<br/>'. date('h:i A', strtotime($admit->updated_at)) : date('d-M-Y', strtotime($admit->created_at)).'<br/>'. date('h:i A', strtotime($admit->created_at))
             ];
         });
         

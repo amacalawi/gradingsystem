@@ -3,7 +3,6 @@
 @section('content')
     @include('partials.messages')
     @include('forms.section')
-    @include('modules.academics.sections.enlist')
 @endsection
 
 @push('scripts')

@@ -15,8 +15,11 @@ class CreateSectionsStudentsTable extends Migration
     {
         Schema::create('sections_students', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('code', 40);
+            $table->string('name', 100);
+            $table->text('description')->nullable();
             $table->integer('section_id')->unsigned();
-            $table->integer('user_id')->unsigned();
+            $table->integer('batch_id')->unsigned();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('created_by');
             $table->timestamp('updated_at')->nullable();
