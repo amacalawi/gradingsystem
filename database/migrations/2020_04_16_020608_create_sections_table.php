@@ -18,8 +18,8 @@ class CreateSectionsTable extends Migration
             $table->string('code', 40);
             $table->string('name', 100);
             $table->text('description')->nullable();
+            $table->string('type', 40);
             $table->integer('level_id')->unsigned();
-            $table->integer('schoolyear_id')->unsigned();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('created_by');
             $table->timestamp('updated_at')->nullable();

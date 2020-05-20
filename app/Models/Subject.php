@@ -21,7 +21,7 @@ class Subject extends Model
                 'code' => ($subject->code) ? $subject->code : '',
                 'name' => ($subject->name) ? $subject->name : '',
                 'description' => ($subject->description) ? $subject->description : '',
-                'schoolyear_id' => ($subject->schoolyear_id) ? $subject->schoolyear_id : '',
+                'type' => ($subject->type) ? $subject->type : '',
             );
         } else {
             $results = array(
@@ -30,6 +30,7 @@ class Subject extends Model
                 'name' => '',
                 'description' => '',
                 'schoolyear_id' => '',
+                'type' => ''
             );
         }
         return (object) $results;

@@ -21,8 +21,8 @@ class Section extends Model
                 'code' => ($section->code) ? $section->code : '',
                 'name' => ($section->name) ? $section->name : '',
                 'description' => ($section->description) ? $section->description : '',
+                'type' => ($section->type) ? $section->type : '',
                 'level_id' => ($section->level_id) ? $section->level_id : '',
-                'schoolyear_id' => ($section->schoolyear_id) ? $section->schoolyear_id : '',
             );
         } else {
             $results = array(
@@ -30,8 +30,8 @@ class Section extends Model
                 'code' => '',
                 'name' => '',
                 'description' => '',
+                'type' => '',
                 'level_id' => '',
-                'schoolyear_id' => ''
             );
         }
         return (object) $results;

@@ -40,5 +40,5 @@
 </div>
 
 @push('scripts')
-    <script src="{{ asset('js/datatables/admission.js') }}" type="text/javascript"></script>
+  <script src="{{ asset('js/datatables/admission.js') }}" type="text/javascript"></script>
 @endpush
