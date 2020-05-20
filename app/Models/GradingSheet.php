@@ -41,22 +41,22 @@ class GradingSheet extends Model
 
     public function batch()
     {
-        return $this->belongsTo('App\Moedels\Batch', 'batch_id', 'id');
+        return $this->belongsTo('App\Models\Batch', 'batch_id', 'id');
     }
 
     public function quarter()
     {
-        return $this->belongsTo('App\Moedels\Quarter');
+        return $this->belongsTo('App\Models\Quarter');
     }
 
     public function section()
     {
-        return $this->belongsTo('App\Moedels\Section');
+        return $this->belongsTo('App\Models\Section');
     }
 
     public function subject()
     {
-        return $this->belongsTo('App\Moedels\Subject');
+        return $this->belongsTo('App\Models\Subject');
     }
 }
 

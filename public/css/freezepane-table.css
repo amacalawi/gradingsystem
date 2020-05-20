@@ -1,0 +1,90 @@
+table {
+  table-layout: fixed;
+  border-spacing: 0px;
+}
+
+td, th {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+table thead tr th:nth-child(2),
+table tbody tr td:nth-child(2) {
+	width: 200px !important;
+}
+
+.table-bordered thead th {
+	word-break: break-all !important;
+}
+
+.tr_shaded:nth-child(even) {
+  background: #e0e0e0;
+}
+
+.tr_shaded:nth-child(odd) {
+  background: #ffffff;
+}
+
+.scrolly_table {
+  white-space: nowrap;
+  overflow: auto;
+}
+
+/* The frozen cells will each get two class names,
+   making it easier for me to select all of them or
+   only a subset.  All frozen cells will be "fixed",
+   the corner will also be in class "freeze", and the
+   row and column headers will be "horizontal" and
+   "vertical" respectively. */
+.fixed.freeze {
+  z-index: 10;
+  position: relative;
+  background: #ffff;
+}
+
+.fixed.freeze_vertical {
+  z-index: 5;
+  position: relative;
+}
+
+.fixed.freeze_horizontal {
+  z-index: 1;
+  position: relative;
+}
+table .shaded {
+	background: #f4f5f8 !important;
+}
+
+table tr td {
+	min-width: 46.4px !important;
+}
+
+table tr td.no-padding {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+table tr td input.text-cell {
+	width: 100%;
+	border: none;
+	background: transparent;
+	box-shadow: none;
+	text-align: center;
+}
+
+table tr td input.text-cell:focus,
+table tr td input.text-cell:active {
+	box-shadow: none !important;
+	box-sizing: none !important;
+	box-shadow: 0;
+	outline: none;
+}
+
+.table-bordered th, .table-bordered td {
+    border: 1px solid #f4f5f8;
+}
+.table-bordered th, .table-bordered td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #f4f5f8;
+}

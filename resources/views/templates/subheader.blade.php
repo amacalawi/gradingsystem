@@ -132,7 +132,12 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    {{ ucwords(Request::segment(3)) }}
+                    @if (Request::segment(3) == 'all-gradingsheets')
+                        Grading Sheets
+                    @else
+                        {{ ucwords(Request::segment(3)) }}
+                    @endif
+
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -159,10 +164,14 @@
                         $string = substr(ucwords(Request::segment(3)), 0, -1);
                         $exemptions = ['modules', 'sub-modules'];
                     @endphp
-                    @if (substr($string, -1) == 'e' && !in_array(Request::segment(3), $exemptions))
-                        Add New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2) }}
+                    @if (Request::segment(3) == 'all-gradingsheets')
+                        Add New Grading Sheet
                     @else
-                        Add New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1) }}
+                        @if (substr($string, -1) == 'e' && !in_array(Request::segment(3), $exemptions))
+                            Add New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2) }}
+                        @else
+                            Add New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1) }}
+                        @endif
                     @endif
                 </a>
             </div>
@@ -173,7 +182,11 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
+                    @if (Request::segment(3) == 'all-gradingsheets')
+                        Grading Sheets
+                    @else
+                        {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
+                    @endif
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -187,7 +200,11 @@
                     <li class="m-nav__item">
                         <a href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/'.Request::segment(3)) }}" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                Manage {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
+                                @if (Request::segment(3) == 'all-gradingsheets')
+                                    Manage Grading Sheets
+                                @else
+                                    Manage {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
+                                @endif
                             </span>
                         </a>
                     </li>
@@ -202,16 +219,24 @@
                                     $exemptions = ['modules', 'sub-modules'];
                                 @endphp
                                 @if (\Request::is('*/*/edit/*'))
-                                    @if (substr($string, -1) == 'e' && !in_array(Request::segment(3), $exemptions))
-                                        Edit {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2) }}
+                                    @if (Request::segment(3) == 'all-gradingsheets')
+                                        Edit Grading Sheet
                                     @else
-                                        Edit {{ substr(ucwords(Request::segment(3)), 0, -1) }}
+                                        @if (substr($string, -1) == 'e' && !in_array(Request::segment(3), $exemptions))
+                                            Edit {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2) }}
+                                        @else
+                                            Edit {{ substr(ucwords(Request::segment(3)), 0, -1) }}
+                                        @endif
                                     @endif
                                 @else
-                                    @if (substr($string, -1) == 'e' && !in_array(Request::segment(3), $exemptions))
-                                        New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2) }}
+                                    @if (Request::segment(3) == 'all-gradingsheets')
+                                        New Grading Sheet
                                     @else
-                                        New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1) }}
+                                        @if (substr($string, -1) == 'e' && !in_array(Request::segment(3), $exemptions))
+                                            New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2) }}
+                                        @else
+                                            New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1) }}
+                                        @endif
                                     @endif
                                 @endif
                             </span>
@@ -221,7 +246,15 @@
             </div>
             <div>
                 <button type="button" class="submit-btn btn m-btn--pill btn-brand m-btn--custom">
-                    <i class="la la-save"></i> Save Changes
+                    @if (\Request::is('*/*/edit/*'))
+                        <i class="la la-save"></i> Save Changes
+                    @else
+                        @if (Request::segment(3) == 'all-gradingsheets')
+                            <i class="la la-save"></i> Generate Grading Sheet
+                        @else
+                            <i class="la la-save"></i> Save Changes
+                        @endif
+                    @endif
                 </button>
             </div>
         </div>

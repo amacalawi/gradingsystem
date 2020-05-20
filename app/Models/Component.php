@@ -56,5 +56,13 @@ class Component extends Model
         }
         return (object) $results;
     }
+
+    public function get_components_via_gradingsheet($id)
+    {
+        $components = self::where([
+            'quarter_id' =>
+            'subject_id' => 
+        ]);
+    }
 }
 

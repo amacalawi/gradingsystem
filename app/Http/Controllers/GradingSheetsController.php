@@ -10,6 +10,7 @@ use App\Models\GradingSheet;
 use App\Models\Quarter;
 use App\Models\Subject;
 use App\Models\Section;
+use App\Models\Batch;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -54,7 +55,7 @@ class GradingSheetsController extends Controller
             'subject' =>  function($q) { 
                 $q->select(['id', 'name']); 
             }
-        ])->orderBy('order', 'ASC')->get();
+        ])->orderBy('id', 'ASC')->get();
 
         return $res->map(function($grading) {
             return [
@@ -77,7 +78,7 @@ class GradingSheetsController extends Controller
             'subject' =>  function($q) { 
                 $q->select(['id', 'name']); 
             }
-        ])->orderBy('order', 'ASC')->get();
+        ])->orderBy('id', 'ASC')->get();
 
         return $res->map(function($grading) {
             return [
@@ -96,16 +97,21 @@ class GradingSheetsController extends Controller
         $segment = request()->segment(4);
         $grading = (new GradingSheet)->fetch($id);
         $quarters = (new Quarter)->all_quarters();
+        $sections = (new Section)->all_sections();
         $subjects = (new Subject)->all_subjects();
-        return view('modules/academics/gradingsheets/all/add')->with(compact('menus', 'grading', 'quarters', 'subjects', 'segment'));
+        return view('modules/academics/gradingsheets/all/add')->with(compact('menus', 'grading', 'quarters', 'sections', 'subjects', 'segment'));
     }
     
     public function edit(Request $request, $id)
     {   
         $menus = $this->load_menus();
         $segment = request()->segment(4);
-        $grading = (new GradingSheet)->find($id);
-        return view('modules/academics/gradingsheets/all/edit')->with(compact('menus', 'grading', 'segment'));
+        $grading = (new GradingSheet)->fetch($id);
+        $quarters = (new Quarter)->all_quarters();
+        $sections = (new Section)->all_sections();
+        $subjects = (new Subject)->all_subjects();
+        $components = (new Component)->get_components_via_gradingsheet($id);
+        return view('modules/academics/gradingsheets/all/edit')->with(compact('menus', 'grading', 'quarters', 'sections', 'subjects', 'components', 'segment'));
     }
     
     public function store(Request $request)
@@ -113,13 +119,16 @@ class GradingSheetsController extends Controller
         $timestamp = date('Y-m-d H:i:s');
 
         $rows = GradingSheet::where([
-            'code' => $request->code
+            'section_id' => $request->section_id,
+            'subject_id' => $request->subject_id,
+            'quarter_id' => $request->quarter_id,
+            'batch_id' => (new Batch)->get_current_batch()
         ])->count();
 
         if ($rows > 0) {
             $data = array(
                 'title' => 'Oh snap!',
-                'text' => 'You cannot create a grading with an existing code.',
+                'text' => 'This section, subject and quarter is already exist.',
                 'type' => 'error',
                 'class' => 'btn-danger'
             );
@@ -130,11 +139,11 @@ class GradingSheetsController extends Controller
         $count = GradingSheet::all()->count() + 1;
 
         $grading = GradingSheet::create([
-            'code' => $request->code,
-            'name' => $request->name,
-            'description' => $request->description,
-            'slug' => str_replace(' ', '-', strtolower($request->name)),
-            'order' => $count,
+            'code' => (new Section)->get_column_via_identifier('name', $request->section_id).': '.(new Subject)->get_column_via_identifier('name', $request->subject_id),
+            'section_id' => $request->section_id,
+            'subject_id' => $request->subject_id,
+            'quarter_id' => $request->quarter_id,
+            'batch_id' => (new Batch)->get_current_batch(),
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
@@ -145,7 +154,7 @@ class GradingSheetsController extends Controller
 
         $data = array(
             'title' => 'Well done!',
-            'text' => 'The grading has been successfully saved.',
+            'text' => 'The grading sheet has been successfully saved.',
             'type' => 'success',
             'class' => 'btn-brand'
         );
@@ -173,7 +182,7 @@ class GradingSheetsController extends Controller
 
             $data = array(
                 'title' => 'Well done!',
-                'text' => 'The grading has been successfully updated.',
+                'text' => 'The grading sheet has been successfully updated.',
                 'type' => 'success',
                 'class' => 'btn-brand'
             );

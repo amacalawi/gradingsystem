@@ -36,4 +36,31 @@ class Section extends Model
         }
         return (object) $results;
     }
+
+    public function all_sections($entity = '')
+    {	
+    	$sections = self::where('is_active', 1)->orderBy('id', 'asc')->get();
+
+        $sectionx = array();
+        $sectionx[] = array('' => 'select a section');
+        foreach ($sections as $section) {
+            $sectionx[] = array(
+                $section->id => $section->name
+            );
+        }
+
+        $sections = array();
+        foreach($sectionx as $section) {
+            foreach($section as $key => $val) {
+                $sections[$key] = $val;
+            }
+        }
+
+        return $sections;
+    }
+
+    public function get_column_via_identifier($column, $id)
+    {
+        return self::where('id', $id)->first()->$column;
+    }
 }

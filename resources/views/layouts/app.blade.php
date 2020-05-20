@@ -17,6 +17,7 @@
         <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('assets/css/responsive.css') }}" rel="stylesheet" type="text/css" />
         <link rel="shortcut icon" href="{{ asset('assets/demo/demo7/media/img/logo/favicon.ico') }}" />
+        @stack('styles')
         <script>
             var base_url = "{{ url('/') }}/";
             var _token = "{{ csrf_token() }}";

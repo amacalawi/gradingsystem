@@ -79,4 +79,9 @@ class Subject extends Model
 
         return $subjects;  
     }
+
+    public function get_column_via_identifier($column, $id)
+    {
+        return self::where('id', $id)->first()->$column;
+    }
 }
