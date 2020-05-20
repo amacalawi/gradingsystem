@@ -20,14 +20,16 @@ class Level extends Model
                 'id' => ($level->id) ? $level->id : '',
                 'code' => ($level->code) ? $level->code : '',
                 'name' => ($level->name) ? $level->name : '',
-                'description' => ($level->description) ? $level->description : ''
+                'description' => ($level->description) ? $level->description : '',
+                'type' => ($level->type) ? $level->type : '',
             );
         } else {
             $results = array(
                 'id' => '',
                 'code' => '',
                 'name' => '',
-                'description' => ''
+                'description' => '',
+                'type' => ''
             );
         }
         return (object) $results;

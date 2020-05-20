@@ -8,9 +8,8 @@ use App\Models\Section;
 use App\Models\Subject;
 use App\Models\Staff;
 use App\Models\Level;
-use App\Models\SectionsSubjects;
-use App\Models\SectionsStudents;
 use App\Models\Admission;
+use App\Models\Quarter;
 
 class SectionsController extends Controller
 {
@@ -75,13 +74,14 @@ class SectionsController extends Controller
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
+        
         $levels = (new Level)->all_levels();
         $subjects = (new Subject)->all_subjects();
         $admitted = (new Admission)->all_admitted_student();
+        $types = (new Quarter)->types();
         $staffs = Staff::select('id', 'lastname', 'firstname', 'middlename', 'identification_no')->where('type','Teacher')->orderBy('lastname', 'asc')->get();
-        $sections_subjects = 0;
-
         
+        $sections_subjects = 0;
         $stfs = array();
         $stfs[] = array('' => 'select a teacher');
         foreach ($staffs as $staff) {
@@ -97,9 +97,8 @@ class SectionsController extends Controller
             }
         }
 
-        $section = (new Section)->fetch($id); 
-        //die( var_dump($staffs) );
-        return view('modules/academics/sections/add')->with(compact('menus', 'section', 'sections_subjects', 'admitted', 'levels', 'staffs', 'subjects', 'segment', 'flashMessage'));
+        $section = (new Section)->fetch($id);
+        return view('modules/academics/sections/add')->with(compact('menus', 'types', 'section', 'sections_subjects', 'admitted', 'levels', 'staffs', 'subjects', 'segment', 'flashMessage'));
     }
     
     public function edit(Request $request, $id)
@@ -107,14 +106,13 @@ class SectionsController extends Controller
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
+
         $allSubjects = Subject::all();
         $allTeachers = Staff::where('is_active', 1)->where('type','Teacher')->orderBy('lastname', 'asc')->get();
+        $types = (new Quarter)->types();
 
         $levels = (new Level)->all_levels();
         $subjects = (new Subject)->all_subjects();
-
-        $sections_students = (new SectionsStudents)->getSection_Student($id);
-        $sections_subjects = (new SectionsSubjects)->getSection_Subject($id);
 
         $staffs = Staff::select('id', 'lastname', 'firstname', 'middlename', 'identification_no')->where('is_active', 1)->where('type','Teacher')->orderBy('lastname', 'asc')->get();
         $stfs = array();
@@ -134,7 +132,7 @@ class SectionsController extends Controller
 
         $section = (new Section)->find($id);
 
-        return view('modules/academics/sections/edit')->with(compact('menus', 'section', 'sections_students', 'allTeachers', 'allSubjects', 'staffs', 'sections_subjects', 'sections_teachers', 'subjects', 'levels', 'segment', 'flashMessage'));
+        return view('modules/academics/sections/edit')->with(compact('menus', 'types', 'section', 'allTeachers', 'allSubjects', 'staffs', 'sections_teachers', 'subjects', 'levels', 'segment', 'flashMessage'));
 
     }
     
@@ -147,37 +145,11 @@ class SectionsController extends Controller
             'code' => $request->code,
             'name' => $request->name,
             'description' => $request->description,
+            'type' => $request->type,
             'level_id' => $request->level_id,
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
-        
-        //section subject
-        $subjects = $request->subjects;
-        $teachers = $request->teachers;
-        foreach ($subjects as $key => $subject) {
-            
-            $sections_subjects = SectionsSubjects::create([
-                'section_id' => $section->id,
-                'subject_id' => $subject,
-                'staff_id' => $teachers[$key],
-                'created_at' => $timestamp,
-                'created_by' => Auth::user()->id
-            ]);
-            
-        }
-        
-        //section members
-        $members = $request->list_admitted_student;
-        foreach ($members as $key => $member) {
-            
-            $sections_students = SectionsStudents::create([
-                'section_id' => $section->id,
-                'user_id' => $member,
-                'created_at' => $timestamp,
-                'created_by' => Auth::user()->id
-            ]);
-        }
         
         $data = array(
             'title' => 'Well done!',
@@ -203,65 +175,10 @@ class SectionsController extends Controller
         $section->code = $request->code;
         $section->name = $request->name;
         $section->description = $request->description;
+        $section->type = $request->type;
         $section->level_id = $request->level_id;
         $section->updated_at = $timestamp;
         $section->updated_at = Auth::user()->id;
-
-        //UPDATE section_subject
-        $all_subjects = $request->subjects;
-        $all_teachers = $request->teachers;
-        $ids_sections_subjects = $request->sections_subjects;
-        $counter = 1;
-        foreach ($all_subjects as $key => $subject) {
-            
-            if( count($ids_sections_subjects) >= $counter )
-            {
-                $counter+=1;
-                if( ( $all_teachers[$key] != 'NULL' ) && ( $subject != 'NULL' ) )
-                {
-                    $ss = SectionsSubjects::find($ids_sections_subjects[$key]);
-                    $ss->section_id = $id;
-                    $ss->subject_id = $subject;
-                    $ss->staff_id = $all_teachers[$key];
-                    $ss->updated_at = $timestamp;
-                    $ss->updated_by = Auth::user()->id;
-                    $ss->update();
-                }
-                else 
-                {
-                    $ss = SectionsSubjects::find($ids_sections_subjects[$key]);
-                    $ss->delete();
-                }
-            }
-            
-            elseif( ( $all_teachers[$key] != 'NULL' ) && ( $subject != 'NULL' ) )
-            {
-                $counter+=1;
-                $sections_subjects = SectionsSubjects::create([
-                        'section_id' => $id,
-                        'subject_id' => $subject,
-                        'staff_id' => $all_teachers[$key],
-                        'created_at' => $timestamp,
-                        'created_by' => Auth::user()->id
-                ]);
-            }
-            
-        }
-        
-        //UPDATE section_subject
-        $section_student = SectionsStudents::where('section_id', $id)->where('is_active', 1);
-        $section_student->delete();
-        $members = $request->list_admitted_student;
-        foreach ($members as $key => $member) {
-            
-            $sections_students = SectionsStudents::create([
-                'section_id' => $id,
-                'user_id' => $member,
-                'created_at' => $timestamp,
-                'created_by' => Auth::user()->id
-            ]);
-        }
-
 
         if ($section->update()) {
 

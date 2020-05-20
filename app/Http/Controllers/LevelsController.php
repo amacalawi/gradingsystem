@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Level;
+use App\Models\Quarter;
 
 class LevelsController extends Controller
 {
@@ -70,12 +71,13 @@ class LevelsController extends Controller
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
+        $types = (new Quarter)->types();
         if (count($flashMessage) && $flashMessage[0]['module'] == 'level') {
             $level = (new Level)->fetch($flashMessage[0]['id']);
         } else {
             $level = (new Level)->fetch($id);
         }
-        return view('modules/academics/levels/add')->with(compact('menus', 'level', 'segment', 'flashMessage'));
+        return view('modules/academics/levels/add')->with(compact('menus', 'types', 'level', 'segment', 'flashMessage'));
     }
     
     public function edit(Request $request, $id)
@@ -83,8 +85,9 @@ class LevelsController extends Controller
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
+        $types = (new Quarter)->types();
         $level = (new Level)->find($id);
-        return view('modules/academics/levels/edit')->with(compact('menus', 'level', 'segment', 'flashMessage'));
+        return view('modules/academics/levels/edit')->with(compact('menus', 'types', 'level', 'segment', 'flashMessage'));
     }
     
     public function store(Request $request)
@@ -96,6 +99,7 @@ class LevelsController extends Controller
             'code' => $request->code,
             'name' => $request->name,
             'description' => $request->description,
+            'type' => $request->type,
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
@@ -127,6 +131,7 @@ class LevelsController extends Controller
         $level->code = $request->code;
         $level->name = $request->name;
         $level->description = $request->description;
+        $level->type = $request->type;
         $level->updated_at = $timestamp;
         $level->updated_by = Auth::user()->id;
 

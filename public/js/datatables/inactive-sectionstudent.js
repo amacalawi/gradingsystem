@@ -12,7 +12,7 @@ var DatatableDataLocalDemo = function () {
 			  read: {
 				// sample GET method
 				method: 'GET',
-				url: base_url + 'academics/admissions/section-student/all-admitted',
+				url: base_url + 'academics/admissions/section-student/all-inactive',
 				map: function(raw) {
 				  // sample data mapping
 				  var dataSet = raw;
@@ -52,7 +52,7 @@ var DatatableDataLocalDemo = function () {
 		// columns definition
 		
 		columns: [{
-			field: "admitUserId",
+			field: "sectionsstudentsID",
 			title: "#",
 			width: 50,
 			name: "test",
@@ -60,11 +60,34 @@ var DatatableDataLocalDemo = function () {
 			textAlign: 'center',			
 			selector: {class: 'm-checkbox--solid m-checkbox--brand checkboxcheck'},
 		}, {
-			field: "admitName",
-			title: "Name"
+			field: "sectionsstudentsCode",
+			title: "Code"
 		}, {
-			field: "admitModified",
-			title: "Last Modified"
+			field: "sectionsstudentsName",
+			title: "Name",
+		}, {
+			field: "sectionsstudentsDescription",
+			title: "Description"
+		}, {
+			field: "sectionsstudentsModified",
+			title: "Last Modified",
+			type: "number"
+		}, {
+			field: "Actions",
+			width: 70,
+			title: "Actions",
+			sortable: false,
+			ordering: false,
+			overflow: 'visible',
+			template: function (row, index, datatable) {
+				var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
+
+				return '\
+                    <a data-row-id="' + row.sectionsstudentsID + '" action="Active" href="javascript:;" class="toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="activate this">\
+                        <i class="la la-undo"></i>\
+                    </a>\
+				';
+			}
 		}]
 	
 	});
@@ -131,7 +154,7 @@ jQuery(document).ready(function (e) {
 				var row_id = $(this).val();
 				var items = [];
 
-				$("#admitted_student").html("");
+				//$("#admitted_student").html("");
 				
 				$.ajax({
 					type: 'GET', 
@@ -148,7 +171,7 @@ jQuery(document).ready(function (e) {
 				});
 			}
 			else {
-				$("#admitted_student").html("");
+				//$("#admitted_student").html("");
 			}
 		});
 
@@ -159,7 +182,7 @@ jQuery(document).ready(function (e) {
 		var $rowID = $(this).attr('data-row-id');
 		console.log($rowID);
 		var $action = $(this).attr('action');
-		var $url = base_url + 'academics/academics/sections/update-status/' + $rowID;
+		var $url = base_url + 'academics/admissions/section-student/update-status/' + $rowID;
 		var items = []; items.push({ action: $action });
 
 		console.log($url);

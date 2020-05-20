@@ -153,6 +153,16 @@ class DatabaseSeeder extends Seeder
                 'icon' => 'fa fa-mortar-board',
                 'order' => '1',
                 'created_by' => 1
+            ],
+            [   
+                'header_id' => '1',
+                'code' => 'admissions',
+                'name' => 'Admissions',
+                'description' => 'Admissions Description',
+                'slug' => 'admissions',
+                'icon' => 'fa fa-university',
+                'order' => '2',
+                'created_by' => 1
             ], 
             [   
                 'header_id' => '1',
@@ -161,7 +171,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Grading Sheets Description',
                 'slug' => 'grading-sheets',
                 'icon' => 'fa fa-file-text-o',
-                'order' => '2',
+                'order' => '3',
                 'created_by' => 1
             ], 
             [   
@@ -171,7 +181,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Attendance Sheets Description',
                 'slug' => 'attendance-sheets',
                 'icon' => 'fa fa-calendar-check-o',
-                'order' => '3',
+                'order' => '4',
                 'created_by' => 1
             ],
             [   
@@ -181,7 +191,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Schools Description',
                 'slug' => 'schools',
                 'icon' => 'fa fa-university',
-                'order' => '4',
+                'order' => '5',
                 'created_by' => 1
             ],
             [   
@@ -191,7 +201,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Groups Description',
                 'slug' => 'groups',
                 'icon' => 'fa fa-group',
-                'order' => '5',
+                'order' => '6',
                 'created_by' => 1
             ],
             [   
@@ -201,7 +211,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Schedules Description',
                 'slug' => 'schedules',
                 'icon' => 'fa fa-calendar',
-                'order' => '6',
+                'order' => '7',
                 'created_by' => 1
             ],
             [   
@@ -211,7 +221,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Menus Description',
                 'slug' => 'menus',
                 'icon' => 'fa fa-list',
-                'order' => '7',
+                'order' => '8',
                 'created_by' => 1
             ],
             [   
@@ -221,7 +231,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Students Description',
                 'slug' => 'students',
                 'icon' => 'la la-user',
-                'order' => '8',
+                'order' => '9',
                 'created_by' => 1
             ],
             [   
@@ -231,7 +241,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Staffs Description',
                 'slug' => 'staffs',
                 'icon' => 'fa fa-user-secret',
-                'order' => '9',
+                'order' => '10',
                 'created_by' => 1
             ],
             [   
@@ -241,7 +251,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Users Description',
                 'slug' => 'users',
                 'icon' => 'la la-users',
-                'order' => '10',
+                'order' => '11',
                 'created_by' => 1
             ],
             [   
@@ -251,7 +261,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Messaging Description',
                 'slug' => 'messaging',
                 'icon' => 'la la-comments',
-                'order' => '11',
+                'order' => '12',
                 'created_by' => 1
             ]
         ];
@@ -292,242 +302,252 @@ class DatabaseSeeder extends Seeder
             ],
             [   
                 'module_id' => '2',
-                'code' => 'all-gradingsheets',
-                'name' => 'All Grading Sheets',
-                'description' => 'All Grading Sheets Description',
-                'slug' => 'all-gradingsheets',
+                'code' => 'section-student',
+                'name' => 'Sections and Students',
+                'description' => 'Sections and Students Description',
+                'slug' => 'section-student',
                 'icon' => '',
                 'order' => '4',
                 'created_by' => 1
             ],
             [   
-                'module_id' => '2',
-                'code' => 'components',
-                'name' => 'Components',
-                'description' => 'Components Description',
-                'slug' => 'components',
+                'module_id' => '3',
+                'code' => 'all-gradingsheets',
+                'name' => 'All Grading Sheets',
+                'description' => 'All Grading Sheets Description',
+                'slug' => 'all-gradingsheets',
                 'icon' => '',
                 'order' => '5',
                 'created_by' => 1
             ],
             [   
-                'module_id' => '2',
-                'code' => 'transmutations',
-                'name' => 'Transmutations',
-                'description' => 'Transmutations Description',
-                'slug' => 'transmutations',
+                'module_id' => '3',
+                'code' => 'components',
+                'name' => 'Components',
+                'description' => 'Components Description',
+                'slug' => 'components',
                 'icon' => '',
                 'order' => '6',
                 'created_by' => 1
             ],
             [   
                 'module_id' => '3',
-                'code' => 'student-attendance',
-                'name' => 'Student Attendance',
-                'description' => 'Student Attendance Description',
-                'slug' => 'student-attendance',
+                'code' => 'transmutations',
+                'name' => 'Transmutations',
+                'description' => 'Transmutations Description',
+                'slug' => 'transmutations',
                 'icon' => '',
                 'order' => '7',
                 'created_by' => 1
             ],
             [   
-                'module_id' => '3',
-                'code' => 'staff-attendance',
-                'name' => 'Staff Attendance',
-                'description' => 'Staff Attendance Description',
-                'slug' => 'staff-attendance',
+                'module_id' => '4',
+                'code' => 'student-attendance',
+                'name' => 'Student Attendance',
+                'description' => 'Student Attendance Description',
+                'slug' => 'student-attendance',
                 'icon' => '',
                 'order' => '8',
                 'created_by' => 1
             ],
             [   
-                'module_id' => '3',
-                'code' => 'attendance-report',
-                'name' => 'Attendance Report',
-                'description' => 'Attendance Report Description',
-                'slug' => 'attendance-report',
+                'module_id' => '4',
+                'code' => 'staff-attendance',
+                'name' => 'Staff Attendance',
+                'description' => 'Staff Attendance Description',
+                'slug' => 'staff-attendance',
                 'icon' => '',
                 'order' => '9',
                 'created_by' => 1
             ],
             [   
                 'module_id' => '4',
-                'code' => 'batches',
-                'name' => 'Batches',
-                'description' => 'Batches Description',
-                'slug' => 'batches',
+                'code' => 'attendance-report',
+                'name' => 'Attendance Report',
+                'description' => 'Attendance Report Description',
+                'slug' => 'attendance-report',
                 'icon' => '',
                 'order' => '10',
                 'created_by' => 1
             ],
             [   
-                'module_id' => '4',
-                'code' => 'quarters',
-                'name' => 'Quaraters',
-                'description' => 'Quaraters Description',
-                'slug' => 'quarters',
+                'module_id' => '5',
+                'code' => 'batches',
+                'name' => 'Batches',
+                'description' => 'Batches Description',
+                'slug' => 'batches',
                 'icon' => '',
                 'order' => '11',
                 'created_by' => 1
             ],
             [   
-                'module_id' => '4',
-                'code' => 'departments',
-                'name' => 'Departments',
-                'description' => 'Departments Description',
-                'slug' => 'departments',
+                'module_id' => '5',
+                'code' => 'quarters',
+                'name' => 'Quaraters',
+                'description' => 'Quaraters Description',
+                'slug' => 'quarters',
                 'icon' => '',
                 'order' => '12',
                 'created_by' => 1
             ],
             [   
-                'module_id' => '4',
-                'code' => 'designations',
-                'name' => 'Designations',
-                'description' => 'Designations Description',
-                'slug' => 'designations',
+                'module_id' => '5',
+                'code' => 'departments',
+                'name' => 'Departments',
+                'description' => 'Departments Description',
+                'slug' => 'departments',
                 'icon' => '',
                 'order' => '13',
                 'created_by' => 1
             ],
             [   
                 'module_id' => '5',
-                'code' => 'all-active-groups',
-                'name' => 'All Active Groups',
-                'description' => 'All Active Groups Description',
-                'slug' => 'active',
+                'code' => 'designations',
+                'name' => 'Designations',
+                'description' => 'Designations Description',
+                'slug' => 'designations',
                 'icon' => '',
                 'order' => '14',
                 'created_by' => 1
             ],
             [   
-                'module_id' => '5',
-                'code' => 'all-inactive-groups',
-                'name' => 'All Inactive Groups',
-                'description' => 'All Inactive Groups Description',
-                'slug' => 'inactive',
+                'module_id' => '6',
+                'code' => 'all-active-groups',
+                'name' => 'All Active Groups',
+                'description' => 'All Active Groups Description',
+                'slug' => 'active',
                 'icon' => '',
                 'order' => '15',
                 'created_by' => 1
             ],
             [   
                 'module_id' => '6',
-                'code' => 'all-active-schedules',
-                'name' => 'All Active Schedules',
-                'description' => 'All Active Schedules Description',
-                'slug' => 'active',
+                'code' => 'all-inactive-groups',
+                'name' => 'All Inactive Groups',
+                'description' => 'All Inactive Groups Description',
+                'slug' => 'inactive',
                 'icon' => '',
                 'order' => '16',
                 'created_by' => 1
             ],
             [   
-                'module_id' => '6',
-                'code' => 'all-inactive-schedules',
-                'name' => 'All Inactive Schedules',
-                'description' => 'All Inactive Schedules Description',
-                'slug' => 'inactive',
+                'module_id' => '7',
+                'code' => 'all-active-schedules',
+                'name' => 'All Active Schedules',
+                'description' => 'All Active Schedules Description',
+                'slug' => 'active',
                 'icon' => '',
                 'order' => '17',
                 'created_by' => 1
             ],
             [   
                 'module_id' => '7',
-                'code' => 'headers',
-                'name' => 'Headers',
-                'description' => 'Headers Description',
-                'slug' => 'headers',
+                'code' => 'all-inactive-schedules',
+                'name' => 'All Inactive Schedules',
+                'description' => 'All Inactive Schedules Description',
+                'slug' => 'inactive',
                 'icon' => '',
                 'order' => '18',
                 'created_by' => 1
             ],
             [   
-                'module_id' => '7',
-                'code' => 'modules',
-                'name' => 'Modules',
-                'description' => 'Modules Description',
-                'slug' => 'modules',
+                'module_id' => '8',
+                'code' => 'headers',
+                'name' => 'Headers',
+                'description' => 'Headers Description',
+                'slug' => 'headers',
                 'icon' => '',
                 'order' => '19',
                 'created_by' => 1
             ],
             [   
-                'module_id' => '7',
-                'code' => 'sub-modules',
-                'name' => 'Sub Modules',
-                'description' => 'Sub Modules Description',
-                'slug' => 'sub-modules',
+                'module_id' => '8',
+                'code' => 'modules',
+                'name' => 'Modules',
+                'description' => 'Modules Description',
+                'slug' => 'modules',
                 'icon' => '',
                 'order' => '20',
                 'created_by' => 1
             ],
             [   
                 'module_id' => '8',
-                'code' => 'all-active-students',
-                'name' => 'All Active Students',
-                'description' => 'All Active Students Description',
-                'slug' => 'active',
+                'code' => 'sub-modules',
+                'name' => 'Sub Modules',
+                'description' => 'Sub Modules Description',
+                'slug' => 'sub-modules',
                 'icon' => '',
                 'order' => '21',
                 'created_by' => 1
             ],
             [   
-                'module_id' => '8',
-                'code' => 'all-inactive-students',
-                'name' => 'All Inactive Students',
-                'description' => 'All Inactive Students Description',
-                'slug' => 'inactive',
+                'module_id' => '9',
+                'code' => 'all-active-students',
+                'name' => 'All Active Students',
+                'description' => 'All Active Students Description',
+                'slug' => 'active',
                 'icon' => '',
                 'order' => '22',
                 'created_by' => 1
             ],
             [   
                 'module_id' => '9',
-                'code' => 'all-active-staffs',
-                'name' => 'All Active Staffs',
-                'description' => 'All Active Staffs Description',
-                'slug' => 'active',
+                'code' => 'all-inactive-students',
+                'name' => 'All Inactive Students',
+                'description' => 'All Inactive Students Description',
+                'slug' => 'inactive',
                 'icon' => '',
                 'order' => '23',
                 'created_by' => 1
             ],
             [   
-                'module_id' => '9',
-                'code' => 'all-inactive-staffs',
-                'name' => 'All Inactive Staffs',
-                'description' => 'All Inactive Staffs Description',
-                'slug' => 'inactive',
+                'module_id' => '10',
+                'code' => 'all-active-staffs',
+                'name' => 'All Active Staffs',
+                'description' => 'All Active Staffs Description',
+                'slug' => 'active',
                 'icon' => '',
                 'order' => '24',
                 'created_by' => 1
             ],
             [   
                 'module_id' => '10',
-                'code' => 'accounts',
-                'name' => 'Accounts',
-                'description' => 'Accounts Description',
-                'slug' => 'accounts',
+                'code' => 'all-inactive-staffs',
+                'name' => 'All Inactive Staffs',
+                'description' => 'All Inactive Staffs Description',
+                'slug' => 'inactive',
                 'icon' => '',
                 'order' => '25',
                 'created_by' => 1
             ],
             [   
-                'module_id' => '10',
-                'code' => 'roles-and-permissions',
-                'name' => 'Roles And Permissions',
-                'description' => 'Roles And Permissions Description',
-                'slug' => 'roles-and-permissions',
+                'module_id' => '11',
+                'code' => 'accounts',
+                'name' => 'Accounts',
+                'description' => 'Accounts Description',
+                'slug' => 'accounts',
                 'icon' => '',
                 'order' => '26',
                 'created_by' => 1
             ],
             [   
                 'module_id' => '11',
+                'code' => 'roles-and-permissions',
+                'name' => 'Roles And Permissions',
+                'description' => 'Roles And Permissions Description',
+                'slug' => 'roles-and-permissions',
+                'icon' => '',
+                'order' => '27',
+                'created_by' => 1
+            ],
+            [   
+                'module_id' => '12',
                 'code' => 'send-message',
                 'name' => 'Send Message',
                 'description' => 'Send Message Description',
                 'slug' => 'send-message',
                 'icon' => '',
-                'order' => '27',
+                'order' => '28',
                 'created_by' => 1
             ]
         ];
@@ -616,6 +636,11 @@ class DatabaseSeeder extends Seeder
             [   
                 'role_id' => '1',
                 'module_id' => '11',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'module_id' => '12',
                 'created_by' => 1
             ]
         ];
@@ -784,6 +809,12 @@ class DatabaseSeeder extends Seeder
             [   
                 'role_id' => '1',
                 'sub_module_id' => '27',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '28',
                 'permissions' => '1,1,1,1',
                 'created_by' => 1
             ]

@@ -190,54 +190,71 @@ Route::prefix('memberships')->group(function () {
 
 
 Route::prefix('academics')->group(function () {
-    /* Sections */
-    Route::get('academics/sections/add', 'SectionsController@add')->name('sections.add');
-    Route::get('academics/sections/edit/{id?}', 'SectionsController@edit')->name('sections.edit');
-    Route::post('academics/sections/store', 'SectionsController@store')->name('sections.store');
-    Route::put('academics/sections/update/{id}', 'SectionsController@update')->name('sections.update');
-    Route::get('academics/sections', 'SectionsController@manage')->name('sections.manage.active');
-    Route::get('academics/sections/inactive', 'SectionsController@inactive')->name('sections.manage.inactive');
-    Route::post('academics/sections/remove', 'SectionsController@remove')->name('sections.remove');
-    Route::post('academics/sections/restore', 'SectionsController@restore')->name('sections.restore');
-    Route::get('academics/sections/all-active', 'SectionsController@all_active')->name('sections.all.active');
-    Route::get('academics/sections/all-inactive', 'SectionsController@all_inactive')->name('sections.all.inactive');
-    Route::put('academics/sections/update-status/{id}', 'SectionsController@update_status')->name('sections.update.status');
-    /* End Sections Routes */
 
-    /* Admissions */
-    Route::get('academics/admission/all-admitted', 'AdmissionController@all_admitted')->name('admission.all.admitted');
-    Route::get('academics/admission/get-this-admitted/{id?}', 'AdmissionController@get_this_admitted');
-    /* End Admissions Routes */
+    Route::prefix('academics')->group(function () {
+        /* Sections */
+        Route::get('sections/add', 'SectionsController@add')->name('sections.add');
+        Route::get('sections/edit/{id?}', 'SectionsController@edit')->name('sections.edit');
+        Route::post('sections/store', 'SectionsController@store')->name('sections.store');
+        Route::put('sections/update/{id}', 'SectionsController@update')->name('sections.update');
+        Route::get('sections', 'SectionsController@manage')->name('sections.manage.active');
+        Route::get('sections/inactive', 'SectionsController@inactive')->name('sections.manage.inactive');
+        Route::post('sections/remove', 'SectionsController@remove')->name('sections.remove');
+        Route::post('sections/restore', 'SectionsController@restore')->name('sections.restore');
+        Route::get('sections/all-active', 'SectionsController@all_active')->name('sections.all.active');
+        Route::get('sections/all-inactive', 'SectionsController@all_inactive')->name('sections.all.inactive');
+        Route::put('sections/update-status/{id}', 'SectionsController@update_status')->name('sections.update.status');
+        /* End Sections Routes */
 
-    /* Levels */
-    Route::get('academics/levels/add', 'LevelsController@add')->name('levels.add');
-    Route::get('academics/levels/edit/{id?}', 'LevelsController@edit')->name('levels.edit');
-    Route::post('academics/levels/store', 'LevelsController@store')->name('levels.store');
-    Route::put('academics/levels/update/{id}', 'LevelsController@update')->name('levels.update');
-    Route::get('academics/levels', 'LevelsController@manage')->name('levels.manage.active');
-    Route::get('academics/levels/inactive', 'LevelsController@inactive')->name('levels.manage.inactive');
-    Route::post('academics/levels/remove', 'LevelsController@remove')->name('levels.remove');
-    Route::post('academics/levels/restore', 'LevelsController@restore')->name('levels.restore');
-    Route::get('academics/levels/all-active', 'LevelsController@all_active')->name('levels.all.active');
-    Route::get('academics/levels/all-inactive', 'LevelsController@all_inactive')->name('levels.all.inactive');
-    Route::put('academics/levels/update-status/{id}', 'LevelsController@update_status')->name('levels.update.status');
-    /* End Levels Routes */
+        /* Levels */
+        Route::get('levels/add', 'LevelsController@add')->name('levels.add');
+        Route::get('levels/edit/{id?}', 'LevelsController@edit')->name('levels.edit');
+        Route::post('levels/store', 'LevelsController@store')->name('levels.store');
+        Route::put('levels/update/{id}', 'LevelsController@update')->name('levels.update');
+        Route::get('levels', 'LevelsController@manage')->name('levels.manage.active');
+        Route::get('levels/inactive', 'LevelsController@inactive')->name('levels.manage.inactive');
+        Route::post('levels/remove', 'LevelsController@remove')->name('levels.remove');
+        Route::post('levels/restore', 'LevelsController@restore')->name('levels.restore');
+        Route::get('levels/all-active', 'LevelsController@all_active')->name('levels.all.active');
+        Route::get('levels/all-inactive', 'LevelsController@all_inactive')->name('levels.all.inactive');
+        Route::put('levels/update-status/{id}', 'LevelsController@update_status')->name('levels.update.status');
+        /* End Levels Routes */
 
-    /* Subjects */
-    Route::get('academics/subjects/add', 'SubjectsController@add')->name('subjects.add');
-    Route::get('academics/subjects/edit/{id?}', 'SubjectsController@edit')->name('subjects.edit');
-    Route::post('academics/subjects/store', 'SubjectsController@store')->name('subjects.store');
-    Route::put('academics/subjects/update/{id}', 'SubjectsController@update')->name('subjects.update');
-    Route::get('academics/subjects', 'SubjectsController@manage')->name('subjects.manage.active');
-    Route::get('academics/subjects/inactive', 'SubjectsController@inactive')->name('subjects.manage.inactive');
-    Route::post('academics/subjects/remove', 'SubjectsController@remove')->name('subjects.remove');
-    Route::post('academics/subjects/restore', 'SubjectsController@restore')->name('subjects.restore');
-    Route::get('academics/subjects/all-active', 'SubjectsController@all_active')->name('subjects.all.active');
-    Route::get('academics/subjects/all-inactive', 'SubjectsController@all_inactive')->name('subjects.all.inactive');
-    Route::put('academics/subjects/update-status/{id}', 'SubjectsController@update_status')->name('subjects.update.status');
-    Route::get('academics/subjects/get-all-subjects', 'SubjectsController@get_all_subjects');
-    Route::get('academics/subjects/get-all-teachers', 'SubjectsController@get_all_teachers'); 
-    /* End Subjects Routes */
+        /* Subjects */
+        Route::get('subjects/add', 'SubjectsController@add')->name('subjects.add');
+        Route::get('subjects/edit/{id?}', 'SubjectsController@edit')->name('subjects.edit');
+        Route::post('subjects/store', 'SubjectsController@store')->name('subjects.store');
+        Route::put('subjects/update/{id}', 'SubjectsController@update')->name('subjects.update');
+        Route::get('subjects', 'SubjectsController@manage')->name('subjects.manage.active');
+        Route::get('subjects/inactive', 'SubjectsController@inactive')->name('subjects.manage.inactive');
+        Route::post('subjects/remove', 'SubjectsController@remove')->name('subjects.remove');
+        Route::post('subjects/restore', 'SubjectsController@restore')->name('subjects.restore');
+        Route::get('subjects/all-active', 'SubjectsController@all_active')->name('subjects.all.active');
+        Route::get('subjects/all-inactive', 'SubjectsController@all_inactive')->name('subjects.all.inactive');
+        Route::put('subjects/update-status/{id}', 'SubjectsController@update_status')->name('subjects.update.status');
+        Route::get('subjects/get-all-subjects', 'SubjectsController@get_all_subjects');
+        Route::get('subjects/get-all-teachers', 'SubjectsController@get_all_teachers'); 
+        /* End Subjects Routes */
+    });
+
+    /* Grading Sheets Routes */
+    Route::prefix('admissions')->group(function () {  
+        /* Admissions */
+        Route::get('section-student/add', 'SectionsStudentsController@add')->name('sectionstudent.add');
+        Route::get('section-student/edit/{id?}', 'SectionsStudentsController@edit')->name('sectionstudent.edit');
+        Route::post('section-student/store', 'SectionsStudentsController@store')->name('sectionstudent.store');
+        Route::put('section-student/update/{id}', 'SectionsStudentsController@update')->name('sectionstudent.update');
+        Route::get('section-student', 'SectionsStudentsController@manage')->name('sectionstudent.manage.active');
+        Route::get('section-student/inactive', 'SectionsStudentsController@inactive')->name('sectionstudent.manage.inactive');
+        Route::post('section-student/remove', 'SectionsStudentsController@remove')->name('sectionstudent.remove');
+        Route::post('section-student/restore', 'SectionsStudentsController@restore')->name('sectionstudent.restore');
+        Route::get('section-student/all-active', 'SectionsStudentsController@all_active')->name('sectionstudent.all.active');
+        Route::get('section-student/all-inactive', 'SectionsStudentsController@all_inactive')->name('sectionstudent.all.inactive');
+        Route::put('section-student/update-status/{id}', 'SectionsStudentsController@update_status')->name('sectionstudent.update.status');        
+        Route::get('section-student/all-admitted', 'AdmissionController@all_admitted')->name('admission.all.admitted');
+        Route::get('section-student/get-this-admitted/{id?}', 'AdmissionController@get_this_admitted');
+        /* End Admissions Routes */
+    });
 
     /* Grading Sheets Routes */
     Route::prefix('grading-sheets')->group(function () {
@@ -257,6 +274,7 @@ Route::prefix('academics')->group(function () {
     });
     /* End Grading Sheets Routes */
 });
+
 
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 

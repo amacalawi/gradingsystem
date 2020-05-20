@@ -27,7 +27,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="form-group m-form__group required">
                 {{ Form::label('code', 'Code', ['class' => '']) }}
                 {{ 
@@ -41,7 +41,7 @@
                 </span>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="form-group m-form__group required">
                 {{ Form::label('name', 'Name', ['class' => '']) }}
                 {{ 
@@ -55,7 +55,18 @@
                 </span>
             </div>
         </div>
+        <div class="col-md-4">
+            <div class="form-group m-form__group required">
+                {{ Form::label('type', 'Type', ['class' => '']) }}
+                {{
+                    Form::select('type', $types, $value = $level->type, ['class' => 'form-control form-control-lg m-input m-input--solid'])
+                }}
+                <span class="m-form__help m--font-danger">
+                </span>
+            </div>
+        </div>        
     </div>
+
     <div class="row">
         <div class="col-md-12">
             <div class="form-group m-form__group">
