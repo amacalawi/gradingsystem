@@ -31,7 +31,7 @@
         </div>
         
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" id="enlist-student-selected" data-dismiss="modal">Done</button>
+          <button type="button" class="btn btn-success" id="enlist-student-selected" data-dismiss="modal"> Save </button>
         </div>
 
       </div>
@@ -40,5 +40,5 @@
 </div>
 
 @push('scripts')
-  <script src="{{ asset('js/datatables/admission.js') }}" type="text/javascript"></script>
+  <script src="{{ asset('js/datatables/enlist.js') }}" type="text/javascript"></script>
 @endpush

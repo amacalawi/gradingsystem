@@ -150,65 +150,123 @@
             self.closest(".form-group").find(".m-form__help").text("");
         });
         
-        this.$body.on('click', '#subject-teacher-addrow', function (e){
+        this.$body.on('change', '#type', function (e) {
             e.preventDefault();
-        
-            $.ajax({
-                type: "GET",
-                url: base_url + 'academics/academics/subjects/get-all-subjects',
-                success: function (data) {
-                    var data = $.parseJSON( data );
+         
+            if( $(this).val() )
+            {
+                //section
+                $('#section').remove();
+                getSectionList_type($(this).val());
 
-                    var subject = $("<select></select>").attr("id", "subjects").attr("name", "subjects[]").attr("class", "form-control form-control-lg m-input m-input--solid");
-                    $.each(data,function(index, data){
-                        if(index == '0'){
-                            subject.append($("<option></option>").attr( { value:"NULL", selected:"true" } ).text(data));
-                        }
-                        else
-                        {
-                            subject.append($("<option></option>").attr("value", index).text(data));
-                        }
-                    });
-                    $("#option-subject").append('<label> Subject: </label>');
-                    $("#option-subject").append(subject);
-                    $("#option-subject").css("display","block");
+                //level
+                $('#level').remove();
+                getLevelList_type($(this).val());
 
-                },
-                async: false
-            });
+                //subject //teacher
+                $('#subject').remove();
+                getSubjectList_type($(this).val());
 
-            $.ajax({
-                type: "GET",
-                url: base_url + 'academics/academics/subjects/get-all-teachers',
-                success: function (data) {
-                    var data = $.parseJSON( data );
-                    
-                    var teacher = $("<select></select>").attr("id", "teachers").attr("name", "teachers[]").attr("class", "form-control form-control-lg m-input m-input--solid");
-                    $.each(data,function(index, data){
-                        if(index == '0'){
-                            teacher.append($("<option></option>").attr( { value:"NULL", selected:"true" } ).text(data));
-                        } 
-                        else 
-                        {
-                            teacher.append($("<option></option>").attr("value", index).text(data));
-                        }
-                    });
-                    $("#option-teacher").append('<label> Teacher: </label>');
-                    $("#option-teacher").append(teacher);
-                    $("#option-teacher").css("display","block");
+                $('#adviser').remove()
+                getAdviserList_type();
+
+                $('#teacher').remove()
+                getTeacherList_type();
+                $('#subject-teacher-main-div').css("display","block");
+
+                clearsubjectteacher(10);
                 
-                },
-                async: false
-            });            
-            
-            //$("#option-subject").append('<button type="button" id="remove-generated-select" class="btn btn-black btn-md"> - </button> ');
+                $("#remove-div_1").append('<label style="visibility:hidden;"> Delete: </label><br/>');
+                $("#remove-div_1").append('<button style="visibility:hidden;" name="remove-button" type="button" id="remove_1" class="btn btn-lg remove">s</button>');
+            }
 
         });
 
-        this.$body.on('click', '#remove-generated-select', function (e){
+        this.$body.on('click', '#subject-teacher-addrow', function (e){
             e.preventDefault();
-            $(this).parent().remove();
-            $('#option-teacher').parent().remove();
+            
+            var limit = 10;
+            var total_element = $(".subject-div").length;
+            var lastid = $(".subject-div:last").attr("id");
+            var split_id = lastid.split("_");
+            var nextindex = Number(split_id[1]) + 1;
+            var type = $("#type").val();
+
+            if( total_element < limit ){
+
+                $(".subject-div:last").after("<div class='form-group m-form__group required subject-div' id='subject-div_"+ nextindex +"'></div>");
+                
+                $.ajax({
+                    type: "GET",
+                    url: base_url + 'academics/academics/subjects/get-all-subjects-bytype/'+type,
+                    success: function (data) {
+                        var data = $.parseJSON( data );
+                        var subject = $("<select></select>").attr("id", "subjects").attr("name", "subjects[]").attr("class", "form-control form-control-lg m-input m-input--solid");
+                        
+                        $.each(data,function(index, data){
+                            if(index == '0'){
+                                subject.append($("<option></option>").attr( { value:"NULL", selected:"true" } ).text(data));
+                            }
+                            else
+                            {
+                                subject.append($("<option></option>").attr("value", index).text(data));
+                            }
+                        });
+                        $("#subject-div_"+nextindex ).append('<label> Subject: </label>');
+                        $("#subject-div_"+nextindex ).append(subject);
+                        $("#option-subject").css("display","block");
+                        
+                    },
+                    async: false
+                });
+
+                var limit = 10;
+                var total_element = $(".teacher-div").length;
+                var lastid = $(".teacher-div:last").attr("id");
+                var split_id = lastid.split("_");
+                var nextindex = Number(split_id[1]) + 1;
+
+                $(".teacher-div:last").after("<div class='form-group m-form__group required teacher-div' id='teacher-div_"+ nextindex +"'></div>");
+                $(".remove-div:last").after("<div class='form-group m-form__group required remove-div' id='remove-div_"+ nextindex +"'></div>");
+                $.ajax({
+                    type: "GET",
+                    url: base_url + 'academics/academics/subjects/get-all-teachers',
+                    success: function (data) {
+                        var data = $.parseJSON( data );
+                        var teacher = $("<select></select>").attr("id", "teachers").attr("name", "teachers[]").attr("class", "form-control form-control-lg m-input m-input--solid");
+                        
+                        $.each(data,function(index, data){
+                            if(index == '0'){
+                                teacher.append($("<option></option>").attr( { value:"NULL", selected:"true" } ).text(data));
+                            } 
+                            else 
+                            {
+                                teacher.append($("<option></option>").attr("value", index).text(data));
+                            }
+                        });
+                        $("#teacher-div_"+nextindex ).append('<label> Teacher: </label>');
+                        $("#teacher-div_"+nextindex ).append(teacher);
+                        $("#option-teacher").css("display","block");
+
+                        $("#remove-div_"+nextindex ).append('<label style="visibility:hidden;"> Delete: </label><br/>');
+                        $("#remove-div_"+nextindex ).append("<button type='button' name='remove-button' id='remove_"+nextindex+"' class='btn btn-lg btn-danger remove' > - </button>");
+
+                    },
+                    async: false
+                });            
+            }
+        });
+
+        this.$body.on('click', '.remove', function (e){
+            var id = this.id;
+            var split_id = id.split("_");
+            var deleteindex = split_id[1];
+        
+            // Remove <div> with id
+            $("#subject-div_" + deleteindex).remove();
+            $("#teacher-div_" + deleteindex).remove();
+            $("#remove-div_" + deleteindex).remove();
+            //$("#sections_subjects_" + deleteindex).remove();
         });
 
         this.$body.on('click', '.submit-btn', function (e){
@@ -287,6 +345,7 @@ function($) {
     $.sectionstudent.init();
 }(window.jQuery);
 
+/*
 //Added JS
 function loadSubjects()
 {
@@ -327,14 +386,156 @@ function loadTeacher()
         async: false
     });  
 }
+*/
+
+function clearsubjectteacher(limit)
+{
+    //var limit = $('[name=remove-button]').length;
+    console.log('remove button = '+limit);
+    for(var x = 1; x<=limit; x++)
+    {
+        // Remove <div> with id
+        if (x >= 2)
+        {
+            $("#subject-div_" + x).remove();
+            $("#teacher-div_" + x).remove();
+            $("#remove-div_" + x).remove();
+        }
+        if(x == 1)
+        {   
+            $("#remove-div_" + x).html("");
+        }
+    }
+
+
+}
+
+//Teacher
+function getTeacherList_type( type )
+{
+    //console.log(type);
+    $.ajax({
+        type: "GET",
+        url: base_url + 'academics/academics/subjects/get-all-teachers-bytype/',
+        success: function (data) {
+            var data = $.parseJSON( data );
+
+            console.log(data);
+
+            var teacher = $("<select></select>").attr("id", "teacher").attr("name", "teachers[]").attr("class", "form-control form-control-lg m-input m-input--solid");
+            $.each(data,function(index, data){
+                teacher.append($("<option></option>").attr("value", index).text(data) );
+            });
+            $('#teacher-div_1').empty();
+            $("#teacher-div_1").append('<label> Teachers: </label>');
+            $('#teacher-div_1').append(teacher);
+
+        },
+        async: false
+    });
+}
+
+//Subject
+function getSubjectList_type( type )
+{
+    //console.log(type);
+
+    $.ajax({
+        type: "GET",
+        url: base_url + 'academics/academics/subjects/get-all-subjects-bytype/'+type,
+        success: function (data) {
+            var data = $.parseJSON( data );
+            var subject = $("<select></select>").attr("id", "subject").attr("name", "subjects[]").attr("class", "form-control form-control-lg m-input m-input--solid");
+            $.each(data,function(index, data){
+                subject.append($("<option></option>").attr("value", index).text(data));
+            });
+            $('#subject-div_1').empty();
+            $("#subject-div_1").append('<label> Subjects: </label>');
+            $('#subject-div_1').append(subject);
+            
+        },
+        async: false
+    });
+}
+
+//Adviser
+function getAdviserList_type( )
+{
+    $.ajax({
+        type: "GET",
+        url: base_url + 'academics/academics/subjects/get-all-advisers-bytype',
+        success: function (data) {
+            var data = $.parseJSON( data );
+            var adviser = $("<select></select>").attr("id", "adviser").attr("name", "adviser").attr("class", "form-control form-control-lg m-input m-input--solid");
+            $.each(data,function(index, data){
+                adviser.append($("<option></option>").attr("value", index).text(data) );
+            });
+            $('#adviser-div').empty();
+            $("#adviser-div").append('<label> Adviser: </label>');
+            $('#adviser-div').append(adviser);
+
+        },
+        async: false
+    });
+}
+
+//Level
+function getLevelList_type( type )
+{
+    $('#level-main-div').css("display","block");
+
+    $.ajax({
+        type: "GET",
+        url: base_url + 'academics/academics/levels/get-all-levels-bytype/'+type,
+        success: function (data) {
+            var data = $.parseJSON( data );
+            var level = $("<select></select>").attr("id", "level").attr("name", "level").attr("class", "form-control form-control-lg m-input m-input--solid");
+            $.each(data,function(index, data){
+                level.append($("<option></option>").attr("value", index).text(data));
+            });
+            $('#level-div').empty();
+            $("#level-div").append('<label> Level: </label>');
+            $('#level-div').append(level);
+        },
+        async: false
+    });
+}
+
+//Section
+function getSectionList_type( type )
+{
+    //console.log(type);
+    $('#section-main-div').css("display","block");
+
+    $.ajax({
+        type: "GET",
+        url: base_url + 'academics/academics/sections/get-all-sections-bytype/'+type,
+        success: function (data) {
+            var data = $.parseJSON( data );
+            var section = $("<select></select>").attr("id", "section").attr("name", "section").attr("class", "form-control form-control-lg m-input m-input--solid");
+            $.each(data,function(index, data){
+                section.append($("<option></option>").attr("value", index).text(data));
+            });
+            $('#section-div').empty();
+            $("#section-div").append('<label> Section: </label>');
+            $('#section-div').append(section);
+        },
+        async: false
+    });
+}
 
 $(document).ready(function(){
 
-    if ( $('#option-subject').css('display') == 'block' ){
-        loadSubjects();
+    if( $('#type').val() ){
+
+        $('#subject-teacher-main-div').css("display","block");
+        
     }
-    if ($('#option-teacher').css('display') == 'block' ){
-        loadTeacher();
-    }
+    //if ( $('#option-subject').css('display') == 'block' ){
+        //loadSubjects();
+    //}
+    //if ($('#option-teacher').css('display') == 'block' ){
+        //loadTeacher();
+    //}
 
 });

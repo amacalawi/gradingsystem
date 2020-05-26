@@ -303,10 +303,29 @@ class SubjectsController extends Controller
         echo json_encode( $subjects ); exit();
     }
 
+    public function get_all_subjects_bytype(Request $request, $type)
+    {
+        $subjects = (new Subject)->get_all_subjects_bytype($type);
+        echo json_encode( $subjects ); exit();
+    }
+
+    public function get_all_teachers_bytype()
+    {
+        $teachers = (new Subject)->get_all_teachers_bytype();
+        echo json_encode( $teachers ); exit();
+    }
+    
+    public function get_all_advisers_bytype()
+    {
+        $advisers = (new Subject)->get_all_advisers_bytype();
+        echo json_encode( $advisers ); exit();
+    }
+
+    //Added here to avoid conflict
     public function get_all_teachers()
     {
         $teachers = Staff::where('is_active', 1)->where('type','Teacher')->orderBy('id', 'asc')->get();
-        //die( var_dump($teachers) );
+
         $staffs = array();
         $staffs[] = array('0' => 'select a teacher');
 
