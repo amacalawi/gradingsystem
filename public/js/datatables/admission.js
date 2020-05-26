@@ -12,7 +12,7 @@ var DatatableDataLocalDemo = function () {
 			  read: {
 				// sample GET method
 				method: 'GET',
-				url: base_url + 'academics/admissions/section-student/all-admitted',
+				url: base_url + 'academics/admissions/section-student/all-active',
 				map: function(raw) {
 				  // sample data mapping
 				  var dataSet = raw;
@@ -51,20 +51,51 @@ var DatatableDataLocalDemo = function () {
 		// editable: false,
 		// columns definition
 		
+		// columns definition
 		columns: [{
-			field: "admitUserId",
+			field: "admissionId",
 			title: "#",
 			width: 50,
-			name: "test",
 			sortable: false,
-			textAlign: 'center',			
-			selector: {class: 'm-checkbox--solid m-checkbox--brand checkboxcheck'},
+			textAlign: 'center',
+			selector: {class: 'm-checkbox--solid m-checkbox--brand'}
 		}, {
-			field: "admitName",
-			title: "Name"
+			field: "admissionLvlName",
+            title: "Level",
+            width: 190
+        }, {
+			field: "admissionSecName",
+			title: "Section"
 		}, {
-			field: "admitModified",
-			title: "Last Modified"
+			field: "admissionAdviserId",
+            title: "Adviser",
+            width: 60,
+		}, {
+			field: "admissionNoSubject",
+            title: "No. Subjects",
+            width: 190
+        }, {
+			field: "admissionNoStudent",
+            title: "No. Students",
+            width: 190
+        },{
+			field: "admissionModified",
+			title: "Last Modified",
+		}, {
+			field: "Actions",
+			width: 90,
+			title: "Actions",
+			sortable: false,
+			ordering: false,
+			overflow: 'visible',
+			template: function (row, index, datatable) {
+				var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
+
+                return '\
+                    <a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/admissions/section-student/edit/' + row.admissionId +'"><i class="la la-edit"></i></a>\
+                    <a title="remove this" data-row-id="' + row.admissionId + '" action="Remove" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-remove"></i></a>\
+				';
+			}
 		}]
 	
 	});
@@ -99,6 +130,8 @@ var DatatableDataLocalDemo = function () {
 	};
 }();
 
+
+//ENLIST
 jQuery(document).ready(function (e) {
 	
 	DatatableDataLocalDemo.init();
@@ -120,6 +153,7 @@ jQuery(document).ready(function (e) {
 		//console.log($(this).val());
 	});
 
+	
 	$('#enlist-student-selected').on('click', function(e) {
 
 		e.preventDefault();
@@ -128,6 +162,7 @@ jQuery(document).ready(function (e) {
 
 			if($(this).val() != 'on')
 			{
+				//console.log( $(this).val() );
 				var row_id = $(this).val();
 				var items = [];
 
@@ -139,7 +174,7 @@ jQuery(document).ready(function (e) {
 					data: { items },
 					success: function(response) {
 						var data = $.parseJSON(response);
-						$("#admitted_student" ).append("<input type='text' name='list_admitted_student[]' value='"+data[0].user_id+"' readonly='true' hidden><button type='button' class='btn p-2 m-1 bg-secondary' >"+data[0].lastname+", "+data[0].firstname+" "+data[0].middlename+"</button>");
+						$("#admitted_student" ).append("<input type='text' name='list_admitted_student[]' value='"+data[0].id+"' readonly='true' hidden><button type='button' class='btn p-2 m-1 bg-secondary' >"+data[0].lastname+", "+data[0].firstname+" "+data[0].middlename+"</button>");
 					}, 
 					complete: function() {
 						window.onkeydown = null;

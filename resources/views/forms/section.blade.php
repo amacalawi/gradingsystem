@@ -82,7 +82,8 @@
                                 <span class="m-form__help m--font-danger">
                                 </span>
                             </div>
-                        </div>                        
+                        </div>
+                                                
                     </div>
 
                     <div class="row">
@@ -106,32 +107,6 @@
                 </div>
             </div>
         </div>
-
-        <div class="col-md-12">
-            <div class="m-portlet m-portlet--tab">
-                <div class="m-portlet__body">
-                    <div class="row">
-
-                        <div class="col-md-12">
-                            <h5 class="m-bottom-1">Levels</h5>
-                        </div>
-                        
-                        <div class="col-md-12">
-                            <div class="form-group m-form__group required">
-                                {{ Form::label('level', 'Level', ['class' => '']) }}
-                                {{  
-                                    Form::select('level_id', $levels, !empty($section) ? $section->level_id : '', ['class' => 'form-control form-control-lg m-input m-input--solid'])
-                                }}
-                                <span class="m-form__help m--font-danger">
-                                </span>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>                
 
 {{ Form::close() }}
