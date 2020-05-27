@@ -2,7 +2,7 @@
 
 var DatatableDataLocalDemo = function () {
 	//== Private functions
- 	console.log(base_url + 'academics/academics/levels/all-inactive');
+ 	//console.log(base_url + 'academics/academics/sections/all-active');
 	
 	var datatable = $('.m_datatable').mDatatable({
 		// datasource definition
@@ -12,13 +12,14 @@ var DatatableDataLocalDemo = function () {
 			  read: {
 				// sample GET method
 				method: 'GET',
-				url: base_url + 'academics/academics/levels/all-inactive',
+				url: base_url + 'academics/admissions/section-student/all-inactive',
 				map: function(raw) {
 				  // sample data mapping
 				  var dataSet = raw;
 				  if (typeof raw.data !== 'undefined') {
-					dataSet = raw.data;
+					dataSet = raw.data; 
 				  }
+			
 				  return dataSet;
 				},
 			  },
@@ -48,44 +49,41 @@ var DatatableDataLocalDemo = function () {
 
 		// inline and bactch editing(cooming soon)
 		// editable: false,
-
+		// columns definition
+		
 		// columns definition
 		columns: [{
-			field: "levelID",
+			field: "admissionId",
 			title: "#",
 			width: 50,
 			sortable: false,
 			textAlign: 'center',
 			selector: {class: 'm-checkbox--solid m-checkbox--brand'}
 		}, {
-			field: "levelCode",
-			title: "Code"
+			field: "admissionLvlName",
+            title: "Level",
+            width: 190
+        }, {
+			field: "admissionSecName",
+			title: "Section"
 		}, {
-			field: "levelName",
-			title: "Name",
+			field: "admissionAdviserId",
+            title: "Adviser",
+            width: 60,
 		}, {
-			field: "levelDescription",
-			title: "Description"
-		}, {
-			field: "levelModified",
+			field: "admissionNoSubject",
+            title: "No. Subjects",
+            width: 190
+        }, {
+			field: "admissionNoStudent",
+            title: "No. Students",
+            width: 190
+        },{
+			field: "admissionModified",
 			title: "Last Modified",
-			type: "number"
-		}, {
-			field: "levelType",
-			title: "Type",
-			// callback function support for column rendering
-			template: function (row) {
-				var type = {
-					"childhood-education" : {'title': 'Childhood', 'class': 'childhood-bg'},
-					"primary-education": {'title': 'Pimary', 'class': 'primary-bg'}, 
-                    "secondary-education": {'title': 'Secondary', 'class': 'secondary-bg'},
-                    "higher-education": {'title': 'Higher', 'class': 'higher-bg'}
-				};
-				return '<span class="m-badge ' + type[row.levelType].class + ' m-badge--wide">' + type[row.levelType].title + '</span>';
-			}
 		}, {
 			field: "Actions",
-			width: 70,
+			width: 90,
 			title: "Actions",
 			sortable: false,
 			ordering: false,
@@ -93,14 +91,29 @@ var DatatableDataLocalDemo = function () {
 			template: function (row, index, datatable) {
 				var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
 
-				return '\
-                    <a data-row-id="' + row.levelID + '" action="Active" href="javascript:;" class="toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="activate this">\
+                return '\
+                    <a data-row-id="' + row.admissionId + '" action="Active" href="javascript:;" class="toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="activate this">\
                         <i class="la la-undo"></i>\
                     </a>\
 				';
 			}
 		}]
+	
 	});
+
+	var demo = function () {
+
+        //<a class="dropdown-item" href="' + base_url + 'applications/view/' + row.AppID + '"><i class="la la-print"></i> Generate Report</a>
+
+		var query = datatable.getDataSourceQuery();
+
+		$('#m_form_status').on('change', function () {
+			datatable.search($(this).val(), 'Status');
+		}).val(typeof query.Status !== 'undefined' ? query.Status : '');
+
+		$('#m_form_status, #m_form_type').selectpicker();
+		
+	};
 
 	var reload = function () {
 		datatable.reload();
@@ -110,13 +123,14 @@ var DatatableDataLocalDemo = function () {
 		//== Public functions
 		init: function () {
 			// init dmeo
-			//demo();
+			demo();
 		}, 
 		reload: function () {
 			reload();
 		}
 	};
 }();
+
 
 jQuery(document).ready(function () {
 	DatatableDataLocalDemo.init();
@@ -127,7 +141,7 @@ jQuery(document).ready(function () {
 		var $rowID = $(this).attr('data-row-id');
 		console.log($rowID);
 		var $action = $(this).attr('action');
-		var $url = base_url + 'academics/academics/levels/update-status/' + $rowID;
+		var $url = base_url + 'academics/admissions/section-student/update-status/' + $rowID;
 		var items = []; items.push({ action: $action });
 
 		console.log($url);

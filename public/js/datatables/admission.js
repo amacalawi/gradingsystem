@@ -194,7 +194,7 @@ jQuery(document).ready(function (e) {
 		var $rowID = $(this).attr('data-row-id');
 		console.log($rowID);
 		var $action = $(this).attr('action');
-		var $url = base_url + 'academics/academics/sections/update-status/' + $rowID;
+		var $url = base_url + 'academics/admissions/section-student/update-status/' + $rowID;
 		var items = []; items.push({ action: $action });
 
 		console.log($url);
