@@ -50,7 +50,14 @@ class AdmissionController extends Controller
     public function all_active(Request $request)
     {
         $batch_id = Batch::where('is_active', 1)->where('status','Current')->pluck('id'); //current batch
-        $res = SectionInfo::select('section_infos.id','section_infos.batch_id','section_infos.section_id','section_infos.adviser_id','section_infos.level_id','sections.name as secname','staffs.user_id','levels.name as lvlname')->join('sections','sections.id','=','section_infos.section_id')->join('staffs','staffs.id','=','section_infos.adviser_id')->join('levels','levels.id','=','section_infos.level_id')->where('section_infos.is_active', 1)->where('section_infos.batch_id', $batch_id[0])->orderBy('section_infos.id', 'DESC')->get();
+        $res = SectionInfo::select('section_infos.id','section_infos.batch_id','section_infos.section_id','section_infos.adviser_id','section_infos.level_id','sections.name as secname','staffs.user_id','levels.name as lvlname')
+            ->join('sections','sections.id','=','section_infos.section_id')
+            ->join('staffs','staffs.id','=','section_infos.adviser_id')
+            ->join('levels','levels.id','=','section_infos.level_id')
+            ->where('section_infos.is_active', 1)
+            ->where('section_infos.batch_id', $batch_id[0])
+            ->orderBy('section_infos.id', 'DESC')
+            ->get();
         
         return $res->map(function($admission) {
             return [
@@ -71,15 +78,27 @@ class AdmissionController extends Controller
 
     public function all_inactive(Request $request)
     {
-        $res = Admission::where('is_active', 1)->orderBy('id', 'DESC')->get();
+        $batch_id = Batch::where('is_active', 1)->where('status','Current')->pluck('id'); //current batch
+        $res = SectionInfo::select('section_infos.id','section_infos.batch_id','section_infos.section_id','section_infos.adviser_id','section_infos.level_id','sections.name as secname','staffs.user_id','levels.name as lvlname')
+            ->join('sections','sections.id','=','section_infos.section_id')
+            ->join('staffs','staffs.id','=','section_infos.adviser_id')
+            ->join('levels','levels.id','=','section_infos.level_id')
+            ->where('section_infos.is_active', 0)
+            ->where('section_infos.batch_id', $batch_id[0])
+            ->orderBy('section_infos.id', 'DESC')
+            ->get();
 
         return $res->map(function($admission) {
             return [
                 'admissionId' => $admission->id,
                 'admissionBatchId' => $admission->batch_id,
                 'admissionSectionId' => $admission->section_id,
-                'admissionStudentId' => $admission->student_id,
-                'admissionStatus' => $admission->status,
+                'admissionSecName' => $admission->secname,
+                'admissionAdviserId' => $admission->adviser_id,
+                'admissionLevel' => $admission->level_id, 
+                'admissionLvlName' => $admission->lvlname,
+                'admissionNoStudent' => $admission->lvlname,
+                'admissionNoSubject' => $admission->lvlname,
                 'admissionModified' => ($admission->updated_at !== NULL) ? date('d-M-Y', strtotime($admission->updated_at)).'<br/>'. date('h:i A', strtotime($admission->updated_at)) : date('d-M-Y', strtotime($admission->created_at)).'<br/>'. date('h:i A', strtotime($admission->created_at))
             ];
         });
@@ -264,6 +283,153 @@ class AdmissionController extends Controller
 
             echo json_encode( $data ); exit();
 
+        }
+    }
+
+    public function update_status(Request $request, $id)
+    {   
+        $timestamp = date('Y-m-d H:i:s');
+        $action = $request->input('items')[0]['action'];
+
+        if ($action == 'Remove') {
+            $sectioninfos = SectionInfo::where([
+                'id' => $id,
+            ])
+            ->update([
+                'updated_at' => $timestamp,
+                'updated_by' => Auth::user()->id,
+                'is_active' => 0
+            ]);
+            
+            $data = array(
+                'title' => 'Well done!',
+                'text' => 'The admission status has been successfully removed.',
+                'type' => 'success',
+                'class' => 'btn-brand'
+            );
+    
+            echo json_encode( $data ); exit();
+        }
+        else if ($action == 'Active') {
+            $sectioninfos = SectionInfo::where([
+                'id' => $id,
+            ])
+            ->update([
+                'updated_at' => $timestamp,
+                'updated_by' => Auth::user()->id,
+                'is_active' => 1
+            ]);
+            
+            $data = array(
+                'title' => 'Well done!',
+                'text' => 'The admission status has been successfully activated.',
+                'type' => 'success',
+                'class' => 'btn-brand'
+            );
+    
+            echo json_encode( $data ); exit();
+        }    
+        else if ($action == 'Current') {
+            $sectioninfos = SectionInfo::where('id', '!=', $id)->where('status', '!=', 'Closed')
+            ->update([
+                'status' => 'Open',
+                'updated_at' => $timestamp,
+                'updated_by' => Auth::user()->id,
+                'is_active' => 1
+            ]);
+
+            $sectioninfos = SectionInfo::where([
+                'id' => $id,
+            ])
+            ->update([
+                'status' => $request->input('items')[0]['action'],
+                'updated_at' => $timestamp,
+                'updated_by' => Auth::user()->id,
+                'is_active' => 1
+            ]);
+            
+            $data = array(
+                'title' => 'Well done!',
+                'text' => 'The admission status has been successfully changed.',
+                'type' => 'success',
+                'class' => 'btn-brand'
+            );
+    
+            echo json_encode( $data ); exit();
+        }
+        else if ($action == 'Open') {
+            $rows = SectionInfo::where('id', '!=', $id)->where([
+                'status' => 'Open',
+                'is_active' => 1
+            ])->count();
+                
+            if ($rows > 0) {
+                $data = array(
+                    'title' => 'Oh snap!',
+                    'text' => 'Only one (Open Status) can be changed at a time.',
+                    'type' => 'warning',
+                    'class' => 'btn-danger'
+                );
+        
+                echo json_encode( $data ); exit();
+            } else {
+                $sectioninfos = SectionInfo::where([
+                    'id' => $id,
+                ])
+                ->update([
+                    'status' => $request->input('items')[0]['action'],
+                    'updated_at' => $timestamp,
+                    'updated_by' => Auth::user()->id,
+                    'is_active' => 1
+                ]);
+
+                $data = array(
+                    'title' => 'Well done!',
+                    'text' => 'The admission status has been successfully changed.',
+                    'type' => 'success',
+                    'class' => 'btn-brand'
+                );
+
+                echo json_encode( $data ); exit();
+            }
+        }
+        else {
+            $rows = SectionInfo::where('id', '!=', $id)->where([
+                'status' => 'Open',
+                'is_active' => 1
+            ])->count();
+
+            if ($rows == 1) {
+                $sectioninfos = SectionInfo::where('id', '!=', $id)->where([
+                    'status' => 'Open',
+                    'is_active' => 1
+                ])
+                ->update([
+                    'status' => 'Current',
+                    'updated_at' => $timestamp,
+                    'updated_by' => Auth::user()->id,
+                    'is_active' => 1
+                ]);
+            }
+
+            $sectioninfos = SectionInfo::where([
+                'id' => $id,
+            ])
+            ->update([
+                'status' => $request->input('items')[0]['action'],
+                'updated_at' => $timestamp,
+                'updated_by' => Auth::user()->id,
+                'is_active' => 1
+            ]);
+
+            $data = array(
+                'title' => 'Well done!',
+                'text' => 'The admission status has been successfully changed.',
+                'type' => 'success',
+                'class' => 'btn-brand'
+            );
+
+            echo json_encode( $data ); exit();
         }
     }
 

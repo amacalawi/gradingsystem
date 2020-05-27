@@ -46,7 +46,8 @@ class SubjectsController extends Controller
                 'subjectCode' => $subject->code,
                 'subjectName' => $subject->name,
                 'subjectDescription' => $subject->description,
-                'subjectModified' => ($subject->updated_at !== NULL) ? date('d-M-Y', strtotime($subject->updated_at)).'<br/>'. date('h:i A', strtotime($subject->updated_at)) : date('d-M-Y', strtotime($subject->created_at)).'<br/>'. date('h:i A', strtotime($subject->created_at))
+                'subjectModified' => ($subject->updated_at !== NULL) ? date('d-M-Y', strtotime($subject->updated_at)).'<br/>'. date('h:i A', strtotime($subject->updated_at)) : date('d-M-Y', strtotime($subject->created_at)).'<br/>'. date('h:i A', strtotime($subject->created_at)),
+                'subjectType' => $subject->type,
             ];
         });
     }
@@ -61,7 +62,8 @@ class SubjectsController extends Controller
                 'subjectCode' => $subject->code,
                 'subjectName' => $subject->name,
                 'subjectDescription' => $subject->description,
-                'subjectModified' => ($subject->updated_at !== NULL) ? date('d-M-Y', strtotime($subject->updated_at)).'<br/>'. date('h:i A', strtotime($subject->updated_at)) : date('d-M-Y', strtotime($subject->created_at)).'<br/>'. date('h:i A', strtotime($subject->created_at))
+                'subjectModified' => ($subject->updated_at !== NULL) ? date('d-M-Y', strtotime($subject->updated_at)).'<br/>'. date('h:i A', strtotime($subject->updated_at)) : date('d-M-Y', strtotime($subject->created_at)).'<br/>'. date('h:i A', strtotime($subject->created_at)),
+                'subjectType' => $subject->type,
             ];
         });
     }
@@ -100,6 +102,8 @@ class SubjectsController extends Controller
             'name' => $request->name,
             'description' => $request->description,
             'type' => $request->type,
+            'is_mapeh' => ($request->is_mapeh !== NULL) ? 1 : 0,
+            'is_tle' => ($request->is_tle !== NULL) ? 1 : 0, 
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
@@ -132,6 +136,8 @@ class SubjectsController extends Controller
         $subject->name = $request->name;
         $subject->description = $request->description;
         $subject->type = $request->type;
+        $subject->is_mapeh = ($request->is_mapeh !== NULL) ? 1 : 0; 
+        $subject->is_tle = ($request->is_tle !== NULL) ? 1 : 0; 
         $subject->updated_at = $timestamp;
         $subject->updated_by = Auth::user()->id;
 

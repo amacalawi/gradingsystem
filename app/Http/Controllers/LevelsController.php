@@ -46,7 +46,8 @@ class LevelsController extends Controller
                 'levelCode' => $level->code,
                 'levelName' => $level->name,
                 'levelDescription' => $level->description,
-                'levelModified' => ($level->updated_at !== NULL) ? date('d-M-Y', strtotime($level->updated_at)).'<br/>'. date('h:i A', strtotime($level->updated_at)) : date('d-M-Y', strtotime($level->created_at)).'<br/>'. date('h:i A', strtotime($level->created_at))
+                'levelModified' => ($level->updated_at !== NULL) ? date('d-M-Y', strtotime($level->updated_at)).'<br/>'. date('h:i A', strtotime($level->updated_at)) : date('d-M-Y', strtotime($level->created_at)).'<br/>'. date('h:i A', strtotime($level->created_at)),
+                'levelType' => $level->type,
             ];
         });
     }
@@ -61,7 +62,8 @@ class LevelsController extends Controller
                 'levelCode' => $level->code,
                 'levelName' => $level->name,
                 'levelDescription' => $level->description,
-                'levelModified' => ($level->updated_at !== NULL) ? date('d-M-Y', strtotime($level->updated_at)).'<br/>'. date('h:i A', strtotime($level->updated_at)) : date('d-M-Y', strtotime($level->created_at)).'<br/>'. date('h:i A', strtotime($level->created_at))
+                'levelModified' => ($level->updated_at !== NULL) ? date('d-M-Y', strtotime($level->updated_at)).'<br/>'. date('h:i A', strtotime($level->updated_at)) : date('d-M-Y', strtotime($level->created_at)).'<br/>'. date('h:i A', strtotime($level->created_at)),
+                'levelType' => $level->type,            
             ];
         });
     }
