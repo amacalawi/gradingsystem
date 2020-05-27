@@ -296,4 +296,9 @@ class LevelsController extends Controller
         }
     }
 
+    public function get_all_levels_bytype(Request $request, $type)
+    {
+        $levels = (new Level)->get_all_levels_bytype($type);
+        echo json_encode( $levels ); exit();
+    }    
 }

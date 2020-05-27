@@ -22,7 +22,6 @@ class Section extends Model
                 'name' => ($section->name) ? $section->name : '',
                 'description' => ($section->description) ? $section->description : '',
                 'type' => ($section->type) ? $section->type : '',
-                'level_id' => ($section->level_id) ? $section->level_id : '',
             );
         } else {
             $results = array(
@@ -31,7 +30,6 @@ class Section extends Model
                 'name' => '',
                 'description' => '',
                 'type' => '',
-                'level_id' => '',
             );
         }
         return (object) $results;
@@ -45,7 +43,7 @@ class Section extends Model
         $sectionx[] = array('' => 'select a section');
         foreach ($sections as $section) {
             $sectionx[] = array(
-                $section->id => $section->name
+                $section->id  => $section->name,
             );
         }
 
@@ -59,8 +57,59 @@ class Section extends Model
         return $sections;
     }
 
+    public function get_all_sections()
+    {
+        $sections = self::where('is_active', 1)->orderBy('id', 'asc')->get();
+        
+        $secs = array();
+        $secs[] = array('0' => 'select a section');
+
+        foreach ($sections as $section) {
+            $secs[] = array(
+                $section->id  => $section->name,
+            );
+        }
+
+        $sections = array();
+        foreach($secs as $sec) {
+            foreach($sec as $key => $val) {
+                $sections[$key] = $val;
+            }
+        }
+
+        return $sections;
+    }
+
     public function get_column_via_identifier($column, $id)
     {
         return self::where('id', $id)->first()->$column;
+        return $sections;  
+    }
+
+    public function get_all_sections_bytype($type)
+    {
+        $sections = self::where('is_active', 1)->where('type', $type)->orderBy('id', 'asc')
+        ->whereNotIn('id',function($query) {
+            $query->select('section_id')->from('admissions');
+        })->get();
+        
+
+        $secs = array();
+        $secs[] = array('0' => 'select a section');
+
+        foreach ($sections as $section) {
+            $secs[] = array(
+                $section->id  => $section->name,
+            );
+        }
+
+        $sections = array();
+        foreach($secs as $sec) {
+            foreach($sec as $key => $val) {
+                $sections[$key] = $val;
+            }
+        }
+
+        return $sections;  
     }
 }

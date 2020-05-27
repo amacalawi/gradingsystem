@@ -84,6 +84,7 @@ class SectionsStudentsController extends Controller
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
+        $types = (new Quarter)->types();
 
         $sections_subjects = 0;
         $allTeachers = Staff::where('is_active', 1)->where('type','Teacher')->orderBy('lastname', 'asc')->get();
@@ -95,7 +96,7 @@ class SectionsStudentsController extends Controller
         } else {
             $sectionsstudents = (new SectionsStudents)->fetch($id);
         }
-        return view('modules/academics/admissions/sectionsstudents/add')->with(compact('menus', 'sections_students','sections_subjects','allTeachers','allSubjects','allSections', 'sectionsstudents', 'segment', 'flashMessage'));
+        return view('modules/academics/admissions/sectionsstudents/add')->with(compact('menus', 'types', 'sections_students','sections_subjects','allTeachers','allSubjects','allSections', 'sectionsstudents', 'segment', 'flashMessage'));
     }
     
     public function edit(Request $request, $id)
@@ -131,17 +132,18 @@ class SectionsStudentsController extends Controller
             'code' => $request->code,
             'name' => $request->name,
             'description' => $request->description,
+            'type' => $request->type,
             'section_id' => $request->section,
             'batch_id' => $batch_id[0],
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
-
         
         //Admission teachers and subject
+        
         $subjects = $request->subjects;
         $teachers = $request->teachers;
-        
+
         if($subjects[0] != "0" && $teachers[0] != "0")
         {
             foreach ($subjects as $key => $subject) {
@@ -154,7 +156,6 @@ class SectionsStudentsController extends Controller
                 ]);
             } 
         }
-
         //section members
         $members = $request->list_admitted_student;
         if($members)
@@ -170,7 +171,7 @@ class SectionsStudentsController extends Controller
                 
             }
         }
-
+        
         $data = array(
             'title' => 'Well done!',
             'text' => 'The section-student has been successfully saved.',
@@ -196,6 +197,7 @@ class SectionsStudentsController extends Controller
         $sectionstudent->code = $request->code;
         $sectionstudent->name = $request->name;
         $sectionstudent->description = $request->description;
+        $sectionstudent->type = $request->type;
         $sectionstudent->section_id = $request->section;
         $sectionstudent->batch_id = $batch_id[0];
         $sectionstudent->updated_at = $timestamp;

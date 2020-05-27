@@ -23,4 +23,9 @@ class SectionsSubjects extends Model
         return $sections_subjects;
     }
 
+    public function get_sections_subjects($section_info_id)
+    {
+        $sections_subjects = SectionsSubjects::where('section_info_id', $section_info_id)->get();
+        return $sections_subjects;
+    }
 }

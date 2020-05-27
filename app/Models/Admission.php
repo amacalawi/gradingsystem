@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\GradingSheet;
 use App\Models\Batch;
+use App\Models\Student;
 
 class Admission extends Model
 {
@@ -20,19 +21,17 @@ class Admission extends Model
         if ($admission) {
             $results = array(
                 'id' => ($admission->id) ? $admission->id : '',
-                'user_id' => ($admission->user_id) ? $admission->user_id : '',
                 'batch_id' => ($admission->batch_id) ? $admission->batch_id : '',
-                'level_id' => ($admission->level_id) ? $admission->level_id : '',
                 'section_id' => ($admission->section_id) ? $admission->section_id : '',
+                'student_id' => ($admission->student_id) ? $admission->student_id : '',
                 'status' => ($admission->status) ? $admission->status : '',
             );
         } else {
             $results = array(
                 'id' => '',
-                'user_id' => '',
                 'batch_id' => '',
-                'level_id' => '',
                 'section_id' => '',
+                'student_id' =>  '',
                 'status' => '',
             );
         }
@@ -47,21 +46,21 @@ class Admission extends Model
 
     public function get_this_admitted( $id )
     {
-        $admitted = Admission::select('admissions.id as admin_id','admissions.*','students.id as stud_id', 'students.*')
-            ->join('students', 'students.id', '=', 'admissions.user_id')
-            ->where('admissions.is_active', 1)
-            ->where('admissions.user_id', $id)
-            ->orderBy('admin_id', 'desc')->get();
+        $student = Student::select('*')
+            ->where('is_active', 1)
+            ->where('id', $id)
+            ->get();
             
-        return $admitted;
+        return $student;
     }
    
-    public function getAdmitted_SectionsStudents($id) //sections_students_id
+    public function getthisAdmitted($id)
     {
-        $admitted = Admission::where('section_student_id', $id)
-        ->join('students', 'students.id', '=', 'admissions.user_id')
-        ->where('status', 'admit')
-        ->orderBy('admissions.id', 'desc')->get();
+        $admitted = Admission::where('section_id', $id)
+        ->join('students', 'students.id', '=', 'admissions.student_id')
+        ->orderBy('admissions.id', 'desc')
+        ->get();
+
         return $admitted;
     }
 

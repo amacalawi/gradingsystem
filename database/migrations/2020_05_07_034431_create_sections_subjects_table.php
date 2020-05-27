@@ -18,6 +18,7 @@ class CreateSectionsSubjectsTable extends Migration
             $table->integer('batch_id')->unsigned();
             $table->integer('subject_id')->unsigned();
             $table->integer('teacher_id')->unsigned();
+            $table->integer('section_info_id')->unsigned();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('created_by')->unsigned();
             $table->timestamp('updated_at')->nullable();

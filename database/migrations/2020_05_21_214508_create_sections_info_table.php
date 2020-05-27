@@ -19,6 +19,7 @@ class CreateSectionsInfoTable extends Migration
             $table->integer('section_id')->unsigned();
             $table->integer('adviser_id')->unsigned();
             $table->integer('level_id')->unsigned();
+            $table->string('type', 40);
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('created_by')->unsigned();
             $table->timestamp('updated_at')->nullable();
