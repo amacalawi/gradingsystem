@@ -48,7 +48,14 @@ class ComponentsController extends Controller
 
     public function all_active(Request $request)
     {
-        $res = Component::where('is_active', 1)->orderBy('order', 'ASC')->get();
+        $res = Component::with([
+            'subject' =>  function($q) { 
+                $q->select(['id', 'name']); 
+            },
+            'quarter' =>  function($q) { 
+                $q->select(['id', 'name']); 
+            }
+        ])->where('is_active', 1)->orderBy('order', 'ASC')->get();
 
         return $res->map(function($component) {
             return [
@@ -57,6 +64,9 @@ class ComponentsController extends Controller
                 'componentName' => $component->name,
                 'componentDescription' => $component->description,
                 'componentOrder' => $component->order,
+                'componentType' => $component->type,
+                'componentQuarter' => $component->quarter->name,
+                'componentSubject' => $component->subject->name,
                 'componentModified' => ($component->updated_at !== NULL) ? date('d-M-Y', strtotime($component->updated_at)).'<br/>'. date('h:i A', strtotime($component->updated_at)) : date('d-M-Y', strtotime($component->created_at)).'<br/>'. date('h:i A', strtotime($component->created_at))
             ];
         });
@@ -64,7 +74,14 @@ class ComponentsController extends Controller
 
     public function all_inactive(Request $request)
     {
-        $res = Component::where('is_active', 0)->orderBy('order', 'ASC')->get();
+        $res = Component::with([
+            'subject' =>  function($q) { 
+                $q->select(['id', 'name']); 
+            },
+            'quarter' =>  function($q) { 
+                $q->select(['id', 'name']); 
+            }
+        ])->where('is_active', 0)->orderBy('order', 'ASC')->get();
 
         return $res->map(function($component) {
             return [
@@ -73,6 +90,9 @@ class ComponentsController extends Controller
                 'componentName' => $component->name,
                 'componentDescription' => $component->description,
                 'componentOrder' => $component->order,
+                'componentType' => $component->type,
+                'componentQuarter' => $component->quarter->name,
+                'componentSubject' => $component->subject->name,
                 'componentModified' => ($component->updated_at !== NULL) ? date('d-M-Y', strtotime($component->updated_at)).'<br/>'. date('h:i A', strtotime($component->updated_at)) : date('d-M-Y', strtotime($component->created_at)).'<br/>'. date('h:i A', strtotime($component->created_at))
             ];
         });
@@ -84,9 +104,10 @@ class ComponentsController extends Controller
         $segment = request()->segment(4);
         $component = (new Component)->fetch($id);
         $activities = (new Activity)->lookup('component_id', $id);
+        $types = (new Component)->types();
         $quarters = (new Quarter)->all_quarters();
         $subjects = (new Subject)->all_subjects();
-        return view('modules/academics/gradingsheets/components/add')->with(compact('menus', 'component', 'segment', 'quarters', 'subjects', 'activities'));
+        return view('modules/academics/gradingsheets/components/add')->with(compact('menus', 'component', 'segment', 'quarters', 'subjects', 'activities', 'types'));
     }
     
     public function edit(Request $request, $id)
@@ -95,29 +116,33 @@ class ComponentsController extends Controller
         $segment = request()->segment(4);
         $component = (new Component)->fetch($id);
         $activities = (new Activity)->lookup('component_id', $id);
+        $types = (new Component)->types();
         $quarters = (new Quarter)->all_quarters();
         $subjects = (new Subject)->all_subjects();
-        return view('modules/academics/gradingsheets/components/edit')->with(compact('menus', 'component', 'segment', 'quarters', 'subjects', 'activities'));
+        return view('modules/academics/gradingsheets/components/edit')->with(compact('menus', 'component', 'segment', 'quarters', 'subjects', 'activities', 'types'));
     }
     
     public function store(Request $request)
     {    
         $timestamp = date('Y-m-d H:i:s');
 
-        $rows = Component::where([
-            'percentage' => $request->percentage
-        ])->count();
+        // $rows = Component::where([
+        //     'batch_id' => (new Batch)->get_current_batch(),
+        //     'quarter_id' => $request->quarter_id,
+        //     'subject_id' => $request->subject_id,
+        //     'type' => $request->type
+        // ])->count();
 
-        if ($rows > 0) {
-            $data = array(
-                'title' => 'Oh snap!',
-                'text' => 'You cannot create a component with an existing code.',
-                'type' => 'error',
-                'class' => 'btn-danger'
-            );
+        // if ($rows > 0) {
+        //     $data = array(
+        //         'title' => 'Oh snap!',
+        //         'text' => 'The component is already existing.',
+        //         'type' => 'error',
+        //         'class' => 'btn-danger'
+        //     );
     
-            echo json_encode( $data ); exit();
-        }
+        //     echo json_encode( $data ); exit();
+        // }
 
         $count = Component::all()->count() + 1;
 
@@ -126,8 +151,10 @@ class ComponentsController extends Controller
             'quarter_id' => $request->quarter_id,
             'subject_id' => $request->subject_id,
             'percentage' => $request->percentage,
+            'type' => $request->type,
             'name' => $request->name,
             'description' => $request->description,
+            'palette' => $request->palette,
             'order' => $count,
             'is_sum_cell' => ($request->is_sum_cell !== NULL) ? 1 : 0,
             'is_hps_cell' => ($request->is_hps_cell !== NULL) ? 1 : 0,
@@ -171,20 +198,23 @@ class ComponentsController extends Controller
     {    
         $timestamp = date('Y-m-d H:i:s');
 
-        $rows = Component::where('id', '!=', $id)->where([
-            'percentage' => $request->percentage
-        ])->count();
+        // $rows = Component::where('id', '!=', $id)->where([
+        //     'batch_id' => (new Batch)->get_current_batch(),
+        //     'quarter_id' => $request->quarter_id,
+        //     'subject_id' => $request->subject_id,
+        //     'type' => $request->type
+        // ])->count();
 
-        if ($rows > 0) {
-            $data = array(
-                'title' => 'Oh snap!',
-                'text' => 'You cannot create a component with an existing code.',
-                'type' => 'error',
-                'class' => 'btn-danger'
-            );
+        // if ($rows > 0) {
+        //     $data = array(
+        //         'title' => 'Oh snap!',
+        //         'text' => 'The component is already existing.',
+        //         'type' => 'error',
+        //         'class' => 'btn-danger'
+        //     );
     
-            echo json_encode( $data ); exit();
-        }
+        //     echo json_encode( $data ); exit();
+        // }
 
         $component = Component::find($id);
 
@@ -195,8 +225,10 @@ class ComponentsController extends Controller
         $component->quarter_id = $request->quarter_id;
         $component->subject_id = $request->subject_id;
         $component->percentage = $request->percentage;
+        $component->type = $request->type;
         $component->name = $request->name;
         $component->description = $request->description;
+        $component->palette = $request->palette;
         $component->is_sum_cell = ($request->is_sum_cell !== NULL) ? 1 : 0;
         $component->is_hps_cell = ($request->is_hps_cell !== NULL) ? 1 : 0;
         $component->is_ps_cell = ($request->is_ps_cell !== NULL) ? 1 : 0;

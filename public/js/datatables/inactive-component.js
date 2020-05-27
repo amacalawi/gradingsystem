@@ -61,17 +61,35 @@ var DatatableDataLocalDemo = function () {
 			field: "componentOrder",
 			title: "Order"
 		}, {
-			field: "componentPercentage",
-			title: "Code"
-		}, {
 			field: "componentName",
 			title: "Name",
 		}, {
 			field: "componentDescription",
 			title: "Description"
         }, {
+			field: "componentPercentage",
+			title: "Percentage"
+		}, {
+			field: "componentQuarter",
+			title: "Quarter"
+		}, {
+			field: "componentSubject",
+			title: "Subject"
+		}, {
 			field: "componentModified",
 			title: "Last Modified",
+		}, {
+			field: "componentType",
+			title: "Type",
+			template: function (row) {
+				var type = {
+					"childhood-education" : {'title': 'Childhood', 'class': 'childhood-bg'},
+					"primary-education": {'title': 'Pimary', 'class': 'primary-bg'}, 
+                    "secondary-education": {'title': 'Secondary', 'class': 'secondary-bg'},
+                    "higher-education": {'title': 'Higher', 'class': 'higher-bg'}
+				};
+				return '<span class="m-badge ' + type[row.componentType].class + ' m-badge--wide">' + type[row.componentType].title + '</span>';
+			}
 		}, {
 			field: "Actions",
 			width: 70,

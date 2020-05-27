@@ -48,17 +48,22 @@
     {   
         $required = 0;
 
-        $.each(this.$body.find("input[type='date'], input[type='text'], select, textarea"), function(){
+        $.each(this.$body.find("input[type='date'], input[type='text'], select, textarea, radio"), function(){
                
             if (!($(this).attr("name") === undefined || $(this).attr("name") === null)) {
-                if($(this).hasClass("required")){
-                    if($(this).is("[multiple]")){
-                        if( !$(this).val() || $(this).find('option:selected').length <= 0 ){
+                if ($(this).hasClass("required")){
+                    if ($(this).is(':radio')) {
+                        if ($('input[name="palette"]:checked').length <= 0) {
+                            $(this).closest(".form-group").find(".m-form__help").text("this field is required.");
+                            $required++; 
+                        }
+                    } else if ($(this).is("[multiple]")){
+                        if ( !$(this).val() || $(this).find('option:selected').length <= 0 ){
                             $(this).closest(".form-group").find(".m-form__help").text("this field is required.");
                             $required++;
                         }
-                    } else if($(this).val()=="" || $(this).val()=="0"){
-                        if(!$(this).is("select")) {
+                    } else if ($(this).val()=="" || $(this).val()=="0"){
+                        if (!$(this).is("select")) {
                             $(this).closest(".form-group").find(".m-form__help").text("this field is required.");
                             $required++;
                         } else {
@@ -76,17 +81,25 @@
     component.prototype.required_fields = function() {
         
         $.each(this.$body.find(".form-group"), function(){
-            if ($(this).hasClass('required')) {       
-                var $input = $(this).find("input[type='date'], input[type='text'], select, textarea");
-                if ($input.val() == '') {
-                    $(this).find('.m-form__help').text('this field is required.');       
+            var $form = $(this);
+            if ($form.hasClass('required')) {       
+                var $input = $form.find("input[type='date'], input[type='text'], select, textarea, radio");
+                if ($input.is("select")) {
+                    if ($input.val() == '') {
+                        $form.find('.m-form__help').text('this field is required.'); 
+                        $input.addClass('required');    
+                    }
+                } else if ($input.val() == '') {  
+                    $form.find('.m-form__help').text('this field is required.'); 
+                    $input.addClass('required');  
+                } else if ($('input[name="palette"]:checked').length <= 0) {
+                    $form.find('.m-form__help').text('this field is required.');    
+                    $input.addClass('required');
                 }
-                $input.addClass('required');
             } else {
-                $(this).find("input[type='text'], select, textarea").removeClass('required');
+                $form.find("input[type='text'], select, textarea, radio").removeClass('required');
             } 
         });
-
     },
 
     component.prototype.price_separator = function (input) {
@@ -132,6 +145,31 @@
         | ---------------------------------
         */
         this.$body.on('keypress', '.numeric-double', function (event) {
+            var $this = $(this);
+            if ((event.which != 46 || $this.val().indexOf('.') != -1) &&
+                ((event.which < 48 || event.which > 57) &&
+                    (event.which != 0 && event.which != 8))) {
+                event.preventDefault();
+            }
+    
+            var text = $(this).val();
+            if ((event.which == 46) && (text.indexOf('.') == -1)) {
+                setTimeout(function () {
+                    if ($this.val().substring($this.val().indexOf('.')).length > 3) {
+                        $this.val($this.val().substring(0, $this.val().indexOf('.') + 3));
+                    }
+                }, 1);
+            }
+    
+            if ((text.indexOf('.') != -1) &&
+                (text.substring(text.indexOf('.')).length > 2) &&
+                (event.which != 0 && event.which != 8) &&
+                ($(this)[0].selectionStart >= text.length - 2)) {
+                event.preventDefault();
+            }
+        });
+
+        this.$body.on('keypress', '.numeric', function (e) {
             var $this = $(this);
             if ((event.which != 46 || $this.val().indexOf('.') != -1) &&
                 ((event.which < 48 || event.which > 57) &&

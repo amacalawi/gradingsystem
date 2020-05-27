@@ -31,5 +31,15 @@ class Activity extends Model
             return '';
         }
     }
+
+    public function sum_value_via_component($id)
+    {
+        $sum = self::where([
+            'component_id' => $id,
+            'is_active' => 1
+        ])->sum('value');
+
+        return $sum;
+    }
 }
 

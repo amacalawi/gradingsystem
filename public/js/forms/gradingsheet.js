@@ -87,6 +87,53 @@
         return true;
     },
 
+    gradingsheet.prototype.compute = function($rows, $group) 
+    {   
+        var $sumCell = $rows.find('.sum-cell[group="'+ $group + '"]');
+        var $hpsCell = $rows.find('.hps-cell[group="'+ $group + '"]');
+        var $psCell  = $rows.find('.ps-cell[group="'+ $group + '"]');
+        var $percentageCell = $rows.find('.percentage-cell[group="'+ $group + '"]');
+        var $initialCell = $rows.find('.initial-cell');
+        var $sumHeader = $('#gradingsheet-table th.sum-header[group="'+ $group + '"]');
+        var $psHeader = $('#gradingsheet-table th.ps-header[group="'+ $group + '"]');
+ 
+        var $sum = 0;
+        $.each($rows.find('td[group="'+ $group + '"] .activity-cell'), function(){
+            var $score = $(this).val();
+
+            if ($score > 0) {
+                $sum += parseFloat($score);
+            }
+        });
+        
+        
+        if (parseFloat($hpsCell.text()) > 0) {
+            var $percentage = (parseFloat($sum) / parseFloat($hpsCell.text())) * 100; 
+            var $totalPercentage = (parseFloat($sum) / parseFloat($hpsCell.text())) * $percentageCell.attr('maxvalue');
+        } else if (parseFloat($sumHeader.text()) > 0) {
+            var $percentage = (parseFloat($sum) / parseFloat($sumHeader.text())) * 100; 
+            var $totalPercentage = $percentage * parseFloat('.' + $percentageCell.attr('maxvalue'));
+        } else {
+            var $percentage = (parseFloat($sum) / parseFloat($psHeader.attr('maxvalue'))) * 100; 
+            var $totalPercentage = $percentage * parseFloat('.' + $percentageCell.attr('maxvalue'));
+        }
+
+        $sumCell.text($sum);
+        $psCell.text($percentage.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]);
+        $percentageCell.text($totalPercentage.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]);
+
+        var $initPercent = 0;
+        $.each($rows.find('.percentage-cell'), function(){
+            var $score = $(this).text();
+
+            if ($score > 0) {
+                $initPercent += parseFloat($score);
+            }
+        });
+
+        $initialCell.text($initPercent.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0])
+    },
+
     gradingsheet.prototype.init = function()
     {   
         /*
@@ -152,7 +199,27 @@
             $('#slug').val(self.replace(/\s+/g, '-').toLowerCase());
         });
 
-        
+        this.$body.on('keyup', '.activity-cell', function (e){
+            e.preventDefault();
+            var self = $(this);
+            var maxValue = $(this).attr('maxvalue');
+
+            if (parseFloat(self.val()) > parseFloat(maxValue)) {
+                self.val(maxValue);
+            }
+            $.gradingsheet.compute(self.closest('tr'), self.closest('td').attr('group'));
+        });
+
+        this.$body.on('blur', '.activity-cell', function (e){
+            e.preventDefault();
+            var self = $(this);
+            var maxValue = $(this).attr('maxvalue');
+
+            if (parseFloat(self.val()) > parseFloat(maxValue)) {
+                self.val(maxValue);
+            }
+            $.gradingsheet.compute(self.closest('tr'), self.closest('td').attr('group'));
+        });
 
         this.$body.on('click', '.submit-btn', function (e){
             e.preventDefault();

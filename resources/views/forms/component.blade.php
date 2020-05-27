@@ -72,6 +72,71 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
+                        <div class="m-form__group form-group required">
+                            {{ Form::label('palette', 'Palette', ['class' => '']) }}
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="m-radio-list col-md-4">
+                                        <label class="m-radio">
+                                            {{ Form::radio('palette', 'm-badge--secondary', ($component->palette == 'm-badge--secondary') ? true : false, array('class' => 'colour')) }}
+                                            <em class="m-right-05 m-badge m-badge--secondary"></em> Light
+                                            <span></span>
+                                        </label>
+                                        <label class="m-radio">
+                                            {{ Form::radio('palette', 'm-badge--metal', ($component->palette == 'm-badge--metal') ? true : false, array('class' => 'colour')) }}
+                                            <em class="m-right-05 m-badge m-badge--metal"></em> Metal
+                                            <span></span>
+                                        </label>
+                                        <label class="m-radio">
+                                            {{ Form::radio('palette', 'm-badge--lemon', ($component->palette == 'm-badge--lemon') ? true : false, array('class' => 'colour')) }}
+                                            <em class="m-right-05 m-badge m-badge--lemon"></em> Lemon
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                    <div class="m-radio-list col-md-4">
+                                        <label class="m-radio">
+                                            {{ Form::radio('palette', 'm-badge--amber', ($component->palette == 'm-badge--amber') ? true : false, array('class' => 'colour')) }}
+                                            <em class="m-right-05 m-badge m-badge--amber"></em> Amber
+                                            <span></span>
+                                        </label>
+                                        <label class="m-radio">
+                                            {{ Form::radio('palette', 'm-badge--lime', ($component->palette == 'm-badge--lime') ? true : false, array('class' => 'colour')) }}
+                                            <em class="m-right-05 m-badge m-badge--lime"></em> Lime
+                                            <span></span>
+                                        </label>
+                                        <label class="m-radio">
+                                            {{ Form::radio('palette', 'm-badge--success', ($component->palette == 'm-badge--success') ? true : false, array('class' => 'colour')) }}
+                                            <em class="m-right-05 m-badge m-badge--success"></em> Leaf
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                    <div class="m-radio-list col-md-4">
+                                        <label class="m-radio">
+                                            {{ Form::radio('palette', 'm-badge--info', ($component->palette == 'm-badge--info') ? true : false, array('class' => 'colour')) }}
+                                            <em class="m-right-05 m-badge m-badge--info"></em> Sky
+                                            <span></span>
+                                        </label>
+                                        <label class="m-radio">
+                                            {{ Form::radio('palette', 'm-badge--accent', ($component->palette == 'm-badge--accent') ? true : false, array('class' => 'colour')) }}
+                                            <em class="m-right-05 m-badge m-badge--accent"></em> Azure
+                                            <span></span>
+                                        </label>
+                                        <label class="m-radio">
+                                            {{ Form::radio('palette', 'm-badge--purple', ($component->palette == 'm-badge--purple') ? true : false, array('class' => 'colour')) }}
+                                            <em class="m-right-05 m-badge m-badge--purple"></em> Purple
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="m-form__help m--font-danger">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
                         <h5 class="m-top-1 m-bottom-1">Activity Cells</h5>
                     </div>
                 </div>
@@ -251,11 +316,28 @@
             <div class="m-portlet__body">
                 <div class="row">
                     <div class="col-md-12">
+                        <h5 class="m-bottom-1">Type</h5>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group m-form__group required">
+                            {{  
+                                Form::select('type', $types, !empty($component) ? $component->type : '', ['class' => 'form-control form-control-lg m-input m-input--solid'])
+                            }}
+                            <span class="m-form__help m--font-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="m-portlet m-portlet--tab">
+            <div class="m-portlet__body">
+                <div class="row">
+                    <div class="col-md-12">
                         <h5 class="m-bottom-1">Quarter</h5>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group m-form__group required">
-                            {{ Form::label('quarter_id', 'Set Quarter', ['class' => '']) }}
                             {{  
                                 Form::select('quarter_id', $quarters, !empty($component) ? $component->quarter_id : '', ['class' => 'form-control form-control-lg m-input m-input--solid'])
                             }}
@@ -274,7 +356,6 @@
                     </div>
                     <div class="col-md-12">
                         <div class="form-group m-form__group required">
-                            {{ Form::label('subject_id', 'Set Subject', ['class' => '']) }}
                             {{  
                                 Form::select('subject_id', $subjects, !empty($component) ? $component->subject_id : '', ['class' => 'form-control form-control-lg m-input m-input--solid'])
                             }}

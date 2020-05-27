@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSectionInfosTable extends Migration
+class CreateTransmutationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateSectionInfosTable extends Migration
      */
     public function up()
     {
-        Schema::create('section_infos', function (Blueprint $table) {
+        Schema::create('transmutations', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('batch_id')->unsigned();
-            $table->integer('section_id')->unsigned();
-            $table->integer('adviser_id')->unsigned();
-            $table->integer('level_id')->unsigned();
+            $table->string('code', 40);
+            $table->string('name', 100);
+            $table->text('description')->nullable();
+            $table->string('type', 40);
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('created_by')->unsigned();
             $table->timestamp('updated_at')->nullable();
@@ -34,6 +34,6 @@ class CreateSectionInfosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('section_infos');
+        Schema::dropIfExists('transmutations');
     }
 }

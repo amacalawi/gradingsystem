@@ -11,6 +11,9 @@ use App\Models\Quarter;
 use App\Models\Subject;
 use App\Models\Section;
 use App\Models\Batch;
+use App\Models\Component;
+use App\Models\Admission;
+use App\Models\GradingSheetActivity;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -111,7 +114,8 @@ class GradingSheetsController extends Controller
         $sections = (new Section)->all_sections();
         $subjects = (new Subject)->all_subjects();
         $components = (new Component)->get_components_via_gradingsheet($id);
-        return view('modules/academics/gradingsheets/all/edit')->with(compact('menus', 'grading', 'quarters', 'sections', 'subjects', 'components', 'segment'));
+        $students = (new Admission)->get_students_via_gradingsheet($id);
+        return view('modules/academics/gradingsheets/all/edit')->with(compact('menus', 'grading', 'quarters', 'sections', 'subjects', 'components', 'students', 'segment'));
     }
     
     public function store(Request $request)
@@ -170,25 +174,47 @@ class GradingSheetsController extends Controller
         if(!$grading) {
             throw new NotFoundHttpException();
         }
+        
+        $iteration = 0;
+        foreach ($request->activity as $activity) 
+        {
+            $activities = explode("_", $activity);
 
-        $grading->code = $request->code;
-        $grading->name = $request->name;
-        $grading->description = $request->description;
-        $grading->slug = str_replace(' ', '-', strtolower($request->name));
-        $grading->updated_at = $timestamp;
-        $grading->updated_by = Auth::user()->id;
+            $row = GradingSheetActivity::where([
+                'gradingsheet_id' => $id,
+                'activity_id' => $activities[0],
+                'student_id' => $activities[1]
+            ])->get();
 
-        if ($grading->update()) {
+            if ($row->count() > 0) {
+                $gradingActivtity = GradingSheetActivity::where('id', '=', $row->first()->id)
+                ->update([
+                    'score' => ($request->score[$iteration] !== NULL) ? $request->score[$iteration] : '',
+                    'updated_at' => $timestamp,
+                    'updated_by' => Auth::user()->id
+                ]);
+            } else {
+                $gradingActivtity = GradingSheetActivity::create([
+                    'gradingsheet_id' => $id,
+                    'activity_id' => $activities[0],
+                    'student_id' => $activities[1],
+                    'score' => ($request->score[$iteration] !== NULL) ? $request->score[$iteration] : '',
+                    'created_at' => $timestamp,
+                    'created_by' => Auth::user()->id
+                ]);
+            }
 
-            $data = array(
-                'title' => 'Well done!',
-                'text' => 'The grading sheet has been successfully updated.',
-                'type' => 'success',
-                'class' => 'btn-brand'
-            );
-    
-            echo json_encode( $data ); exit();
+            $iteration++;
         }
+
+        $data = array(
+            'title' => 'Well done!',
+            'text' => 'The grading sheet has been successfully updated.',
+            'type' => 'success',
+            'class' => 'btn-brand'
+        );
+
+        echo json_encode( $data ); exit();
     }
 
     public function update_status(Request $request, $id)
@@ -288,4 +314,8 @@ class GradingSheetsController extends Controller
         }   
     }
 
+    public function get_activity_score_via_activity($id, $student, $grading)
+    {
+        return (new GradingSheetActivity)->get_activity_score_via_activity($id, $student, $grading);
+    }
 }
