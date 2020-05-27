@@ -180,7 +180,7 @@ class AdmissionController extends Controller
         $teachers = (new Subject)->get_all_teachers_bytype();
         $sections_subjects = (new SectionsSubjects)->get_sections_subjects($id);
         
-        $section_id = SectionInfo::find($id)->pluck('section_id');
+        $section_id = SectionInfo::where('id', $id)->pluck('section_id');
         $sections_students = (new Admission)->getthisAdmitted($section_id[0]); //section_id
 
         if (count($flashMessage) && $flashMessage[0]['module'] == 'sectionstudent') {
@@ -237,37 +237,22 @@ class AdmissionController extends Controller
         }
         //end section_subject
 
-        /*
-        //admission
-        $section_student = Admission::where('section_id', $id)->where('is_active', 1);
-        $section_student->delete();
-        $members = $request->list_admitted_student;
-        foreach ($members as $key => $member) {
-            
-            $sections_students = SectionsStudents::create([
-                'section_id' => $id,
-                'user_id' => $member,
-                'created_at' => $timestamp,
-                'created_by' => Auth::user()->id
-            ]);
-        }
- 
         //admission
         $members = $request->list_admitted_student;
         if($members)
         {
             foreach ($members as $key => $member) {
-
-                $enliststudent = Admission::find($member);
-                $enliststudent->status = 'admit';
-                $enliststudent->section_student_id = $sectionstudent->id;
-                $enliststudent->updated_at = $timestamp;
-                $enliststudent->updated_by = Auth::user()->id;
-                $enliststudent->update();
-                
+                $enliststudent = Admission::where('student_id', $member)
+                ->update([
+                    'section_id' => $request->section,
+                    'status' => 'admit',
+                    'updated_at' => $timestamp,
+                    'updated_by' => Auth::user()->id,
+                ]);
             }
         }
-        */
+        //end admission
+
         if ($sectioninfo->update()) {
 
             $data = array(
