@@ -125,11 +125,12 @@ class AdmissionController extends Controller
     {           
         $timestamp = date('Y-m-d H:i:s');
         $batch_id = Batch::where('is_active','1')->where('status','Current')->pluck('id');
-        
+        $classcode = $this->generate_classcode($request->type, $request->section, $batch_id[0]);
+
         if(!$batch_id){
             $batch_id[0] = '0';
         } 
-
+        
         //section_infos
         $sectioninfo = SectionInfo::create([
             'batch_id' => $batch_id[0],
@@ -137,6 +138,7 @@ class AdmissionController extends Controller
             'adviser_id' => $request->adviser,
             'level_id' => $request->level,
             'type' => $request->type,
+            'classcode' => $classcode,
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
@@ -160,17 +162,28 @@ class AdmissionController extends Controller
             } 
         }
 
+        
         $members = $request->list_admitted_student;
         if($members)
         {
             foreach ($members as $key => $member) {
                 //admission
+                /*
                 $enliststudent = Admission::where('student_id', $member)
                 ->update([
                     'section_id' => $request->section,
                     'status' => 'admit',
                     'updated_at' => $timestamp,
                     'updated_by' => Auth::user()->id,
+                ]);
+                */
+                $enliststudent = Admission::create([
+                    'batch_id' => $batch_id[0],
+                    'section_id' => $request->section,
+                    'student_id' =>  $member,
+                    'status' => 'admit',
+                    'created_at' => $timestamp,
+                    'created_by' => Auth::user()->id
                 ]);
             }
         }
@@ -216,6 +229,7 @@ class AdmissionController extends Controller
         $timestamp = date('Y-m-d H:i:s');
         $sectioninfo = SectionInfo::find($id);
         $batch_id = Batch::where('is_active','1')->where('status','Current')->pluck('id');
+        $classcode = $this->generate_classcode($request->type, $request->section, $batch_id[0]);
 
         if(!$sectioninfo) {
             throw new NotFoundHttpException();
@@ -226,6 +240,7 @@ class AdmissionController extends Controller
         $sectioninfo->adviser_id = $request->adviser;
         $sectioninfo->level_id = $request->level;
         $sectioninfo->type = $request->type;
+        $sectioninfo->classcode = $classcode;
         $sectioninfo->updated_at = $timestamp;
         $sectioninfo->updated_by = Auth::user()->id;
         //end section_infos
@@ -256,21 +271,52 @@ class AdmissionController extends Controller
         }
         //end section_subject
 
-        //admission
+        //admissions
         $members = $request->list_admitted_student;
         if($members)
         {
             foreach ($members as $key => $member) {
-                $enliststudent = Admission::where('student_id', $member)
-                ->update([
-                    'section_id' => $request->section,
-                    'status' => 'admit',
-                    'updated_at' => $timestamp,
-                    'updated_by' => Auth::user()->id,
-                ]);
+                
+                $checkstudent = Admission::where('student_id', $member)->count();
+
+                if($checkstudent) //UPDATE
+                {   
+                    $enliststudent = Admission::where('student_id', $member)
+                    ->update([
+                        'section_id' => $request->section,
+                        'status' => 'admit',
+                        'updated_at' => $timestamp,
+                        'updated_by' => Auth::user()->id,
+                    ]);
+                } 
+                else  //ADD
+                {   
+                    $sections_subjects = Admission::create([
+                        'batch_id' => $batch_id[0],
+                        'section_id' =>  $request->section,
+                        'status' => 'admit',
+                        'student_id' => $member,
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+                }
             }
+
+            //DELETE
+            $students = Admission::select('student_id')->where('section_id', $request->section)->whereNotIn('student_id', $request->list_admitted_student )->get();
+            foreach($students as $student)
+            {
+                $ss = Admission::where('student_id', $student['student_id']);
+                $ss->delete();
+            }
+
+        } 
+        else //No student selected 
+        {
+            $ss = Admission::where('section_id', $request->section);
+            $ss->delete();
         }
-        //end admission
+        //end admissions
 
         if ($sectioninfo->update()) {
 
@@ -459,14 +505,19 @@ class AdmissionController extends Controller
     {
         $student = (new Admission)->get_this_admitted( $id );
         echo json_encode( $student ); exit();
-        
+    }
+
+    public function get_this_admitted_section(Request $request, $section_id)
+    {
+        $student = (new Admission)->get_this_admitted_section( $section_id );
+        echo json_encode( $student ); exit();
     }
 
     public function save_this_admitted(Request $request, $id, $section_id)
     {
         $timestamp = date('Y-m-d H:i:s');
         $batch_id = Batch::where('is_active','1')->where('status','Current')->pluck('id');
-        
+        /*
         $enliststudent = Admission::create([
             'batch_id' => $batch_id[0],
             'section_id' => $section_id,
@@ -475,7 +526,7 @@ class AdmissionController extends Controller
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
-
+        */
         $student = (new Admission)->get_this_admitted( $id );
         echo json_encode( $student ); exit();
     }
@@ -522,5 +573,37 @@ class AdmissionController extends Controller
     {
         $enliststudent = Admission::where('status', 'semi-admit');
         $enliststudent->delete();
+    }
+
+    public function generate_classcode($type, $section_id, $batch_id)
+    {
+        //Type
+        $tc = '';
+        $type_code = explode('-', $type);
+        foreach ($type_code as $ty_code) {
+            $tc .= strtoupper($ty_code[0]);
+        }
+
+        //section
+        $section_code = Section::where('id', $section_id)->pluck('name');
+        $sc = strtoupper(substr($section_code[0], 0, 2));
+
+        //batch
+        $batch_code = Batch::where('id', $batch_id)->where('status', 'Current')->pluck('date_start');
+        $bt_code = explode('-', $batch_code[0]);
+        foreach ($bt_code as $btcode)
+        {
+            if( strlen($btcode) == 4){ //Year
+                $bc = substr($btcode, 2, 2);
+            }
+        }
+
+        //section id
+        $sidc = sprintf("%02d", $section_id);
+
+        //combine
+        $classcode = $tc.$sc.'-'.$bc.$sidc;
+
+        return $classcode;
     }
 }

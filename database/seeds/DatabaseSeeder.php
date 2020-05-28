@@ -303,8 +303,8 @@ class DatabaseSeeder extends Seeder
             [   
                 'module_id' => '2',
                 'code' => 'section-student',
-                'name' => 'Sections and Students',
-                'description' => 'Sections and Students Description',
+                'name' => 'Classes',
+                'description' => 'Classes Description',
                 'slug' => 'section-student',
                 'icon' => '',
                 'order' => '4',
