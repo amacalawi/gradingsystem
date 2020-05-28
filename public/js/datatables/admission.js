@@ -153,7 +153,7 @@ jQuery(document).ready(function (e) {
 		//console.log($(this).val());
 	});
 
-	
+	/*
 	$('#enlist-student-selected').on('click', function(e) {
 
 		e.preventDefault();
@@ -188,7 +188,8 @@ jQuery(document).ready(function (e) {
 		});
 
 	});
-
+	*/
+	
 	$body.on('click', '.toggle-status', function (e){
 		e.preventDefault();
 		var $rowID = $(this).attr('data-row-id');

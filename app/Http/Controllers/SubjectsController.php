@@ -330,7 +330,7 @@ class SubjectsController extends Controller
     //Added here to avoid conflict
     public function get_all_teachers()
     {
-        $teachers = Staff::where('is_active', 1)->where('type','Teacher')->orderBy('id', 'asc')->get();
+        $teachers = Staff::where('is_active', 1)->orwhere('type','Adviser')->orwhere('type','Teacher')->orderBy('id', 'asc')->get();
 
         $staffs = array();
         $staffs[] = array('0' => 'select a teacher');

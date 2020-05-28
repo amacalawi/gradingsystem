@@ -116,22 +116,8 @@ var DatatableDataLocalDemo = function () {
 $('body').on('click', '.semi-enlist-student', function() {
 	
 	var id = $(this).val();
-	var items = [];
-	$.ajax({
-		type: 'GET',
-		url: base_url + 'academics/admissions/section-student/delete-this-admitted/'+$(this).val(), //user_id
-		data: { items },
-		success: function(response) {
-			var data = $.parseJSON(response);
-			console.log(data);
-		}, 
-		complete: function() {
-			window.onkeydown = null;
-			window.onfocus = null;
-		}
-	});
-	
 	$("#enlist-div-"+id).remove();
+	
 });
 
 //ENLIST
@@ -157,17 +143,34 @@ jQuery(document).ready(function (e) {
 
 		e.preventDefault();
 		var section_id = $('#section').val();
+		
 		if( (section_id) && section_id != '0')
 		{
-			$('input:checkbox:checked').each(function() {
+			$("#admitted_student" ).html("");
 
+			var items = [];
+			$.ajax({
+				type: 'GET',
+				url: base_url + 'academics/admissions/section-student/get-student-admitted-section/'+section_id,
+				data: { items },
+				success: function(response) {
+					var data = $.parseJSON(response);
+					$.each(data, function(index, value) {
+						$("#admitted_student" ).append("<div class='btn-group mr-2' id='enlist-div-"+data[index].stud_id+"' > <input type='text' name='list_admitted_student[]' value='"+data[index].stud_id+"' readonly='true' hidden><button type='button' class='btn bg-secondary' >"+data[index].lastname+", "+data[index].firstname+" "+data[index].middlename+"</button><button type='button' id='semi-enlist-student' class='btn bg-danger semi-enlist-student' value='"+data[index].stud_id+"' >x</button></div>");
+					});
+				}, 
+				complete: function() {
+					window.onkeydown = null;
+					window.onfocus = null;
+				}
+			});
+
+			$('input:checkbox:checked').each(function() {
+				
 				if($(this).val() != 'on')
 				{
-					//console.log( $(this).val() );
 					var row_id = $(this).val();
 					var items = [];
-
-					//$("#admitted_student").html("");
 					
 					$.ajax({
 						type: 'GET',
@@ -175,7 +178,7 @@ jQuery(document).ready(function (e) {
 						data: { items },
 						success: function(response) {
 							var data = $.parseJSON(response);
-							$("#admitted_student" ).append("<div class='btn-group' id='enlist-div-"+data[0].id+"' > <input type='text' name='list_admitted_student[]' value='"+data[0].id+"' readonly='true' hidden><button type='button' class='btn bg-secondary' >"+data[0].lastname+", "+data[0].firstname+" "+data[0].middlename+"</button><button type='button' id='semi-enlist-student' class='btn bg-danger semi-enlist-student' value='"+data[0].id+"' >x</button></div>");
+							$("#admitted_student" ).append("<div class='btn-group mr-2' id='enlist-div-"+data[0].id+"' > <input type='text' name='list_admitted_student[]' value='"+data[0].id+"' readonly='true' hidden><button type='button' class='btn bg-secondary' >"+data[0].lastname+", "+data[0].firstname+" "+data[0].middlename+"</button><button type='button' id='semi-enlist-student' class='btn bg-danger semi-enlist-student' value='"+data[0].id+"' >x</button></div>");
 						}, 
 						complete: function() {
 							window.onkeydown = null;
@@ -184,9 +187,10 @@ jQuery(document).ready(function (e) {
 					});
 				}
 				else {
-					//$("#admitted_student").html("");
+
 				}
 			});
+
 		}
 		else 
 		{

@@ -51,7 +51,18 @@ class Admission extends Model
             
         return $student;
     }
-   
+
+    public function get_this_admitted_section( $section_id )
+    {
+        $student = Admission::select('admissions.*','students.id as stud_id','students.firstname', 'students.middlename', 'students.lastname', 'students.user_id')
+            ->join('students', 'students.id', '=', 'admissions.student_id')
+            ->where('admissions.is_active', 1)
+            ->where('admissions.section_id', $section_id)
+            ->get();
+            
+        return $student;
+    }
+    
     public function getthisAdmitted($id)
     {
         $admitted = Admission::where('section_id', $id)
