@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Staff;
 use App\Models\Department;
 use App\Models\Designation;
+use App\Models\UserRole;
 use App\User;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -97,7 +98,8 @@ class StaffsController extends Controller
         $types = (new Staff)->types();
         $departments = (new Department)->all_departments();
         $designations = (new Designation)->all_designations();
-        return view('modules/memberships/staffs/add')->with(compact('menus', 'staff', 'civils', 'types', 'departments', 'designations', 'segment'));
+        $specifications = (new Staff)->specifications();
+        return view('modules/memberships/staffs/add')->with(compact('menus', 'staff', 'civils', 'types', 'departments', 'designations', 'specifications', 'segment'));
     }
     
     public function edit(Request $request, $id)
@@ -109,7 +111,8 @@ class StaffsController extends Controller
         $types = (new Staff)->types();
         $departments = (new Department)->all_departments();
         $designations = (new Designation)->all_designations();
-        return view('modules/memberships/staffs/edit')->with(compact('menus', 'staff', 'civils', 'types', 'departments', 'designations', 'segment'));
+        $specifications = (new Staff)->specifications();
+        return view('modules/memberships/staffs/edit')->with(compact('menus', 'staff', 'civils', 'types', 'departments', 'designations', 'specifications', 'segment'));
     }
     
     public function uploads(Request $request)
@@ -170,6 +173,13 @@ class StaffsController extends Controller
             throw new NotFoundHttpException();
         }  
 
+        $userRole = UserRole::create([
+            'user_id' => $user->id,
+            'role_id' => 3,
+            'created_at' => $timestamp,
+            'created_by' => Auth::user()->id
+        ]);
+
         $staff = Staff::create([
             'user_id' => $user->id,
             'role_id' => $request->role_id,
@@ -177,6 +187,7 @@ class StaffsController extends Controller
             'designation_id' => $request->designation_id,
             'identification_no' => $this->generate_staff_no(),
             'type' => $request->type,
+            'specification' => $request->specification,
             'firstname' => $request->firstname,
             'middlename' => $request->middlename,
             'lastname' => $request->lastname,
@@ -223,6 +234,7 @@ class StaffsController extends Controller
         $staff->department_id = $request->department_id;
         $staff->designation_id = $request->designation_id;
         $staff->type = $request->type;
+        $staff->specification = $request->specification;
         $staff->firstname = $request->firstname;
         $staff->middlename = $request->middlename;
         $staff->lastname = $request->lastname;
@@ -256,6 +268,16 @@ class StaffsController extends Controller
                 ->update([
                     'name' => $request->firstname.' '.$request->lastname,
                     'email' => $request->email,
+                ]);
+            }
+
+            $exist = UserRole::where('user_id', $user->id)->count();
+            if (!($exist > 0)) {
+                $userRole = UserRole::create([
+                    'user_id' => $user->id,
+                    'role_id' => 3,
+                    'created_at' => $timestamp,
+                    'created_by' => Auth::user()->id
                 ]);
             }
             

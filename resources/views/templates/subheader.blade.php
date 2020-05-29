@@ -158,22 +158,27 @@
                 </ul>
             </div>
             <div>
-                <a href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/'.Request::segment(3).'/add') }}" class="btn m-btn--pill btn-brand add-btn m-btn--custom">
-                    <i class="la la-commenting"></i> 
-                    @php 
-                        $string = substr(ucwords(Request::segment(3)), 0, -1);
-                        $exemptions = ['modules', 'sub-modules'];
-                    @endphp
-                    @if (Request::segment(3) == 'all-gradingsheets')
-                        Add New Grading Sheet
-                    @else
-                        @if (substr($string, -1) == 'e' && !in_array(Request::segment(3), $exemptions))
-                            Add New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2) }}
+                @php 
+                    $invisibles = ['transmutations'];
+                @endphp
+                @if (!in_array(Request::segment(3), $invisibles))
+                    <a href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/'.Request::segment(3).'/add') }}" class="btn m-btn--pill btn-brand add-btn m-btn--custom">
+                        <i class="la la-commenting"></i> 
+                        @php 
+                            $string = substr(ucwords(Request::segment(3)), 0, -1);
+                            $exemptions = ['modules', 'sub-modules'];
+                        @endphp
+                        @if (Request::segment(3) == 'all-gradingsheets')
+                            Add New Grading Sheet
                         @else
-                            Add New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1) }}
+                            @if (substr($string, -1) == 'e' && !in_array(Request::segment(3), $exemptions))
+                                Add New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2) }}
+                            @else
+                                Add New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1) }}
+                            @endif
                         @endif
-                    @endif
-                </a>
+                    </a>
+                @endif
             </div>
         </div>
     </div>

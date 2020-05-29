@@ -419,6 +419,16 @@
                                 </span>
                             </div>
                         </div>
+                        <div class="col-md-12">
+                            <div class="form-group m-form__group required">
+                                {{ Form::label('specification', 'Specification', ['class' => '']) }}
+                                {{
+                                    Form::select('specification', $specifications, !empty($staff) ? $staff->specification : '', ['class' => 'form-control form-control-lg m-input m-input--solid'])
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -2,7 +2,7 @@
 
 var DatatableDataLocalDemo = function () {
 	//== Private functions
- 	console.log(base_url + 'academics/grading-sheets/all-gradingsheets/all-active');
+ 	console.log(base_url + 'academics/grading-sheets/transmutations/all-active');
 	
 	var datatable = $('.m_datatable').mDatatable({
 		// datasource definition
@@ -12,7 +12,7 @@ var DatatableDataLocalDemo = function () {
 			  read: {
 				// sample GET method
 				method: 'GET',
-				url: base_url + 'academics/grading-sheets/all-gradingsheets/all-active',
+				url: base_url + 'academics/grading-sheets/transmutations/all-active',
 				map: function(raw) {
 				  // sample data mapping
 				  var dataSet = raw;
@@ -51,26 +51,26 @@ var DatatableDataLocalDemo = function () {
 
 		// columns definition
 		columns: [{
-			field: "gradingID",
+			field: "transID",
 			title: "#",
 			width: 50,
 			sortable: false,
 			textAlign: 'center',
 			selector: {class: 'm-checkbox--solid m-checkbox--brand'}
 		}, {
-			field: "gradingCode",
+			field: "transCode",
 			title: "Code"
 		}, {
-			field: "gradingSection",
-			title: "Section"
+			field: "transName",
+			title: "Name",
 		}, {
-			field: "gradingSubject",
-			title: "Subject",
+			field: "transDescription",
+			title: "Description"
+        }, {
+			field: "transElement",
+			title: "Elements"
 		}, {
-			field: "gradingQuarter",
-			title: "Quarter",
-		}, {
-			field: "gradingModified",
+			field: "transModified",
 			title: "Last Modified",
 		}, {
 			field: "Actions",
@@ -83,7 +83,8 @@ var DatatableDataLocalDemo = function () {
 				var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
 
                 return '\
-                    <a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/grading-sheets/all-gradingsheets/edit/' + row.gradingID + '"><i class="la la-edit"></i></a>\
+                    <a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/grading-sheets/transmutations/edit/' + row.transID + '"><i class="la la-edit"></i></a>\
+					<a title="remove this" data-row-id="' + row.transID + '" action="Remove" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-remove"></i></a>\
 				';
 			}
 		}]
@@ -133,7 +134,7 @@ jQuery(document).ready(function () {
 		var $rowID = $(this).attr('data-row-id');
 		console.log($rowID);
 		var $action = $(this).attr('action');
-		var $url = base_url + 'academics/grading-sheets/all-gradingsheets/update-status/' + $rowID;
+		var $url = base_url + 'academics/grading-sheets/transmutations/update-status/' + $rowID;
 		var items = []; items.push({ action: $action });
 
 		console.log($url);

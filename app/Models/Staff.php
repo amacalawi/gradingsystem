@@ -30,6 +30,7 @@ class Staff extends Model
                 'designation_id' => ($staff->designation_id) ? $staff->designation_id : '',
                 'identification_no' => ($staff->identification_no) ? $staff->identification_no : '',
                 'type' => ($staff->type) ? $staff->type : '',
+                'specification' => ($staff->specification) ? $staff->specification : '',
                 'firstname' => ($staff->firstname) ? $staff->firstname : '',
                 'middlename' => ($staff->middlename) ? $staff->middlename : '',
                 'lastname' => ($staff->lastname) ? $staff->lastname : '',
@@ -57,6 +58,7 @@ class Staff extends Model
                 'designation_id' => '',
                 'identification_no' => $this->generate_staff_no(),
                 'type' => '',
+                'specification' => '',
                 'firstname' => '',
                 'middlename' => '',
                 'lastname' => '',
@@ -113,6 +115,12 @@ class Staff extends Model
         return $marital_status;
     }
 
+    public function specifications()
+    {	
+        $specifications = array('' => 'select a specification', 'childhood-education' => 'Childhood Education', 'primary-education' => 'Primary Education', 'secondary-education' => 'Secondary Education', 'higher-education' => 'Higher Education');
+        return $specifications;
+    }
+
     public function types()
     {	
         $marital_status = array('' => 'select a type', 'Staff' => 'Staff', 'Adviser' => 'Adviser', 'Teacher' => 'Teacher');
@@ -137,6 +145,12 @@ class Staff extends Model
     public function designation()
     {
         return $this->belongsTo('App\Models\Designation', 'designation_id', 'id');
+    }
+
+    public function get_column_via_user($column, $id)
+    {
+        return self::where('user_id', $id)->first()->$column;
+        return $sections;  
     }
 }
 

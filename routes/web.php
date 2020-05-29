@@ -280,7 +280,9 @@ Route::prefix('academics')->group(function () {
         Route::post('all-gradingsheets/restore', 'GradingSheetsController@restore')->name('gradingsheets.restore');
         Route::get('all-gradingsheets/all-active', 'GradingSheetsController@all_active')->name('gradingsheets.all.active');
         Route::get('all-gradingsheets/all-inactive', 'GradingSheetsController@all_inactive')->name('gradingsheets.all.inactive');
-        Route::put('all-gradingsheets/update-status/{id}', 'GradingSheetsController@update_status')->name('components.update.status');
+        Route::put('all-gradingsheets/update-status/{id}', 'GradingSheetsController@update_status')->name('gradingsheets.update.status');
+        Route::get('all-gradingsheets/reload/{id}', 'GradingSheetsController@reload')->name('gradingsheets.reload.status');
+        Route::get('all-gradingsheets/fetch-transmutations/{id}', 'GradingSheetsController@fetch_transmutations')->name('gradingsheets.fetch.transmutation');
         /* End Grading Sheets Routes */
 
         /* Start Components Routes */
@@ -297,8 +299,19 @@ Route::prefix('academics')->group(function () {
         Route::put('components/update-status/{id}', 'ComponentsController@update_status')->name('components.update.status');
         /* End Components Routes */
 
-
-        
+        /* Start Transmutation Routes */
+        Route::get('transmutations/add', 'TransmutationsController@add')->name('menus.transmutations.add');
+        Route::get('transmutations/edit/{id?}', 'TransmutationsController@edit')->name('menus.transmutations.edit');
+        Route::post('transmutations/store', 'TransmutationsController@store')->name('menus.transmutations.store');
+        Route::put('transmutations/update/{id}', 'TransmutationsController@update')->name('menus.transmutations.update');
+        Route::get('transmutations', 'TransmutationsController@manage')->name('menus.transmutations.manage.active');
+        Route::get('transmutations/inactive', 'TransmutationsController@inactive')->name('menus.transmutations.manage.inactive');
+        Route::post('transmutations/remove', 'TransmutationsController@remove')->name('menus.transmutations.remove');
+        Route::post('transmutations/restore', 'TransmutationsController@restore')->name('menus.transmutations.restore');
+        Route::get('transmutations/all-active', 'TransmutationsController@all_active')->name('menus.transmutations.all.active');
+        Route::get('transmutations/all-inactive', 'TransmutationsController@all_inactive')->name('menus.transmutations.all.inactive');
+        Route::put('transmutations/update-status/{id}', 'TransmutationsController@update_status')->name('menus.transmutations.update.status');
+        /* End Transmutation Routes */
     });
     /* End Grading Sheets Routes */
 });

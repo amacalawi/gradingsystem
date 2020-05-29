@@ -14,6 +14,11 @@ use App\Models\Batch;
 use App\Models\Component;
 use App\Models\Admission;
 use App\Models\GradingSheetActivity;
+use App\Models\SectionInfo;
+use App\Models\SectionsSubjects;
+use App\Models\Staff;
+use App\Models\TransmutationElement;
+use App\Models\Transmutation;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -48,50 +53,172 @@ class GradingSheetsController extends Controller
         return view('modules/academics/gradingsheets/all/inactive')->with(compact('menus'));
     }
 
-    public function all_active(Request $request)
+    public function validated($user, $id)
     {
-        $res = GradingSheet::where('is_active', 1)
-        ->with([
-            'section' =>  function($q) { 
-                $q->select(['id', 'name']); 
-            },
-            'subject' =>  function($q) { 
-                $q->select(['id', 'name']); 
+        if ($id != '') {
+            if (Auth::user()->type != 'administrator') {
+                $rows = GradingSheet::
+                whereIn('subject_id', 
+                    SectionsSubjects::select('subject_id')
+                    ->where([
+                        'teacher_id' => (new Staff)->get_column_via_user('id', Auth::user()->id),
+                        'batch_id' => (new Batch)->get_current_batch(),
+                        'is_active' => 1
+                    ])
+                )
+                ->where('id', $id)
+                ->where('is_active', 1)->count();
+                if (!($rows > 0)) {
+                    return abort(404);
+                }
             }
-        ])->orderBy('id', 'ASC')->get();
+        }
 
-        return $res->map(function($grading) {
-            return [
-                'gradingID' => $grading->id,
-                'gradingCode' => $grading->code,
-                'gradingSection' => $grading->section->name,
-                'gradingSubject' => $grading->subject->name,
-                'gradingModified' => ($grading->updated_at !== NULL) ? date('d-M-Y', strtotime($grading->updated_at)).'<br/>'. date('h:i A', strtotime($grading->updated_at)) : date('d-M-Y', strtotime($grading->created_at)).'<br/>'. date('h:i A', strtotime($grading->created_at))
-            ];
-        });
+        return true;
+    }
+
+    public function all_active(Request $request)
+    {   
+        if (Auth::user()->type == 'administrator') 
+        { 
+            $res = GradingSheet::where('is_active', 1)
+            ->with([
+                'section' =>  function($q) { 
+                    $q->select(['id', 'name']); 
+                },
+                'subject' =>  function($q) { 
+                    $q->select(['id', 'name']); 
+                },
+                'quarter' =>  function($q) { 
+                    $q->select(['id', 'name']); 
+                }
+            ])->orderBy('id', 'ASC')->get();
+
+            return $res->map(function($grading) {
+                return [
+                    'gradingID' => $grading->id,
+                    'gradingCode' => $grading->code,
+                    'gradingSection' => $grading->section->name,
+                    'gradingSubject' => $grading->subject->name,
+                    'gradingQuarter' => $grading->quarter->name,
+                    'gradingModified' => ($grading->updated_at !== NULL) ? date('d-M-Y', strtotime($grading->updated_at)).'<br/>'. date('h:i A', strtotime($grading->updated_at)) : date('d-M-Y', strtotime($grading->created_at)).'<br/>'. date('h:i A', strtotime($grading->created_at))
+                ];
+            });
+        }
+        else
+        {
+            $res = GradingSheet::
+            whereIn('subject_id', 
+                SectionsSubjects::select('subject_id')
+                ->whereIn('section_info_id', 
+                    SectionInfo::select('id')->where([
+                        'batch_id' => (new Batch)->get_current_batch(), 
+                        'is_active' => 1
+                    ])
+                )
+                ->where([
+                    'teacher_id' => (new Staff)->get_column_via_user('id', Auth::user()->id),
+                    'batch_id' => (new Batch)->get_current_batch(),
+                    'is_active' => 1
+                ])
+            )
+            ->with([
+                'section' =>  function($q) { 
+                    $q->select(['id', 'name']); 
+                },
+                'subject' =>  function($q) { 
+                    $q->select(['id', 'name']); 
+                },
+                'quarter' =>  function($q) { 
+                    $q->select(['id', 'name']); 
+                }
+            ])
+            ->where('is_active', 1)
+            ->orderBy('id', 'ASC')->get();
+
+            return $res->map(function($grading) {
+                return [
+                    'gradingID' => $grading->id,
+                    'gradingCode' => $grading->code,
+                    'gradingSection' => $grading->section->name,
+                    'gradingSubject' => $grading->subject->name,
+                    'gradingQuarter' => $grading->quarter->name,
+                    'gradingModified' => ($grading->updated_at !== NULL) ? date('d-M-Y', strtotime($grading->updated_at)).'<br/>'. date('h:i A', strtotime($grading->updated_at)) : date('d-M-Y', strtotime($grading->created_at)).'<br/>'. date('h:i A', strtotime($grading->created_at))
+                ];
+            });
+        }
     }
 
     public function all_inactive(Request $request)
-    {
-        $res = GradingSheet::where('is_active', 0)
-        ->with([
-            'section' =>  function($q) { 
-                $q->select(['id', 'name']); 
-            },
-            'subject' =>  function($q) { 
-                $q->select(['id', 'name']); 
-            }
-        ])->orderBy('id', 'ASC')->get();
+    {   
+        if (Auth::user()->type == 'administrator') 
+        { 
+            $res = GradingSheet::where('is_active', 0)
+            ->with([
+                'section' =>  function($q) { 
+                    $q->select(['id', 'name']); 
+                },
+                'subject' =>  function($q) { 
+                    $q->select(['id', 'name']); 
+                },
+                'quarter' =>  function($q) { 
+                    $q->select(['id', 'name']); 
+                }
+            ])->orderBy('id', 'ASC')->get();
 
-        return $res->map(function($grading) {
-            return [
-                'gradingID' => $grading->id,
-                'gradingCode' => $grading->code,
-                'gradingSection' => $grading->section->name,
-                'gradingSubject' => $grading->subject->name,
-                'gradingModified' => ($grading->updated_at !== NULL) ? date('d-M-Y', strtotime($grading->updated_at)).'<br/>'. date('h:i A', strtotime($grading->updated_at)) : date('d-M-Y', strtotime($grading->created_at)).'<br/>'. date('h:i A', strtotime($grading->created_at))
-            ];
-        });
+            return $res->map(function($grading) {
+                return [
+                    'gradingID' => $grading->id,
+                    'gradingCode' => $grading->code,
+                    'gradingSection' => $grading->section->name,
+                    'gradingSubject' => $grading->subject->name,
+                    'gradingQuarter' => $grading->quarter->name,
+                    'gradingModified' => ($grading->updated_at !== NULL) ? date('d-M-Y', strtotime($grading->updated_at)).'<br/>'. date('h:i A', strtotime($grading->updated_at)) : date('d-M-Y', strtotime($grading->created_at)).'<br/>'. date('h:i A', strtotime($grading->created_at))
+                ];
+            });
+        }
+        else
+        {
+            $res = GradingSheet::
+            whereIn('subject_id', 
+                SectionsSubjects::select('subject_id')
+                ->whereIn('section_info_id', 
+                    SectionInfo::select('id')->where([
+                        'batch_id' => (new Batch)->get_current_batch(), 
+                        'is_active' => 1
+                    ])
+                )
+                ->where([
+                    'teacher_id' => (new Staff)->get_column_via_user('id', Auth::user()->id),
+                    'batch_id' => (new Batch)->get_current_batch(),
+                    'is_active' => 1
+                ])
+            )
+            ->with([
+                'section' =>  function($q) { 
+                    $q->select(['id', 'name']); 
+                },
+                'subject' =>  function($q) { 
+                    $q->select(['id', 'name']); 
+                },
+                'quarter' =>  function($q) { 
+                    $q->select(['id', 'name']); 
+                }
+            ])
+            ->where('is_active', 0)
+            ->orderBy('id', 'ASC')->get();
+
+            return $res->map(function($grading) {
+                return [
+                    'gradingID' => $grading->id,
+                    'gradingCode' => $grading->code,
+                    'gradingSection' => $grading->section->name,
+                    'gradingSubject' => $grading->subject->name,
+                    'gradingQuarter' => $grading->quarter->name,
+                    'gradingModified' => ($grading->updated_at !== NULL) ? date('d-M-Y', strtotime($grading->updated_at)).'<br/>'. date('h:i A', strtotime($grading->updated_at)) : date('d-M-Y', strtotime($grading->created_at)).'<br/>'. date('h:i A', strtotime($grading->created_at))
+                ];
+            });
+        }
     }
 
     public function add(Request $request, $id = '')
@@ -102,11 +229,13 @@ class GradingSheetsController extends Controller
         $quarters = (new Quarter)->all_quarters();
         $sections = (new Section)->all_sections();
         $subjects = (new Subject)->all_subjects();
-        return view('modules/academics/gradingsheets/all/add')->with(compact('menus', 'grading', 'quarters', 'sections', 'subjects', 'segment'));
+        $types = (new GradingSheet)->types();
+        return view('modules/academics/gradingsheets/all/add')->with(compact('menus', 'grading', 'quarters', 'sections', 'subjects', 'types', 'segment'));
     }
     
     public function edit(Request $request, $id)
     {   
+        $this->validated(Auth::user()->id, $id);
         $menus = $this->load_menus();
         $segment = request()->segment(4);
         $grading = (new GradingSheet)->fetch($id);
@@ -126,6 +255,7 @@ class GradingSheetsController extends Controller
             'section_id' => $request->section_id,
             'subject_id' => $request->subject_id,
             'quarter_id' => $request->quarter_id,
+            'type' => $request->type,
             'batch_id' => (new Batch)->get_current_batch()
         ])->count();
 
@@ -147,6 +277,7 @@ class GradingSheetsController extends Controller
             'section_id' => $request->section_id,
             'subject_id' => $request->subject_id,
             'quarter_id' => $request->quarter_id,
+            'type' => $request->type,
             'batch_id' => (new Batch)->get_current_batch(),
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
@@ -189,7 +320,7 @@ class GradingSheetsController extends Controller
             if ($row->count() > 0) {
                 $gradingActivtity = GradingSheetActivity::where('id', '=', $row->first()->id)
                 ->update([
-                    'score' => ($request->score[$iteration] !== NULL) ? $request->score[$iteration] : '',
+                    'score' => ($request->score[$iteration] !== NULL) ? $request->score[$iteration] : NULL,
                     'updated_at' => $timestamp,
                     'updated_by' => Auth::user()->id
                 ]);
@@ -198,7 +329,7 @@ class GradingSheetsController extends Controller
                     'gradingsheet_id' => $id,
                     'activity_id' => $activities[0],
                     'student_id' => $activities[1],
-                    'score' => ($request->score[$iteration] !== NULL) ? $request->score[$iteration] : '',
+                    'score' => ($request->score[$iteration] !== NULL) ? $request->score[$iteration] : NULL,
                     'created_at' => $timestamp,
                     'created_by' => Auth::user()->id
                 ]);
@@ -317,5 +448,115 @@ class GradingSheetsController extends Controller
     public function get_activity_score_via_activity($id, $student, $grading)
     {
         return (new GradingSheetActivity)->get_activity_score_via_activity($id, $student, $grading);
+    }
+
+    public function reload($type)
+    {   
+        if (Auth::user()->type == 'administrator') 
+        {   
+            //--> sections
+            $arr['sections'] = (new Section)
+            ->whereIn('id', 
+                SectionInfo::select('section_id')->where([
+                    'batch_id' => (new Batch)->get_current_batch(), 
+                    'is_active' => 1
+                ])
+            )
+            ->where(['is_active' => 1, 'type' => $type])
+            ->orderBy('id', 'ASC')->get();
+
+            //--> subjects
+            $arr['subjects'] = (new Subject)
+            ->whereIn('id', 
+                SectionsSubjects::select('subject_id')
+                ->whereIn('section_info_id', 
+                    SectionInfo::select('id')->where([
+                        'batch_id' => (new Batch)->get_current_batch(), 'is_active' => 1
+                    ])
+                )
+            )
+            ->where(['is_active' => 1, 'type' => $type])
+            ->orderBy('id', 'ASC')->get();
+
+            //--> quarters
+            $arr['quarters'] = (new Quarter)->where(['is_active' => 1, 'type' => $type])->orderBy('id', 'ASC')->get();
+        }
+        else
+        {   
+            //--> sections
+            $arr['sections'] = (new Section)
+            ->whereIn('id',     
+                SectionInfo::select('section_id')
+                ->whereIn('id', 
+                    SectionsSubjects::select('section_info_id')->where([
+                        'teacher_id' => (new Staff)->get_column_via_user('id', Auth::user()->id),
+                        'batch_id' => (new Batch)->get_current_batch(),
+                        'is_active' => 1
+                    ])
+                )->where([
+                    'batch_id' => (new Batch)->get_current_batch(), 
+                    'is_active' => 1
+                ])
+            )
+            ->where(['is_active' => 1, 'type' => $type])
+            ->orderBy('id', 'ASC')->get();
+
+            //--> subjects
+            $arr['subjects'] = (new Subject)
+            ->whereIn('id', 
+                SectionsSubjects::select('subject_id')
+                ->whereIn('section_info_id', 
+                    SectionInfo::select('id')->where([
+                        'batch_id' => (new Batch)->get_current_batch(), 
+                        'is_active' => 1]
+                    )
+                )->where([
+                    'teacher_id' => (new Staff)->get_column_via_user('id', Auth::user()->id),
+                    'batch_id' => (new Batch)->get_current_batch(),
+                    'is_active' => 1
+                ])
+            )
+            ->where(['is_active' => 1, 'type' => $type])
+            ->orderBy('id', 'ASC')->get();
+
+            //--> quarters
+            $arr['quarters'] = (new Quarter)->where(['is_active' => 1, 'type' => $type])->orderBy('id', 'ASC')->get();
+        }
+
+        echo json_encode( $arr ); exit();
+    }
+
+    public function get_transmutation_value($score, $type)
+    {   
+        $res = TransmutationElement::with([
+            'transmutation' =>  function($q) { 
+                $q->select(['id', 'name']);
+            },
+        ])
+        ->whereIn('transmutation_id', Transmutation::select('id')->where('type', $type))
+        ->where('score', '<=', $score)
+        ->max('equivalent');
+
+        return $res;
+    }
+
+    public function fetch_transmutations($type)
+    {
+        $res = TransmutationElement::with([
+            'transmutation' =>  function($q) use ($type) { 
+                $q->select(['id', 'name'])->where('type', $type);
+            },
+        ])
+        ->whereIn('transmutation_id', Transmutation::select('id')->where('type', $type))
+        ->get();
+
+        $res = $res->map(function($grading) {
+            return (object) [
+                'score' => $grading->score,
+                'equivalent' => $grading->equivalent
+            ];
+        });
+
+        echo json_encode( $res ); exit();
     }
 }

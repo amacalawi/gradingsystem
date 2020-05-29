@@ -23,7 +23,7 @@ class GradingSheetActivity extends Model
 
         $score = '';
         if ($gradingActivity->count() > 0) {
-            $score = ($gradingActivity->first()->score > 0) ? $gradingActivity->first()->score : '';
+            $score = ($gradingActivity->first()->score !== NULL) ? $gradingActivity->first()->score : '';
         } 
         return $score;
     }

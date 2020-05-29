@@ -58,11 +58,20 @@
                     <div class="m-portlet__body">
                         <div class="row">
                             <div class="col-md-12">
-                                <h5 class="m-bottom-1">Quarter</h5>
+                                <h5 class="m-bottom-1">Type & Quarter</h5>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group m-form__group required">
-                                    {{ Form::label('quarter_id', 'Select Quarter', ['class' => '']) }}
+                                    {{ Form::label('type', 'Type', ['class' => '']) }}
+                                    {{  
+                                        Form::select('type', $types, !empty($grading) ? $grading->type : '', ['class' => 'form-control form-control-lg m-input m-input--solid'])
+                                    }}
+                                    <span class="m-form__help m--font-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group m-form__group required">
+                                    {{ Form::label('quarter_id', 'Quarter', ['class' => '']) }}
                                     {{  
                                         Form::select('quarter_id', $quarters, !empty($grading) ? $grading->quarter_id : '', ['class' => 'form-control form-control-lg m-input m-input--solid'])
                                     }}
@@ -84,15 +93,18 @@
                     <div class="row">
                         <div class="col-md-12">
                             <h4 class="m-bottom-1">Grading Sheet Information</h4>
+                            <div class="row hidden">
+                                <h5 id="type">{{ $grading->type }}</h5>
+                            </div>
                             <div class="row">
                                 <div class="col-md-6">
                                     <h5>
                                         <strong>Level & Section:</strong>
-                                         - {{ $grading->section_name }}
+                                        {{ $grading->level_name }} ({{ $grading->section_name }})
                                     </h5>
                                     <h5 class="m-bottom-2">
-                                        <strong>Subject:</strong> 
-                                        {{ $grading->subject_name }}
+                                        <strong>Subject & Teacher:</strong> 
+                                        {{ $grading->subject_name }} ({{ $grading->teacher }})
                                     </h5>
                                 </div>
                                 <div class="col-md-6">
@@ -101,7 +113,8 @@
                                         {{ $grading->batch_name }} ({{ $grading->quarter_name }})
                                     </h5>
                                     <h5 class="m-bottom-2">
-                                        <strong>Teacher:</strong>
+                                        <strong>Adviser:</strong>
+                                        {{ $grading->adviser }}
                                     </h5>
                                 </div>
                             </div>
@@ -182,14 +195,18 @@
                                                 @foreach ($components as $component)
                                                     @php 
                                                         $sum = 0;
-                                                        $hps = $component->sum_value;
+                                                        $hps = 0;
                                                         $ps = 0;
                                                         $percentage = 0;
                                                     @endphp
                                                     @foreach ($component->activities as $activity)
                                                         @php 
                                                         $score = $gradings->get_activity_score_via_activity($activity->id, $student->student_id, $grading->id);
-                                                        $sum += !empty($score) ? floatval($score) : 0 ; @endphp
+                                                        $sum += !empty($score) ? floatval($score) : 0 ; 
+                                                        if (floatval($score) > 0) { 
+                                                            $hps += $activity->value;
+                                                        }
+                                                        @endphp
                                                         <td group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding">
                                                             <input value="{{ $activity->id.'_'.$student->student_id }}" name="activity[]" class="hidden text-cell" type="text"/>    
                                                             <input maxvalue="{{ $activity->value }}" value="{{ $score }}" name="score[]" class="numeric-double activity-cell text-cell" type="text"/>
@@ -226,11 +243,13 @@
                                                     </td>
                                                 @endforeach
                                                 <td class="shaded fixed freeze_vertical text-center scrolling_table_1 initial-cell">
-                                                    {{ floor($totalpercentage*100)/100 }}
+                                                    {{ $grades = floor($totalpercentage*100)/100 }}
                                                 </td>
-                                                <td class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg quarter-cell">&nbsp;</td>
+                                                <td class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg quarter-cell">
+                                                    {{ $gradings->get_transmutation_value($grades, $grading->type) }}
+                                                </td>
                                                 <td class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell">
-                                                    <input name="tc_score[]" class="numeric-double text-cell" type="text"/>
+                                                    <input maxvalue="100" name="tc_score[]" class="numeric-double text-cell" type="text"/>
                                                 </td>
                                             </tr>
                                             @php $iteration++; @endphp

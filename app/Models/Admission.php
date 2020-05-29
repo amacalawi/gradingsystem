@@ -71,7 +71,7 @@ class Admission extends Model
 
     public function student()
     {   
-        return $this->hasOne('App\Models\Student', 'user_id', 'student_id');
+        return $this->hasOne('App\Models\Student', 'id', 'student_id');
     }
 
     public function get_students_via_gradingsheet($id)

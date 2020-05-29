@@ -12,6 +12,9 @@ use App\Models\Batch;
 use App\Models\Quarter;
 use App\Models\Subject;
 use App\Models\UserRole;
+use App\Models\Staff;
+use App\Models\SectionsSubjects;
+use App\Models\SectionInfo;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -46,56 +49,170 @@ class ComponentsController extends Controller
         return view('modules/academics/gradingsheets/components/inactive')->with(compact('menus'));
     }
 
-    public function all_active(Request $request)
+    public function validated($user, $id)
     {
-        $res = Component::with([
-            'subject' =>  function($q) { 
-                $q->select(['id', 'name']); 
-            },
-            'quarter' =>  function($q) { 
-                $q->select(['id', 'name']); 
+        if ($id != '') {
+            if (Auth::user()->type != 'administrator') {
+                $rows = Component::
+                whereIn('subject_id', 
+                    SectionsSubjects::select('subject_id')
+                    ->where([
+                        'teacher_id' => (new Staff)->get_column_via_user('id', $user),
+                        'batch_id' => (new Batch)->get_current_batch(),
+                        'is_active' => 1
+                    ])
+                )
+                ->where('id', $id)
+                ->where('is_active', 1)->count();
+                if (!($rows > 0)) {
+                    return abort(404);
+                }
             }
-        ])->where('is_active', 1)->orderBy('order', 'ASC')->get();
+        }
 
-        return $res->map(function($component) {
-            return [
-                'componentID' => $component->id,
-                'componentPercentage' => $component->percentage,
-                'componentName' => $component->name,
-                'componentDescription' => $component->description,
-                'componentOrder' => $component->order,
-                'componentType' => $component->type,
-                'componentQuarter' => $component->quarter->name,
-                'componentSubject' => $component->subject->name,
-                'componentModified' => ($component->updated_at !== NULL) ? date('d-M-Y', strtotime($component->updated_at)).'<br/>'. date('h:i A', strtotime($component->updated_at)) : date('d-M-Y', strtotime($component->created_at)).'<br/>'. date('h:i A', strtotime($component->created_at))
-            ];
-        });
+        return true;
+    }
+
+    public function all_active(Request $request)
+    {   
+        if (Auth::user()->type == 'administrator') 
+        { 
+            $res = Component::with([
+                'subject' =>  function($q) { 
+                    $q->select(['id', 'name']); 
+                },
+                'quarter' =>  function($q) { 
+                    $q->select(['id', 'name']); 
+                }
+            ])->where('is_active', 1)->orderBy('order', 'ASC')->get();
+
+            return $res->map(function($component) {
+                return [
+                    'componentID' => $component->id,
+                    'componentPercentage' => $component->percentage,
+                    'componentName' => $component->name,
+                    'componentDescription' => $component->description,
+                    'componentOrder' => $component->order,
+                    'componentType' => $component->type,
+                    'componentQuarter' => $component->quarter->name,
+                    'componentSubject' => $component->subject->name,
+                    'componentModified' => ($component->updated_at !== NULL) ? date('d-M-Y', strtotime($component->updated_at)).'<br/>'. date('h:i A', strtotime($component->updated_at)) : date('d-M-Y', strtotime($component->created_at)).'<br/>'. date('h:i A', strtotime($component->created_at))
+                ];
+            });
+        }
+        else
+        {
+            $res = Component::
+            whereIn('subject_id', 
+                SectionsSubjects::select('subject_id')
+                ->whereIn('section_info_id', 
+                    SectionInfo::select('id')->where([
+                        'batch_id' => (new Batch)->get_current_batch(), 
+                        'is_active' => 1
+                    ])
+                )
+                ->where([
+                    'teacher_id' => (new Staff)->get_column_via_user('id', Auth::user()->id),
+                    'batch_id' => (new Batch)->get_current_batch(),
+                    'is_active' => 1
+                ])
+            )
+            ->with([
+                'subject' =>  function($q) { 
+                    $q->select(['id', 'name']); 
+                },
+                'quarter' =>  function($q) { 
+                    $q->select(['id', 'name']); 
+                }
+            ])
+            ->where('is_active', 1)
+            ->orderBy('order', 'ASC')->get();
+
+            return $res->map(function($component) {
+                return [
+                    'componentID' => $component->id,
+                    'componentPercentage' => $component->percentage,
+                    'componentName' => $component->name,
+                    'componentDescription' => $component->description,
+                    'componentOrder' => $component->order,
+                    'componentType' => $component->type,
+                    'componentQuarter' => $component->quarter->name,
+                    'componentSubject' => $component->subject->name,
+                    'componentModified' => ($component->updated_at !== NULL) ? date('d-M-Y', strtotime($component->updated_at)).'<br/>'. date('h:i A', strtotime($component->updated_at)) : date('d-M-Y', strtotime($component->created_at)).'<br/>'. date('h:i A', strtotime($component->created_at))
+                ];
+            });
+        }
     }
 
     public function all_inactive(Request $request)
-    {
-        $res = Component::with([
-            'subject' =>  function($q) { 
-                $q->select(['id', 'name']); 
-            },
-            'quarter' =>  function($q) { 
-                $q->select(['id', 'name']); 
-            }
-        ])->where('is_active', 0)->orderBy('order', 'ASC')->get();
+    {   
+        if (Auth::user()->type == 'administrator') 
+        { 
+            $res = Component::with([
+                'subject' =>  function($q) { 
+                    $q->select(['id', 'name']); 
+                },
+                'quarter' =>  function($q) { 
+                    $q->select(['id', 'name']); 
+                }
+            ])->where('is_active', 0)->orderBy('order', 'ASC')->get();
 
-        return $res->map(function($component) {
-            return [
-                'componentID' => $component->id,
-                'componentPercentage' => $component->percentage,
-                'componentName' => $component->name,
-                'componentDescription' => $component->description,
-                'componentOrder' => $component->order,
-                'componentType' => $component->type,
-                'componentQuarter' => $component->quarter->name,
-                'componentSubject' => $component->subject->name,
-                'componentModified' => ($component->updated_at !== NULL) ? date('d-M-Y', strtotime($component->updated_at)).'<br/>'. date('h:i A', strtotime($component->updated_at)) : date('d-M-Y', strtotime($component->created_at)).'<br/>'. date('h:i A', strtotime($component->created_at))
-            ];
-        });
+            return $res->map(function($component) {
+                return [
+                    'componentID' => $component->id,
+                    'componentPercentage' => $component->percentage,
+                    'componentName' => $component->name,
+                    'componentDescription' => $component->description,
+                    'componentOrder' => $component->order,
+                    'componentType' => $component->type,
+                    'componentQuarter' => $component->quarter->name,
+                    'componentSubject' => $component->subject->name,
+                    'componentModified' => ($component->updated_at !== NULL) ? date('d-M-Y', strtotime($component->updated_at)).'<br/>'. date('h:i A', strtotime($component->updated_at)) : date('d-M-Y', strtotime($component->created_at)).'<br/>'. date('h:i A', strtotime($component->created_at))
+                ];
+            });
+        }
+        else 
+        {
+            $res = Component::
+            whereIn('subject_id', 
+                SectionsSubjects::select('subject_id')
+                ->whereIn('section_info_id', 
+                    SectionInfo::select('id')->where([
+                        'batch_id' => (new Batch)->get_current_batch(), 
+                        'is_active' => 1
+                    ])
+                )
+                ->where([
+                    'teacher_id' => (new Staff)->get_column_via_user('id', Auth::user()->id),
+                    'batch_id' => (new Batch)->get_current_batch(),
+                    'is_active' => 1
+                ])
+            )
+            ->with([
+                'subject' =>  function($q) { 
+                    $q->select(['id', 'name']); 
+                },
+                'quarter' =>  function($q) { 
+                    $q->select(['id', 'name']); 
+                }
+            ])
+            ->where('is_active', 0)
+            ->orderBy('order', 'ASC')->get();
+
+            return $res->map(function($component) {
+                return [
+                    'componentID' => $component->id,
+                    'componentPercentage' => $component->percentage,
+                    'componentName' => $component->name,
+                    'componentDescription' => $component->description,
+                    'componentOrder' => $component->order,
+                    'componentType' => $component->type,
+                    'componentQuarter' => $component->quarter->name,
+                    'componentSubject' => $component->subject->name,
+                    'componentModified' => ($component->updated_at !== NULL) ? date('d-M-Y', strtotime($component->updated_at)).'<br/>'. date('h:i A', strtotime($component->updated_at)) : date('d-M-Y', strtotime($component->created_at)).'<br/>'. date('h:i A', strtotime($component->created_at))
+                ];
+            });
+        }
     }
 
     public function add(Request $request, $id = '')
@@ -112,6 +229,7 @@ class ComponentsController extends Controller
     
     public function edit(Request $request, $id)
     {   
+        $this->validated(Auth::user()->id, $id);
         $menus = $this->load_menus();
         $segment = request()->segment(4);
         $component = (new Component)->fetch($id);
@@ -197,24 +315,6 @@ class ComponentsController extends Controller
     public function update(Request $request, $id)
     {    
         $timestamp = date('Y-m-d H:i:s');
-
-        // $rows = Component::where('id', '!=', $id)->where([
-        //     'batch_id' => (new Batch)->get_current_batch(),
-        //     'quarter_id' => $request->quarter_id,
-        //     'subject_id' => $request->subject_id,
-        //     'type' => $request->type
-        // ])->count();
-
-        // if ($rows > 0) {
-        //     $data = array(
-        //         'title' => 'Oh snap!',
-        //         'text' => 'The component is already existing.',
-        //         'type' => 'error',
-        //         'class' => 'btn-danger'
-        //     );
-    
-        //     echo json_encode( $data ); exit();
-        // }
 
         $component = Component::find($id);
 
