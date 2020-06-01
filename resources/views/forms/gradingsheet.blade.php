@@ -243,13 +243,15 @@
                                                     </td>
                                                 @endforeach
                                                 <td class="shaded fixed freeze_vertical text-center scrolling_table_1 initial-cell">
-                                                    {{ $grades = floor($totalpercentage*100)/100 }}
+                                                    {{ $gradings->get_colum_via_gradingsheet_student('initial_grade', $grading->id, $student->student_id) }}
                                                 </td>
                                                 <td class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg quarter-cell">
-                                                    {{ $gradings->get_transmutation_value($grades, $grading->type) }}
+                                                    {{ $gradings->get_colum_via_gradingsheet_student('quarter_grade', $grading->id, $student->student_id) }}
                                                 </td>
                                                 <td class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell">
-                                                    <input maxvalue="100" name="tc_score[]" class="numeric-double text-cell" type="text"/>
+                                                    <input maxvalue="100" name="init_grade[]" value="{{ $gradings->get_colum_via_gradingsheet_student('initial_grade', $grading->id, $student->student_id) }}" class="hidden numeric-double text-cell" type="text"/>
+                                                    <input maxvalue="100" name="quarter_grade[]" value="{{ $gradings->get_colum_via_gradingsheet_student('quarter_grade', $grading->id, $student->student_id) }}" class="hidden numeric-double text-cell" type="text"/>
+                                                    <input maxvalue="100" name="tc_score[]" value="{{ $gradings->get_colum_via_gradingsheet_student('adjustment_grade', $grading->id, $student->student_id) }}" class="numeric-double text-cell" type="text"/>
                                                 </td>
                                             </tr>
                                             @php $iteration++; @endphp

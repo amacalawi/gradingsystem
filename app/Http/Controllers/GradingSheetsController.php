@@ -14,6 +14,7 @@ use App\Models\Batch;
 use App\Models\Component;
 use App\Models\Admission;
 use App\Models\GradingSheetActivity;
+use App\Models\GradingSheetQuarter;
 use App\Models\SectionInfo;
 use App\Models\SectionsSubjects;
 use App\Models\Staff;
@@ -306,10 +307,13 @@ class GradingSheetsController extends Controller
             throw new NotFoundHttpException();
         }
         
-        $iteration = 0;
+        $iteration = 0; $students = array();
         foreach ($request->activity as $activity) 
         {
             $activities = explode("_", $activity);
+            if (!in_array($activities[1], $students)) {
+                $students[] = $activities[1];
+            }
 
             $row = GradingSheetActivity::where([
                 'gradingsheet_id' => $id,
@@ -330,6 +334,40 @@ class GradingSheetsController extends Controller
                     'activity_id' => $activities[0],
                     'student_id' => $activities[1],
                     'score' => ($request->score[$iteration] !== NULL) ? $request->score[$iteration] : NULL,
+                    'created_at' => $timestamp,
+                    'created_by' => Auth::user()->id
+                ]);
+            }
+            
+            $iteration++;
+        }
+
+        $iteration = 0;
+        foreach ($students as $student) 
+        {
+            $rowQuarter = GradingSheetQuarter::where([
+                'gradingsheet_id' => $id,
+                'student_id' => $student
+            ])->get();
+
+            if ($rowQuarter->count() > 0) {
+                $gradingQuarter = GradingSheetQuarter::where('id', '=', $rowQuarter->first()->id)
+                ->update([
+                    'initial_grade' => ($request->init_grade[$iteration] !== NULL) ? $request->init_grade[$iteration] : NULL,
+                    'adjustment_grade' => ($request->tc_score[$iteration] !== NULL) ? $request->tc_score[$iteration] : NULL,
+                    'quarter_grade' => ($request->quarter_grade[$iteration] !== NULL) ? $request->quarter_grade[$iteration] : NULL,
+                    'updated_at' => $timestamp,
+                    'updated_by' => Auth::user()->id
+                ]);
+            } else {
+                $gradingQuarter = GradingSheetQuarter::create([
+                    'gradingsheet_id' => $id,
+                    'batch_id' => (new Batch)->get_current_batch(),
+                    'quarter_id' => (new GradingSheet)->get_column_via_identifier('quarter_id', $id),
+                    'student_id' => $student,
+                    'initial_grade' => ($request->init_grade[$iteration] !== NULL) ? $request->init_grade[$iteration] : NULL,
+                    'adjustment_grade' => ($request->tc_score[$iteration] !== NULL) ? $request->tc_score[$iteration] : NULL,
+                    'quarter_grade' => ($request->quarter_grade[$iteration] !== NULL) ? $request->quarter_grade[$iteration] : NULL,
                     'created_at' => $timestamp,
                     'created_by' => Auth::user()->id
                 ]);
@@ -558,5 +596,11 @@ class GradingSheetsController extends Controller
         });
 
         echo json_encode( $res ); exit();
+    }
+
+    public function get_colum_via_gradingsheet_student($column, $gradingID, $student)
+    {
+        $res = (new GradingSheetQuarter)->get_colum_via_gradingsheet_student($column, $gradingID, $student);
+        return $res;
     }
 }

@@ -93,7 +93,7 @@
             var $sumCell = $rows.find('.sum-cell[group="'+ $group + '"]');
             var $hpsCell = $rows.find('.hps-cell[group="'+ $group + '"]');
             var $psCell  = $rows.find('.ps-cell[group="'+ $group + '"]');
-            var $tcCell  = $rows.find('.tc-cell input');
+            var $tcCell  = $rows.find('.tc-cell input[name="tc_score[]"]');
             var $qcCell  = $rows.find('.quarter-cell');
             var $percentageCell = $rows.find('.percentage-cell[group="'+ $group + '"]');
             var $initialCell = $rows.find('.initial-cell');
@@ -150,7 +150,7 @@
         } 
         else
         {   
-            var $tcCell = $rows.find('.tc-cell input');
+            var $tcCell = $rows.find('.tc-cell input[name="tc_score[]"]');
             var $initialCell = $rows.find('.initial-cell');
             var $qcCell  = $rows.find('.quarter-cell');
 
@@ -174,6 +174,11 @@
             var qg = Math.max.apply(Math, filters.map(function(o) { return o.equivalent; }));
             $qcCell.text(qg);
         }
+
+        var initGrade = $rows.find('.tc-cell input[name="init_grade[]"]');
+        var quarterGrade = $rows.find('.tc-cell input[name="quarter_grade[]"]');
+        initGrade.val($scoring);
+        quarterGrade.val(qg);
     },
 
     gradingsheet.prototype.reload_section_subject_quarter = function($type) 
