@@ -130,7 +130,7 @@ class AdmissionController extends Controller
         if(!$batch_id){
             $batch_id[0] = '0';
         } 
-
+      
         //sections_info
         $sectioninfo = SectionInfo::create([
             'batch_id' => $batch_id[0],
