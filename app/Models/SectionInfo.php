@@ -8,7 +8,7 @@ class SectionInfo extends Model
 {
     protected $guarded = ['id'];
 
-    protected $table = 'section_infos';
+    protected $table = 'sections_info';
     
     public $timestamps = false;
 

@@ -50,13 +50,13 @@ class AdmissionController extends Controller
     public function all_active(Request $request)
     {
         $batch_id = Batch::where('is_active', 1)->where('status','Current')->pluck('id'); //current batch
-        $res = SectionInfo::select('section_infos.id','section_infos.batch_id','section_infos.section_id','section_infos.adviser_id','section_infos.level_id','sections.name as secname','staffs.user_id','levels.name as lvlname')
-            ->join('sections','sections.id','=','section_infos.section_id')
-            ->join('staffs','staffs.id','=','section_infos.adviser_id')
-            ->join('levels','levels.id','=','section_infos.level_id')
-            ->where('section_infos.is_active', 1)
-            ->where('section_infos.batch_id', $batch_id[0])
-            ->orderBy('section_infos.id', 'DESC')
+        $res = SectionInfo::select('sections_info.id','sections_info.batch_id','sections_info.section_id','sections_info.adviser_id','sections_info.level_id','sections.name as secname','staffs.user_id','levels.name as lvlname')
+            ->join('sections','sections.id','=','sections_info.section_id')
+            ->join('staffs','staffs.id','=','sections_info.adviser_id')
+            ->join('levels','levels.id','=','sections_info.level_id')
+            ->where('sections_info.is_active', 1)
+            ->where('sections_info.batch_id', $batch_id[0])
+            ->orderBy('sections_info.id', 'DESC')
             ->get();
         
         return $res->map(function($admission) {
@@ -79,13 +79,13 @@ class AdmissionController extends Controller
     public function all_inactive(Request $request)
     {
         $batch_id = Batch::where('is_active', 1)->where('status','Current')->pluck('id'); //current batch
-        $res = SectionInfo::select('section_infos.id','section_infos.batch_id','section_infos.section_id','section_infos.adviser_id','section_infos.level_id','sections.name as secname','staffs.user_id','levels.name as lvlname')
-            ->join('sections','sections.id','=','section_infos.section_id')
-            ->join('staffs','staffs.id','=','section_infos.adviser_id')
-            ->join('levels','levels.id','=','section_infos.level_id')
-            ->where('section_infos.is_active', 0)
-            ->where('section_infos.batch_id', $batch_id[0])
-            ->orderBy('section_infos.id', 'DESC')
+        $res = SectionInfo::select('sections_info.id','sections_info.batch_id','sections_info.section_id','sections_info.adviser_id','sections_info.level_id','sections.name as secname','staffs.user_id','levels.name as lvlname')
+            ->join('sections','sections.id','=','sections_info.section_id')
+            ->join('staffs','staffs.id','=','sections_info.adviser_id')
+            ->join('levels','levels.id','=','sections_info.level_id')
+            ->where('sections_info.is_active', 0)
+            ->where('sections_info.batch_id', $batch_id[0])
+            ->orderBy('sections_info.id', 'DESC')
             ->get();
 
         return $res->map(function($admission) {
@@ -131,7 +131,7 @@ class AdmissionController extends Controller
             $batch_id[0] = '0';
         } 
         
-        //section_infos
+        //sections_info
         $sectioninfo = SectionInfo::create([
             'batch_id' => $batch_id[0],
             'section_id' => $request->section,
@@ -235,7 +235,7 @@ class AdmissionController extends Controller
             throw new NotFoundHttpException();
         }
         
-        //section_infos
+        //sections_info
         $sectioninfo->section_id = $request->section;
         $sectioninfo->adviser_id = $request->adviser;
         $sectioninfo->level_id = $request->level;
@@ -243,7 +243,7 @@ class AdmissionController extends Controller
         $sectioninfo->classcode = $classcode;
         $sectioninfo->updated_at = $timestamp;
         $sectioninfo->updated_by = Auth::user()->id;
-        //end section_infos
+        //end sections_info
 
 
         //section_subject

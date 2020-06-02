@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSectionInfosTable extends Migration
+class CreateSectionsInfoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateSectionInfosTable extends Migration
      */
     public function up()
     {
-        Schema::create('section_infos', function (Blueprint $table) {
+        Schema::create('sections_info', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('batch_id')->unsigned();
             $table->integer('section_id')->unsigned();
@@ -36,6 +36,6 @@ class CreateSectionInfosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('section_infos');
+        Schema::dropIfExists('sections_info');
     }
 }
