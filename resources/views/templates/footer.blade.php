@@ -5,7 +5,7 @@
                 <span class="m-footer__copyright">
                     2020 &copy; 
                     <a href="#" class="m-link">
-                        Patent Admin
+                        SmartSchool App
                     </a>
                 </span>
             </div>

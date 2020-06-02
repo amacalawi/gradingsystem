@@ -27,41 +27,9 @@
 
         <!-- begin:: Page -->
         <div class="m-grid m-grid--hor m-grid--root m-page">
-
-            <!-- BEGIN: Header -->
-            @include('templates.header')
-            <!-- END: Header -->  
-
-            <!-- begin::Body -->
-            <div class="m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-body">
-
-                <!-- BEGIN: Left Aside -->
-                @include('templates.aside')
-                <!-- END: Left Aside -->
-
-                <div class="m-grid__item m-grid__item--fluid m-wrapper">
-
-                    <!-- BEGIN: Subheader -->
-                    @include('templates.subheader')
-                    <!-- END: Subheader -->
-
-                    <div class="m-content">  
-                        @yield('content')   
-                    </div>
-                </div>
-            </div>
-            <!-- end:: Body -->
-
-            <!-- begin::Footer -->
-            @include('templates.footer')
-            <!-- end::Footer -->
-
+            @yield('content') 
         </div>
         <!-- end:: Page -->
-                   
-        <!-- begin::Quick Sidebar -->
-        @include('templates.sidebar')
-        <!-- end::Quick Sidebar -->  
 
         <!--begin::Base Scripts -->
         <script src="{{ asset('assets/vendors/base/vendors.bundle.js') }}" type="text/javascript"></script>

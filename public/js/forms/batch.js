@@ -146,6 +146,13 @@
             self.closest(".form-group").find(".m-form__help").text("");
         });
 
+        this.$body.on('keyup', '#name', function (e){
+            e.preventDefault();
+            var self = $(this).val();
+            $('#code').val(self.replace(/\s+/g, '-').toLowerCase());
+            $('#code').closest(".form-group").find(".m-form__help").text("");
+        });
+
         this.$body.on('click', '.submit-btn', function (e){
             e.preventDefault();
             var $self = $(this);

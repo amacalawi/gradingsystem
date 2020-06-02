@@ -11,6 +11,7 @@ use App\Models\Student;
 use App\Models\Guardian;
 use App\Models\GuardianUser;
 use App\Models\Sibling;
+use App\Models\UserRole;
 use App\User;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -192,6 +193,13 @@ class StudentsController extends Controller
             throw new NotFoundHttpException();
         }  
 
+        $userRole = UserRole::create([
+            'user_id' => $user->id,
+            'role_id' => 4,
+            'created_at' => $timestamp,
+            'created_by' => Auth::user()->id
+        ]);
+
         $student = Student::create([
             'user_id' => $user->id,
             'role_id' => $request->role_id,
@@ -245,6 +253,13 @@ class StudentsController extends Controller
                 'type' => 'parent'
             ]);
 
+            $motherRole = UserRole::create([
+                'user_id' => $mother_user->id,
+                'role_id' => 5,
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+
             $mother_guardian_user = GuardianUser::create([
                 'guardian_id' => $guardian->id,
                 'user_id' => $mother_user->id,
@@ -258,6 +273,13 @@ class StudentsController extends Controller
                 'email' => $request->father_email,
                 'password' => (new Student)->random(),
                 'type' => 'parent'
+            ]);
+
+            $fatherRole = UserRole::create([
+                'user_id' => $father_user->id,
+                'role_id' => 5,
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
             ]);
 
             $father_guardian_user = GuardianUser::create([
@@ -308,31 +330,32 @@ class StudentsController extends Controller
             throw new NotFoundHttpException();
         }
 
-        $guardian = Guardian::where('student_id', $id)->pluck('id');
-        $motherUser = GuardianUser::where('guardian_id', $guardian)->orderBy('id', 'asc')->first()->user_id;
-        $fatherUser = GuardianUser::where('guardian_id', $guardian)->orderBy('id', 'desc')->first()->user_id;
+        if ($request->is_guardian !== NULL) {
+            $guardian = Guardian::where('student_id', $id)->pluck('id');
+            $motherUser = GuardianUser::where('guardian_id', $guardian)->orderBy('id', 'asc')->first()->user_id;
+            $fatherUser = GuardianUser::where('guardian_id', $guardian)->orderBy('id', 'desc')->first()->user_id;
 
-        $rows = User::where(function ($query) use ($user_id, $email) {
-            $query->where('id', '!=', $user_id)->where('email', $email);
-        })->orWhere(function($query) use ($motherUser, $mother_email) {
-            $query->where('id', '!=', $motherUser)->where('email', $mother_email);
-        })->orWhere(function($query) use ($fatherUser, $father_email) {
-            $query->where('id', '!=', $fatherUser)->where('email', $father_email);
-        })->count();    
+            $rows = User::where(function ($query) use ($user_id, $email) {
+                $query->where('id', '!=', $user_id)->where('email', $email);
+            })->orWhere(function($query) use ($motherUser, $mother_email) {
+                $query->where('id', '!=', $motherUser)->where('email', $mother_email);
+            })->orWhere(function($query) use ($fatherUser, $father_email) {
+                $query->where('id', '!=', $fatherUser)->where('email', $father_email);
+            })->count();    
 
-        if ($rows > 0) {
-            $data = array(
-                'title' => 'Oh snap!',
-                'rows' => $rows,
-                'text' => 'The email is already in use.',
-                'type' => 'error',
-                'class' => 'btn-danger'
-            );
-    
-            echo json_encode( $data ); exit();
+            if ($rows > 0) {
+                $data = array(
+                    'title' => 'Oh snap!',
+                    'rows' => $rows,
+                    'text' => 'The email is already in use.',
+                    'type' => 'error',
+                    'class' => 'btn-danger'
+                );
+        
+                echo json_encode( $data ); exit();
+            }
         }
 
-        $user_id = $student->id;
         $student->role_id = $request->role_id;
         $student->firstname = $request->firstname;
         $student->middlename = $request->middlename;
@@ -356,22 +379,32 @@ class StudentsController extends Controller
         $student->updated_by = Auth::user()->id;
 
         if ($student->update()) {
-            $password = User::where('id', '=', $user_id)->pluck('password');
+            $password = User::where('id', $user_id)->pluck('password');
             if ($password != $request->password) {
-                User::where('id', '=', $user_id)
+                User::where('id', $user_id)
                 ->update([
                     'name' => $request->firstname.' '.$request->lastname,
                     'email' => $request->email,
                     'password' => Hash::make($request->password)
                 ]);
             } else {
-                User::where('id', '=', $user_id)
+                User::where('id', $user_id)
                 ->update([
                     'name' => $request->firstname.' '.$request->lastname,
                     'email' => $request->email,
                 ]);
             }
             
+            $exist = UserRole::where('user_id', $user_id)->count();
+            if (!($exist > 0)) {
+                $userRole = UserRole::create([
+                    'user_id' => $user_id,
+                    'role_id' => 4,
+                    'created_at' => $timestamp,
+                    'created_by' => Auth::user()->id
+                ]);
+            }
+
             if ($request->is_guardian !== NULL) {
                 $guardian = Guardian::where([
                     'student_id' => $id,
@@ -412,6 +445,18 @@ class StudentsController extends Controller
                     'email' => $mother_email,
                     'updated_at' => $timestamp
                 ]);
+
+                if ($mother_user) {
+                    $motherExist = UserRole::where('user_id', $mother_user->id)->count();
+                    if (!($motherExist > 0)) {
+                        $userRole = UserRole::create([
+                            'user_id' => $mother_user->id,
+                            'role_id' => 5,
+                            'created_at' => $timestamp,
+                            'created_by' => Auth::user()->id
+                        ]);
+                    }
+                }
     
                 $father_user = User::where([
                     'username' => str_replace('S', 'F', $student->identification_no)
@@ -421,6 +466,18 @@ class StudentsController extends Controller
                     'email' => $father_email,
                     'updated_at' => $timestamp
                 ]);
+
+                if ($father_user) {
+                    $fatherExist = UserRole::where('user_id', $father_user->id)->count();
+                    if (!($fatherExist > 0)) {
+                        $userRole = UserRole::create([
+                            'user_id' => $father_user->id,
+                            'role_id' => 5,
+                            'created_at' => $timestamp,
+                            'created_by' => Auth::user()->id
+                        ]);
+                    }
+                }
             }
 
             Sibling::where('student_id', $student->id)->forceDelete();

@@ -51,13 +51,13 @@ class AdmissionController extends Controller
     {
         $batch_id = Batch::where('is_active', 1)->where('status','Current')->pluck('id'); //current batch
         $res = SectionInfo::select('sections_info.id','sections_info.batch_id','sections_info.section_id','sections_info.adviser_id','sections_info.level_id','sections.name as secname','staffs.user_id','levels.name as lvlname')
-            ->join('sections','sections.id','=','sections_info.section_id')
-            ->join('staffs','staffs.id','=','sections_info.adviser_id')
-            ->join('levels','levels.id','=','sections_info.level_id')
-            ->where('sections_info.is_active', 1)
-            ->where('sections_info.batch_id', $batch_id[0])
-            ->orderBy('sections_info.id', 'DESC')
-            ->get();
+        ->join('sections','sections.id','=','sections_info.section_id')
+        ->join('staffs','staffs.id','=','sections_info.adviser_id')
+        ->join('levels','levels.id','=','sections_info.level_id')
+        ->where('sections_info.is_active', 1)
+        ->where('sections_info.batch_id', $batch_id[0])
+        ->orderBy('sections_info.id', 'DESC')
+        ->get();
         
         return $res->map(function($admission) {
             return [
@@ -130,7 +130,7 @@ class AdmissionController extends Controller
         if(!$batch_id){
             $batch_id[0] = '0';
         } 
-        
+      
         //sections_info
         $sectioninfo = SectionInfo::create([
             'batch_id' => $batch_id[0],

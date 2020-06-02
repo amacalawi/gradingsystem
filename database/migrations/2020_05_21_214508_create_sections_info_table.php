@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateComponentsTable extends Migration
+class CreateSectionsInfoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,14 @@ class CreateComponentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('components', function (Blueprint $table) {
+        Schema::create('sections_info', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('batch_id')->unsigned();
-            $table->integer('quarter_id')->unsigned();
-            $table->integer('subject_id')->unsigned(); 
+            $table->integer('section_id')->unsigned();
+            $table->integer('adviser_id')->unsigned();
+            $table->integer('level_id')->unsigned();
             $table->string('type', 40);
-            $table->string('name', 40);
-            $table->double('percentage');
-            $table->text('description')->nullable();
-            $table->string('palette', 40);
-            $table->integer('order')->unsigned();
-            $table->boolean('is_sum_cell')->default(0);
-            $table->boolean('is_hps_cell')->default(0);
-            $table->boolean('is_ps_cell')->default(0);
+            $table->string('classcode', 20);
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('created_by')->unsigned();
             $table->timestamp('updated_at')->nullable();
@@ -42,6 +36,6 @@ class CreateComponentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('components');
+        Schema::dropIfExists('sections_info');
     }
 }

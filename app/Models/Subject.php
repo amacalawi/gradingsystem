@@ -86,6 +86,11 @@ class Subject extends Model
         return $subjects;  
     }
 
+    public function get_column_via_identifier($column, $id)
+    {
+        return self::where('id', $id)->first()->$column;
+    }
+    
     public function get_all_subjects_bytype($type)
     {
         $subjects = self::where('is_active', 1)->where('type', $type)->orderBy('id', 'asc')->get();

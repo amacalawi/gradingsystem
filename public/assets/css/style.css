@@ -90,6 +90,10 @@ button:not([data-dismiss="alert"]) {
     margin-left: 2.2rem;
 }
 
+.m-right-05 {
+    margin-right: 0.55rem;
+}
+
 .m-subheader.fix {
     position: fixed;
     z-index: 99;
@@ -354,4 +358,77 @@ input[type="text"].bold {
 .toggle-crud {
     color: #a4a6ae;
     text-decoration: none !important;
+}
+
+.m-radio > input:checked ~ span {
+    border: 1px solid #00a3ee;
+}
+
+.m-radio > span:after {
+    border: solid #00a3ee;
+    background: #00a3ee;
+}
+
+.m-badge--amber {
+    background-color: #ffc107 !important;
+}
+
+.m-badge--lime {
+    background: #8BC34A !important;
+}
+
+.m-badge--lemon {
+    background: #FFD600 !important;
+}
+
+.m-badge--purple {
+    background: #BA68C8 !important;
+}
+
+.m-badge--info {
+    background: #36a3f7 !important;
+}
+
+.m-badge--accent {
+    background: #00c5dc !important;
+}
+
+.m-badge--success {
+    background: #34bfa3 !important;
+}
+
+.m-badge--secondary {
+    background: #eaeaea !important;
+}
+
+.m-badge--metal {
+    background: #c4c5d6 !important;
+}
+
+#gradingsheet-table {
+    table-layout: fixed;
+}
+
+#gradingsheet-table td,
+#gradingsheet-table th {
+    border: 1px solid #575962 !important;
+    color: #212529 !important;
+}
+
+#gradingsheet-table th.component-header {
+    max-width: 120px !important;
+    word-wrap: break-word !important;
+}
+
+#gradingsheet-table .sum-cell,
+#gradingsheet-table .hps-cell,
+#gradingsheet-table .ps-cell,
+#gradingsheet-table .percentage-cell,
+#gradingsheet-table .initial-cell,
+#gradingsheet-table .quarter-cell {
+    font-weight: bold !important;
+}
+
+#gradingsheet-table .quarter-bg {
+    background: #fffcbe !important;
 }

@@ -322,12 +322,22 @@ class DatabaseSeeder extends Seeder
             ],
             [   
                 'module_id' => '3',
+                'code' => 'class-record',
+                'name' => 'Class Record',
+                'description' => 'Class Record Description',
+                'slug' => 'class-record',
+                'icon' => '',
+                'order' => '6',
+                'created_by' => 1
+            ],
+            [   
+                'module_id' => '3',
                 'code' => 'components',
                 'name' => 'Components',
                 'description' => 'Components Description',
                 'slug' => 'components',
                 'icon' => '',
-                'order' => '6',
+                'order' => '7',
                 'created_by' => 1
             ],
             [   
@@ -337,7 +347,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Transmutations Description',
                 'slug' => 'transmutations',
                 'icon' => '',
-                'order' => '7',
+                'order' => '8',
                 'created_by' => 1
             ],
             [   
@@ -347,7 +357,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Student Attendance Description',
                 'slug' => 'student-attendance',
                 'icon' => '',
-                'order' => '8',
+                'order' => '9',
                 'created_by' => 1
             ],
             [   
@@ -357,7 +367,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Staff Attendance Description',
                 'slug' => 'staff-attendance',
                 'icon' => '',
-                'order' => '9',
+                'order' => '10',
                 'created_by' => 1
             ],
             [   
@@ -367,7 +377,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Attendance Report Description',
                 'slug' => 'attendance-report',
                 'icon' => '',
-                'order' => '10',
+                'order' => '11',
                 'created_by' => 1
             ],
             [   
@@ -377,7 +387,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Batches Description',
                 'slug' => 'batches',
                 'icon' => '',
-                'order' => '11',
+                'order' => '12',
                 'created_by' => 1
             ],
             [   
@@ -387,7 +397,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Quaraters Description',
                 'slug' => 'quarters',
                 'icon' => '',
-                'order' => '12',
+                'order' => '13',
                 'created_by' => 1
             ],
             [   
@@ -397,7 +407,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Departments Description',
                 'slug' => 'departments',
                 'icon' => '',
-                'order' => '13',
+                'order' => '14',
                 'created_by' => 1
             ],
             [   
@@ -407,7 +417,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Designations Description',
                 'slug' => 'designations',
                 'icon' => '',
-                'order' => '14',
+                'order' => '15',
                 'created_by' => 1
             ],
             [   
@@ -417,7 +427,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'All Active Groups Description',
                 'slug' => 'active',
                 'icon' => '',
-                'order' => '15',
+                'order' => '16',
                 'created_by' => 1
             ],
             [   
@@ -427,7 +437,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'All Inactive Groups Description',
                 'slug' => 'inactive',
                 'icon' => '',
-                'order' => '16',
+                'order' => '17',
                 'created_by' => 1
             ],
             [   
@@ -437,7 +447,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'All Active Schedules Description',
                 'slug' => 'active',
                 'icon' => '',
-                'order' => '17',
+                'order' => '18',
                 'created_by' => 1
             ],
             [   
@@ -447,7 +457,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'All Inactive Schedules Description',
                 'slug' => 'inactive',
                 'icon' => '',
-                'order' => '18',
+                'order' => '19',
                 'created_by' => 1
             ],
             [   
@@ -457,7 +467,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Headers Description',
                 'slug' => 'headers',
                 'icon' => '',
-                'order' => '19',
+                'order' => '20',
                 'created_by' => 1
             ],
             [   
@@ -467,7 +477,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Modules Description',
                 'slug' => 'modules',
                 'icon' => '',
-                'order' => '20',
+                'order' => '21',
                 'created_by' => 1
             ],
             [   
@@ -477,7 +487,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Sub Modules Description',
                 'slug' => 'sub-modules',
                 'icon' => '',
-                'order' => '21',
+                'order' => '22',
                 'created_by' => 1
             ],
             [   
@@ -485,9 +495,9 @@ class DatabaseSeeder extends Seeder
                 'code' => 'all-active-students',
                 'name' => 'All Active Students',
                 'description' => 'All Active Students Description',
-                'slug' => 'active',
+                'slug' => '',
                 'icon' => '',
-                'order' => '22',
+                'order' => '23',
                 'created_by' => 1
             ],
             [   
@@ -497,7 +507,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'All Inactive Students Description',
                 'slug' => 'inactive',
                 'icon' => '',
-                'order' => '23',
+                'order' => '24',
                 'created_by' => 1
             ],
             [   
@@ -505,9 +515,9 @@ class DatabaseSeeder extends Seeder
                 'code' => 'all-active-staffs',
                 'name' => 'All Active Staffs',
                 'description' => 'All Active Staffs Description',
-                'slug' => 'active',
+                'slug' => '',
                 'icon' => '',
-                'order' => '24',
+                'order' => '25',
                 'created_by' => 1
             ],
             [   
@@ -517,7 +527,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'All Inactive Staffs Description',
                 'slug' => 'inactive',
                 'icon' => '',
-                'order' => '25',
+                'order' => '26',
                 'created_by' => 1
             ],
             [   
@@ -527,7 +537,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Accounts Description',
                 'slug' => 'accounts',
                 'icon' => '',
-                'order' => '26',
+                'order' => '27',
                 'created_by' => 1
             ],
             [   
@@ -535,9 +545,9 @@ class DatabaseSeeder extends Seeder
                 'code' => 'roles-and-permissions',
                 'name' => 'Roles And Permissions',
                 'description' => 'Roles And Permissions Description',
-                'slug' => 'roles-and-permissions',
+                'slug' => 'roles',
                 'icon' => '',
-                'order' => '27',
+                'order' => '28',
                 'created_by' => 1
             ],
             [   
@@ -547,7 +557,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Send Message Description',
                 'slug' => 'send-message',
                 'icon' => '',
-                'order' => '28',
+                'order' => '29',
                 'created_by' => 1
             ]
         ];
@@ -822,6 +832,1032 @@ class DatabaseSeeder extends Seeder
 
         foreach ($roles_sub_modules as $roles_sub_module) {
             DB::table('roles_sub_modules')->insert($roles_sub_module);
+        }
+
+        $transmutations = [
+            [   
+                'code' => 'ce-transmutation',
+                'name' => 'Childhood Education Transmutation',
+                'description' => 'Childhood Education Transmutation',
+                'type' => 'childhood-education',
+                'created_by' => 1
+            ], 
+            [   
+                'code' => 'pe-transmutation',
+                'name' => 'Primary Education Transmutation',
+                'description' => 'Primary Education Transmutation',
+                'type' => 'primary-education',
+                'created_by' => 1
+            ], 
+            [   
+                'code' => 'se-transmutation',
+                'name' => 'Secondary Education Transmutation',
+                'description' => 'Secondary Education Transmutation',
+                'type' => 'secondary-education',
+                'created_by' => 1
+            ], 
+            [   
+                'code' => 'he-transmutation',
+                'name' => 'Higher Education Transmutation',
+                'description' => 'Higher Education Transmutation',
+                'type' => 'higher-education',
+                'created_by' => 1
+            ]
+        ];
+
+        foreach ($transmutations as $transmutation) {
+            DB::table('transmutations')->insert($transmutation);
+        }
+
+        $transmutations_elements = [
+            [   
+                'transmutation_id' => '1',
+                'score' => '0.00',
+                'equivalent' => '60',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '4.00',
+                'equivalent' => '61',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '8.00',
+                'equivalent' => '62',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '12.00',
+                'equivalent' => '63',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '1',
+                'score' => '16.00',
+                'equivalent' => '64',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '20.00',
+                'equivalent' => '65',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '24.00',
+                'equivalent' => '66',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '28.00',
+                'equivalent' => '67',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '1',
+                'score' => '32.00',
+                'equivalent' => '68',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '36.00',
+                'equivalent' => '69',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '40.00',
+                'equivalent' => '70',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '44.00',
+                'equivalent' => '71',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '1',
+                'score' => '48.00',
+                'equivalent' => '72',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '52.00',
+                'equivalent' => '73',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '56.00',
+                'equivalent' => '74',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '60.00',
+                'equivalent' => '75',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '1',
+                'score' => '61.60',
+                'equivalent' => '76',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '63.20',
+                'equivalent' => '77',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '64.80',
+                'equivalent' => '78',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '66.40',
+                'equivalent' => '79',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '1',
+                'score' => '68.00',
+                'equivalent' => '80',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '69.60',
+                'equivalent' => '81',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '71.20',
+                'equivalent' => '82',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '72.80',
+                'equivalent' => '83',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '1',
+                'score' => '74.40',
+                'equivalent' => '84',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '76.00',
+                'equivalent' => '85',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '77.60',
+                'equivalent' => '86',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '79.20',
+                'equivalent' => '87',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '1',
+                'score' => '80.80',
+                'equivalent' => '88',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '82.40',
+                'equivalent' => '89',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '84.00',
+                'equivalent' => '90',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '85.60',
+                'equivalent' => '91',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '1',
+                'score' => '87.20',
+                'equivalent' => '92',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '88.80',
+                'equivalent' => '93',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '90.40',
+                'equivalent' => '94',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '92.00',
+                'equivalent' => '95',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '1',
+                'score' => '93.60',
+                'equivalent' => '96',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '95.20',
+                'equivalent' => '97',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '96.80',
+                'equivalent' => '98',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '1',
+                'score' => '98.40',
+                'equivalent' => '99',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '1',
+                'score' => '100.00',
+                'equivalent' => '100',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '2',
+                'score' => '0.00',
+                'equivalent' => '60',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '4.00',
+                'equivalent' => '61',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '8.00',
+                'equivalent' => '62',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '12.00',
+                'equivalent' => '63',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '2',
+                'score' => '16.00',
+                'equivalent' => '64',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '20.00',
+                'equivalent' => '65',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '24.00',
+                'equivalent' => '66',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '28.00',
+                'equivalent' => '67',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '2',
+                'score' => '32.00',
+                'equivalent' => '68',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '36.00',
+                'equivalent' => '69',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '40.00',
+                'equivalent' => '70',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '44.00',
+                'equivalent' => '71',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '2',
+                'score' => '48.00',
+                'equivalent' => '72',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '52.00',
+                'equivalent' => '73',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '56.00',
+                'equivalent' => '74',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '60.00',
+                'equivalent' => '75',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '2',
+                'score' => '61.60',
+                'equivalent' => '76',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '63.20',
+                'equivalent' => '77',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '64.80',
+                'equivalent' => '78',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '66.40',
+                'equivalent' => '79',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '2',
+                'score' => '68.00',
+                'equivalent' => '80',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '69.60',
+                'equivalent' => '81',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '71.20',
+                'equivalent' => '82',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '72.80',
+                'equivalent' => '83',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '2',
+                'score' => '74.40',
+                'equivalent' => '84',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '76.00',
+                'equivalent' => '85',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '77.60',
+                'equivalent' => '86',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '79.20',
+                'equivalent' => '87',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '2',
+                'score' => '80.80',
+                'equivalent' => '88',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '82.40',
+                'equivalent' => '89',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '84.00',
+                'equivalent' => '90',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '85.60',
+                'equivalent' => '91',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '2',
+                'score' => '87.20',
+                'equivalent' => '92',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '88.80',
+                'equivalent' => '93',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '90.40',
+                'equivalent' => '94',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '92.00',
+                'equivalent' => '95',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '2',
+                'score' => '93.60',
+                'equivalent' => '96',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '95.20',
+                'equivalent' => '97',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '96.80',
+                'equivalent' => '98',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '2',
+                'score' => '98.40',
+                'equivalent' => '99',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '2',
+                'score' => '100.00',
+                'equivalent' => '100',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '3',
+                'score' => '0.00',
+                'equivalent' => '60',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '4.00',
+                'equivalent' => '61',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '8.00',
+                'equivalent' => '62',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '12.00',
+                'equivalent' => '63',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '3',
+                'score' => '16.00',
+                'equivalent' => '64',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '20.00',
+                'equivalent' => '65',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '24.00',
+                'equivalent' => '66',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '28.00',
+                'equivalent' => '67',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '3',
+                'score' => '32.00',
+                'equivalent' => '68',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '36.00',
+                'equivalent' => '69',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '40.00',
+                'equivalent' => '70',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '44.00',
+                'equivalent' => '71',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '3',
+                'score' => '48.00',
+                'equivalent' => '72',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '52.00',
+                'equivalent' => '73',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '56.00',
+                'equivalent' => '74',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '60.00',
+                'equivalent' => '75',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '3',
+                'score' => '61.60',
+                'equivalent' => '76',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '63.20',
+                'equivalent' => '77',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '64.80',
+                'equivalent' => '78',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '66.40',
+                'equivalent' => '79',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '3',
+                'score' => '68.00',
+                'equivalent' => '80',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '69.60',
+                'equivalent' => '81',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '71.20',
+                'equivalent' => '82',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '72.80',
+                'equivalent' => '83',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '3',
+                'score' => '74.40',
+                'equivalent' => '84',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '76.00',
+                'equivalent' => '85',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '77.60',
+                'equivalent' => '86',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '79.20',
+                'equivalent' => '87',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '3',
+                'score' => '80.80',
+                'equivalent' => '88',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '82.40',
+                'equivalent' => '89',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '84.00',
+                'equivalent' => '90',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '85.60',
+                'equivalent' => '91',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '3',
+                'score' => '87.20',
+                'equivalent' => '92',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '88.80',
+                'equivalent' => '93',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '90.40',
+                'equivalent' => '94',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '92.00',
+                'equivalent' => '95',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '3',
+                'score' => '93.60',
+                'equivalent' => '96',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '95.20',
+                'equivalent' => '97',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '96.80',
+                'equivalent' => '98',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '3',
+                'score' => '98.40',
+                'equivalent' => '99',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '3',
+                'score' => '100.00',
+                'equivalent' => '100',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '4',
+                'score' => '0.00',
+                'equivalent' => '60',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '4.00',
+                'equivalent' => '61',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '8.00',
+                'equivalent' => '62',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '12.00',
+                'equivalent' => '63',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '4',
+                'score' => '16.00',
+                'equivalent' => '64',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '20.00',
+                'equivalent' => '65',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '24.00',
+                'equivalent' => '66',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '28.00',
+                'equivalent' => '67',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '4',
+                'score' => '32.00',
+                'equivalent' => '68',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '36.00',
+                'equivalent' => '69',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '40.00',
+                'equivalent' => '70',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '44.00',
+                'equivalent' => '71',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '4',
+                'score' => '48.00',
+                'equivalent' => '72',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '52.00',
+                'equivalent' => '73',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '56.00',
+                'equivalent' => '74',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '60.00',
+                'equivalent' => '75',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '4',
+                'score' => '61.60',
+                'equivalent' => '76',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '63.20',
+                'equivalent' => '77',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '64.80',
+                'equivalent' => '78',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '66.40',
+                'equivalent' => '79',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '4',
+                'score' => '68.00',
+                'equivalent' => '80',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '69.60',
+                'equivalent' => '81',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '71.20',
+                'equivalent' => '82',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '72.80',
+                'equivalent' => '83',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '4',
+                'score' => '74.40',
+                'equivalent' => '84',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '76.00',
+                'equivalent' => '85',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '77.60',
+                'equivalent' => '86',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '79.20',
+                'equivalent' => '87',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '4',
+                'score' => '80.80',
+                'equivalent' => '88',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '82.40',
+                'equivalent' => '89',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '84.00',
+                'equivalent' => '90',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '85.60',
+                'equivalent' => '91',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '4',
+                'score' => '87.20',
+                'equivalent' => '92',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '88.80',
+                'equivalent' => '93',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '90.40',
+                'equivalent' => '94',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '92.00',
+                'equivalent' => '95',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '4',
+                'score' => '93.60',
+                'equivalent' => '96',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '95.20',
+                'equivalent' => '97',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '96.80',
+                'equivalent' => '98',
+                'created_by' => 1
+            ], 
+            [   
+                'transmutation_id' => '4',
+                'score' => '98.40',
+                'equivalent' => '99',
+                'created_by' => 1
+            ],
+            [   
+                'transmutation_id' => '4',
+                'score' => '100.00',
+                'equivalent' => '100',
+                'created_by' => 1
+            ]
+        ];
+
+        foreach ($transmutations_elements as $transmutation_element) {
+            DB::table('transmutations_elements')->insert($transmutation_element);
         }
     }
 }

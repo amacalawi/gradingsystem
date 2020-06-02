@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\GradingSheet;
+use App\Models\Batch;
 use App\Models\Student;
 
 class Admission extends Model
@@ -73,4 +75,45 @@ class Admission extends Model
         return $admitted;
     }
 
+    public function section()
+    {   
+        return $this->belongsTo('App\Models\Section');
+    }
+
+    public function student()
+    {   
+        return $this->hasOne('App\Models\Student', 'id', 'student_id');
+    }
+
+    public function get_students_via_gradingsheet($id)
+    {
+        $results = self::with([
+            'student' => function($q) {
+                $q->select([
+                    'user_id', 
+                    'id', 
+                    'identification_no', 
+                    'firstname', 
+                    'middlename', 
+                    'lastname'
+                ]);
+            },
+        ])->where([
+            'batch_id' => (new Batch)->get_current_batch(),
+            'section_id' => (new GradingSheet)->get_column_via_identifier('section_id', $id),
+            'status' => 'admit',
+            'is_active' => 1
+        ])->orderBy('id', 'ASC')->get();
+
+        $students = $results->map(function($res) {
+            return (object) [
+                'user_id' => $res->student->user_id,
+                'student_id' => $res->student->id,
+                'fullname' => ucfirst($res->student->firstname).' '.ucfirst($res->student->lastname),
+                'identification_no' => $res->student->identification_no
+            ];
+        });
+
+        return $students;
+    }
 }

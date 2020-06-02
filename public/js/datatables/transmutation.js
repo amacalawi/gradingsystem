@@ -2,7 +2,7 @@
 
 var DatatableDataLocalDemo = function () {
 	//== Private functions
- 	console.log(base_url + 'academics/grading-sheets/components/all-active');
+ 	console.log(base_url + 'academics/grading-sheets/transmutations/all-active');
 	
 	var datatable = $('.m_datatable').mDatatable({
 		// datasource definition
@@ -12,7 +12,7 @@ var DatatableDataLocalDemo = function () {
 			  read: {
 				// sample GET method
 				method: 'GET',
-				url: base_url + 'academics/grading-sheets/components/all-active',
+				url: base_url + 'academics/grading-sheets/transmutations/all-active',
 				map: function(raw) {
 				  // sample data mapping
 				  var dataSet = raw;
@@ -51,45 +51,27 @@ var DatatableDataLocalDemo = function () {
 
 		// columns definition
 		columns: [{
-			field: "componentID",
+			field: "transID",
 			title: "#",
 			width: 50,
 			sortable: false,
 			textAlign: 'center',
 			selector: {class: 'm-checkbox--solid m-checkbox--brand'}
 		}, {
-			field: "componentOrder",
-			title: "Order"
+			field: "transCode",
+			title: "Code"
 		}, {
-			field: "componentName",
+			field: "transName",
 			title: "Name",
 		}, {
-			field: "componentDescription",
+			field: "transDescription",
 			title: "Description"
         }, {
-			field: "componentPercentage",
-			title: "Percentage"
+			field: "transElement",
+			title: "Elements"
 		}, {
-			field: "componentQuarter",
-			title: "Quarter"
-		}, {
-			field: "componentSubject",
-			title: "Subject"
-		}, {
-			field: "componentModified",
+			field: "transModified",
 			title: "Last Modified",
-		}, {
-			field: "componentType",
-			title: "Type",
-			template: function (row) {
-				var type = {
-					"childhood-education" : {'title': 'Childhood', 'class': 'childhood-bg'},
-					"primary-education": {'title': 'Pimary', 'class': 'primary-bg'}, 
-                    "secondary-education": {'title': 'Secondary', 'class': 'secondary-bg'},
-                    "higher-education": {'title': 'Higher', 'class': 'higher-bg'}
-				};
-				return '<span class="m-badge ' + type[row.componentType].class + ' m-badge--wide">' + type[row.componentType].title + '</span>';
-			}
 		}, {
 			field: "Actions",
 			width: 90,
@@ -101,10 +83,8 @@ var DatatableDataLocalDemo = function () {
 				var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
 
                 return '\
-                    <a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/grading-sheets/components/edit/' + row.componentID + '"><i class="la la-edit"></i></a>\
-					<a title="remove this" data-row-id="' + row.componentID + '" action="Remove" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-remove"></i></a>\
-					<a title="move up this" data-row-id="' + row.componentID + '" action="Up" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-arrow-up"></i></a>\
-					<a title="move down this" data-row-id="' + row.componentID + '" action="Down" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-arrow-down"></i></a>\
+                    <a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/grading-sheets/transmutations/edit/' + row.transID + '"><i class="la la-edit"></i></a>\
+					<a title="remove this" data-row-id="' + row.transID + '" action="Remove" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-remove"></i></a>\
 				';
 			}
 		}]
@@ -154,7 +134,7 @@ jQuery(document).ready(function () {
 		var $rowID = $(this).attr('data-row-id');
 		console.log($rowID);
 		var $action = $(this).attr('action');
-		var $url = base_url + 'academics/grading-sheets/components/update-status/' + $rowID;
+		var $url = base_url + 'academics/grading-sheets/transmutations/update-status/' + $rowID;
 		var items = []; items.push({ action: $action });
 
 		console.log($url);
