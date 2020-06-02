@@ -43,5 +43,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('js/datatables/inactive-sectionstudent.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/datatables/inactive-admission.js') }}" type="text/javascript"></script>
 @endpush

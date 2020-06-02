@@ -262,6 +262,7 @@ Route::prefix('academics')->group(function () {
         Route::put('section-student/update-status/{id}', 'AdmissionController@update_status')->name('sectionstudent.update.status');        
         Route::get('section-student/all-admitted', 'AdmissionController@all_admitted')->name('admission.all.admitted');
         Route::get('section-student/get-this-admitted/{id?}', 'AdmissionController@get_this_admitted');
+        Route::get('section-student/get-student-admitted-section/{secid?}', 'AdmissionController@get_this_admitted_section');
         Route::get('section-student/save-this-admitted/{id?}/{secid?}', 'AdmissionController@save_this_admitted');
         Route::get('section-student/delete-this-admitted/{id?}/{secid?}', 'AdmissionController@delete_this_admitted');
         /* End Admissions Routes */

@@ -84,4 +84,41 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group m-form__group">
+                <label class="m-checkbox m-checkbox--solid" style="position: absolute;">
+                    @if ($subject->is_mapeh > 0) 
+                        {{ Form::checkbox('is_mapeh', '1', true, array('id' => 'parent-cell')) }}
+                    @else
+                        {{ Form::checkbox('is_mapeh', '1', false, array('id' => 'parent-cell')) }}
+                    @endif
+                    <span></span>
+                </label>    
+                <h5 id="parents-label" class="m-left-2">
+                    MAPEH
+                </h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group m-form__group">
+                <label class="m-checkbox m-checkbox--solid" style="position: absolute;">
+                    @if ($subject->is_tle > 0) 
+                        {{ Form::checkbox('is_tle', '1', true, array('id' => 'parent-cell')) }}
+                    @else
+                        {{ Form::checkbox('is_tle', '1', false, array('id' => 'parent-cell')) }}
+                    @endif
+                    <span></span>
+                </label>    
+                <h5 id="parents-label" class="m-left-2">
+                    TLE
+                </h5>
+            </div>
+        </div>
+    </div>
+
 {{ Form::close() }}

@@ -23,6 +23,8 @@ class Subject extends Model
                 'name' => ($subject->name) ? $subject->name : '',
                 'description' => ($subject->description) ? $subject->description : '',
                 'type' => ($subject->type) ? $subject->type : '',
+                'is_mapeh' => ($subject->is_mapeh) ? $subject->is_mapeh : '',
+                'is_tle' => ($subject->is_tle) ? $subject->is_tle : '',
             );
         } else {
             $results = array(
@@ -31,7 +33,9 @@ class Subject extends Model
                 'name' => '',
                 'description' => '',
                 'schoolyear_id' => '',
-                'type' => ''
+                'type' => '',
+                'is_mapeh' => '',
+                'is_tle' => '',
             );
         }
         return (object) $results;
@@ -110,10 +114,10 @@ class Subject extends Model
         return $subjects;  
     }
 
-    //Added here to avoid conflict
+    //Added here to avoid conflict //this function will be move if system is ready
     public function get_all_teachers_bytype()
     {
-        $teachers = Staff::where('is_active', 1)->where('type', 'Teacher')->orderBy('id', 'asc')->get();
+        $teachers = Staff::where('is_active', 1)->orWhere('type', 'Adviser')->orWhere('type', 'Teacher')->orderBy('id', 'asc')->get();
 
         $teac = array();
         $teac[] = array('0' => 'select a teacher');

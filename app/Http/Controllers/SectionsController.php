@@ -48,7 +48,8 @@ class SectionsController extends Controller
                 'sectionCode' => $section->code,
                 'sectionName' => $section->name,
                 'sectionDescription' => $section->description,
-                'sectionModified' => ($section->updated_at !== NULL) ? date('d-M-Y', strtotime($section->updated_at)).'<br/>'. date('h:i A', strtotime($section->updated_at)) : date('d-M-Y', strtotime($section->created_at)).'<br/>'. date('h:i A', strtotime($section->created_at))
+                'sectionModified' => ($section->updated_at !== NULL) ? date('d-M-Y', strtotime($section->updated_at)).'<br/>'. date('h:i A', strtotime($section->updated_at)) : date('d-M-Y', strtotime($section->created_at)).'<br/>'. date('h:i A', strtotime($section->created_at)),
+                'sectionType' => $section->type,
             ];
         });
     }
@@ -63,7 +64,8 @@ class SectionsController extends Controller
                 'sectionCode' => $section->code,
                 'sectionName' => $section->name,
                 'sectionDescription' => $section->description,
-                'sectionModified' => ($section->updated_at !== NULL) ? date('d-M-Y', strtotime($section->updated_at)).'<br/>'. date('h:i A', strtotime($section->updated_at)) : date('d-M-Y', strtotime($section->created_at)).'<br/>'. date('h:i A', strtotime($section->created_at))
+                'sectionModified' => ($section->updated_at !== NULL) ? date('d-M-Y', strtotime($section->updated_at)).'<br/>'. date('h:i A', strtotime($section->updated_at)) : date('d-M-Y', strtotime($section->created_at)).'<br/>'. date('h:i A', strtotime($section->created_at)),
+                'sectionType' => $section->type,
             ];
         });
     }
@@ -128,7 +130,7 @@ class SectionsController extends Controller
 
         $section = (new Section)->find($id);
 
-        return view('modules/academics/sections/edit')->with(compact('menus', 'types', 'section', 'allTeachers', 'allSubjects', 'staffs', 'sections_teachers', 'subjects', 'segment', 'flashMessage'));
+        return view('modules/academics/sections/edit')->with(compact('menus', 'types', 'section', 'allTeachers', 'allSubjects', 'staffs', 'subjects', 'segment', 'flashMessage'));
 
     }
     

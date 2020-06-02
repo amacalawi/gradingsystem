@@ -88,10 +88,10 @@ class Section extends Model
 
     public function get_all_sections_bytype($type)
     {
-        $sections = self::where('is_active', 1)->where('type', $type)->orderBy('id', 'asc')
+        $sections = self::where('is_active', 1)->where('type', $type)
         ->whereNotIn('id',function($query) {
             $query->select('section_id')->from('admissions');
-        })->get();
+        })->orderBy('id', 'asc')->get();
         
 
         $secs = array();

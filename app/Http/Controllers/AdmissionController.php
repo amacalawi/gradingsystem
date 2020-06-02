@@ -50,7 +50,14 @@ class AdmissionController extends Controller
     public function all_active(Request $request)
     {
         $batch_id = Batch::where('is_active', 1)->where('status','Current')->pluck('id'); //current batch
-        $res = SectionInfo::select('sections_info.id','sections_info.batch_id','sections_info.section_id','sections_info.adviser_id','sections_info.level_id','sections.name as secname','staffs.user_id','levels.name as lvlname')->join('sections','sections.id','=','sections_info.section_id')->join('staffs','staffs.id','=','sections_info.adviser_id')->join('levels','levels.id','=','sections_info.level_id')->where('sections_info.is_active', 1)->where('sections_info.batch_id', $batch_id[0])->orderBy('sections_info.id', 'DESC')->get();
+        $res = SectionInfo::select('sections_info.id','sections_info.batch_id','sections_info.section_id','sections_info.adviser_id','sections_info.level_id','sections.name as secname','staffs.user_id','levels.name as lvlname')
+        ->join('sections','sections.id','=','sections_info.section_id')
+        ->join('staffs','staffs.id','=','sections_info.adviser_id')
+        ->join('levels','levels.id','=','sections_info.level_id')
+        ->where('sections_info.is_active', 1)
+        ->where('sections_info.batch_id', $batch_id[0])
+        ->orderBy('sections_info.id', 'DESC')
+        ->get();
         
         return $res->map(function($admission) {
             return [
@@ -71,15 +78,27 @@ class AdmissionController extends Controller
 
     public function all_inactive(Request $request)
     {
-        $res = Admission::where('is_active', 1)->orderBy('id', 'DESC')->get();
+        $batch_id = Batch::where('is_active', 1)->where('status','Current')->pluck('id'); //current batch
+        $res = SectionInfo::select('sections_info.id','sections_info.batch_id','sections_info.section_id','sections_info.adviser_id','sections_info.level_id','sections.name as secname','staffs.user_id','levels.name as lvlname')
+            ->join('sections','sections.id','=','sections_info.section_id')
+            ->join('staffs','staffs.id','=','sections_info.adviser_id')
+            ->join('levels','levels.id','=','sections_info.level_id')
+            ->where('sections_info.is_active', 0)
+            ->where('sections_info.batch_id', $batch_id[0])
+            ->orderBy('sections_info.id', 'DESC')
+            ->get();
 
         return $res->map(function($admission) {
             return [
                 'admissionId' => $admission->id,
                 'admissionBatchId' => $admission->batch_id,
                 'admissionSectionId' => $admission->section_id,
-                'admissionStudentId' => $admission->student_id,
-                'admissionStatus' => $admission->status,
+                'admissionSecName' => $admission->secname,
+                'admissionAdviserId' => $admission->adviser_id,
+                'admissionLevel' => $admission->level_id, 
+                'admissionLvlName' => $admission->lvlname,
+                'admissionNoStudent' => $admission->lvlname,
+                'admissionNoSubject' => $admission->lvlname,
                 'admissionModified' => ($admission->updated_at !== NULL) ? date('d-M-Y', strtotime($admission->updated_at)).'<br/>'. date('h:i A', strtotime($admission->updated_at)) : date('d-M-Y', strtotime($admission->created_at)).'<br/>'. date('h:i A', strtotime($admission->created_at))
             ];
         });
@@ -106,7 +125,8 @@ class AdmissionController extends Controller
     {           
         $timestamp = date('Y-m-d H:i:s');
         $batch_id = Batch::where('is_active','1')->where('status','Current')->pluck('id');
-        
+        $classcode = $this->generate_classcode($request->type, $request->section, $batch_id[0]);
+
         if(!$batch_id){
             $batch_id[0] = '0';
         } 
@@ -118,6 +138,7 @@ class AdmissionController extends Controller
             'adviser_id' => $request->adviser,
             'level_id' => $request->level,
             'type' => $request->type,
+            'classcode' => $classcode,
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
@@ -141,17 +162,28 @@ class AdmissionController extends Controller
             } 
         }
 
+        
         $members = $request->list_admitted_student;
         if($members)
         {
             foreach ($members as $key => $member) {
                 //admission
+                /*
                 $enliststudent = Admission::where('student_id', $member)
                 ->update([
                     'section_id' => $request->section,
                     'status' => 'admit',
                     'updated_at' => $timestamp,
                     'updated_by' => Auth::user()->id,
+                ]);
+                */
+                $enliststudent = Admission::create([
+                    'batch_id' => $batch_id[0],
+                    'section_id' => $request->section,
+                    'student_id' =>  $member,
+                    'status' => 'admit',
+                    'created_at' => $timestamp,
+                    'created_by' => Auth::user()->id
                 ]);
             }
         }
@@ -197,6 +229,7 @@ class AdmissionController extends Controller
         $timestamp = date('Y-m-d H:i:s');
         $sectioninfo = SectionInfo::find($id);
         $batch_id = Batch::where('is_active','1')->where('status','Current')->pluck('id');
+        $classcode = $this->generate_classcode($request->type, $request->section, $batch_id[0]);
 
         if(!$sectioninfo) {
             throw new NotFoundHttpException();
@@ -207,6 +240,7 @@ class AdmissionController extends Controller
         $sectioninfo->adviser_id = $request->adviser;
         $sectioninfo->level_id = $request->level;
         $sectioninfo->type = $request->type;
+        $sectioninfo->classcode = $classcode;
         $sectioninfo->updated_at = $timestamp;
         $sectioninfo->updated_by = Auth::user()->id;
         //end sections_info
@@ -237,21 +271,52 @@ class AdmissionController extends Controller
         }
         //end section_subject
 
-        //admission
+        //admissions
         $members = $request->list_admitted_student;
         if($members)
         {
             foreach ($members as $key => $member) {
-                $enliststudent = Admission::where('student_id', $member)
-                ->update([
-                    'section_id' => $request->section,
-                    'status' => 'admit',
-                    'updated_at' => $timestamp,
-                    'updated_by' => Auth::user()->id,
-                ]);
+                
+                $checkstudent = Admission::where('student_id', $member)->count();
+
+                if($checkstudent) //UPDATE
+                {   
+                    $enliststudent = Admission::where('student_id', $member)
+                    ->update([
+                        'section_id' => $request->section,
+                        'status' => 'admit',
+                        'updated_at' => $timestamp,
+                        'updated_by' => Auth::user()->id,
+                    ]);
+                } 
+                else  //ADD
+                {   
+                    $sections_subjects = Admission::create([
+                        'batch_id' => $batch_id[0],
+                        'section_id' =>  $request->section,
+                        'status' => 'admit',
+                        'student_id' => $member,
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+                }
             }
+
+            //DELETE
+            $students = Admission::select('student_id')->where('section_id', $request->section)->whereNotIn('student_id', $request->list_admitted_student )->get();
+            foreach($students as $student)
+            {
+                $ss = Admission::where('student_id', $student['student_id']);
+                $ss->delete();
+            }
+
+        } 
+        else //No student selected 
+        {
+            $ss = Admission::where('section_id', $request->section);
+            $ss->delete();
         }
-        //end admission
+        //end admissions
 
         if ($sectioninfo->update()) {
 
@@ -264,6 +329,153 @@ class AdmissionController extends Controller
 
             echo json_encode( $data ); exit();
 
+        }
+    }
+
+    public function update_status(Request $request, $id)
+    {   
+        $timestamp = date('Y-m-d H:i:s');
+        $action = $request->input('items')[0]['action'];
+
+        if ($action == 'Remove') {
+            $sectioninfos = SectionInfo::where([
+                'id' => $id,
+            ])
+            ->update([
+                'updated_at' => $timestamp,
+                'updated_by' => Auth::user()->id,
+                'is_active' => 0
+            ]);
+            
+            $data = array(
+                'title' => 'Well done!',
+                'text' => 'The admission status has been successfully removed.',
+                'type' => 'success',
+                'class' => 'btn-brand'
+            );
+    
+            echo json_encode( $data ); exit();
+        }
+        else if ($action == 'Active') {
+            $sectioninfos = SectionInfo::where([
+                'id' => $id,
+            ])
+            ->update([
+                'updated_at' => $timestamp,
+                'updated_by' => Auth::user()->id,
+                'is_active' => 1
+            ]);
+            
+            $data = array(
+                'title' => 'Well done!',
+                'text' => 'The admission status has been successfully activated.',
+                'type' => 'success',
+                'class' => 'btn-brand'
+            );
+    
+            echo json_encode( $data ); exit();
+        }    
+        else if ($action == 'Current') {
+            $sectioninfos = SectionInfo::where('id', '!=', $id)->where('status', '!=', 'Closed')
+            ->update([
+                'status' => 'Open',
+                'updated_at' => $timestamp,
+                'updated_by' => Auth::user()->id,
+                'is_active' => 1
+            ]);
+
+            $sectioninfos = SectionInfo::where([
+                'id' => $id,
+            ])
+            ->update([
+                'status' => $request->input('items')[0]['action'],
+                'updated_at' => $timestamp,
+                'updated_by' => Auth::user()->id,
+                'is_active' => 1
+            ]);
+            
+            $data = array(
+                'title' => 'Well done!',
+                'text' => 'The admission status has been successfully changed.',
+                'type' => 'success',
+                'class' => 'btn-brand'
+            );
+    
+            echo json_encode( $data ); exit();
+        }
+        else if ($action == 'Open') {
+            $rows = SectionInfo::where('id', '!=', $id)->where([
+                'status' => 'Open',
+                'is_active' => 1
+            ])->count();
+                
+            if ($rows > 0) {
+                $data = array(
+                    'title' => 'Oh snap!',
+                    'text' => 'Only one (Open Status) can be changed at a time.',
+                    'type' => 'warning',
+                    'class' => 'btn-danger'
+                );
+        
+                echo json_encode( $data ); exit();
+            } else {
+                $sectioninfos = SectionInfo::where([
+                    'id' => $id,
+                ])
+                ->update([
+                    'status' => $request->input('items')[0]['action'],
+                    'updated_at' => $timestamp,
+                    'updated_by' => Auth::user()->id,
+                    'is_active' => 1
+                ]);
+
+                $data = array(
+                    'title' => 'Well done!',
+                    'text' => 'The admission status has been successfully changed.',
+                    'type' => 'success',
+                    'class' => 'btn-brand'
+                );
+
+                echo json_encode( $data ); exit();
+            }
+        }
+        else {
+            $rows = SectionInfo::where('id', '!=', $id)->where([
+                'status' => 'Open',
+                'is_active' => 1
+            ])->count();
+
+            if ($rows == 1) {
+                $sectioninfos = SectionInfo::where('id', '!=', $id)->where([
+                    'status' => 'Open',
+                    'is_active' => 1
+                ])
+                ->update([
+                    'status' => 'Current',
+                    'updated_at' => $timestamp,
+                    'updated_by' => Auth::user()->id,
+                    'is_active' => 1
+                ]);
+            }
+
+            $sectioninfos = SectionInfo::where([
+                'id' => $id,
+            ])
+            ->update([
+                'status' => $request->input('items')[0]['action'],
+                'updated_at' => $timestamp,
+                'updated_by' => Auth::user()->id,
+                'is_active' => 1
+            ]);
+
+            $data = array(
+                'title' => 'Well done!',
+                'text' => 'The admission status has been successfully changed.',
+                'type' => 'success',
+                'class' => 'btn-brand'
+            );
+
+            echo json_encode( $data ); exit();
         }
     }
 
@@ -293,14 +505,19 @@ class AdmissionController extends Controller
     {
         $student = (new Admission)->get_this_admitted( $id );
         echo json_encode( $student ); exit();
-        
+    }
+
+    public function get_this_admitted_section(Request $request, $section_id)
+    {
+        $student = (new Admission)->get_this_admitted_section( $section_id );
+        echo json_encode( $student ); exit();
     }
 
     public function save_this_admitted(Request $request, $id, $section_id)
     {
         $timestamp = date('Y-m-d H:i:s');
         $batch_id = Batch::where('is_active','1')->where('status','Current')->pluck('id');
-        
+        /*
         $enliststudent = Admission::create([
             'batch_id' => $batch_id[0],
             'section_id' => $section_id,
@@ -309,7 +526,7 @@ class AdmissionController extends Controller
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
-
+        */
         $student = (new Admission)->get_this_admitted( $id );
         echo json_encode( $student ); exit();
     }
@@ -356,5 +573,37 @@ class AdmissionController extends Controller
     {
         $enliststudent = Admission::where('status', 'semi-admit');
         $enliststudent->delete();
+    }
+
+    public function generate_classcode($type, $section_id, $batch_id)
+    {
+        //Type
+        $tc = '';
+        $type_code = explode('-', $type);
+        foreach ($type_code as $ty_code) {
+            $tc .= strtoupper($ty_code[0]);
+        }
+
+        //section
+        $section_code = Section::where('id', $section_id)->pluck('name');
+        $sc = strtoupper(substr($section_code[0], 0, 2));
+
+        //batch
+        $batch_code = Batch::where('id', $batch_id)->where('status', 'Current')->pluck('date_start');
+        $bt_code = explode('-', $batch_code[0]);
+        foreach ($bt_code as $btcode)
+        {
+            if( strlen($btcode) == 4){ //Year
+                $bc = substr($btcode, 2, 2);
+            }
+        }
+
+        //section id
+        $sidc = sprintf("%02d", $section_id);
+
+        //combine
+        $classcode = $tc.$sc.'-'.$bc.$sidc;
+
+        return $classcode;
     }
 }

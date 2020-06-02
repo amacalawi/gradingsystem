@@ -71,6 +71,19 @@ var DatatableDataLocalDemo = function () {
 			title: "Last Modified",
 			type: "number"
 		}, {
+			field: "subjectType",
+			title: "Type",
+			// callback function support for column rendering
+			template: function (row) {
+				var type = {
+					"childhood-education" : {'title': 'Childhood', 'class': 'childhood-bg'},
+					"primary-education": {'title': 'Pimary', 'class': 'primary-bg'}, 
+                    "secondary-education": {'title': 'Secondary', 'class': 'secondary-bg'},
+                    "higher-education": {'title': 'Higher', 'class': 'higher-bg'}
+				};
+				return '<span class="m-badge ' + type[row.subjectType].class + ' m-badge--wide">' + type[row.subjectType].title + '</span>';
+			}
+		}, {
 			field: "Actions",
 			width: 70,
 			title: "Actions",
