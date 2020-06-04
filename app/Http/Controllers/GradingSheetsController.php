@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+
+use App\Exports\GradingSheetExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 use App\Http\Controllers\Controller;
 use App\Models\GradingSheet;
 use App\Models\Quarter;
@@ -603,4 +607,11 @@ class GradingSheetsController extends Controller
         $res = (new GradingSheetQuarter)->get_colum_via_gradingsheet_student($column, $gradingID, $student);
         return $res;
     }
+
+    public function export_gradingsheet(Request $request, $id)
+    {   
+        $gradingsheet = (new GradingSheet)->fetch($id);
+        return Excel::download(new GradingSheetExport($id), 'GradingSheet_'.$gradingsheet->level_name.'_'.$gradingsheet->section_name.'.xlsx');
+    }
+
 }

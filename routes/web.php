@@ -284,6 +284,7 @@ Route::prefix('academics')->group(function () {
         Route::put('all-gradingsheets/update-status/{id}', 'GradingSheetsController@update_status')->name('gradingsheets.update.status');
         Route::get('all-gradingsheets/reload/{id}', 'GradingSheetsController@reload')->name('gradingsheets.reload.status');
         Route::get('all-gradingsheets/fetch-transmutations/{id}', 'GradingSheetsController@fetch_transmutations')->name('gradingsheets.fetch.transmutation');
+        Route::get('all-gradingsheets/export-gradingsheet/{id}', 'GradingSheetsController@export_gradingsheet')->name('gradingsheets.fetch.export.gradingsheet');
         /* End Grading Sheets Routes */
 
         /* Start Components Routes */

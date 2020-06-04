@@ -125,75 +125,79 @@ class AdmissionController extends Controller
     {           
         $timestamp = date('Y-m-d H:i:s');
         $batch_id = Batch::where('is_active','1')->where('status','Current')->pluck('id');
-        $classcode = $this->generate_classcode($request->type, $request->section, $batch_id[0]);
 
-        if(!$batch_id){
-            $batch_id[0] = '0';
-        } 
-      
-        //sections_info
-        $sectioninfo = SectionInfo::create([
-            'batch_id' => $batch_id[0],
-            'section_id' => $request->section,
-            'adviser_id' => $request->adviser,
-            'level_id' => $request->level,
-            'type' => $request->type,
-            'classcode' => $classcode,
-            'created_at' => $timestamp,
-            'created_by' => Auth::user()->id
-        ]);
-        
-        
-        //sections_subjects
-        $subjects = $request->subjects;
-        $teachers = $request->teachers;
-
-        if($subjects[0] != "0" && $teachers[0] != "0")
+        if(!$batch_id->isEmpty())
         {
-            foreach ($subjects as $key => $subject) {
-                $sections_subjects = SectionsSubjects::create([
-                    'batch_id' => $batch_id[0],
-                    'subject_id' => $subject,
-                    'teacher_id' => $teachers[$key],
-                    'section_info_id' => $sectioninfo->id,
-                    'created_at' => $timestamp,
-                    'created_by' => Auth::user()->id
-                ]);
+
+            $classcode = $this->generate_classcode($request->type, $request->section, $batch_id[0]);
+            if(!$batch_id){
+                $batch_id[0] = '0';
             } 
-        }
-
         
-        $members = $request->list_admitted_student;
-        if($members)
-        {
-            foreach ($members as $key => $member) {
-                //admission
-                /*
-                $enliststudent = Admission::where('student_id', $member)
-                ->update([
-                    'section_id' => $request->section,
-                    'status' => 'admit',
-                    'updated_at' => $timestamp,
-                    'updated_by' => Auth::user()->id,
-                ]);
-                */
-                $enliststudent = Admission::create([
-                    'batch_id' => $batch_id[0],
-                    'section_id' => $request->section,
-                    'student_id' =>  $member,
-                    'status' => 'admit',
-                    'created_at' => $timestamp,
-                    'created_by' => Auth::user()->id
-                ]);
-            }
-        }
+            //sections_info
+            $sectioninfo = SectionInfo::create([
+                'batch_id' => $batch_id[0],
+                'section_id' => $request->section,
+                'adviser_id' => $request->adviser,
+                'level_id' => $request->level,
+                'type' => $request->type,
+                'classcode' => $classcode,
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+            
+            
+            //sections_subjects
+            $subjects = $request->subjects;
+            $teachers = $request->teachers;
 
-        $data = array(
-            'title' => 'Well done!',
-            'text' => 'The section-student has been successfully saved.',
-            'type' => 'success',
-            'class' => 'btn-brand'
-        );
+            if($subjects[0] != "0" && $teachers[0] != "0")
+            {
+                foreach ($subjects as $key => $subject) {
+                    $sections_subjects = SectionsSubjects::create([
+                        'batch_id' => $batch_id[0],
+                        'subject_id' => $subject,
+                        'teacher_id' => $teachers[$key],
+                        'section_info_id' => $sectioninfo->id,
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+                } 
+            }
+
+            
+            $members = $request->list_admitted_student;
+            if($members)
+            {
+                foreach ($members as $key => $member) {
+                    //admission
+                    $enliststudent = Admission::create([
+                        'batch_id' => $batch_id[0],
+                        'section_id' => $request->section,
+                        'student_id' =>  $member,
+                        'status' => 'admit',
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+                }
+            }
+
+            $data = array(
+                'title' => 'Well done!',
+                'text' => 'The section-student has been successfully saved.',
+                'type' => 'success',
+                'class' => 'btn-brand'
+            );
+        }
+        else 
+        {
+            $data = array(
+                'title' => 'Warning',
+                'text' => 'No current batch is active.',
+                'type' => 'warning',
+                'class' => 'btn-brand'
+            );
+        }
 
         echo json_encode( $data ); exit();
 
@@ -517,16 +521,6 @@ class AdmissionController extends Controller
     {
         $timestamp = date('Y-m-d H:i:s');
         $batch_id = Batch::where('is_active','1')->where('status','Current')->pluck('id');
-        /*
-        $enliststudent = Admission::create([
-            'batch_id' => $batch_id[0],
-            'section_id' => $section_id,
-            'student_id' => $id,
-            'status' => 'semi-admit',
-            'created_at' => $timestamp,
-            'created_by' => Auth::user()->id
-        ]);
-        */
         $student = (new Admission)->get_this_admitted( $id );
         echo json_encode( $student ); exit();
     }
