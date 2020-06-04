@@ -83,7 +83,8 @@ var DatatableDataLocalDemo = function () {
 				var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
 
                 return '\
-                    <a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/grading-sheets/all-gradingsheets/edit/' + row.gradingID + '"><i class="la la-edit"></i></a>\
+					<a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/grading-sheets/all-gradingsheets/edit/' + row.gradingID + '"><i class="la la-edit"></i></a>\
+					<a title="export this" class=" m-portlet__nav-link btn m-btn m-btn--hover-success m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/grading-sheets/all-gradingsheets/export-gradingsheet/' + row.gradingID + '"><i class="la la-download"></i></a>\
 				';
 			}
 		}]
