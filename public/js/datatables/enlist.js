@@ -115,8 +115,20 @@ var DatatableDataLocalDemo = function () {
 //$('#semi-enlist-student').on('click', function(e) {
 $('body').on('click', '.semi-enlist-student', function() {
 	
-	var id = $(this).val();
-	$("#enlist-div-"+id).remove();
+	swal({
+		title: "Warning",
+		text:  "Do you really want to remove this student?",
+		type:  "warning",
+		showCancelButton: true,
+		closeOnConfirm: true,
+		confirmButtonClass: "btn btn-danger btn-focus m-btn m-btn--custom"
+	}).then((confirmed) => {
+		if(confirmed.value)
+		{
+			var id = $(this).val();
+			$("#enlist-div-"+id).remove();
+		}
+    });
 	
 });
 
