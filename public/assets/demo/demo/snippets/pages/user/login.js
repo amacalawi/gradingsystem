@@ -69,7 +69,7 @@ var SnippetLogin = function() {
             var btn = $(this);
             var form = $(this).closest('form');
 
-            if (form.find('input[name="email"]').val() == 'superadmin') {
+            if (form.find('input[name="username"]').val() == 'superadmin') {
                 form.validate({
                     rules: {
                         password: {
