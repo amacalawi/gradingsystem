@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 use App\Exports\GradingSheetExport;
+use App\Imports\GradingSheetImport;
 use Maatwebsite\Excel\Facades\Excel;
 
 use App\Http\Controllers\Controller;
@@ -611,7 +612,24 @@ class GradingSheetsController extends Controller
     public function export_gradingsheet(Request $request, $id)
     {   
         $gradingsheet = (new GradingSheet)->fetch($id);
-        return Excel::download(new GradingSheetExport($id), 'GradingSheet_'.$gradingsheet->level_name.'_'.$gradingsheet->section_name.'.xlsx');
+        return Excel::download(new GradingSheetExport($id), 'GradingSheet_'.$id.'.xlsx');
     }
 
+    public function import_gradingsheet(Request $request, $id)
+    {   
+        $this->validate( $request, [
+            'import_file' => 'required|mimes:xls,xlsx'
+        ]);
+
+        preg_match_all('!\d+!', $request->file('import_file')->getClientOriginalName(), $gradingsheet_id);
+        $gs_id = implode(' ', $gradingsheet_id[0]); //get file id
+
+        if($gs_id == $id)
+        {
+            $path = $request->file('import_file')->store('Imports');
+            Excel::import(new GradingSheetImport($id), $path);
+            return back();
+        }
+        
+    }
 }
