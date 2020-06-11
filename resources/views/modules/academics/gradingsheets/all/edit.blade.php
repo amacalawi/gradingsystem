@@ -2,6 +2,7 @@
 
 @section('content')
     @include('forms.gradingsheet')
+    @include('modules.academics.gradingsheets.all.import')
 @endsection
 
 @push('styles')

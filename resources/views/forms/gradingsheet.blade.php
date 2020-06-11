@@ -268,14 +268,16 @@
         
     <div class="row">
         <div class="col-md-12 ">
-            <a href="{{ url('academics/grading-sheets/all-gradingsheets/export-gradingsheet/'.$grading->id ) }}" >
-                <button type="button" class="btn btn-success pull-right">
+            <button type="button" class="btn btn-info pull-right m-2" data-toggle="modal" data-target="#importmodal">
+                Import gradingsheet
+            </button>
+            <a href="{{ url('academics/grading-sheets/all-gradingsheets/export-gradingsheet/'.$grading->id) }}" >
+                <button type="button" class="btn btn-success pull-right m-2">
                     Export gradingsheet
                 </button>
             </a>
         </div>
     </div>
-
 
     @endif
 {{ Form::close() }}
