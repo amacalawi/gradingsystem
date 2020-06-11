@@ -82,24 +82,20 @@ class DepartmentsController extends Controller
     {   
         $menus = $this->load_menus();
         $flashMessage = self::messages();
-        $segment = request()->segment(3);
-        if (count($flashMessage) && $flashMessage[0]['module'] == 'department') {
-            $department = (new Department)->fetch($flashMessage[0]['id']);
-        } else {
-            $department = (new Department)->fetch($id);
-        }
+        $segment = request()->segment(4);
+        $department = (new Department)->fetch($id);
         $types = (new Department)->types();
-        return view('modules/schools/departments/add')->with(compact('menus', 'department', 'types', 'segment', 'flashMessage'));
+        return view('modules/schools/departments/add')->with(compact('menus', 'department', 'types', 'segment'));
     }
     
     public function edit(Request $request, $id)
     {   
         $menus = $this->load_menus();
         $flashMessage = self::messages();
-        $segment = request()->segment(3);
-        $department = (new Department)->find($id);
+        $segment = request()->segment(4);
+        $department = (new Department)->fetch($id);
         $types = (new Department)->types();
-        return view('modules/schools/departments/edit')->with(compact('menus', 'department', 'types', 'segment', 'flashMessage'));
+        return view('modules/schools/departments/edit')->with(compact('menus', 'department', 'types', 'segment'));
     }
     
     public function store(Request $request)

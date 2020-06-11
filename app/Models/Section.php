@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\SectionInfo;
+use App\Models\Component;
 
 class Section extends Model
 {
@@ -83,7 +85,6 @@ class Section extends Model
     public function get_column_via_identifier($column, $id)
     {
         return self::where('id', $id)->first()->$column;
-        return $sections;  
     }
 
     public function get_all_sections_bytype($type)

@@ -21,6 +21,7 @@
         <script>
             var base_url = "{{ url('/') }}/";
             var _token = "{{ csrf_token() }}";
+            var user_role = "{{ Auth::user()->type }}";
         </script>
     </head>
     <body class="m-page--fluid m--skin- m-content--skin-light2 m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-light m-aside-left--fixed m-aside-left--offcanvas m-aside-left--minimize m-brand--minimize m-footer--push m-aside--offcanvas-default">

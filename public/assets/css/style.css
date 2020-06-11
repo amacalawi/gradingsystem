@@ -360,6 +360,10 @@ input[type="text"].bold {
     text-decoration: none !important;
 }
 
+span[aria-expanded="true"]:before {
+    content: "\f28e" !important;
+}
+
 .m-radio > input:checked ~ span {
     border: 1px solid #00a3ee;
 }
@@ -431,4 +435,13 @@ input[type="text"].bold {
 
 #gradingsheet-table .quarter-bg {
     background: #fffcbe !important;
+}
+
+.check-roles {
+    text-decoration: none;
+    color: #333;
+}
+
+.check-roles:hover {
+    color: #3b3b3b;
 }

@@ -70,7 +70,7 @@ class Student extends Model
             $results = array(
                 'id' => '',
                 'members_type_id' => '',
-                'identification_no' => $this->generate_student_no(),
+                'identification_no' => '',
                 'firstname' => '',
                 'middlename' => '',
                 'lastname' => '',
@@ -100,7 +100,7 @@ class Student extends Model
                 'admitted_date' => date('Y-m-d'),
                 'avatar' => '',
                 'email' => '',
-                'username' => $this->generate_student_no(),
+                'username' => '',
                 'password' => $this->random(),
                 'siblings' => '',
                 'is_guardian' => 0,

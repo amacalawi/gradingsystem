@@ -82,24 +82,20 @@ class DesignationsController extends Controller
     {   
         $menus = $this->load_menus();
         $flashMessage = self::messages();
-        $segment = request()->segment(3);
-        if (count($flashMessage) && $flashMessage[0]['module'] == 'designation') {
-            $designation = (new designation)->fetch($flashMessage[0]['id']);
-        } else {
-            $designation = (new designation)->fetch($id);
-        }
+        $segment = request()->segment(4);
+        $designation = (new designation)->fetch($id);
         $types = (new designation)->types();
-        return view('modules/schools/designations/add')->with(compact('menus', 'designation', 'types', 'segment', 'flashMessage'));
+        return view('modules/schools/designations/add')->with(compact('menus', 'designation', 'types', 'segment'));
     }
     
     public function edit(Request $request, $id)
     {   
         $menus = $this->load_menus();
         $flashMessage = self::messages();
-        $segment = request()->segment(3);
-        $designation = (new designation)->find($id);
+        $segment = request()->segment(4);
+        $designation = (new designation)->fetch($id);
         $types = (new designation)->types();
-        return view('modules/schools/designations/edit')->with(compact('menus', 'designation', 'types', 'segment', 'flashMessage'));
+        return view('modules/schools/designations/edit')->with(compact('menus', 'designation', 'types', 'segment'));
     }
     
     public function store(Request $request)

@@ -56,7 +56,7 @@ class Staff extends Model
                 'role_id' => '',
                 'department_id' => '',
                 'designation_id' => '',
-                'identification_no' => $this->generate_staff_no(),
+                'identification_no' => '',
                 'type' => '',
                 'specification' => '',
                 'firstname' => '',
@@ -72,7 +72,7 @@ class Staff extends Model
                 'telephone_no' => '',
                 'avatar' => '',
                 'email' => '',
-                'username' => $this->generate_staff_no(),
+                'username' => '',
                 'password' => $this->random(),
                 'date_joined' => date('Y-m-d'),
                 'date_resigned' => ''

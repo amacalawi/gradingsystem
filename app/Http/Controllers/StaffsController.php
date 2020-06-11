@@ -155,6 +155,39 @@ class StaffsController extends Controller
                 'title' => 'Oh snap!',
                 'text' => 'The email is already in use.',
                 'type' => 'error',
+                'error' => 'email',
+                'class' => 'btn-danger'
+            );
+    
+            echo json_encode( $data ); exit();
+        }
+
+        $rows2 = Staff::where([
+            'identification_no' => $request->identification_no
+        ])->count();
+
+        if ($rows2 > 0) {
+            $data = array(
+                'title' => 'Oh snap!',
+                'text' => 'The staff number is already in use.',
+                'type' => 'error',
+                'error' => 'identification_no',
+                'class' => 'btn-danger'
+            );
+    
+            echo json_encode( $data ); exit();
+        }
+
+        $rows3 = User::where([
+            'username' => $request->username
+        ])->count();
+
+        if ($rows3 > 0) {
+            $data = array(
+                'title' => 'Oh snap!',
+                'text' => 'The username is already in use.',
+                'type' => 'error',
+                'error' => 'username',
                 'class' => 'btn-danger'
             );
     
@@ -163,7 +196,7 @@ class StaffsController extends Controller
         
         $user = User::create([
             'name' => $request->firstname.' '.$request->lastname,
-            'username' => $this->generate_staff_no(),
+            'username' => $request->username,
             'email' => $request->email,
             'password' => $request->password,
             'type' => 'staff'
@@ -185,7 +218,7 @@ class StaffsController extends Controller
             'role_id' => $request->role_id,
             'department_id' => $request->department_id,
             'designation_id' => $request->designation_id,
-            'identification_no' => $this->generate_staff_no(),
+            'identification_no' => $request->identification_no,
             'type' => $request->type,
             'specification' => $request->specification,
             'firstname' => $request->firstname,
@@ -223,14 +256,70 @@ class StaffsController extends Controller
     public function update(Request $request, $id)
     {    
         $timestamp = date('Y-m-d H:i:s');
+        
         $staff = Staff::find($id);
 
         if(!$staff) {
             throw new NotFoundHttpException();
         }
 
+        $rows = User::where([
+            'email' => $request->email,
+        ])
+        ->where('id', '!=', $staff->user_id)
+        ->count();
+
+        if ($rows > 0) {
+            $data = array(
+                'title' => 'Oh snap!',
+                'text' => 'The email is already in use.',
+                'type' => 'error',
+                'error' => 'email',
+                'class' => 'btn-danger'
+            );
+    
+            echo json_encode( $data ); exit();
+        }
+
+        $rows2 = Staff::where([
+            'identification_no' => $request->identification_no
+        ])
+        ->where('id', '!=', $id)
+        ->count();
+
+        if ($rows2 > 0) {
+            $data = array(
+                'title' => 'Oh snap!',
+                'text' => 'The staff number is already in use.',
+                'type' => 'error',
+                'error' => 'identification_no',
+                'class' => 'btn-danger'
+            );
+    
+            echo json_encode( $data ); exit();
+        }
+
+        $rows3 = User::where([
+            'username' => $request->username
+        ])
+        ->where('id', '!=', $staff->user_id)
+        ->count();
+
+        if ($rows3 > 0) {
+            $data = array(
+                'title' => 'Oh snap!',
+                'text' => 'The username is already in use.',
+                'type' => 'error',
+                'error' => 'username',
+                'class' => 'btn-danger'
+            );
+    
+            echo json_encode( $data ); exit();
+        }
+
         $user_id = $staff->user_id;
         $staff->role_id = $request->role_id;
+        $staff->identification_no = $request->identification_no;
         $staff->department_id = $request->department_id;
         $staff->designation_id = $request->designation_id;
         $staff->type = $request->type;
@@ -261,6 +350,7 @@ class StaffsController extends Controller
                 ->update([
                     'name' => $request->firstname.' '.$request->lastname,
                     'email' => $request->email,
+                    'username' => $request->username,
                     'password' => Hash::make($request->password)
                 ]);
             } else {
@@ -268,6 +358,7 @@ class StaffsController extends Controller
                 ->update([
                     'name' => $request->firstname.' '.$request->lastname,
                     'email' => $request->email,
+                    'username' => $request->username
                 ]);
             }
 
