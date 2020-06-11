@@ -11,7 +11,7 @@
     {   
         $required = 0;
 
-        $.each(this.$body.find("input[type='radio'], input[type='password'], input[type='date'], input[type='text'], select, textarea"), function(){
+        $.each(this.$body.find("input[type='email'], input[type='radio'], input[type='password'], input[type='date'], input[type='text'], select, textarea"), function(){
             var $self = $(this);
             if (!($self.attr("name") === undefined || $self.attr("name") === null)) {
                 if($self.hasClass("required")){
@@ -43,7 +43,7 @@
         
         $.each(this.$body.find(".form-group"), function(){
             if ($(this).hasClass('required')) {       
-                var $input = $(this).find("input[type='radio'], input[type='password'], input[type='date'], input[type='text'], select, textarea");
+                var $input = $(this).find("input[type='email'], input[type='radio'], input[type='password'], input[type='date'], input[type='text'], select, textarea");
                 if ($input.attr('type') == 'radio') {
                     if ( !$input.is(':checked') ) {
                         $(this).find('.m-form__help').text('this field is required.');    
