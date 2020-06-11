@@ -15,6 +15,7 @@ use App\Models\UserRole;
 use App\Models\Staff;
 use App\Models\SectionsSubjects;
 use App\Models\SectionInfo;
+use App\Models\Section;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -105,12 +106,6 @@ class ComponentsController extends Controller
             $res = Component::
             whereIn('subject_id', 
                 SectionsSubjects::select('subject_id')
-                ->whereIn('section_info_id', 
-                    SectionInfo::select('id')->where([
-                        'batch_id' => (new Batch)->get_current_batch(), 
-                        'is_active' => 1
-                    ])
-                )
                 ->where([
                     'teacher_id' => (new Staff)->get_column_via_user('id', Auth::user()->id),
                     'batch_id' => (new Batch)->get_current_batch(),
@@ -176,12 +171,6 @@ class ComponentsController extends Controller
             $res = Component::
             whereIn('subject_id', 
                 SectionsSubjects::select('subject_id')
-                ->whereIn('section_info_id', 
-                    SectionInfo::select('id')->where([
-                        'batch_id' => (new Batch)->get_current_batch(), 
-                        'is_active' => 1
-                    ])
-                )
                 ->where([
                     'teacher_id' => (new Staff)->get_column_via_user('id', Auth::user()->id),
                     'batch_id' => (new Batch)->get_current_batch(),
@@ -224,7 +213,8 @@ class ComponentsController extends Controller
         $types = (new Component)->types();
         $quarters = (new Quarter)->all_quarters();
         $subjects = (new Subject)->all_subjects();
-        return view('modules/academics/gradingsheets/components/add')->with(compact('menus', 'component', 'segment', 'quarters', 'subjects', 'activities', 'types'));
+        $sections = (new Section)->all_sections();
+        return view('modules/academics/gradingsheets/components/add')->with(compact('menus', 'component', 'segment', 'quarters', 'subjects', 'activities', 'types', 'sections'));
     }
     
     public function edit(Request $request, $id)
@@ -237,36 +227,20 @@ class ComponentsController extends Controller
         $types = (new Component)->types();
         $quarters = (new Quarter)->all_quarters();
         $subjects = (new Subject)->all_subjects();
-        return view('modules/academics/gradingsheets/components/edit')->with(compact('menus', 'component', 'segment', 'quarters', 'subjects', 'activities', 'types'));
+        $sections = (new Section)->all_sections();
+        return view('modules/academics/gradingsheets/components/edit')->with(compact('menus', 'component', 'segment', 'quarters', 'subjects', 'activities', 'types', 'sections'));
     }
     
     public function store(Request $request)
     {    
         $timestamp = date('Y-m-d H:i:s');
 
-        // $rows = Component::where([
-        //     'batch_id' => (new Batch)->get_current_batch(),
-        //     'quarter_id' => $request->quarter_id,
-        //     'subject_id' => $request->subject_id,
-        //     'type' => $request->type
-        // ])->count();
-
-        // if ($rows > 0) {
-        //     $data = array(
-        //         'title' => 'Oh snap!',
-        //         'text' => 'The component is already existing.',
-        //         'type' => 'error',
-        //         'class' => 'btn-danger'
-        //     );
-    
-        //     echo json_encode( $data ); exit();
-        // }
-
         $count = Component::all()->count() + 1;
 
         $component = Component::create([
             'batch_id' => (new Batch)->get_current_batch(),
             'quarter_id' => $request->quarter_id,
+            'section_id' => $request->section_id,
             'subject_id' => $request->subject_id,
             'percentage' => $request->percentage,
             'type' => $request->type,
@@ -281,22 +255,24 @@ class ComponentsController extends Controller
             'created_by' => Auth::user()->id
         ]);
 
-        if (!empty($request->activity_name)) {
-            $activities = $request->activity_name; $iteration = 0;
-            foreach ($activities as $activity) {
-                if ($activity !== NULL) {
-                    $activity = Activity::create([
-                        'component_id' => $component->id,
-                        'activity' => $request->activity_name[$iteration],
-                        'value' => $request->activity_value[$iteration],
-                        'description' => $request->activity_description[$iteration],
-                        'created_at' => $timestamp,
-                        'created_by' => Auth::user()->id
-                    ]);
+        /*
+            if (!empty($request->activity_name)) {
+                $activities = $request->activity_name; $iteration = 0;
+                foreach ($activities as $activity) {
+                    if ($activity !== NULL) {
+                        $activity = Activity::create([
+                            'component_id' => $component->id,
+                            'activity' => $request->activity_name[$iteration],
+                            'value' => $request->activity_value[$iteration],
+                            'description' => $request->activity_description[$iteration],
+                            'created_at' => $timestamp,
+                            'created_by' => Auth::user()->id
+                        ]);
+                    }
+                    $iteration++;
                 }
-                $iteration++;
             }
-        }
+        */
 
         if (!$component) {
             throw new NotFoundHttpException();
@@ -322,37 +298,50 @@ class ComponentsController extends Controller
             throw new NotFoundHttpException();
         }
 
-        $component->quarter_id = $request->quarter_id;
-        $component->subject_id = $request->subject_id;
-        $component->percentage = $request->percentage;
-        $component->type = $request->type;
-        $component->name = $request->name;
-        $component->description = $request->description;
-        $component->palette = $request->palette;
-        $component->is_sum_cell = ($request->is_sum_cell !== NULL) ? 1 : 0;
-        $component->is_hps_cell = ($request->is_hps_cell !== NULL) ? 1 : 0;
-        $component->is_ps_cell = ($request->is_ps_cell !== NULL) ? 1 : 0;
-        $component->updated_at = $timestamp;
-        $component->updated_by = Auth::user()->id;
-
-        Activity::where('component_id', $id)->update(['is_active' => 0]);
-        if (!empty($request->activity_name)) {
-            $activities = $request->activity_name; $iteration = 0;
-            $activity_components = Activity::where('component_id', $component->id)->orderBy('id', 'ASC')->get();
-            foreach ($activities as $activity) 
-            {
-                if ($activity !== NULL) {
-                    if ($activity_components->count() > 0 && $activity_components->count() > $iteration) {
-                        if ($activity_components[$iteration]->id !== NULL) {
-                            $activity_component = Activity::where('id', $activity_components[$iteration]->id)
-                            ->update([
-                                'activity' => $request->activity_name[$iteration],
-                                'value' => $request->activity_value[$iteration],
-                                'description' => $request->activity_description[$iteration],
-                                'updated_at' => $timestamp,
-                                'updated_by' => Auth::user()->id,
-                                'is_active' => 1
-                            ]);
+        if (Auth::user()->type == 'administrator') {
+            $component->quarter_id = $request->quarter_id;
+            $component->section_id = $request->section_id;
+            $component->subject_id = $request->subject_id;
+            $component->percentage = $request->percentage;
+            $component->type = $request->type;
+            $component->name = $request->name;
+            $component->description = $request->description;
+            $component->palette = $request->palette;
+            $component->is_sum_cell = ($request->is_sum_cell !== NULL) ? 1 : 0;
+            $component->is_hps_cell = ($request->is_hps_cell !== NULL) ? 1 : 0;
+            $component->is_ps_cell = ($request->is_ps_cell !== NULL) ? 1 : 0;
+            $component->updated_at = $timestamp;
+            $component->updated_by = Auth::user()->id;
+            $component->update();
+        } else {
+            Activity::where('component_id', $id)->update(['is_active' => 0]);
+            if (!empty($request->activity_name)) {
+                $activities = $request->activity_name; $iteration = 0;
+                $activity_components = Activity::where('component_id', $component->id)->orderBy('id', 'ASC')->get();
+                foreach ($activities as $activity) 
+                {
+                    if ($activity !== NULL) {
+                        if ($activity_components->count() > 0 && $activity_components->count() > $iteration) {
+                            if ($activity_components[$iteration]->id !== NULL) {
+                                $activity_component = Activity::where('id', $activity_components[$iteration]->id)
+                                ->update([
+                                    'activity' => $request->activity_name[$iteration],
+                                    'value' => $request->activity_value[$iteration],
+                                    'description' => $request->activity_description[$iteration],
+                                    'updated_at' => $timestamp,
+                                    'updated_by' => Auth::user()->id,
+                                    'is_active' => 1
+                                ]);
+                            } else {
+                                $activity_component = Activity::create([
+                                    'component_id' => $component->id,
+                                    'activity' => $request->activity_name[$iteration],
+                                    'value' => $request->activity_value[$iteration],
+                                    'description' => $request->activity_description[$iteration],
+                                    'created_at' => $timestamp,
+                                    'created_by' => Auth::user()->id
+                                ]);
+                            }
                         } else {
                             $activity_component = Activity::create([
                                 'component_id' => $component->id,
@@ -363,32 +352,20 @@ class ComponentsController extends Controller
                                 'created_by' => Auth::user()->id
                             ]);
                         }
-                    } else {
-                        $activity_component = Activity::create([
-                            'component_id' => $component->id,
-                            'activity' => $request->activity_name[$iteration],
-                            'value' => $request->activity_value[$iteration],
-                            'description' => $request->activity_description[$iteration],
-                            'created_at' => $timestamp,
-                            'created_by' => Auth::user()->id
-                        ]);
                     }
+                    $iteration++;
                 }
-                $iteration++;
             }
         }
 
-        if ($component->update()) {
+        $data = array(
+            'title' => 'Well done!',
+            'text' => 'The component has been successfully updated.',
+            'type' => 'success',
+            'class' => 'btn-brand'
+        );
 
-            $data = array(
-                'title' => 'Well done!',
-                'text' => 'The component has been successfully updated.',
-                'type' => 'success',
-                'class' => 'btn-brand'
-            );
-    
-            echo json_encode( $data ); exit();
-        }
+        echo json_encode( $data ); exit();
     }
 
     public function update_status(Request $request, $id)

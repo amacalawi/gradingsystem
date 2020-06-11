@@ -175,6 +175,39 @@ class StudentsController extends Controller
                 'title' => 'Oh snap!',
                 'text' => 'The email is already in use.',
                 'type' => 'error',
+                'error' => 'email',
+                'class' => 'btn-danger'
+            );
+    
+            echo json_encode( $data ); exit();
+        }
+
+        $rows2 = Student::where([
+            'identification_no' => $request->identification_no
+        ])->count();
+
+        if ($rows2 > 0) {
+            $data = array(
+                'title' => 'Oh snap!',
+                'text' => 'The student number is already in use.',
+                'type' => 'error',
+                'error' => 'identification_no',
+                'class' => 'btn-danger'
+            );
+    
+            echo json_encode( $data ); exit();
+        }
+
+        $rows3 = User::where([
+            'username' => $request->username
+        ])->count();
+
+        if ($rows3 > 0) {
+            $data = array(
+                'title' => 'Oh snap!',
+                'text' => 'The username is already in use.',
+                'type' => 'error',
+                'error' => 'username',
                 'class' => 'btn-danger'
             );
     
@@ -183,7 +216,7 @@ class StudentsController extends Controller
 
         $user = User::create([
             'name' => $request->firstname.' '.$request->lastname,
-            'username' => $this->generate_student_no(),
+            'username' => $request->username,
             'email' => $request->email,
             'password' => $request->password,
             'type' => 'student'
@@ -203,7 +236,7 @@ class StudentsController extends Controller
         $student = Student::create([
             'user_id' => $user->id,
             'role_id' => $request->role_id,
-            'identification_no' => $this->generate_student_no(),
+            'identification_no' => $request->identification_no,
             'firstname' => $request->firstname,
             'middlename' => $request->middlename,
             'lastname' => $request->lastname,
@@ -330,6 +363,62 @@ class StudentsController extends Controller
             throw new NotFoundHttpException();
         }
 
+        $rows = User::where(function($query) use ($email, $mother_email, $father_email){
+            $query->orWhere('email', $email);
+            $query->orWhere('email', $mother_email);
+            $query->orWhere('email', $father_email);
+        })
+        ->where('id', '!=', $user_id)
+        ->count();
+
+        if ($rows > 0) {
+            $data = array(
+                'title' => 'Oh snap!',
+                'text' => 'The email is already in use.',
+                'type' => 'error',
+                'error' => 'email',
+                'class' => 'btn-danger'
+            );
+    
+            echo json_encode( $data ); exit();
+        }
+
+        $rows2 = Student::where([
+            'identification_no' => $request->identification_no
+        ])
+        ->where('id', '!=', $id)
+        ->count();
+
+        if ($rows2 > 0) {
+            $data = array(
+                'title' => 'Oh snap!',
+                'text' => 'The student number is already in use.',
+                'type' => 'error',
+                'error' => 'identification_no',
+                'class' => 'btn-danger'
+            );
+    
+            echo json_encode( $data ); exit();
+        }
+
+        $rows3 = User::where([
+            'username' => $request->username
+        ])
+        ->where('id', '!=', $user_id)
+        ->count();
+
+        if ($rows3 > 0) {
+            $data = array(
+                'title' => 'Oh snap!',
+                'text' => 'The username is already in use.',
+                'type' => 'error',
+                'error' => 'username',
+                'class' => 'btn-danger'
+            );
+    
+            echo json_encode( $data ); exit();
+        }
+
         if ($request->is_guardian !== NULL) {
             $guardian = Guardian::where('student_id', $id)->pluck('id');
             $motherUser = GuardianUser::where('guardian_id', $guardian)->orderBy('id', 'asc')->first()->user_id;
@@ -357,6 +446,7 @@ class StudentsController extends Controller
         }
 
         $student->role_id = $request->role_id;
+        $student->identification_no = $request->identification_no;
         $student->firstname = $request->firstname;
         $student->middlename = $request->middlename;
         $student->lastname = $request->lastname;
@@ -385,6 +475,7 @@ class StudentsController extends Controller
                 ->update([
                     'name' => $request->firstname.' '.$request->lastname,
                     'email' => $request->email,
+                    'username' => $request->username,
                     'password' => Hash::make($request->password)
                 ]);
             } else {
@@ -392,6 +483,7 @@ class StudentsController extends Controller
                 ->update([
                     'name' => $request->firstname.' '.$request->lastname,
                     'email' => $request->email,
+                    'username' => $request->username,
                 ]);
             }
             

@@ -86,22 +86,18 @@ class BatchesController extends Controller
     {   
         $menus = $this->load_menus();
         $flashMessage = self::messages();
-        $segment = request()->segment(3);
-        if (count($flashMessage) && $flashMessage[0]['module'] == 'batch') {
-            $batch = (new Batch)->fetch($flashMessage[0]['id']);
-        } else {
-            $batch = (new Batch)->fetch($id);
-        }
-        return view('modules/schools/batches/add')->with(compact('menus', 'batch', 'segment', 'flashMessage'));
+        $segment = request()->segment(4);
+        $batch = (new Batch)->fetch($id);
+        return view('modules/schools/batches/add')->with(compact('menus', 'batch', 'segment'));
     }
     
     public function edit(Request $request, $id)
     {   
         $menus = $this->load_menus();
         $flashMessage = self::messages();
-        $segment = request()->segment(3);
+        $segment = request()->segment(4);
         $batch = (new Batch)->find($id);
-        return view('modules/schools/batches/edit')->with(compact('menus', 'batch', 'segment', 'flashMessage'));
+        return view('modules/schools/batches/edit')->with(compact('menus', 'batch', 'segment'));
     }
     
     public function store(Request $request)

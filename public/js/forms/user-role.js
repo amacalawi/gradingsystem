@@ -162,7 +162,6 @@
            
         });
         
-
         this.$body.on('click', '.submit-btn', function (e){
             e.preventDefault();
             var $self = $(this);
@@ -225,7 +224,56 @@
                 });
             }
         });
+
+        this.$body.on('click', '.check-roles', function (e){
+            var self = $(this);
+
+            if (self.attr('value') == 'checkall') {
+                $('input[type="checkbox"]').prop('checked', true);
+            } else {
+                $('input[type="checkbox"]').prop('checked', false);
+            }
+        });
+
+        this.$body.on('click', 'input[type="checkbox"][name="headers[]"]', function (e){
+            var self = $(this);
+            var parent = self.parents('.m-accordion__item');
+
+            if (self.is(":checked")) {
+                parent.find('input[type="checkbox"]').prop('checked', true);
+            } else {
+                parent.find('input[type="checkbox"]').prop('checked', false);
+            }
+        });
+
+        this.$body.on('click', 'input[type="checkbox"][name="modules[]"]', function (e){
+            var self = $(this);
+            var submodules = $('input[type="checkbox"][module="' + self.val() + '"]');
+            
+            if (self.is(":checked")) {
+                $.each(submodules, function(){
+                    var submodule = $(this);
+                    submodule.prop('checked', true);
+                    $('input[type="checkbox"][submodule="' + submodule.val() + '"]').prop('checked', true);
+                });
+            } else {
+                $.each(submodules, function(){
+                    var submodule = $(this);
+                    submodule.prop('checked', false);
+                    $('input[type="checkbox"][submodule="' + submodule.val() + '"]').prop('checked', false);
+                });
+            }
+        });
         
+        this.$body.on('click', 'input[type="checkbox"][name="sub_modules[]"]', function (e){
+            var self = $(this);
+
+            if (self.is(":checked")) {
+                $('input[type="checkbox"][submodule="' + self.val() + '"]').prop('checked', true);
+            } else {
+                $('input[type="checkbox"][submodule="' + self.val() + '"]').prop('checked', false);
+            }
+        });
     }
 
     //init role_and_permission

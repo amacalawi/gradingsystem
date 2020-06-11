@@ -161,7 +161,9 @@
                 @php 
                     $invisibles = ['transmutations'];
                 @endphp
-                @if (!in_array(Request::segment(3), $invisibles))
+                @if (Request::segment(3) == 'components' && Auth::user()->type  != 'administrator')
+
+                @else (!in_array(Request::segment(3), $invisibles))
                     <a href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/'.Request::segment(3).'/add') }}" class="btn m-btn--pill btn-brand add-btn m-btn--custom">
                         <i class="la la-commenting"></i> 
                         @php 

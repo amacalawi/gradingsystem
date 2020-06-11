@@ -153,6 +153,23 @@
         console.log(files);
     } 
 
+    staff.prototype.isValidEmailAddress = function () {
+        var emailError = 0;
+        var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+
+        $.each(this.$body.find("input[type='email']"), function(){
+            var $self = $(this);
+            var validEmail = pattern.test($self.val());
+
+            if (!validEmail) {
+                emailError++;
+                $self.next().text('this is not a valid email');
+            }
+        });
+
+        return emailError;
+    },
+
     staff.prototype.init = function()
     {   
         /*
@@ -219,6 +236,7 @@
             var $error = $.staff.validate($form, 0);
             var $identification = ($('input[name="method"]').val() == 'add') ? '' : $('input[name="identification_no"]').val();
             var $avatar = ($('input[name="avatar"]').val() != '') ? $('input[name="avatar"]').get(0).files[0].name : '';
+            var $emailError = $.staff.isValidEmailAddress();
 
             if ($error != 0) {
                 swal({
@@ -232,6 +250,17 @@
                 window.onkeydown = null;
                 window.onfocus = null;   
                 $.staff.required_fields();
+            } else if ($emailError > 0) {
+                swal({
+                    title: "Oops...",
+                    text: "Something went wrong! \nPlease use a valid email.",
+                    type: "warning",
+                    showCancelButton: false,
+                    closeOnConfirm: true,
+                    confirmButtonClass: "btn btn-warning btn-focus m-btn m-btn--pill m-btn--air m-btn--custom"
+                });
+                window.onkeydown = null;
+                window.onfocus = null;
             } else {
                 $self.prop('disabled', true).html('wait.....').addClass('m-btn--custom m-loader m-loader--light m-loader--right');
                 var d1 = $.staff.do_uploads($identification);
@@ -263,7 +292,7 @@
                                     }, 500 + 300 * (Math.random() * 5));
                                 } else {
                                     $self.html('<i class="la la-save"></i> Save Changes').removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
-                                    $form.find('input[name="code"]').next().text('This is an existing code.');
+                                    $form.find('input[name="' + data.error + '"]').next().text(data.text);
                                     swal({
                                         title: data.title,
                                         text: data.text,

@@ -75,12 +75,14 @@
     <div class="col-md-12">
         <div class="m-portlet m-portlet--tab">
             <div class="m-portlet__body">
+                <a href="javascript:;" class="check-roles" value="checkall">[ Check All ]</a>
+                <a href="javascript:;" class="check-roles" value="uncheckall">[ Uncheck All ]</a>
                 <div class="m-accordion m-accordion--bordered m-accordion--solid" id="m_accordion_4" role="tablist">
                     <div class="row">
                         @foreach ($headers as $header)
                             <div class="col-md-6 margin-top-bottom-10">
                                 <div class="m-accordion__item">
-                                    <div class="m-accordion__item-head collapsed"  role="tab" id="m_accordion_4_item_{{ $header['id'] }}_head" data-toggle="collapse" href="#m_accordion_4_item_{{ $header['id'] }}_body" aria-expanded="false">
+                                    <div class="m-accordion__item-head collapsed" id="m_accordion_4_item_{{ $header['id'] }}_head">
                                         <span class="m-accordion__item-icon">
                                             <label class="m-checkbox">
                                                 @if (!empty($role))
@@ -99,7 +101,7 @@
                                         <span class="m-accordion__item-title">
                                             {{ $header['name'] }}
                                         </span>
-                                        <span class="m-accordion__item-mode"></span>
+                                        <span role="tab" href="#m_accordion_4_item_{{ $header['id'] }}_body" data-toggle="collapse" class="m-accordion__item-mode" aria-expanded="false"></span>
                                     </div>
                                     <div class="m-accordion__item-body collapse" id="m_accordion_4_item_{{ $header['id'] }}_body" class=" " role="tabpanel" aria-labelledby="m_accordion_4_item_{{ $header['id'] }}_head" data-parent="#m_accordion_4">
                                         <div class="m-accordion__item-content">
@@ -126,12 +128,12 @@
                                                                 @if (!empty($role))
                                                                     @php $subModuleCheck = $roles->check_sub_module_if_checked($sub_module['id'], $role->id); @endphp
                                                                     @if ($subModuleCheck['count'] > 0)
-                                                                        <input type="checkbox" name="sub_modules[]" value="{{ $sub_module['id'] }}" checked="checked">
+                                                                        <input module="{{ $module['id'] }}" type="checkbox" name="sub_modules[]" value="{{ $sub_module['id'] }}" checked="checked">
                                                                     @else
-                                                                        <input type="checkbox" name="sub_modules[]" value="{{ $sub_module['id'] }}">
+                                                                        <input module="{{ $module['id'] }}" type="checkbox" name="sub_modules[]" value="{{ $sub_module['id'] }}">
                                                                     @endif
                                                                 @else
-                                                                    <input type="checkbox" name="sub_modules[]" value="{{ $sub_module['id'] }}">
+                                                                    <input module="{{ $module['id'] }}" type="checkbox" name="sub_modules[]" value="{{ $sub_module['id'] }}">
                                                                 @endif
                                                                     {{ $sub_module['name'] }}
                                                                 <span></span>
@@ -145,12 +147,12 @@
                                                                         <label class="m-checkbox">
                                                                             @if (!empty($role))
                                                                                 @if ($subModuleCheck['create'] > 0)
-                                                                                    <input type="checkbox" name="crud[{{ $sub_module['id'] }}][1]" value="1" checked="checked">
+                                                                                    <input submodule="{{ $sub_module['id'] }}" type="checkbox" name="crud[{{ $sub_module['id'] }}][1]" value="1" checked="checked">
                                                                                 @else
-                                                                                    <input type="checkbox" name="crud[{{ $sub_module['id'] }}][1]" value="1">
+                                                                                    <input submodule="{{ $sub_module['id'] }}" type="checkbox" name="crud[{{ $sub_module['id'] }}][1]" value="1">
                                                                                 @endif
                                                                             @else
-                                                                                <input type="checkbox" name="crud[{{ $sub_module['id'] }}][1]" value="1">
+                                                                                <input submodule="{{ $sub_module['id'] }}" type="checkbox" name="crud[{{ $sub_module['id'] }}][1]" value="1">
                                                                             @endif
                                                                                 Create
                                                                             <span></span>
@@ -158,12 +160,12 @@
                                                                         <label class="m-checkbox">
                                                                             @if (!empty($role))
                                                                                 @if ($subModuleCheck['read'] > 0)
-                                                                                    <input type="checkbox" name="crud[{{ $sub_module['id'] }}][2]" value="1" checked="checked">
+                                                                                    <input submodule="{{ $sub_module['id'] }}" type="checkbox" name="crud[{{ $sub_module['id'] }}][2]" value="1" checked="checked">
                                                                                 @else
-                                                                                    <input type="checkbox" name="crud[{{ $sub_module['id'] }}][2]" value="1">
+                                                                                    <input submodule="{{ $sub_module['id'] }}" type="checkbox" name="crud[{{ $sub_module['id'] }}][2]" value="1">
                                                                                 @endif
                                                                             @else
-                                                                                <input type="checkbox" name="crud[{{ $sub_module['id'] }}][2]" value="1">
+                                                                                <input submodule="{{ $sub_module['id'] }}" type="checkbox" name="crud[{{ $sub_module['id'] }}][2]" value="1">
                                                                             @endif
                                                                                 Read
                                                                             <span></span>
@@ -171,12 +173,12 @@
                                                                         <label class="m-checkbox">
                                                                             @if (!empty($role))
                                                                                 @if ($subModuleCheck['update'] > 0)
-                                                                                    <input type="checkbox" name="crud[{{ $sub_module['id'] }}][3]" value="1" checked="checked">
+                                                                                    <input submodule="{{ $sub_module['id'] }}" type="checkbox" name="crud[{{ $sub_module['id'] }}][3]" value="1" checked="checked">
                                                                                 @else
-                                                                                    <input type="checkbox" name="crud[{{ $sub_module['id'] }}][3]" value="1">
+                                                                                    <input submodule="{{ $sub_module['id'] }}" type="checkbox" name="crud[{{ $sub_module['id'] }}][3]" value="1">
                                                                                 @endif
                                                                             @else
-                                                                                <input type="checkbox" name="crud[{{ $sub_module['id'] }}][3]" value="1">
+                                                                                <input submodule="{{ $sub_module['id'] }}" type="checkbox" name="crud[{{ $sub_module['id'] }}][3]" value="1">
                                                                             @endif
                                                                                 Update
                                                                             <span></span>
@@ -184,12 +186,12 @@
                                                                         <label class="m-checkbox">
                                                                             @if (!empty($role))
                                                                                 @if ($subModuleCheck['delete'] > 0)
-                                                                                    <input type="checkbox" name="crud[{{ $sub_module['id'] }}][4]" value="1" checked="checked">
+                                                                                    <input submodule="{{ $sub_module['id'] }}" type="checkbox" name="crud[{{ $sub_module['id'] }}][4]" value="1" checked="checked">
                                                                                 @else
-                                                                                    <input type="checkbox" name="crud[{{ $sub_module['id'] }}][4]" value="1">
+                                                                                    <input submodule="{{ $sub_module['id'] }}" type="checkbox" name="crud[{{ $sub_module['id'] }}][4]" value="1">
                                                                                 @endif
                                                                             @else
-                                                                                <input type="checkbox" name="crud[{{ $sub_module['id'] }}][4]" value="1">
+                                                                                <input submodule="{{ $sub_module['id'] }}" type="checkbox" name="crud[{{ $sub_module['id'] }}][4]" value="1">
                                                                             @endif
                                                                                 Delete
                                                                             <span></span>

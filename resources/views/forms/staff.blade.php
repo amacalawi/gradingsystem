@@ -27,13 +27,12 @@
                     </div>    
                     <div class="row">
                         <div class="offset-md-6 col-md-6">
-                            <div class="form-group m-form__group">
+                            <div class="form-group m-form__group required">
                                 {{ Form::label('identification_no', 'Staff Number', ['class' => '']) }}
                                 {{ 
                                     Form::text($name = 'identification_no', $value = !empty($staff) ? $staff->identification_no : $staffs->generate_staff_no(), 
                                     $attributes = array(
                                         'id' => 'identification_no',
-                                        'disabled' => 'disabled',
                                         'class' => 'bold form-control form-control-lg m-input m-input--solid'
                                     )) 
                                 }}
@@ -271,9 +270,8 @@
                         <div class="col-md-9">
                             <div class="form-group m-form__group required">
                                 {{ 
-                                    Form::text($name = 'email', $value = !empty($staff) ? $staff->email : '', 
+                                    Form::email($name = 'email', $value = !empty($staff) ? $staff->email : '', 
                                     $attributes = array(
-                                        'type' => 'email',
                                         'id' => 'email',
                                         'class' => 'form-control form-control-lg m-input m-input--solid'
                                     )) 
@@ -288,12 +286,11 @@
                             {{ Form::label('username', 'Username', ['class' => '']) }}
                         </div>
                         <div class="col-md-9">
-                            <div class="form-group m-form__group">
+                            <div class="form-group m-form__group required">
                                 {{ 
                                     Form::text($name = 'username', $value = !empty($staff) ? $staff->username : $staffs->generate_staff_no(), 
                                     $attributes = array(
                                         'id' => 'username',
-                                        'disabled' => 'disabled',
                                         'class' => 'bold form-control form-control-lg m-input m-input--solid'
                                     )) 
                                 }}

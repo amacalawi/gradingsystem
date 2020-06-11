@@ -27,13 +27,12 @@
                     </div>    
                     <div class="row">
                         <div class="offset-md-6 col-md-6">
-                            <div class="form-group m-form__group">
+                            <div class="form-group m-form__group required">
                                 {{ Form::label('identification_no', 'Student Number', ['class' => '']) }}
                                 {{ 
                                     Form::text($name = 'identification_no', $value = !empty($student) ? $student->identification_no : '', 
                                     $attributes = array(
                                         'id' => 'identification_no',
-                                        'disabled' => 'disabled',
                                         'class' => 'bold form-control form-control-lg m-input m-input--solid'
                                     )) 
                                 }}
@@ -373,9 +372,8 @@
                                         <div class="form-group m-form__group">
                                             {{ Form::label('mother_email', 'Email', ['class' => '']) }}
                                             {{ 
-                                                Form::text($name = 'mother_email', $value = !empty($student) ? $student->mother_email : '', 
+                                                Form::email($name = 'mother_email', $value = !empty($student) ? $student->mother_email : '', 
                                                 $attributes = array(
-                                                    'type' => 'email',
                                                     'id' => 'mother_email',
                                                     'class' => 'form-control form-control-lg m-input m-input--solid'
                                                 )) 
@@ -484,9 +482,8 @@
                                         <div class="form-group m-form__group">
                                             {{ Form::label('father_email', 'Email', ['class' => '']) }}
                                             {{ 
-                                                Form::text($name = 'father_email', $value = !empty($student) ? $student->father_email : '', 
+                                                Form::email($name = 'father_email', $value = !empty($student) ? $student->father_email : '', 
                                                 $attributes = array(
-                                                    'type' => 'email',
                                                     'id' => 'father_email',
                                                     'class' => 'form-control form-control-lg m-input m-input--solid'
                                                 )) 
@@ -650,9 +647,8 @@
                         <div class="col-md-9">
                             <div class="form-group m-form__group required">
                                 {{ 
-                                    Form::text($name = 'email', $value = !empty($student) ? $student->email : '', 
+                                    Form::email($name = 'email', $value = !empty($student) ? $student->email : '', 
                                     $attributes = array(
-                                        'type' => 'email',
                                         'id' => 'email',
                                         'class' => 'form-control form-control-lg m-input m-input--solid'
                                     )) 
@@ -672,7 +668,6 @@
                                     Form::text($name = 'username', $value = $student->username ? $student->username : '', 
                                     $attributes = array(
                                         'id' => 'username',
-                                        'disabled' => 'disabled',
                                         'class' => 'bold form-control form-control-lg m-input m-input--solid'
                                     )) 
                                 }}

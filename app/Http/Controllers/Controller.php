@@ -20,4 +20,5 @@ class Controller extends BaseController
         $menus = (new UserRole)->load_menus(Auth::user()->id);
         return $menus;
     }
+    
 }

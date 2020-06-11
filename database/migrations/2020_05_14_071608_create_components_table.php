@@ -17,6 +17,7 @@ class CreateComponentsTable extends Migration
             $table->increments('id');
             $table->integer('batch_id')->unsigned();
             $table->integer('quarter_id')->unsigned();
+            $table->integer('section_id')->unsigned(); 
             $table->integer('subject_id')->unsigned(); 
             $table->string('type', 40);
             $table->string('name', 40);
