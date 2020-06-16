@@ -9,12 +9,10 @@ use App\Models\Component;
 use App\Models\Admission;
 use App\Models\Quarter;
 use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\FromView;
-use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-use App\Exports\QuarterGradeExport;
-
-class GradingSheetExport implements FromView, WithMultipleSheets
+class GradingSheetTableExport implements WithTitle, FromView
 {
     private $query;
 
@@ -26,6 +24,7 @@ class GradingSheetExport implements FromView, WithMultipleSheets
     public function view(): View
     {   
         return view('modules.academics.gradingsheets.all.export', [
+            'title' => $this->title(),
             'segment' => request()->segment(4),
             'grading' => (new GradingSheet)->fetch($this->query),
             'quarters' => (new Quarter)->all_quarters(),
@@ -35,14 +34,12 @@ class GradingSheetExport implements FromView, WithMultipleSheets
             'students' => (new Admission)->get_students_via_gradingsheet($this->query),
         ]);
     }
- 
-    public function sheets(): array
+
+    /**
+     * @return string
+     */
+    public function title(): string
     {
-        $sheets = [];
-
-        $sheets[] = new GradingSheetTableExport($this->query);
-        $sheets[] = new QuarterGradeLookupExport($this->query);
-
-        return $sheets;
+        return 'GradingSheet';
     }
 }

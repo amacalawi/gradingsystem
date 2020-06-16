@@ -165,8 +165,8 @@
             $iteration = 3; 
             $rownumber = 10; //start of student
 
-            $total_row_after = $rownumber+count($students)+3; // 3 number of spaces row
-            $total_row_befor = $total_row_after+40 // 40 number of qg_lookup
+            //$total_row_after = $rownumber+count($students)+3; // 3 number of spaces row
+            //$total_row_befor = $total_row_after+40 // 40 number of qg_lookup
         @endphp
         
         @foreach ($students as $student)
@@ -341,7 +341,8 @@
                 <!-- QG -->
                 <td style="text-align: center; background-color:#fffcbe;" class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg quarter-cell">
                     @php
-                        $qg_formula = '=LOOKUP('.$column_letter_repo['initial'].$rownumber.','.'A'.$total_row_after.':'.'B'.$total_row_befor.')';
+                        //$qg_formula = "=LOOKUP(".$column_letter_repo['initial'].$rownumber.","."'Quarter Grade'! A".$total_row_after.":"."B".$total_row_befor.")";
+                        $qg_formula = "=LOOKUP(".$column_letter_repo['initial'].$rownumber.","."'Quarter Grade'! A2:"."B42)";
                     @endphp
                     {{$qg_formula}} <!-- QG Complete Formula -->
                 </td>
@@ -356,36 +357,6 @@
             @php $iteration++; $rownumber++; @endphp
         
         @endforeach
-        
-        <!-- Spaces before QG lookup //for formality -->
-        <?php for( $spaces=1; $spaces<3; $spaces++ ){ ?>
-            <tr>
-                <td></td>
-            </tr>  
-        <?php } ?>
-
-        <tr>
-            <td colspan="2"> Quarter Grade lookup </td>
-        </tr>
-        <?php
-            $row = 41;
-            $double = 0.00;
-            $equal_value = 60;
-            for( $qg_count=1; $qg_count<=$row ; $qg_count++ ){
-        ?>
-        <tr>
-            <td> <?php echo number_format($double,2) ?> </td>
-            <td> <?php echo $equal_value; ?> </td>
-        </tr>
-        <?php
-                if($qg_count < 16){
-                    $double = $double + 4.00;
-                } else {
-                    $double = $double + 1.60;
-                }
-                $equal_value++;
-            } //die();
-        ?>
         
     </tbody>
 </table>
