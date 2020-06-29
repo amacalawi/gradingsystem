@@ -28,4 +28,9 @@ class SectionsSubjects extends Model
         $sections_subjects = SectionsSubjects::where('section_info_id', $section_info_id)->get();
         return $sections_subjects;
     }
+
+    public function subject()
+    {   
+        return $this->belongsTo('App\Models\Subject');
+    }
 }

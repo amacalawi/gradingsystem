@@ -94,6 +94,38 @@ button:not([data-dismiss="alert"]) {
     margin-right: 0.55rem;
 }
 
+.p-t-2 {
+    padding-top: 2.2rem !important;
+}
+
+.p-l-0 {
+    padding-left: 0 !important;
+}
+
+.p-l-1 {
+    padding-left: 1.1rem !important;
+}
+
+.p-r-1 {
+    padding-right: 1.1rem !important;
+}
+
+.p-r-0 {
+    padding-right: 0 !important;
+}
+
+.m-b-0 {
+    margin-bottom: 0 !important;
+}
+
+.p-b-0 {
+    padding-bottom: 0 !important;
+}
+
+.p-t-0 {
+    padding-top: 0 !important;
+}
+
 .m-subheader.fix {
     position: fixed;
     z-index: 99;
@@ -409,14 +441,39 @@ span[aria-expanded="true"]:before {
     background: #c4c5d6 !important;
 }
 
+.class-record {
+    width: 100%;
+}
+
+.class-record th:first-child,
+.class-record td:first-child {
+    width: 42.4px;
+}
+
+.class-record th:nth-child(2),
+.class-record td:nth-child(2) {
+    width: 200px !important;
+}
+
+.class-record td {
+    width: auto !important;
+}
+
+.class-record,
 #gradingsheet-table {
     table-layout: fixed;
 }
 
+.class-record td,
+.class-record th,
 #gradingsheet-table td,
 #gradingsheet-table th {
     border: 1px solid #575962 !important;
     color: #212529 !important;
+}
+
+.class-record-head th {
+    border-bottom: 1px !important;
 }
 
 #gradingsheet-table th.component-header {
@@ -444,4 +501,24 @@ span[aria-expanded="true"]:before {
 
 .check-roles:hover {
     color: #3b3b3b;
+}
+
+#m_wizard .m-portlet .m-portlet__body {
+    padding-left: 1.1rem !important;
+    padding-right: 1.1rem !important;
+}
+
+.m-wizard.m-wizard--1.m-wizard--success .m-wizard__progress .progress .progress-bar {
+    background-color: #22b9ff;
+}
+.m-wizard.m-wizard--1.m-wizard--success .m-wizard__progress .progress .progress-bar:after {
+    background-color: #22b9ff;
+}
+.m-wizard.m-wizard--1.m-wizard--success .m-wizard__steps .m-wizard__step.m-wizard__step--current .m-wizard__step-info a.m-wizard__step-number:hover > span,
+.m-wizard.m-wizard--1.m-wizard--success .m-wizard__steps .m-wizard__step.m-wizard__step--done .m-wizard__step-info a.m-wizard__step-number:hover > span {
+    background-color: #1da4e3;
+}
+.m-wizard.m-wizard--1.m-wizard--success .m-wizard__steps .m-wizard__step.m-wizard__step--done .m-wizard__step-info .m-wizard__step-number > span,
+.m-wizard.m-wizard--1.m-wizard--success .m-wizard__steps .m-wizard__step.m-wizard__step--current .m-wizard__step-info .m-wizard__step-number > span {
+    background-color: #22b9ff;
 }

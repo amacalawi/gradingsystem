@@ -66,5 +66,17 @@ class Quarter extends Model
 
         return $quarters;
     }
+
+    public function all_quarters_via_type($type)
+    {
+        $quarters = self::where([
+            'type' => $type,
+            'is_active' => 1
+        ])
+        ->orderBy('id', 'asc')
+        ->get();
+
+        return $quarters;
+    }
 }
 
