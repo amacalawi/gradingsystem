@@ -135,7 +135,7 @@
                     @if (Request::segment(3) == 'all-gradingsheets')
                         Grading Sheets
                     @else
-                        {{ ucwords(Request::segment(3)) }}
+                        {{ ucwords(str_replace('-', ' ', Request::segment(3))) }}
                     @endif
 
                 </h3>
@@ -159,11 +159,11 @@
             </div>
             <div>
                 @php 
-                    $invisibles = ['transmutations'];
+                    $invisibles = ['transmutations', 'class-record'];
                 @endphp
                 @if (Request::segment(3) == 'components' && Auth::user()->type  != 'administrator')
 
-                @else (!in_array(Request::segment(3), $invisibles))
+                @elseif (!in_array(Request::segment(3), $invisibles))
                     <a href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/'.Request::segment(3).'/add') }}" class="btn m-btn--pill btn-brand add-btn m-btn--custom">
                         <i class="la la-commenting"></i> 
                         @php 
@@ -176,7 +176,14 @@
                             @if (substr($string, -1) == 'e' && !in_array(Request::segment(3), $exemptions))
                                 Add New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2) }}
                             @else
-                                Add New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1) }}
+                                @php 
+                                    $exemption = [];
+                                @endphp
+                                @if (!in_array(Request::segment(3), $exemption))
+                                    Add New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1) }}
+                                @else
+                                    Add New {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
+                                @endif
                             @endif
                         @endif
                     </a>
@@ -184,7 +191,7 @@
             </div>
         </div>
     </div>
-@elseif ((\Request::is('*/*/*/add') && Request::segment(5) == '') || (\Request::is('*/*/*/edit/*') && Request::segment(6) == ''))  
+@elseif ((\Request::is('*/*/*/add') && Request::segment(5) == '') || (\Request::is('*/*/*/view/*') && Request::segment(6) == '') || (\Request::is('*/*/*/edit/*') && Request::segment(6) == ''))  
     <div class="m-subheader ">
         <div class="d-flex align-items-center">
             <div class="mr-auto">
@@ -236,13 +243,17 @@
                                         @endif
                                     @endif
                                 @else
-                                    @if (Request::segment(3) == 'all-gradingsheets')
-                                        New Grading Sheet
+                                    @if (\Request::is('*/*/view/*'))
+                                        View Class Record
                                     @else
-                                        @if (substr($string, -1) == 'e' && !in_array(Request::segment(3), $exemptions))
-                                            New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2) }}
+                                        @if (Request::segment(3) == 'all-gradingsheets')
+                                            New Grading Sheet
                                         @else
-                                            New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1) }}
+                                            @if (substr($string, -1) == 'e' && !in_array(Request::segment(3), $exemptions))
+                                                New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2) }}
+                                            @else
+                                                New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1) }}
+                                            @endif
                                         @endif
                                     @endif
                                 @endif
@@ -252,17 +263,21 @@
                 </ul>
             </div>
             <div>
-                <button type="button" class="submit-btn btn m-btn--pill btn-brand m-btn--custom">
-                    @if (\Request::is('*/*/edit/*'))
-                        <i class="la la-save"></i> Save Changes
-                    @else
-                        @if (Request::segment(3) == 'all-gradingsheets')
-                            <i class="la la-save"></i> Generate Grading Sheet
-                        @else
+                @if (\Request::is('*/*/view/*'))
+
+                @else
+                    <button type="button" class="submit-btn btn m-btn--pill btn-brand m-btn--custom">
+                        @if (\Request::is('*/*/edit/*'))
                             <i class="la la-save"></i> Save Changes
+                        @else
+                            @if (Request::segment(3) == 'all-gradingsheets')
+                                <i class="la la-save"></i> Generate Grading Sheet
+                            @else
+                                <i class="la la-save"></i> Save Changes
+                            @endif
                         @endif
-                    @endif
-                </button>
+                    </button>
+                @endif
             </div>
         </div>
     </div>

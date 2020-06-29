@@ -34,30 +34,6 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="m-form__group m-form__group--inline">
-                            <div class="m-form__control">
-                                <select class="form-control m-bootstrap-select m-bootstrap-select--solid" id="m_form_type">
-                                    <option value="">
-                                        All
-                                    </option>
-                                    <option value="childhood-education">
-                                        Childhood Education
-                                    </option>
-                                    <option value="primary-education">
-                                        Primary Education
-                                    </option>
-                                    <option value="secondary-education">
-                                        Secondary Education
-                                    </option>
-                                    <option value="higher-education">
-                                        Higher Education
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="d-md-none m--margin-bottom-10"></div>
-                    </div>
                 </div>
                 <div class="m_datatable" id="local_data"></div>
             </div>
@@ -67,5 +43,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('js/datatables/inactive-quarter.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/datatables/inactive-component.js') }}" type="text/javascript"></script>
 @endpush

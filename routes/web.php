@@ -302,6 +302,13 @@ Route::prefix('academics')->group(function () {
         Route::post('all-gradingsheets/import-gradingsheet/{id}', 'GradingSheetsController@import_gradingsheet')->name('gradingsheets.fetch.import.gradingsheet');
         /* End Grading Sheets Routes */
 
+        /* Start Class Record Routes */
+        Route::get('class-record', 'ClassRecordController@manage')->name('classrecord.manage');
+        Route::get('class-record/all-active', 'ClassRecordController@all_active')->name('classrecord.active');
+        Route::get('class-record/view/{id}', 'ClassRecordController@view')->name('classrecord.view');
+
+        /* End Class Record Routes */
+
         /* Start Components Routes */
         Route::get('components/add', 'ComponentsController@add')->name('components.add');
         Route::get('components/edit/{id?}', 'ComponentsController@edit')->name('components.edit');
