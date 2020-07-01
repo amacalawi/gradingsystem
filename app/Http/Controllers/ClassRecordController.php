@@ -98,6 +98,10 @@ class ClassRecordController extends Controller
                     $q->select(['id', 'code', 'name', 'description']); 
                 }
             ])
+            ->where([
+                'batch_id' => (new Batch)->get_current_batch(),
+                'is_active' => 1
+            ])
             ->orderBy('id', 'DESC')
             ->get();
         }

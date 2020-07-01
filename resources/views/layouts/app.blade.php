@@ -90,6 +90,7 @@
         @endif
         <script src="{{ asset('assets/vendors/easing/jquery.easing.1.3.min.js') }}" type="text/javascript"></script>
         <script src="{{ asset('assets/app/js/dashboard.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('assets/app/js/utility.js') }}" type="text/javascript"></script>
         <!--end::Page Vendors -->  
         <!--begin::append script-->
         @stack('scripts')

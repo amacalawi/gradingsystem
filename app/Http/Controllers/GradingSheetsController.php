@@ -98,7 +98,12 @@ class GradingSheetsController extends Controller
                 'quarter' =>  function($q) { 
                     $q->select(['id', 'name']); 
                 }
-            ])->orderBy('id', 'ASC')->get();
+            ])
+            ->where([
+                'batch_id' => (new Batch)->get_current_batch(),
+                'is_active' => 1
+            ])
+            ->orderBy('id', 'ASC')->get();
 
             return $res->map(function($grading) {
                 return [
@@ -139,7 +144,10 @@ class GradingSheetsController extends Controller
                     $q->select(['id', 'name']); 
                 }
             ])
-            ->where('is_active', 1)
+            ->where([
+                'batch_id' => (new Batch)->get_current_batch(),
+                'is_active' => 1
+            ])
             ->orderBy('id', 'ASC')->get();
 
             return $res->map(function($grading) {
@@ -159,8 +167,7 @@ class GradingSheetsController extends Controller
     {   
         if (Auth::user()->type == 'administrator') 
         { 
-            $res = GradingSheet::where('is_active', 0)
-            ->with([
+            $res = GradingSheet::with([
                 'section' =>  function($q) { 
                     $q->select(['id', 'name']); 
                 },
@@ -170,7 +177,12 @@ class GradingSheetsController extends Controller
                 'quarter' =>  function($q) { 
                     $q->select(['id', 'name']); 
                 }
-            ])->orderBy('id', 'ASC')->get();
+            ])
+            ->where([
+                'batch_id' => (new Batch)->get_current_batch(),
+                'is_active' => 0
+            ])
+            ->orderBy('id', 'ASC')->get();
 
             return $res->map(function($grading) {
                 return [
@@ -211,7 +223,10 @@ class GradingSheetsController extends Controller
                     $q->select(['id', 'name']); 
                 }
             ])
-            ->where('is_active', 0)
+            ->where([
+                'batch_id' => (new Batch)->get_current_batch(),
+                'is_active' => 0
+            ])
             ->orderBy('id', 'ASC')->get();
 
             return $res->map(function($grading) {

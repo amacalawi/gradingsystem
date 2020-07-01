@@ -85,7 +85,11 @@ class ComponentsController extends Controller
                 'quarter' =>  function($q) { 
                     $q->select(['id', 'name']); 
                 }
-            ])->where('is_active', 1)->orderBy('order', 'ASC')->get();
+            ])
+            ->where([
+                'batch_id' => (new Batch)->get_current_batch(),
+                'is_active' => 1
+            ])->orderBy('order', 'ASC')->get();
 
             return $res->map(function($component) {
                 return [
@@ -120,7 +124,10 @@ class ComponentsController extends Controller
                     $q->select(['id', 'name']); 
                 }
             ])
-            ->where('is_active', 1)
+            ->where([
+                'batch_id' => (new Batch)->get_current_batch(),
+                'is_active' => 1
+            ])
             ->orderBy('order', 'ASC')->get();
 
             return $res->map(function($component) {
@@ -150,7 +157,12 @@ class ComponentsController extends Controller
                 'quarter' =>  function($q) { 
                     $q->select(['id', 'name']); 
                 }
-            ])->where('is_active', 0)->orderBy('order', 'ASC')->get();
+            ])
+            ->where([
+                'batch_id' => (new Batch)->get_current_batch(),
+                'is_active' => 0
+            ])
+            ->orderBy('order', 'ASC')->get();
 
             return $res->map(function($component) {
                 return [
@@ -185,7 +197,10 @@ class ComponentsController extends Controller
                     $q->select(['id', 'name']); 
                 }
             ])
-            ->where('is_active', 0)
+            ->where([
+                'batch_id' => (new Batch)->get_current_batch(),
+                'is_active' => 0
+            ])
             ->orderBy('order', 'ASC')->get();
 
             return $res->map(function($component) {
