@@ -393,8 +393,8 @@ class DatabaseSeeder extends Seeder
             [   
                 'module_id' => '5',
                 'code' => 'quarters',
-                'name' => 'Quaraters',
-                'description' => 'Quaraters Description',
+                'name' => 'Quarters',
+                'description' => 'Quarters Description',
                 'slug' => 'quarters',
                 'icon' => '',
                 'order' => '13',

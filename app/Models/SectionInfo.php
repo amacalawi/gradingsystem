@@ -29,7 +29,7 @@ class SectionInfo extends Model
         ->where('id', '=', $id)
         ->get();
 
-        if ($sectioninfos) {
+        if ($sectioninfos->count() > 0) {
             $sectioninfos = $sectioninfos->first();
             $results = array(
                 'id' => ($sectioninfos->id) ? $sectioninfos->id : '',

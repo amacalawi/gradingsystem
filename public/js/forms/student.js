@@ -217,11 +217,13 @@
 
         $.each(this.$body.find("input[type='email']"), function(){
             var $self = $(this);
-            var validEmail = pattern.test($self.val());
+            if ($self.val() != '') {
+                var validEmail = pattern.test($self.val());
 
-            if (!validEmail) {
-                emailError++;
-                $self.next().text('this is not a valid email');
+                if (!validEmail) {
+                    emailError++;
+                    $self.next().text('this is not a valid email');
+                }
             }
         });
 
