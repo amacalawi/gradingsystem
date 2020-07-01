@@ -326,8 +326,11 @@ Route::prefix('academics')->group(function () {
     /* End Grading Sheets Routes */
 });
 
-
-Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+Route::prefix('dashboard')->group(function () {
+    Route::get('', 'DashboardController@index')->name('dashboard');
+    Route::get('get-all-open-batches', 'DashboardController@open_batches')->name('dashboard.open');
+    Route::get('update-current/{id}', 'DashboardController@update_current')->name('dashboard.update');
+});
 
 Route::get('/send-mail', function () {
     Mail::to('aranfure@gmail.com')->send(new UserNotification()); 

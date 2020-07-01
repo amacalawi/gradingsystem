@@ -181,6 +181,45 @@
                                 </div>
                             </div>
                         </li>
+                        <li class="opened-list hidden m-menu__item  m-menu__item--submenu m-menu__item--rel m-menu__item--more m-menu__item--icon-only"  data-menu-submenu-toggle="click" data-redirect="true" aria-haspopup="true">
+                            <a  href="#" class="m-menu__link m-menu__toggle">
+                                <span class="m-menu__item-here"></span>
+                                <i class="m-menu__link-icon flaticon-more-v3"></i>
+                                <span class="m-menu__link-text"></span>
+                            </a>
+                            <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left m-menu__submenu--pull">
+                                <span class="m-menu__arrow m-menu__arrow--adjust"></span>
+                                <ul class="m-menu__subnav opened-nav school-year">
+                                    <li class="m-menu__item ">
+                                        <a  href="inner.html" class="m-menu__link">
+                                            <span class="m-menu__link-text">
+                                                SY 2018-2019
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="m-menu__item ">
+                                        <a  href="inner.html" class="m-menu__link">
+                                            <span class="m-menu__link-text">
+                                                SY 2019-2020
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="m-menu__item ">
+                                        <a  href="inner.html" class="m-menu__link active">
+                                            <span class="m-menu__link-text">
+                                                SY 2020-2021
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="current-list hidden m-menu__item  m-menu__item--submenu m-menu__item--rel m-menu__item--more m-menu__item--icon-only">
+                            <a  href="#" class="m-menu__link m-menu__toggle active">
+                                <span class="m-menu__item-here"></span>
+                                <span class="m-menu__link-text current-nav">SY 2020-2021</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
                 <!-- END: Horizontal Menu -->               
