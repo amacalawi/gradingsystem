@@ -93,6 +93,8 @@ Route::prefix('components')->group(function () {
     Route::get('groups/all-active', 'GroupsController@all_active')->name('groups.all.active');
     Route::get('groups/inactive', 'GroupsController@inactive')->name('groups.manage.inactive');
     Route::get('groups/all-inactive', 'GroupsController@all_inactive')->name('groups.all.inactive');
+    Route::get('groups/group-user-list', 'GroupsController@all_group_users')->name('groups.all.group.users');
+    Route::get('groups/all-member', 'GroupsController@all_member')->name('groups.all.member');    
     /* End Groups Routes */
 
     /* Menus Routes */

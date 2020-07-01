@@ -658,4 +658,10 @@ class StudentsController extends Controller
         $siblings = (new Student)->get_all_siblings($request->get('id'));
         echo json_encode( $siblings ); exit();
     }
+
+    public function get_student($id)
+    {
+        $student = (new Student)->get_this_student( $id );
+        echo json_encode( $student ); exit();
+    }
 }
