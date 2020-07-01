@@ -190,27 +190,6 @@
                             <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left m-menu__submenu--pull">
                                 <span class="m-menu__arrow m-menu__arrow--adjust"></span>
                                 <ul class="m-menu__subnav opened-nav school-year">
-                                    <li class="m-menu__item ">
-                                        <a  href="inner.html" class="m-menu__link">
-                                            <span class="m-menu__link-text">
-                                                SY 2018-2019
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="m-menu__item ">
-                                        <a  href="inner.html" class="m-menu__link">
-                                            <span class="m-menu__link-text">
-                                                SY 2019-2020
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="m-menu__item ">
-                                        <a  href="inner.html" class="m-menu__link active">
-                                            <span class="m-menu__link-text">
-                                                SY 2020-2021
-                                            </span>
-                                        </a>
-                                    </li>
                                 </ul>
                             </div>
                         </li>
