@@ -2,7 +2,7 @@
 
 var DatatableDataLocalDemo = function () {
 	//== Private functions
- 	console.log(base_url + 'components/groups/all-active');
+ 	console.log(base_url + 'components/groups/group-user-list');
 	
 	var datatable = $('.m_datatable').mDatatable({
 		// datasource definition
@@ -12,7 +12,7 @@ var DatatableDataLocalDemo = function () {
 			  read: {
 				// sample GET method
 				method: 'GET',
-				url: base_url + 'components/groups/all-active',
+				url: base_url + 'components/groups/group-user-list',
 				map: function(raw) {
 				  // sample data mapping
 				  var dataSet = raw;
@@ -51,29 +51,18 @@ var DatatableDataLocalDemo = function () {
 
 		// columns definition
 		columns: [{
-			field: "groupID",
+			field: "groupuserID",
 			title: "#",
 			width: 50,
 			sortable: false,
 			textAlign: 'center',
 			selector: {class: 'm-checkbox--solid m-checkbox--brand'}
 		}, {
-			field: "groupCode",
-			title: "Code"
+			field: "groupuserFullname",
+			title: "Fullname"
 		}, {
-			field: "groupName",
-			title: "Name",
-		}, {
-			field: "groupDescription",
-			title: "Description"
-		}, {
-			field: "groupUser",
-			title: "No. Students",
-			type: "number"
-		}, {
-			field: "groupModified",
+			field: "groupuserModified",
 			title: "Last Modified",
-			type: "number"
 		}, {
 			field: "Actions",
 			width: 70,
@@ -85,16 +74,8 @@ var DatatableDataLocalDemo = function () {
 				var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
 
 				return '\
-					<div class="dropdown ' + dropup + '">\
-						<a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">\
-							<i class="la la-ellipsis-h"></i>\
-						</a>\
-						  <div class="dropdown-menu dropdown-menu-right">\
-							<a title="edit this" class="dropdown-item" href="' + base_url + 'components/groups/edit/' + row.groupID + '"><i class="la la-edit"></i> Edit Details</a>\
-							<a title="remove this" data-row-id="' + row.groupID + '" action="Remove" class="dropdown-item toggle-status" href="javascript:;"><i class="la la-remove"></i> Remove Details</a>\
-							\
-						  </div>\
-					</div>\
+                    <a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'memberships/staffs/edit/' + row.staffID + '"><i class="la la-edit"></i></a>\
+                    <a title="remove this" data-row-id="' + row.staffID + '" action="Remove" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-remove"></i></a>\
 				';
 			}
 		}]
@@ -133,7 +114,7 @@ var DatatableDataLocalDemo = function () {
 }();
 
 jQuery(document).ready(function () {
-	DatatableDataLocalDemo.init();
+	/*DatatableDataLocalDemo.init();*/
 	var $body = $("body");
 
 	$body.on('click', '.toggle-status', function (e){

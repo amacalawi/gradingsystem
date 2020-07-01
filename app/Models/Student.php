@@ -172,5 +172,16 @@ class Student extends Model
 
         return $siblings;
     }
+
+    public function get_this_student( $id )
+    {
+        $student = Student::select('*')
+            ->where('is_active', 1)
+            ->where('id', $id)
+            ->get();
+            
+        return $student;
+    }
+
 }
 

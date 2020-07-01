@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Group;
+use App\Models\GroupUser;
+use App\Models\Student;
+use App\Models\Batch;
 
 class GroupsController extends Controller
 {
@@ -64,6 +67,34 @@ class GroupsController extends Controller
         });
     }
 
+    public function all_group_users(Request $request)
+    {   
+        /*
+        $res = GroupUser::where('is_active', 1)
+            ->with([
+                'group' =>  function($q) { 
+                    $q->select(['id', 'name']); 
+                },
+                'users' =>  function($q) { 
+                    $q->select(['id', 'firstname', 'lastname']); 
+                },
+                'batch' =>  function($q) { 
+                    $q->select(['id', 'name']); 
+                }
+            ])->orderBy('id', 'ASC')->get();
+
+        return $res->map(function($groupuser) {
+            return [
+                'groupuserID' => $groupuser->id,
+                'groupuserCode' => $groupuser->code,
+                'groupuserFullname' => $groupuser->users->firstname.' '. $groupuser->users->lastname,
+                'groupuserDescription' => $groupuser->description,
+                'groupuserModified' => ($groupuser->updated_at !== NULL) ? date('d-M-Y', strtotime($groupuser->updated_at)).'<br/>'. date('h:i A', strtotime($groupuser->updated_at)) : date('d-M-Y', strtotime($groupuser->created_at)).'<br/>'. date('h:i A', strtotime($groupuser->created_at)),          
+            ];
+        });
+        */
+    }
+    
     public function add(Request $request, $id = '')
     {   
         $menus = $this->load_menus();
@@ -85,14 +116,16 @@ class GroupsController extends Controller
         $flashMessage = self::messages();
         $segment = request()->segment(3);
         $group = (new Group)->find($id);
-        return view('modules/groups/edit')->with(compact('menus', 'group', 'segment', 'flashMessage'));
+        $groupusers = (new GroupUser)->get_this_groupsusers($id);
+        return view('modules/groups/edit')->with(compact('menus', 'groupusers', 'group', 'segment', 'flashMessage'));
     }
 
     public function store(Request $request)
     {   
-        
-        $timestamp = date('Y-m-d H:i:s');
 
+        $timestamp = date('Y-m-d H:i:s');
+        $batch_id = Batch::where('is_active','1')->where('status','Current')->pluck('id');
+        //die(var_dump($batch_id));
         $group = Group::create([
             'code' => $request->code,
             'name' => $request->name,
@@ -105,6 +138,20 @@ class GroupsController extends Controller
             throw new NotFoundHttpException();
         }
 
+        $users = $request->group_member;
+        if($users)
+        {
+            foreach ($users as $key => $user) {
+                $groupuser = GroupUser::create([
+                    'group_id' => $group->id,
+                    'users_id' => $user,
+                    'batch_id' =>  $batch_id[0],
+                    'created_at' => $timestamp,
+                    'created_by' => Auth::user()->id
+                ]);
+            }
+        }
+
         $data = array(
             'title' => 'Well done!',
             'text' => 'The group has been successfully saved.',
@@ -113,12 +160,14 @@ class GroupsController extends Controller
         );
 
         echo json_encode( $data ); exit();
-
+ 
     }
 
     public function update(Request $request, $id)
     {    
         $timestamp = date('Y-m-d H:i:s');
+        $batch_id = Batch::where('is_active','1')->where('status','Current')->pluck('id');
+
         $group = Group::find($id);
 
         if(!$group) {
@@ -130,6 +179,21 @@ class GroupsController extends Controller
         $group->description = $request->description;
         $group->updated_at = $timestamp;
         $group->updated_by = Auth::user()->id;
+
+        //UPDATE groupuser
+        $groupuser = GroupUser::where('group_id', $id)->where('is_active', 1);
+        $groupuser->delete();
+        $users = $request->group_member;
+        foreach ($users as $key => $user) {
+            $groupuser = GroupUser::create([
+                'group_id' => $id,
+                'users_id' => $user,
+                'batch_id' =>  $batch_id[0],
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+        }
+
 
         if ($group->update()) {
 
@@ -191,5 +255,26 @@ class GroupsController extends Controller
         }
 
     }
+
+    public function all_member()
+    {
+        /*if($group_id){
+            $res = Student::where('is_active', 1)->whereNotIn('id',function($query) {
+                $query->select('users_id')->from('groups_users')->where('group_id', $group_id);
+            })->orderBy('students.id', 'ASC')->get();
+        } else {*/
+        $res = Student::where('is_active', 1)->orderBy('id', 'ASC')->get();
+        //}
+        
+        return $res->map(function($student) {
+            return [
+                'studentID' => $student->id,
+                'studentIdentification' => $student->identification_no,
+                'studentName' => $student->firstname.' '.$student->lastname,
+                'studentModified' => ($student->updated_at !== NULL) ? date('d-M-Y', strtotime($student->updated_at)).'<br/>'. date('h:i A', strtotime($student->updated_at)) : date('d-M-Y', strtotime($student->created_at)).'<br/>'. date('h:i A', strtotime($student->created_at)),          
+            ];
+        });
+    }
+
 
 }
