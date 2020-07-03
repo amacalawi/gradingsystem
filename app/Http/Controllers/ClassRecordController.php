@@ -20,6 +20,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
 use App\Components\FlashMessages;
 
+use App\Exports\ClassRecordExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 class ClassRecordController extends Controller
 {   
     use FlashMessages;
@@ -248,4 +251,11 @@ class ClassRecordController extends Controller
             }
         }
     }
+
+    public function export_record(Request $request, $id)
+    {
+        $quarters = (new Quarter)->all_quarters_via_type((new SectionInfo)->fetch($id)->type);
+        return Excel::download(new ClassRecordExport($id), 'ClassRecord_'.$id.'.xlsx');
+    }
+
 }

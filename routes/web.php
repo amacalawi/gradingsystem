@@ -308,7 +308,7 @@ Route::prefix('academics')->group(function () {
         Route::get('class-record', 'ClassRecordController@manage')->name('classrecord.manage');
         Route::get('class-record/all-active', 'ClassRecordController@all_active')->name('classrecord.active');
         Route::get('class-record/view/{id}', 'ClassRecordController@view')->name('classrecord.view');
-
+        Route::get('class-record/export-record/{id}', 'ClassRecordController@export_record')->name('classrecord.fetch.export.record');
         /* End Class Record Routes */
 
         /* Start Components Routes */
