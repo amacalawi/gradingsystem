@@ -38,7 +38,7 @@ html, body {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .add-btn,
@@ -521,4 +521,8 @@ span[aria-expanded="true"]:before {
 .m-wizard.m-wizard--1.m-wizard--success .m-wizard__steps .m-wizard__step.m-wizard__step--done .m-wizard__step-info .m-wizard__step-number > span,
 .m-wizard.m-wizard--1.m-wizard--success .m-wizard__steps .m-wizard__step.m-wizard__step--current .m-wizard__step-info .m-wizard__step-number > span {
     background-color: #22b9ff;
+}
+
+.m-tabs-line .m-tabs__item {
+    margin-right: 10px;
 }
