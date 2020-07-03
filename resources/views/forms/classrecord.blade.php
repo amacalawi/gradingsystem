@@ -328,5 +328,14 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12 ">
+                <a href="{{ url('academics/grading-sheets/class-record/export-record/'.$class_records->id) }}" >
+                    <button type="button" class="btn btn-success pull-right">
+                        Export class record
+                    </button>
+                </a>
+            </div>
+        </div>
     </div>
 </div>
