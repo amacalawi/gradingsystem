@@ -81,6 +81,22 @@ Route::prefix('components')->group(function () {
     });
     /* End Schools Routes */
 
+    /* Start Groups Routes */
+    Route::get('groups', 'GroupsController@manage')->name('groups.manage.active');
+    Route::get('groups/add', 'GroupsController@add')->name('groups.add');
+    Route::get('groups/edit/{id?}', 'GroupsController@edit')->name('groups.edit');
+    Route::post('groups/store', 'GroupsController@store')->name('groups.store');
+    Route::put('groups/update/{id}', 'GroupsController@update')->name('groups.update');
+    Route::put('groups/update-status/{id}', 'GroupsController@update_status')->name('groups.update.status');
+    Route::post('groups/remove', 'GroupsController@remove')->name('groups.remove');
+    Route::post('groups/restore', 'GroupsController@restore')->name('groups.restore');
+    Route::get('groups/all-active', 'GroupsController@all_active')->name('groups.all.active');
+    Route::get('groups/inactive', 'GroupsController@inactive')->name('groups.manage.inactive');
+    Route::get('groups/all-inactive', 'GroupsController@all_inactive')->name('groups.all.inactive');
+    Route::get('groups/group-user-list', 'GroupsController@all_group_users')->name('groups.all.group.users');
+    Route::get('groups/all-member', 'GroupsController@all_member')->name('groups.all.member');    
+    /* End Groups Routes */
+
     /* Menus Routes */
     Route::prefix('menus')->group(function () {
         /* Start Headers Routes */
