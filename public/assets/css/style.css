@@ -526,3 +526,22 @@ span[aria-expanded="true"]:before {
 .m-tabs-line .m-tabs__item {
     margin-right: 10px;
 }
+
+.m-checkbox > span:after {
+    border: solid #00a3ee;
+}
+
+.m-checkbox > input:checked ~ span {
+    border: 1px solid #00a3ee;
+}
+
+form[name="infoblast_form"] .btn-primary {
+    background-color: #00a3ee;
+    border-color: #00a3ee;
+}
+
+.m-tabs-line.nav.nav-tabs .nav-link:hover, .m-tabs-line.nav.nav-tabs .nav-link.active, .m-tabs-line a.m-tabs__link:hover, .m-tabs-line a.m-tabs__link.active {
+    background: transparent;
+    color: #00a3ee;
+    border-bottom: 1px solid #00a3ee;
+}
