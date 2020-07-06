@@ -2,7 +2,7 @@
 
 var DatatableDataLocalDemo = function () {
 	//== Private functions
- 	console.log(base_url + 'schools/batches/all-inactive');
+ 	console.log(base_url + 'components/schools/batches/all-inactive');
 	
 	var datatable = $('.m_datatable').mDatatable({
 		// datasource definition
@@ -12,7 +12,7 @@ var DatatableDataLocalDemo = function () {
 			  read: {
 				// sample GET method
 				method: 'GET',
-				url: base_url + 'schools/batches/all-inactive',
+				url: base_url + 'components/schools/batches/all-inactive',
 				map: function(raw) {
 				  // sample data mapping
 				  var dataSet = raw;
@@ -151,7 +151,7 @@ jQuery(document).ready(function () {
 		var $rowID = $(this).attr('data-row-id');
 		console.log($rowID);
 		var $action = $(this).attr('action');
-		var $url = base_url + 'schools/batches/update-status/' + $rowID;
+		var $url = base_url + 'components/schools/batches/update-status/' + $rowID;
 		var items = []; items.push({ action: $action });
 
 		console.log($url);

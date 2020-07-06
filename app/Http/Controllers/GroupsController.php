@@ -107,7 +107,7 @@ class GroupsController extends Controller
             $group = (new Group)->fetch($id);
         }
 
-        return view('modules/groups/add')->with(compact('menus', 'types', 'group', 'segment', 'flashMessage'));
+        return view('modules/groups/add')->with(compact('menus', 'group', 'segment', 'flashMessage'));
     }
 
     public function edit(Request $request, $id)
