@@ -23,18 +23,18 @@
         </tr>
 
         <tr>
-            <td> # </td>
-            <td> STUDENT </td>
+            <td style="text-align: center; border: 1px solid black;"> # </td>
+            <td style="text-align: center; border: 1px solid black;"> STUDENT </td>
             @foreach ($class_records->subjects as $subjects)
-                <td>{{ $subjects->subject->code }}</td>
+                <td style="text-align: center; border: 1px solid black;">{{ $subjects->subject->code }}</td>
             @endforeach
             @if ($class_records->has_mapeh > 0) 
-                <td>MAPEH</td>
+                <td style="text-align: center; border: 1px solid black;">MAPEH</td>
             @endif
             @if ($class_records->has_tle > 0) 
-                <td>TLE</td>
+                <td style="text-align: center; border: 1px solid black;">TLE</td>
             @endif
-            <td>Quarter Grade</td>
+            <td style="text-align: center; border: 1px solid black;">Quarter Grade</td>
         </tr>
 
         @php $i = 0; $row = 7; $quarter_grade = []; @endphp
@@ -42,8 +42,8 @@
         @foreach ($class_records->students as $students)
             @php $i++; $quarterGrade = 0; $gradeCounter = 0; $col = 'C'; $count_qg = 0; @endphp
             <tr>
-                <td> {{ $i }}</td>
-                <td> {{ $students->student->firstname.' '. $students->student->lastname }}</td>
+                <td style="text-align: center; border: 1px solid black;"> {{ $i }}</td>
+                <td style="border: 1px solid black;"> {{ $students->student->firstname.' '. $students->student->lastname }}</td>
                 @foreach ($class_records->subjects as $subjects)
                     @php
                         $gradeCounter++;
@@ -52,7 +52,7 @@
                             $quarterGrade += floatval($subjectGrade);
                         }
                     @endphp
-                    <td> {{ $classrecords->get_subject_quarter_grade($class_records->id, $class_records->batch_id, $quarterid, $class_records->section_id, $subjects->subject->id, $students->student->id, 0, 0) }}</td>
+                    <td style="text-align: center; border: 1px solid black;"> {{ $classrecords->get_subject_quarter_grade($class_records->id, $class_records->batch_id, $quarterid, $class_records->section_id, $subjects->subject->id, $students->student->id, 0, 0) }}</td>
                     
                     @php
                         $quarter_grade[$count_qg] = $col.$row;
@@ -69,7 +69,7 @@
                             $quarterGrade += floatval($mapehGrade);
                         }
                     @endphp
-                    <td> {{ $classrecords->get_subject_quarter_grade($class_records->id, $class_records->batch_id, $quarterid, $class_records->section_id, 0, $students->student->id, 1, 0) }} </td>
+                    <td style="text-align: center; border: 1px solid black;"> {{ $classrecords->get_subject_quarter_grade($class_records->id, $class_records->batch_id, $quarterid, $class_records->section_id, 0, $students->student->id, 1, 0) }} </td>
                     
                     @php
                         $quarter_grade[$count_qg] = $col.$row;
@@ -86,7 +86,7 @@
                             $quarterGrade += floatval($tleGrade);
                         }
                     @endphp
-                    <td> {{ $classrecords->get_subject_quarter_grade($class_records->id, $class_records->batch_id, $quarterid, $class_records->section_id, 0, $students->student->id, 0, 1) }} </td>
+                    <td style="text-align: center; border: 1px solid black;"> {{ $classrecords->get_subject_quarter_grade($class_records->id, $class_records->batch_id, $quarterid, $class_records->section_id, 0, $students->student->id, 0, 1) }} </td>
                 
                     @php
                         $quarter_grade[$count_qg] = $col.$row;
@@ -95,7 +95,7 @@
                 
                 @endif
 
-                <td>
+                <td style="text-align: center; border: 1px solid black;">
                     @php 
                         $add = 1;
                         $quartergrade_formula = '=SUM(';

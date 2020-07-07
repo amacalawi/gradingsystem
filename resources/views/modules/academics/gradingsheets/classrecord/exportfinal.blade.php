@@ -23,19 +23,19 @@
         </tr>
 
         <tr>
-            <td> # </td>
-            <td> STUDENT </td>
+            <td style="text-align: center; border: 1px solid black;"> # </td>
+            <td style="text-align: center; border: 1px solid black;"> STUDENT </td>
             @foreach ($quarters as $quarter)
-                <td>{{ $quarter->name }}</td>
+                <td style="text-align: center; border: 1px solid black;">{{ $quarter->name }}</td>
             @endforeach
-            <td>FINAL GRADE</td>
+            <td style="text-align: center; border: 1px solid black;">FINAL GRADE</td>
         </tr>
 
         @php $i = 1; $row = 7; @endphp
         @foreach ($class_records->students as $students)
             <tr>
-                <td> {{ $i }} </td>
-                <td> {{ $students->student->firstname.' '. $students->student->lastname }} </td>
+                <td style="text-align: center;  border: 1px solid black;"> {{ $i }} </td>
+                <td style="border: 1px solid black;"> {{ $students->student->firstname.' '. $students->student->lastname }} </td>
                     @php $col = 'C'; @endphp
                     @foreach($class_records->subjects as $subjects)
                         <!-- col subjects -->
@@ -52,10 +52,10 @@
                         @php $col++; @endphp
                     @endif
 
-                    @php $add = 1; $x_quarter_val = '=SUM('; $x_quarter_formula = '=SUM('; @endphp
+                    @php $add = 1; $x_quarter_formula = '=SUM('; @endphp
                     @foreach ($quarters as $quarter)
                         @php
-                            $x_quarter_val .= "'".$quarter->name."'!".$col.$row.")";
+                            $x_quarter_val = "=SUM('".$quarter->name."'!".$col.$row.")";
                             $x_quarter_formula .= "'".$quarter->name."'!".$col.$row;
 
                             if( count($quarters) > $add )
@@ -65,13 +65,13 @@
                             } 
                         @endphp
 
-                        <td> {{ $x_quarter_val }} </td>
+                        <td style="text-align: center; border: 1px solid black;"> {{ $x_quarter_val }} </td>
 
                     @endforeach
 
                     @php $x_quarter_formula .= ')/'.count($quarters); @endphp
                     
-                    <td> {{ $x_quarter_formula }} </td>
+                    <td style="text-align: center; border: 1px solid black;"> {{ $x_quarter_formula }} </td>
             </tr>
             @php $i++; $row++; @endphp
         @endforeach
