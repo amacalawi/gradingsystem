@@ -60,24 +60,23 @@ var DatatableDataLocalDemo = function () {
 			textAlign: 'center',
 			selector: {class: 'm-checkbox--solid m-checkbox--brand'}
 		}, {
-			field: "admissionLvlName",
-            title: "Level",
-            width: 190
-        }, {
+			field: "admissionSecCode",
+			title: "Classcode"
+		}, {
 			field: "admissionSecName",
 			title: "Section"
 		}, {
+			field: "admissionLvlName",
+            title: "Level",
+        }, {
 			field: "admissionAdviserId",
             title: "Adviser",
-            width: 60,
 		}, {
 			field: "admissionNoSubject",
             title: "No. Subjects",
-            width: 190
         }, {
 			field: "admissionNoStudent",
             title: "No. Students",
-            width: 190
         },{
 			field: "admissionModified",
 			title: "Last Modified",
