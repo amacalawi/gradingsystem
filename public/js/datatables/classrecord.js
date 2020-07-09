@@ -59,7 +59,7 @@ var DatatableDataLocalDemo = function () {
 			selector: {class: 'm-checkbox--solid m-checkbox--brand'}
 		}, {
             field: "classrecordCode",
-			title: "Class Code"
+			title: "Classcode"
 		}, {
 			field: "classrecordSection",
 			title: "Section"
