@@ -181,7 +181,9 @@
                             type: data.type,
                             confirmButtonClass: "btn " + data.class + " btn-focus m-btn m-btn--pill m-btn--air m-btn--custom"
                         });
-                        $('.m_datatable').mDatatable().reload();
+                        if ( $('.m_datatable').length ) {
+                            $('.m_datatable').mDatatable().reload();
+                        }
                     }
                 }
             });

@@ -50,7 +50,7 @@ class AdmissionController extends Controller
     public function all_active(Request $request)
     {
         $batch_id = Batch::where('is_active', 1)->where('status','Current')->pluck('id'); //current batch
-        $res = SectionInfo::select('sections_info.id','sections_info.batch_id','sections_info.section_id','sections_info.adviser_id','sections_info.level_id','sections.name as secname','staffs.user_id','levels.name as lvlname')
+        $res = SectionInfo::select('sections_info.classcode','sections_info.updated_at','sections_info.created_at','sections_info.id','sections_info.batch_id','sections_info.section_id','sections_info.adviser_id','sections_info.level_id','sections.name as secname','staffs.user_id','levels.name as lvlname')
         ->join('sections','sections.id','=','sections_info.section_id')
         ->join('staffs','staffs.id','=','sections_info.adviser_id')
         ->join('levels','levels.id','=','sections_info.level_id')
@@ -62,14 +62,15 @@ class AdmissionController extends Controller
         return $res->map(function($admission) {
             return [
                 'admissionId' => $admission->id,
+                'admissionSecCode' => $admission->classcode,
                 'admissionBatchId' => $admission->batch_id,
                 'admissionSectionId' => $admission->section_id,
                 'admissionSecName' => $admission->secname,
-                'admissionAdviserId' => $admission->adviser_id,
+                'admissionAdviserId' => ucwords((new Staff)->where('id', $admission->adviser_id)->first()->firstname).' '.ucwords((new Staff)->where('id', $admission->adviser_id)->first()->lastname),
                 'admissionLevel' => $admission->level_id, 
                 'admissionLvlName' => $admission->lvlname,
-                'admissionNoStudent' => $admission->lvlname,
-                'admissionNoSubject' => $admission->lvlname,
+                'admissionNoStudent' => (new Admission)->where(['section_id' => $admission->section_id, 'batch_id' => $admission->batch_id, 'is_active' => 1])->count(),
+                'admissionNoSubject' => (new SectionsSubjects)->where(['section_info_id' => $admission->id, 'is_active' => 1])->count(),
                 'admissionModified' => ($admission->updated_at !== NULL) ? date('d-M-Y', strtotime($admission->updated_at)).'<br/>'. date('h:i A', strtotime($admission->updated_at)) : date('d-M-Y', strtotime($admission->created_at)).'<br/>'. date('h:i A', strtotime($admission->created_at))
             ];
         });
@@ -79,7 +80,7 @@ class AdmissionController extends Controller
     public function all_inactive(Request $request)
     {
         $batch_id = Batch::where('is_active', 1)->where('status','Current')->pluck('id'); //current batch
-        $res = SectionInfo::select('sections_info.id','sections_info.batch_id','sections_info.section_id','sections_info.adviser_id','sections_info.level_id','sections.name as secname','staffs.user_id','levels.name as lvlname')
+        $res = SectionInfo::select('sections_info.classcode','sections_info.updated_at','sections_info.created_at','sections_info.id','sections_info.batch_id','sections_info.section_id','sections_info.adviser_id','sections_info.level_id','sections.name as secname','staffs.user_id','levels.name as lvlname')
             ->join('sections','sections.id','=','sections_info.section_id')
             ->join('staffs','staffs.id','=','sections_info.adviser_id')
             ->join('levels','levels.id','=','sections_info.level_id')
@@ -91,14 +92,15 @@ class AdmissionController extends Controller
         return $res->map(function($admission) {
             return [
                 'admissionId' => $admission->id,
+                'admissionSecCode' => $admission->classcode,
                 'admissionBatchId' => $admission->batch_id,
                 'admissionSectionId' => $admission->section_id,
                 'admissionSecName' => $admission->secname,
-                'admissionAdviserId' => $admission->adviser_id,
+                'admissionAdviserId' => ucwords((new Staff)->where('id', $admission->adviser_id)->first()->firstname).' '.ucwords((new Staff)->where('id', $admission->adviser_id)->first()->lastname),
                 'admissionLevel' => $admission->level_id, 
                 'admissionLvlName' => $admission->lvlname,
-                'admissionNoStudent' => $admission->lvlname,
-                'admissionNoSubject' => $admission->lvlname,
+                'admissionNoStudent' => (new Admission)->where(['section_id' => $admission->section_id, 'batch_id' => $admission->batch_id, 'is_active' => 1])->count(),
+                'admissionNoSubject' => (new SectionsSubjects)->where(['section_info_id' => $admission->id, 'is_active' => 1])->count(),
                 'admissionModified' => ($admission->updated_at !== NULL) ? date('d-M-Y', strtotime($admission->updated_at)).'<br/>'. date('h:i A', strtotime($admission->updated_at)) : date('d-M-Y', strtotime($admission->created_at)).'<br/>'. date('h:i A', strtotime($admission->created_at))
             ];
         });

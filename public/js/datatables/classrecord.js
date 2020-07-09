@@ -94,7 +94,8 @@ var DatatableDataLocalDemo = function () {
 			template: function (row, index, datatable) {
 				var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
                 return '\
-                    <a title="view this" class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/grading-sheets/class-record/view/' + row.classrecordID + '"><i class="la la-search-plus"></i></a>\
+					<a title="view this" class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/grading-sheets/class-record/view/' + row.classrecordID + '"><i class="la la-search-plus"></i></a>\
+					<a title="export this" class=" m-portlet__nav-link btn m-btn m-btn--hover-success m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/grading-sheets/class-record/export-record/' + row.classrecordID + '"><i class="la la-download"></i></a>\
                 ';
 			}
 		}]

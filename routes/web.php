@@ -308,7 +308,7 @@ Route::prefix('academics')->group(function () {
         Route::get('class-record', 'ClassRecordController@manage')->name('classrecord.manage');
         Route::get('class-record/all-active', 'ClassRecordController@all_active')->name('classrecord.active');
         Route::get('class-record/view/{id}', 'ClassRecordController@view')->name('classrecord.view');
-
+        Route::get('class-record/export-record/{id}', 'ClassRecordController@export_record')->name('classrecord.fetch.export.record');
         /* End Class Record Routes */
 
         /* Start Components Routes */
@@ -341,6 +341,24 @@ Route::prefix('academics')->group(function () {
     });
     /* End Grading Sheets Routes */
 });
+
+/* Notifications Routes */
+Route::prefix('notifications')->group(function () {
+    /* Messaging Routes */
+    Route::prefix('messaging')->group(function () {
+        /* Infoblast Routes */
+        Route::prefix('infoblast')->group(function () {
+            Route::get('new', 'InfoblastController@new')->name('messaging.infoblast.new');
+            Route::get('inbox', 'InfoblastController@inbox')->name('messaging.infoblast.inbox');
+            Route::get('outbox', 'InfoblastController@outbox')->name('messaging.infoblast.outbox');
+            Route::get('tracking', 'InfoblastController@tracking')->name('messaging.infoblast.tracking');
+            Route::get('templates', 'InfoblastController@templates')->name('messaging.infoblast.templates');
+        });
+        /* End Infoblast Routes */
+    });
+    /* End Messaging Routes */
+});
+/* End Notifcations Routes */
 
 Route::prefix('dashboard')->group(function () {
     Route::get('', 'DashboardController@index')->name('dashboard');

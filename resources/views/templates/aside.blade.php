@@ -56,16 +56,117 @@
                                         <span class="m-menu__arrow"></span>
                                         <ul class="m-menu__subnav">
                                             @foreach ($menu['sub_modules'][$module['id']] as $submodule)
-                                            <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
-                                                <a  href="{{ url($menu['slug'].'/'.$module['slug'].'/'.$submodule['slug']) }}" class="m-menu__link ">
-                                                    <i class="m-menu__link-bullet m-menu__link-bullet--dot">
-                                                        <span></span>
-                                                    </i>
-                                                    <span class="m-menu__link-text">
-                                                        {{ $submodule['name'] }}
-                                                    </span>
-                                                </a>
-                                            </li>
+                                                @if ($submodule['name'] == 'Infoblast' || $submodule['name'] == 'Emailblast') 
+                                                    <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion" data-redirect="true">
+                                                        <a href="#" class="m-menu__link m-menu__toggle">
+                                                            <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                                                <span></span>
+                                                            </i>
+                                                            <span class="m-menu__link-text">
+                                                                {{ $submodule['name'] }}
+                                                            </span>
+                                                            <i class="m-menu__ver-arrow la la-angle-right"></i>
+                                                        </a>
+                                                        <div class="m-menu__submenu " style="">
+                                                            <span class="m-menu__arrow"></span>
+                                                            <ul class="m-menu__subnav">
+                                                                <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
+                                                                    <a href="{{ url($menu['slug'].'/'.$module['slug'].'/'.$submodule['slug'].'/new') }}" class="m-menu__link ">
+                                                                        <i class="m-menu__link-icon flaticon-computer"></i>
+                                                                        <span class="m-menu__link-title">
+                                                                            <span class="m-menu__link-wrap">
+                                                                                <span class="m-menu__link-text">
+                                                                                    New
+                                                                                </span>
+                                                                                <span class="m-menu__link-badge">
+                                                                                </span>
+                                                                            </span>
+                                                                        </span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
+                                                                    <a href="inner.html" class="m-menu__link ">
+                                                                        <i class="m-menu__link-icon flaticon-signs-2"></i>
+                                                                        <span class="m-menu__link-title">
+                                                                            <span class="m-menu__link-wrap">
+                                                                                <span class="m-menu__link-text">
+                                                                                    Inbox
+                                                                                </span>
+                                                                                <span class="m-menu__link-badge">
+                                                                                    <span class="m-badge m-badge--danger">
+                                                                                        6
+                                                                                    </span>
+                                                                                </span>
+                                                                            </span>
+                                                                        </span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
+                                                                    <a href="inner.html" class="m-menu__link ">
+                                                                        <i class="m-menu__link-icon flaticon-clipboard"></i>
+                                                                        <span class="m-menu__link-title">
+                                                                            <span class="m-menu__link-wrap">
+                                                                                <span class="m-menu__link-text">
+                                                                                    Outbox
+                                                                                </span>
+                                                                                <span class="m-menu__link-badge">
+                                                                                    <span class="m-badge m-badge--success">
+                                                                                        2
+                                                                                    </span>
+                                                                                </span>
+                                                                            </span>
+                                                                        </span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
+                                                                    <a href="inner.html" class="m-menu__link ">
+                                                                        <i class="m-menu__link-icon flaticon-multimedia-2"></i>
+                                                                        <span class="m-menu__link-title">
+                                                                            <span class="m-menu__link-wrap">
+                                                                                <span class="m-menu__link-text">
+                                                                                    Tracking
+                                                                                </span>
+                                                                                <span class="m-menu__link-badge">
+                                                                                    <span class="m-badge m-badge--info m-badge--wide">
+                                                                                        245
+                                                                                    </span>
+                                                                                </span>
+                                                                            </span>
+                                                                        </span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
+                                                                    <a href="inner.html" class="m-menu__link ">
+                                                                        <i class="m-menu__link-icon flaticon-multimedia-2"></i>
+                                                                        <span class="m-menu__link-title">
+                                                                            <span class="m-menu__link-wrap">
+                                                                                <span class="m-menu__link-text">
+                                                                                    Templates
+                                                                                </span>
+                                                                                <span class="m-menu__link-badge">
+                                                                                    <span class="m-badge m-badge--info m-badge--wide">
+                                                                                        245
+                                                                                    </span>
+                                                                                </span>
+                                                                            </span>
+                                                                        </span>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </li>
+                                                @else
+                                                    <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
+                                                        <a  href="{{ url($menu['slug'].'/'.$module['slug'].'/'.$submodule['slug']) }}" class="m-menu__link ">
+                                                            <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                                                <span></span>
+                                                            </i>
+                                                            <span class="m-menu__link-text">
+                                                                {{ $submodule['name'] }}
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                @endif
                                             @endforeach
                                         </ul>
                                     </div>

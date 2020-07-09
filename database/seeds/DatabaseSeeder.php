@@ -552,12 +552,42 @@ class DatabaseSeeder extends Seeder
             ],
             [   
                 'module_id' => '12',
-                'code' => 'send-message',
-                'name' => 'Send Message',
-                'description' => 'Send Message Description',
-                'slug' => 'send-message',
+                'code' => 'infoblast',
+                'name' => 'Infoblast',
+                'description' => 'Infoblast Description',
+                'slug' => 'infoblast',
                 'icon' => '',
                 'order' => '29',
+                'created_by' => 1
+            ],
+            [   
+                'module_id' => '12',
+                'code' => 'emailblast',
+                'name' => 'Emailblast',
+                'description' => 'Emailblast Description',
+                'slug' => 'emailblast',
+                'icon' => '',
+                'order' => '30',
+                'created_by' => 1
+            ],
+            [   
+                'module_id' => '12',
+                'code' => 'systemblast',
+                'name' => 'Systemblast',
+                'description' => 'Systemblast Description',
+                'slug' => 'systemblast',
+                'icon' => '',
+                'order' => '31',
+                'created_by' => 1
+            ],
+            [   
+                'module_id' => '12',
+                'code' => 'configuration',
+                'name' => 'Configuration',
+                'description' => 'Configuration Description',
+                'slug' => 'configuration',
+                'icon' => '',
+                'order' => '32',
                 'created_by' => 1
             ]
         ];
@@ -825,6 +855,30 @@ class DatabaseSeeder extends Seeder
             [   
                 'role_id' => '1',
                 'sub_module_id' => '28',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '29',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '30',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '31',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '32',
                 'permissions' => '1,1,1,1',
                 'created_by' => 1
             ]
