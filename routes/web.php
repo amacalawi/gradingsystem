@@ -97,6 +97,38 @@ Route::prefix('components')->group(function () {
     Route::get('groups/all-member', 'GroupsController@all_member')->name('groups.all.member');    
     /* End Groups Routes */
 
+    /* Start Schedules Routes */
+    Route::get('schedules', 'SchedulesController@manage')->name('schedules.manage.active');
+    Route::get('schedules/add', 'SchedulesController@add')->name('schedules.add');
+    Route::get('schedules/edit/{id?}', 'SchedulesController@edit')->name('schedules.edit');
+    Route::post('schedules/store', 'SchedulesController@store')->name('schedules.store');
+    Route::put('schedules/update/{id}', 'SchedulesController@update')->name('schedules.update');
+    Route::put('schedules/update-status/{id}', 'SchedulesController@update_status')->name('schedules.update.status');
+    Route::post('schedules/remove', 'SchedulesController@remove')->name('schedules.remove');
+    Route::post('schedules/restore', 'SchedulesController@restore')->name('schedules.restore');
+    Route::get('schedules/all-active', 'SchedulesController@all_active')->name('schedules.all.active');
+    Route::get('schedules/inactive', 'SchedulesController@inactive')->name('schedules.manage.inactive');
+    Route::get('schedules/all-inactive', 'SchedulesController@all_inactive')->name('schedules.all.inactive');
+    //Route::get('schedules/group-user-list', 'SchedulesController@all_group_users')->name('schedules.all.group.users');
+    Route::get('schedules/all-member', 'SchedulesController@all_member')->name('schedules.all.member');
+    Route::get('schedules/get-this-schedule/{id?}', 'SchedulesController@get_this_schedule');
+
+        /*Start Preset Message */
+        Route::get('schedules/preset-message', 'PresetMessageController@manage')->name('presetmsg.manage.active');
+        Route::get('schedules/preset-message/add', 'PresetMessageController@add')->name('presetmsg.add');
+        Route::get('schedules/preset-message/edit/{id?}', 'PresetMessageController@edit')->name('presetmsg.edit');
+        Route::post('schedules/preset-message/store', 'PresetMessageController@store')->name('presetmsg.store');
+        Route::put('schedules/preset-message/update/{id}', 'PresetMessageController@update')->name('presetmsg.update');
+        Route::put('schedules/preset-message/update-status/{id}', 'PresetMessageController@update_status')->name('presetmsg.update.status');
+        Route::post('schedules/preset-message/remove', 'PresetMessageController@remove')->name('presetmsg.remove');
+        Route::post('schedules/preset-message/restore', 'PresetMessageController@restore')->name('presetmsg.restore');
+        Route::get('schedules/preset-message/all-active', 'PresetMessageController@all_active')->name('presetmsg.all.active');
+        Route::get('schedules/preset-message/inactive', 'PresetMessageController@inactive')->name('presetmsg.manage.inactive');
+        Route::get('schedules/preset-message/all-inactive', 'PresetMessageController@all_inactive')->name('presetmsg.all.inactive');
+        /*End Preset Message */
+
+    /* End Schedules Routes */
+
     /* Menus Routes */
     Route::prefix('menus')->group(function () {
         /* Start Headers Routes */
