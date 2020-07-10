@@ -67,34 +67,6 @@ class GroupsController extends Controller
         });
     }
 
-    public function all_group_users(Request $request)
-    {   
-        /*
-        $res = GroupUser::where('is_active', 1)
-            ->with([
-                'group' =>  function($q) { 
-                    $q->select(['id', 'name']); 
-                },
-                'users' =>  function($q) { 
-                    $q->select(['id', 'firstname', 'lastname']); 
-                },
-                'batch' =>  function($q) { 
-                    $q->select(['id', 'name']); 
-                }
-            ])->orderBy('id', 'ASC')->get();
-
-        return $res->map(function($groupuser) {
-            return [
-                'groupuserID' => $groupuser->id,
-                'groupuserCode' => $groupuser->code,
-                'groupuserFullname' => $groupuser->users->firstname.' '. $groupuser->users->lastname,
-                'groupuserDescription' => $groupuser->description,
-                'groupuserModified' => ($groupuser->updated_at !== NULL) ? date('d-M-Y', strtotime($groupuser->updated_at)).'<br/>'. date('h:i A', strtotime($groupuser->updated_at)) : date('d-M-Y', strtotime($groupuser->created_at)).'<br/>'. date('h:i A', strtotime($groupuser->created_at)),          
-            ];
-        });
-        */
-    }
-    
     public function add(Request $request, $id = '')
     {   
         $menus = $this->load_menus();
