@@ -297,22 +297,22 @@ Route::prefix('academics')->group(function () {
     /* Grading Sheets Routes */
     Route::prefix('admissions')->group(function () {  
         /* Admissions */
-        Route::get('section-student/add', 'AdmissionController@add')->name('sectionstudent.add');
-        Route::get('section-student/edit/{id?}', 'AdmissionController@edit')->name('sectionstudent.edit');
-        Route::post('section-student/store', 'AdmissionController@store')->name('sectionstudent.store');
-        Route::put('section-student/update/{id}', 'AdmissionController@update')->name('sectionstudent.update');
-        Route::get('section-student', 'AdmissionController@manage')->name('sectionstudent.manage.active');
-        Route::get('section-student/inactive', 'AdmissionController@inactive')->name('sectionstudent.manage.inactive');
-        Route::post('section-student/remove', 'AdmissionController@remove')->name('sectionstudent.remove');
-        Route::post('section-student/restore', 'AdmissionController@restore')->name('sectionstudent.restore');
-        Route::get('section-student/all-active', 'AdmissionController@all_active')->name('sectionstudent.all.active');
-        Route::get('section-student/all-inactive', 'AdmissionController@all_inactive')->name('sectionstudent.all.inactive');
-        Route::put('section-student/update-status/{id}', 'AdmissionController@update_status')->name('sectionstudent.update.status');        
-        Route::get('section-student/all-admitted', 'AdmissionController@all_admitted')->name('admission.all.admitted');
-        Route::get('section-student/get-this-admitted/{id?}', 'AdmissionController@get_this_admitted');
-        Route::get('section-student/get-student-admitted-section/{secid?}', 'AdmissionController@get_this_admitted_section');
-        Route::get('section-student/save-this-admitted/{id?}/{secid?}', 'AdmissionController@save_this_admitted');
-        Route::get('section-student/delete-this-admitted/{id?}/{secid?}', 'AdmissionController@delete_this_admitted');
+        Route::get('classes/add', 'AdmissionController@add')->name('sectionstudent.add');
+        Route::get('classes/edit/{id?}', 'AdmissionController@edit')->name('sectionstudent.edit');
+        Route::post('classes/store', 'AdmissionController@store')->name('sectionstudent.store');
+        Route::put('classes/update/{id}', 'AdmissionController@update')->name('sectionstudent.update');
+        Route::get('classes', 'AdmissionController@manage')->name('sectionstudent.manage.active');
+        Route::get('classes/inactive', 'AdmissionController@inactive')->name('sectionstudent.manage.inactive');
+        Route::post('classes/remove', 'AdmissionController@remove')->name('sectionstudent.remove');
+        Route::post('classes/restore', 'AdmissionController@restore')->name('sectionstudent.restore');
+        Route::get('classes/all-active', 'AdmissionController@all_active')->name('sectionstudent.all.active');
+        Route::get('classes/all-inactive', 'AdmissionController@all_inactive')->name('sectionstudent.all.inactive');
+        Route::put('classes/update-status/{id}', 'AdmissionController@update_status')->name('sectionstudent.update.status');        
+        Route::get('classes/all-admitted', 'AdmissionController@all_admitted')->name('admission.all.admitted');
+        Route::get('classes/get-this-admitted/{id?}', 'AdmissionController@get_this_admitted');
+        Route::get('classes/get-student-admitted-section/{secid?}', 'AdmissionController@get_this_admitted_section');
+        Route::get('classes/save-this-admitted/{id?}/{secid?}', 'AdmissionController@save_this_admitted');
+        Route::get('classes/delete-this-admitted/{id?}/{secid?}', 'AdmissionController@delete_this_admitted');
         /* End Admissions Routes */
     });
 

@@ -174,7 +174,7 @@ class SectionsStudentsController extends Controller
         
         $data = array(
             'title' => 'Well done!',
-            'text' => 'The section-student has been successfully saved.',
+            'text' => 'The classes has been successfully saved.',
             'type' => 'success',
             'class' => 'btn-brand'
         );
@@ -284,7 +284,7 @@ class SectionsStudentsController extends Controller
 
             $data = array(
                 'title' => 'Well done!',
-                'text' => 'The section-student has been successfully updated.',
+                'text' => 'The classes has been successfully updated.',
                 'type' => 'success',
                 'class' => 'btn-brand'
             );
@@ -311,7 +311,7 @@ class SectionsStudentsController extends Controller
             
             $data = array(
                 'title' => 'Well done!',
-                'text' => 'The section-student status has been successfully removed.',
+                'text' => 'The classes status has been successfully removed.',
                 'type' => 'success',
                 'class' => 'btn-brand'
             );
@@ -330,7 +330,7 @@ class SectionsStudentsController extends Controller
             
             $data = array(
                 'title' => 'Well done!',
-                'text' => 'The section-student status has been successfully activated.',
+                'text' => 'The classes status has been successfully activated.',
                 'type' => 'success',
                 'class' => 'btn-brand'
             );
@@ -358,7 +358,7 @@ class SectionsStudentsController extends Controller
             
             $data = array(
                 'title' => 'Well done!',
-                'text' => 'The section-student status has been successfully changed.',
+                'text' => 'The classes status has been successfully changed.',
                 'type' => 'success',
                 'class' => 'btn-brand'
             );
@@ -393,7 +393,7 @@ class SectionsStudentsController extends Controller
 
                 $data = array(
                     'title' => 'Well done!',
-                    'text' => 'The section-student status has been successfully changed.',
+                    'text' => 'The classes status has been successfully changed.',
                     'type' => 'success',
                     'class' => 'btn-brand'
                 );
@@ -432,7 +432,7 @@ class SectionsStudentsController extends Controller
 
             $data = array(
                 'title' => 'Well done!',
-                'text' => 'The section-student status has been successfully changed.',
+                'text' => 'The classes status has been successfully changed.',
                 'type' => 'success',
                 'class' => 'btn-brand'
             );

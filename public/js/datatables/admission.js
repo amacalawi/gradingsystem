@@ -12,7 +12,7 @@ var DatatableDataLocalDemo = function () {
 			  read: {
 				// sample GET method
 				method: 'GET',
-				url: base_url + 'academics/admissions/section-student/all-active',
+				url: base_url + 'academics/admissions/classes/all-active',
 				map: function(raw) {
 				  // sample data mapping
 				  var dataSet = raw;
@@ -91,7 +91,7 @@ var DatatableDataLocalDemo = function () {
 				var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
 
                 return '\
-                    <a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/admissions/section-student/edit/' + row.admissionId +'"><i class="la la-edit"></i></a>\
+                    <a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/admissions/classes/edit/' + row.admissionId +'"><i class="la la-edit"></i></a>\
                     <a title="remove this" data-row-id="' + row.admissionId + '" action="Remove" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-remove"></i></a>\
 				';
 			}
@@ -151,50 +151,13 @@ jQuery(document).ready(function (e) {
 	$('input[type="checkbox"]').each(function() {
 		//console.log($(this).val());
 	});
-
-	/*
-	$('#enlist-student-selected').on('click', function(e) {
-
-		e.preventDefault();
-		
-		$('input:checkbox:checked').each(function() {
-
-			if($(this).val() != 'on')
-			{
-				//console.log( $(this).val() );
-				var row_id = $(this).val();
-				var items = [];
-
-				$("#admitted_student").html("");
-				
-				$.ajax({
-					type: 'GET', 
-					url: base_url + 'academics/admissions/section-student/get-this-admitted/'+row_id,
-					data: { items },
-					success: function(response) {
-						var data = $.parseJSON(response);
-						$("#admitted_student" ).append("<input type='text' name='list_admitted_student[]' value='"+data[0].id+"' readonly='true' hidden><button type='button' class='btn p-2 m-1 bg-secondary' >"+data[0].lastname+", "+data[0].firstname+" "+data[0].middlename+"</button>");
-					}, 
-					complete: function() {
-						window.onkeydown = null;
-						window.onfocus = null;
-					}
-				});
-			}
-			else {
-				$("#admitted_student").html("");
-			}
-		});
-
-	});
-	*/
 	
 	$body.on('click', '.toggle-status', function (e){
 		e.preventDefault();
 		var $rowID = $(this).attr('data-row-id');
 		console.log($rowID);
 		var $action = $(this).attr('action');
-		var $url = base_url + 'academics/admissions/section-student/update-status/' + $rowID;
+		var $url = base_url + 'academics/admissions/classes/update-status/' + $rowID;
 		var items = []; items.push({ action: $action });
 
 		console.log($url);
