@@ -4,8 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
+use App\Imports\LevelImport;
+use Maatwebsite\Excel\Facades\Excel;
+
 use App\Models\Level;
 use App\Models\Quarter;
+
+use Illuminate\Http\File;
 
 class LevelsController extends Controller
 {
@@ -302,5 +308,18 @@ class LevelsController extends Controller
     {
         $levels = (new Level)->get_all_levels_bytype($type);
         echo json_encode( $levels ); exit();
-    }    
+    }
+
+    public function import_level(Request $request)
+    {   
+        $this->validate( $request, [
+            'import_file' => 'required|mimes:xls,xlsx'
+        ]);
+        
+        $path = $request->file('import_file')->store('Imports');
+
+        Excel::import(new LevelImport, $path);
+        return redirect('/academics/academics/levels');
+    }
+
 }

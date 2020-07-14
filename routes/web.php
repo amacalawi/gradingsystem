@@ -282,6 +282,7 @@ Route::prefix('academics')->group(function () {
         Route::get('levels/all-inactive', 'LevelsController@all_inactive')->name('levels.all.inactive');
         Route::put('levels/update-status/{id}', 'LevelsController@update_status')->name('levels.update.status');
         Route::get('levels/get-all-levels-bytype/{type}', 'LevelsController@get_all_levels_bytype');
+        Route::post('levels/import-levels', 'LevelsController@import_level')->name('levels.fetch.import.level');
         /* End Levels Routes */
 
         /* Subjects */
