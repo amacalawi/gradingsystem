@@ -167,7 +167,7 @@
 
                     @if (Request::segment(3) == 'sections' || Request::segment(3) == 'levels' || Request::segment(3) == 'subjects' || Request::segment(3) == 'classes')
                         <button type="button" class="btn m-btn--pill btn-success m-btn--custom" data-toggle="modal" data-target="#importmodule">
-                            Import gradingsheet
+                            Import {{ ucwords(Request::segment(3)) }}
                         </button>
                     @endif
 

@@ -267,6 +267,7 @@ Route::prefix('academics')->group(function () {
         Route::get('sections/all-inactive', 'SectionsController@all_inactive')->name('sections.all.inactive');
         Route::put('sections/update-status/{id}', 'SectionsController@update_status')->name('sections.update.status');
         Route::get('sections/get-all-sections-bytype/{type}', 'SectionsController@get_all_sections_bytype');
+        Route::post('sections/import-sections', 'SectionsController@import_section')->name('sections.fetch.import.section');
         /* End Sections Routes */
 
         /* Levels */
@@ -300,6 +301,7 @@ Route::prefix('academics')->group(function () {
         Route::get('subjects/get-all-subjects', 'SubjectsController@get_all_subjects');
         Route::get('subjects/get-all-subjects-bytype/{type}', 'SubjectsController@get_all_subjects_bytype');
         Route::get('subjects/get-all-teachers', 'SubjectsController@get_all_teachers'); 
+        Route::post('subjects/import-subjects', 'SubjectsController@import_subject')->name('subjects.fetch.import.subject');
         /* End Subjects Routes */
 
         /* Staff */ //move this in future

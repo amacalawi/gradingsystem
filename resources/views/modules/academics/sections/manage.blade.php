@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@include('modules.academics.sections.import')
+
 @section('content')
 <div class="row">
     <div class="col-xl-12">

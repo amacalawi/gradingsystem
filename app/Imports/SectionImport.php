@@ -2,7 +2,7 @@
 
 namespace App\Imports;
 
-use App\Models\Level;
+use App\Models\Section;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +11,7 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 use Maatwebsite\Excel\Concerns\WithMappedCells;
 
-class LevelImport implements ToModel, WithCalculatedFormulas, WithMappedCells
+class SectionImport implements ToModel, WithCalculatedFormulas, WithMappedCells
 {
     public function mapping(): array
     {
@@ -48,7 +48,7 @@ class LevelImport implements ToModel, WithCalculatedFormulas, WithMappedCells
             $score = $col.$row;
             
             if($checkexist){
-                $level = Level::create([
+                $section = Section::create([
                     'code' => $rows[$col++.$row],
                     'name' => $rows[$col++.$row],
                     'description' => $rows[$col++.$row],
