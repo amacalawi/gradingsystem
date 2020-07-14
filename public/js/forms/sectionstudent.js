@@ -306,7 +306,7 @@
                                     confirmButtonClass: "btn " + data.class + " btn-focus m-btn m-btn--pill m-btn--air m-btn--custom",
                                     onClose: () => {
                                         if ($form.find("input[name='method']").val() == 'add') {
-                                            window.location.replace(base_url + 'academics/admissions/section-student');
+                                            window.location.replace(base_url + 'academics/admissions/classes');
                                         }
                                     }
                                 });

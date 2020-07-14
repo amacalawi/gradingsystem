@@ -12,7 +12,7 @@ var DatatableDataLocalDemo = function () {
 			  read: {
 				// sample GET method
 				method: 'GET',
-				url: base_url + 'academics/admissions/section-student/all-inactive',
+				url: base_url + 'academics/admissions/classes/all-inactive',
 				map: function(raw) {
 				  // sample data mapping
 				  var dataSet = raw;
@@ -141,7 +141,7 @@ jQuery(document).ready(function () {
 		var $rowID = $(this).attr('data-row-id');
 		console.log($rowID);
 		var $action = $(this).attr('action');
-		var $url = base_url + 'academics/admissions/section-student/update-status/' + $rowID;
+		var $url = base_url + 'academics/admissions/classes/update-status/' + $rowID;
 		var items = []; items.push({ action: $action });
 
 		console.log($url);

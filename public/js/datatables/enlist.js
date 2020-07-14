@@ -12,7 +12,7 @@ var DatatableDataLocalDemo = function () {
 			  read: {
 				// sample GET method
 				method: 'GET',
-				url: base_url + 'academics/admissions/section-student/all-admitted',
+				url: base_url + 'academics/admissions/classes/all-admitted',
 				map: function(raw) {
 				  // sample data mapping
 				  var dataSet = raw;
@@ -163,7 +163,7 @@ jQuery(document).ready(function (e) {
 			var items = [];
 			$.ajax({
 				type: 'GET',
-				url: base_url + 'academics/admissions/section-student/get-student-admitted-section/'+section_id,
+				url: base_url + 'academics/admissions/classes/get-student-admitted-section/'+section_id,
 				data: { items },
 				success: function(response) {
 					var data = $.parseJSON(response);
@@ -186,7 +186,7 @@ jQuery(document).ready(function (e) {
 					
 					$.ajax({
 						type: 'GET',
-						url: base_url + 'academics/admissions/section-student/save-this-admitted/'+row_id+'/'+section_id,
+						url: base_url + 'academics/admissions/classes/save-this-admitted/'+row_id+'/'+section_id,
 						data: { items },
 						success: function(response) {
 							var data = $.parseJSON(response);

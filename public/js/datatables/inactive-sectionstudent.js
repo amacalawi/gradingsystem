@@ -12,7 +12,7 @@ var DatatableDataLocalDemo = function () {
 			  read: {
 				// sample GET method
 				method: 'GET',
-				url: base_url + 'academics/admissions/section-student/all-inactive',
+				url: base_url + 'academics/admissions/classes/all-inactive',
 				map: function(raw) {
 				  // sample data mapping
 				  var dataSet = raw;
@@ -158,7 +158,7 @@ jQuery(document).ready(function (e) {
 				
 				$.ajax({
 					type: 'GET', 
-					url: base_url + 'academics/admissions/section-student/get-this-admitted/'+row_id,
+					url: base_url + 'academics/admissions/classes/get-this-admitted/'+row_id,
 					data: { items },
 					success: function(response) {
 						var data = $.parseJSON(response);
@@ -182,7 +182,7 @@ jQuery(document).ready(function (e) {
 		var $rowID = $(this).attr('data-row-id');
 		console.log($rowID);
 		var $action = $(this).attr('action');
-		var $url = base_url + 'academics/admissions/section-student/update-status/' + $rowID;
+		var $url = base_url + 'academics/admissions/classes/update-status/' + $rowID;
 		var items = []; items.push({ action: $action });
 
 		console.log($url);

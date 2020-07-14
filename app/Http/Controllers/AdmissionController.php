@@ -186,7 +186,7 @@ class AdmissionController extends Controller
 
             $data = array(
                 'title' => 'Well done!',
-                'text' => 'The section-student has been successfully saved.',
+                'text' => 'The classes has been successfully saved.',
                 'type' => 'success',
                 'class' => 'btn-brand'
             );
@@ -328,7 +328,7 @@ class AdmissionController extends Controller
 
             $data = array(
                 'title' => 'Well done!',
-                'text' => 'The section-student has been successfully updated.',
+                'text' => 'The classes has been successfully updated.',
                 'type' => 'success',
                 'class' => 'btn-brand'
             );

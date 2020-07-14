@@ -302,10 +302,10 @@ class DatabaseSeeder extends Seeder
             ],
             [   
                 'module_id' => '2',
-                'code' => 'section-student',
+                'code' => 'classes',
                 'name' => 'Classes',
                 'description' => 'Classes Description',
-                'slug' => 'section-student',
+                'slug' => 'classes',
                 'icon' => '',
                 'order' => '4',
                 'created_by' => 1
