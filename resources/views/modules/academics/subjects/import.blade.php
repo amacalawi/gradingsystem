@@ -1,7 +1,7 @@
 <div class="modal fade" id="importmodule" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            {{ Form::open(array('url' => 'academics/academics/levels/import-levels', 'name' => 'levels_import_form', 'method' => 'POST', 'enctype' => 'multipart/form-data' )) }}
+            {{ Form::open(array('url' => 'academics/academics/subjects/import-subjects', 'name' => 'levels_import_form', 'method' => 'POST', 'enctype' => 'multipart/form-data' )) }}
                 <div class="modal-header">
                     <h4 class="modal-title">Import {{ ucfirst(Request::segment(3)) }}</h4>
                 </div>

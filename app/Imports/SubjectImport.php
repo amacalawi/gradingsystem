@@ -2,7 +2,7 @@
 
 namespace App\Imports;
 
-use App\Models\Level;
+use App\Models\Subject;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +11,7 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 use Maatwebsite\Excel\Concerns\WithMappedCells;
 
-class LevelImport implements ToModel, WithCalculatedFormulas, WithMappedCells
+class SubjectImport implements ToModel, WithCalculatedFormulas, WithMappedCells
 {
     public function mapping(): array
     {
@@ -23,7 +23,7 @@ class LevelImport implements ToModel, WithCalculatedFormulas, WithMappedCells
         for($x=0; $x<$max_upload; $x++)
         {
             $col = 'A';
-            for($y=0; $y<4; $y++){
+            for($y=0; $y<6; $y++){
                 $score = $col.$row;
                 $data[$score] = $score;
                 $col++;
@@ -48,11 +48,13 @@ class LevelImport implements ToModel, WithCalculatedFormulas, WithMappedCells
             $score = $col.$row;
             
             if($checkexist){
-                $level = Level::create([
+                $subject = Subject::create([
                     'code' => $rows[$col++.$row],
                     'name' => $rows[$col++.$row],
                     'description' => $rows[$col++.$row],
                     'type' => $rows[$col++.$row],
+                    'is_mapeh' => $rows[$col++.$row],
+                    'is_tle' => $rows[$col++.$row],
                     'created_at' => $timestamp,
                     'created_by' => Auth::user()->id
                 ]);
@@ -65,7 +67,7 @@ class LevelImport implements ToModel, WithCalculatedFormulas, WithMappedCells
     public function check_rowdata($row, $rows)
     {
         $col = 'A';
-        $max_col = 4;
+        $max_col = 6;
         $data_count = 0;
         
         for($y=0; $y<$max_col; $y++)
