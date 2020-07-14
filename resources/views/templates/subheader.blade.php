@@ -168,7 +168,7 @@
                         <i class="la la-commenting"></i> 
                         @php 
                             $string = substr(ucwords(Request::segment(3)), 0, -1);
-                            $exemptions = ['modules', 'sub-modules'];
+                            $exemptions = ['modules', 'sub-modules', 'education-types'];
                         @endphp
                         @if (Request::segment(3) == 'all-gradingsheets')
                             Add New Grading Sheet

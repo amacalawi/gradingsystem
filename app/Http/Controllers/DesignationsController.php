@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Designation;
+use App\Models\EducationType;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -22,33 +23,34 @@ class DesignationsController extends Controller
         date_default_timezone_set('Asia/Manila');
         $this->middleware('auth');
     }
-
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
+    
     public function index()
     {
         $menus = $this->load_menus();
-        return view('modules/schools/designations/manage')->with(compact('menus'));
+        return view('modules/components/schools/designations/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/schools/designations/manage')->with(compact('menus'));
+        return view('modules/components/schools/designations/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/schools/designations/inactive')->with(compact('menus'));
+        return view('modules/components/schools/designations/inactive')->with(compact('menus'));
     }
 
     public function all_active(Request $request)
     {
-        $res = Designation::where('is_active', 1)->orderBy('id', 'DESC')->get();
+        $res = Designation::
+        with([
+            'edtype' =>  function($q) { 
+                $q->select(['id', 'name']); 
+            }
+        ])
+        ->where('is_active', 1)->orderBy('id', 'DESC')->get();
 
         return $res->map(function($designation) {
             return [
@@ -56,7 +58,8 @@ class DesignationsController extends Controller
                 'designationCode' => $designation->code,
                 'designationName' => $designation->name,
                 'designationDescription' => $designation->description,
-                'designationType' => $designation->type,
+                'designationTypeID' => $designation->edtype->id,
+                'designationType' => $designation->edtype->name,
                 'designationModified' => ($designation->updated_at !== NULL) ? date('d-M-Y', strtotime($designation->updated_at)).'<br/>'. date('h:i A', strtotime($designation->updated_at)) : date('d-M-Y', strtotime($designation->created_at)).'<br/>'. date('h:i A', strtotime($designation->created_at))
             ];
         });
@@ -64,7 +67,13 @@ class DesignationsController extends Controller
 
     public function all_inactive(Request $request)
     {
-        $res = Designation::where('is_active', 0)->orderBy('id', 'DESC')->get();
+        $res = Designation::
+        with([
+            'edtype' =>  function($q) { 
+                $q->select(['id', 'name']); 
+            }
+        ])
+        ->where('is_active', 0)->orderBy('id', 'DESC')->get();
 
         return $res->map(function($designation) {
             return [
@@ -72,7 +81,8 @@ class DesignationsController extends Controller
                 'designationCode' => $designation->code,
                 'designationName' => $designation->name,
                 'designationDescription' => $designation->description,
-                'designationType' => $designation->type,
+                'designationTypeID' => $designation->edtype->id,
+                'designationType' => $designation->edtype->name,
                 'designationModified' => ($designation->updated_at !== NULL) ? date('d-M-Y', strtotime($designation->updated_at)).'<br/>'. date('h:i A', strtotime($designation->updated_at)) : date('d-M-Y', strtotime($designation->created_at)).'<br/>'. date('h:i A', strtotime($designation->created_at))
             ];
         });
@@ -83,9 +93,9 @@ class DesignationsController extends Controller
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
-        $designation = (new designation)->fetch($id);
-        $types = (new designation)->types();
-        return view('modules/schools/designations/add')->with(compact('menus', 'designation', 'types', 'segment'));
+        $designation = (new Designation)->fetch($id);
+        $types = (new EducationType)->all_education_types();
+        return view('modules/components/schools/designations/add')->with(compact('menus', 'designation', 'types', 'segment'));
     }
     
     public function edit(Request $request, $id)
@@ -93,9 +103,9 @@ class DesignationsController extends Controller
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
-        $designation = (new designation)->fetch($id);
-        $types = (new designation)->types();
-        return view('modules/schools/designations/edit')->with(compact('menus', 'designation', 'types', 'segment'));
+        $designation = (new Designation)->fetch($id);
+        $types = (new EducationType)->all_education_types();
+        return view('modules/components/schools/designations/edit')->with(compact('menus', 'designation', 'types', 'segment'));
     }
     
     public function store(Request $request)
@@ -121,7 +131,7 @@ class DesignationsController extends Controller
             'code' => $request->code,
             'name' => $request->name,
             'description' => $request->description,
-            'type' => $request->type,
+            'education_type_id' => $request->education_type_id,
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
@@ -152,7 +162,7 @@ class DesignationsController extends Controller
         $designation->code = $request->code;
         $designation->name = $request->name;
         $designation->description = $request->description;
-        $designation->type = $request->type;
+        $designation->education_type_id = $request->education_type_id;
         $designation->updated_at = $timestamp;
         $designation->updated_by = Auth::user()->id;
 

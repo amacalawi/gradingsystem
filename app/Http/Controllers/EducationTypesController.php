@@ -6,14 +6,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
-use App\Models\Department;
 use App\Models\EducationType;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
 use App\Components\FlashMessages;
 
-class DepartmentsController extends Controller
+class EducationTypesController extends Controller
 {   
     use FlashMessages;
     private $models;
@@ -32,63 +31,47 @@ class DepartmentsController extends Controller
     public function index()
     {
         $menus = $this->load_menus();
-        return view('modules/components/schools/departments/manage')->with(compact('menus'));
+        return view('modules/components/schools/education-types/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/components/schools/departments/manage')->with(compact('menus'));
+        return view('modules/components/schools/education-types/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/components/schools/departments/inactive')->with(compact('menus'));
+        return view('modules/components/schools/education-types/inactive')->with(compact('menus'));
     }
 
     public function all_active(Request $request)
     {
-        $res = Department::
-        with([
-            'edtype' =>  function($q) { 
-                $q->select(['id', 'name']); 
-            }
-        ])
-        ->where('is_active', 1)->orderBy('id', 'DESC')->get();
+        $res = EducationType::where('is_active', 1)->orderBy('id', 'DESC')->get();
 
-        return $res->map(function($department) {
+        return $res->map(function($educationType) {
             return [
-                'departmentID' => $department->id,
-                'departmentCode' => $department->code,
-                'departmentName' => $department->name,
-                'departmentDescription' => $department->description,
-                'departmentTypeID' => $department->edtype->id,
-                'departmentType' => $department->edtype->name,
-                'departmentModified' => ($department->updated_at !== NULL) ? date('d-M-Y', strtotime($department->updated_at)).'<br/>'. date('h:i A', strtotime($department->updated_at)) : date('d-M-Y', strtotime($department->created_at)).'<br/>'. date('h:i A', strtotime($department->created_at))
+                'educationTypeID' => $educationType->id,
+                'educationTypeCode' => $educationType->code,
+                'educationTypeName' => $educationType->name,
+                'educationTypeDescription' => $educationType->description,
+                'educationTypeModified' => ($educationType->updated_at !== NULL) ? date('d-M-Y', strtotime($educationType->updated_at)).'<br/>'. date('h:i A', strtotime($educationType->updated_at)) : date('d-M-Y', strtotime($educationType->created_at)).'<br/>'. date('h:i A', strtotime($educationType->created_at))
             ];
         });
     }
 
     public function all_inactive(Request $request)
     {
-        $res = Department::
-        with([
-            'edtype' =>  function($q) { 
-                $q->select(['id', 'name']); 
-            }
-        ])
-        ->where('is_active', 0)->orderBy('id', 'DESC')->get();
+        $res = EducationType::where('is_active', 0)->orderBy('id', 'DESC')->get();
 
-        return $res->map(function($department) {
+        return $res->map(function($educationType) {
             return [
-                'departmentID' => $department->id,
-                'departmentCode' => $department->code,
-                'departmentName' => $department->name,
-                'departmentDescription' => $department->description,
-                'departmentTypeID' => $department->edtype->id,
-                'departmentType' => $department->edtype->name,
-                'departmentModified' => ($department->updated_at !== NULL) ? date('d-M-Y', strtotime($department->updated_at)).'<br/>'. date('h:i A', strtotime($department->updated_at)) : date('d-M-Y', strtotime($department->created_at)).'<br/>'. date('h:i A', strtotime($department->created_at))
+                'educationTypeID' => $educationType->id,
+                'educationTypeCode' => $educationType->code,
+                'educationTypeName' => $educationType->name,
+                'educationTypeDescription' => $educationType->description,
+                'educationTypeModified' => ($educationType->updated_at !== NULL) ? date('d-M-Y', strtotime($educationType->updated_at)).'<br/>'. date('h:i A', strtotime($educationType->updated_at)) : date('d-M-Y', strtotime($educationType->created_at)).'<br/>'. date('h:i A', strtotime($educationType->created_at))
             ];
         });
     }
@@ -98,9 +81,9 @@ class DepartmentsController extends Controller
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
-        $department = (new Department)->fetch($id);
+        $educationType = (new EducationType)->fetch($id);
         $types = (new EducationType)->all_education_types();
-        return view('modules/components/schools/departments/add')->with(compact('menus', 'department', 'types', 'segment'));
+        return view('modules/components/schools/education-types/add')->with(compact('menus', 'educationType', 'types', 'segment'));
     }
     
     public function edit(Request $request, $id)
@@ -108,23 +91,23 @@ class DepartmentsController extends Controller
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
-        $department = (new Department)->fetch($id);
+        $educationType = (new EducationType)->fetch($id);
         $types = (new EducationType)->all_education_types();
-        return view('modules/components/schools/departments/edit')->with(compact('menus', 'department', 'types', 'segment'));
+        return view('modules/components/schools/education-types/edit')->with(compact('menus', 'educationType', 'types', 'segment'));
     }
     
     public function store(Request $request)
     {    
         $timestamp = date('Y-m-d H:i:s');
 
-        $rows = Department::where([
+        $rows = EducationType::where([
             'code' => $request->code
         ])->count();
 
         if ($rows > 0) {
             $data = array(
                 'title' => 'Oh snap!',
-                'text' => 'You cannot create a department with an existing code.',
+                'text' => 'You cannot create a education type with an existing code.',
                 'type' => 'error',
                 'class' => 'btn-danger'
             );
@@ -132,22 +115,21 @@ class DepartmentsController extends Controller
             echo json_encode( $data ); exit();
         }
 
-        $department = Department::create([
+        $educationType = EducationType::create([
             'code' => $request->code,
             'name' => $request->name,
             'description' => $request->description,
-            'education_type_id' => $request->education_type_id,
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
 
-        if (!$department) {
+        if (!$educationType) {
             throw new NotFoundHttpException();
         }
 
         $data = array(
             'title' => 'Well done!',
-            'text' => 'The department has been successfully saved.',
+            'text' => 'The education type has been successfully saved.',
             'type' => 'success',
             'class' => 'btn-brand'
         );
@@ -158,24 +140,23 @@ class DepartmentsController extends Controller
     public function update(Request $request, $id)
     {    
         $timestamp = date('Y-m-d H:i:s');
-        $department = Department::find($id);
+        $educationType = EducationType::find($id);
 
-        if(!$department) {
+        if(!$educationType) {
             throw new NotFoundHttpException();
         }
 
-        $department->code = $request->code;
-        $department->name = $request->name;
-        $department->description = $request->description;
-        $department->education_type_id = $request->education_type_id;
-        $department->updated_at = $timestamp;
-        $department->updated_by = Auth::user()->id;
+        $educationType->code = $request->code;
+        $educationType->name = $request->name;
+        $educationType->description = $request->description;
+        $educationType->updated_at = $timestamp;
+        $educationType->updated_by = Auth::user()->id;
 
-        if ($department->update()) {
+        if ($educationType->update()) {
 
             $data = array(
                 'title' => 'Well done!',
-                'text' => 'The department has been successfully updated.',
+                'text' => 'The education type has been successfully updated.',
                 'type' => 'success',
                 'class' => 'btn-brand'
             );
@@ -190,7 +171,7 @@ class DepartmentsController extends Controller
         $action = $request->input('items')[0]['action'];
 
         if ($action == 'Remove') {
-            $departments = Department::where([
+            $educationTypes = EducationType::where([
                 'id' => $id,
             ])
             ->update([
@@ -201,7 +182,7 @@ class DepartmentsController extends Controller
             
             $data = array(
                 'title' => 'Well done!',
-                'text' => 'The department has been successfully removed.',
+                'text' => 'The education type has been successfully removed.',
                 'type' => 'success',
                 'class' => 'btn-brand'
             );
@@ -209,7 +190,7 @@ class DepartmentsController extends Controller
             echo json_encode( $data ); exit();
         }    
         else {
-            $batches = Department::where([
+            $batches = EducationType::where([
                 'id' => $id,
             ])
             ->update([
@@ -220,7 +201,7 @@ class DepartmentsController extends Controller
             
             $data = array(
                 'title' => 'Well done!',
-                'text' => 'The department has been successfully activated.',
+                'text' => 'The education type has been successfully activated.',
                 'type' => 'success',
                 'class' => 'btn-brand'
             );

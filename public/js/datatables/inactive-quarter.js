@@ -2,7 +2,7 @@
 
 var DatatableDataLocalDemo = function () {
 	//== Private functions
- 	console.log(base_url + 'schools/quarters/all-inactive');
+ 	console.log(base_url + 'components/schools/quarters/all-inactive');
 	
 	var datatable = $('.m_datatable').mDatatable({
 		// datasource definition
@@ -12,7 +12,7 @@ var DatatableDataLocalDemo = function () {
 			  read: {
 				// sample GET method
 				method: 'GET',
-				url: base_url + 'schools/quarters/all-inactive',
+				url: base_url + 'components/schools/quarters/all-inactive',
 				map: function(raw) {
 				  // sample data mapping
 				  var dataSet = raw;
@@ -81,12 +81,12 @@ var DatatableDataLocalDemo = function () {
 			// callback function support for column rendering
 			template: function (row) {
 				var type = {
-					"childhood-education" : {'title': 'Childhood', 'class': 'childhood-bg'},
-					"primary-education": {'title': 'Pimary', 'class': 'primary-bg'}, 
-                    "secondary-education": {'title': 'Secondary', 'class': 'secondary-bg'},
-                    "higher-education": {'title': 'Higher', 'class': 'higher-bg'}
+					1 : {'class': 'childhood-bg'},
+					2 : {'class': 'primary-bg'}, 
+                    3 : {'class': 'secondary-bg'},
+                    4 : {'class': 'higher-bg'}
 				};
-				return '<span class="m-badge ' + type[row.quarterType].class + ' m-badge--wide">' + type[row.quarterType].title + '</span>';
+				return '<span class="m-badge ' + type[row.quarterTypeID].class + ' m-badge--wide">' + row.quarterType + '</span>';
 			}
 		}, {
 			field: "Actions",
@@ -151,7 +151,7 @@ jQuery(document).ready(function () {
 		var $rowID = $(this).attr('data-row-id');
 		console.log($rowID);
 		var $action = $(this).attr('action');
-		var $url = base_url + 'schools/quarters/update-status/' + $rowID;
+		var $url = base_url + 'components/schools/quarters/update-status/' + $rowID;
 		var items = []; items.push({ action: $action });
 
 		console.log($url);

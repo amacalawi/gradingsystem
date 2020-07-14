@@ -184,28 +184,28 @@ button:not([data-dismiss="alert"]) {
     color: #444;
     text-shadow: 1px 1px #eaeaea;
     background: #eaeaea;
-    width: 88px !important;
+    /* width: 88px !important; */
 }
 
 .primary-bg {
     color: #fff;
     text-shadow: 1px 1px #333;
     background: #34bfa3 !important;
-    width: 88px !important;
+    /* width: 88px !important; */
 }
 
 .secondary-bg {
     color: #fff;
     text-shadow: 1px 1px #333;
     background: #42A5F5 !important;
-    width: 88px !important;
+    /* width: 88px !important; */
 }
 
 .higher-bg {
     color: #fff;
     text-shadow: 1px 1px #333;
     background: #f12143 !important;
-    width: 88px !important;
+    /* width: 88px !important; */
 }
 
 /* AVATAR CSS */

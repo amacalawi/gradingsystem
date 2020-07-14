@@ -15,10 +15,10 @@ class CreateQuartersTable extends Migration
     {
         Schema::create('quarters', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('education_type_id')->unsigned();
             $table->string('code', 40);
             $table->string('name', 100);
             $table->text('description')->nullable();
-            $table->string('type', 40);
             $table->date('date_start');
             $table->date('date_end');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));

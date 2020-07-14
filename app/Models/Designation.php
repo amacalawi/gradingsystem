@@ -21,7 +21,7 @@ class Designation extends Model
                 'code' => ($designation->code) ? $designation->code : '',
                 'name' => ($designation->name) ? $designation->name : '',
                 'description' => ($designation->description) ? $designation->description : '',
-                'type' => ($designation->type) ? $designation->type : ''
+                'education_type_id' => ($designation->education_type_id) ? $designation->education_type_id : ''
             );
         } else {
             $results = array(
@@ -29,16 +29,15 @@ class Designation extends Model
                 'code' => '',
                 'name' => '',
                 'description' => '',
-                'type' => ''
+                'education_type_id' => ''
             );
         }
         return (object) $results;
     }
 
-    public function types()
-    {	
-        $types = array('' => 'select a type', 'childhood-education' => 'Childhood Education', 'primary-education' => 'Primary Education', 'secondary-education' => 'Secondary Education', 'higher-education' => 'Higher Education');
-        return $types;
+    public function edtype()
+    {
+        return $this->belongsTo('App\Models\EducationType', 'education_type_id', 'id');
     }
 
     public function all_designations()

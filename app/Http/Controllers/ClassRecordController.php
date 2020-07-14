@@ -61,7 +61,7 @@ class ClassRecordController extends Controller
     {   
         if (Auth::user()->type != 'administrator') {
             $rows = SectionInfo::
-            whereIn([
+            where([
                 'adviser_id' => (new Staff)->get_column_via_user('id', Auth::user()->id),
                 'batch_id' => (new Batch)->get_current_batch(),
                 'is_active' => 1
@@ -88,7 +88,7 @@ class ClassRecordController extends Controller
             ->where([
                 'adviser_id' => (new Staff)->get_column_via_user('id', Auth::user()->id),
                 'batch_id' => (new Batch)->get_current_batch(),
-                'is_active', 1
+                'is_active' => 1
             ])
             ->orderBy('id', 'DESC')
             ->get();
@@ -115,6 +115,56 @@ class ClassRecordController extends Controller
                 'classrecordCode' => $classrecord->classcode,
                 'classrecordSection' => $classrecord->section->name,
                 'classrecordLevel' => $classrecord->level->name,
+                'classrecordSubjects' => (new SectionsSubjects)->where(['section_info_id' => $classrecord->id, 'is_active' => 1])->count(),
+                'classrecordStudents' => (new Admission)->where(['section_id' => $classrecord->section->id, 'status' => 'admit', 'is_active' => 1])->count(),
+                'classrecordType' => $classrecord->type,
+                'classrecordModified' => ($classrecord->updated_at !== NULL) ? date('d-M-Y', strtotime($classrecord->updated_at)).'<br/>'. date('h:i A', strtotime($classrecord->updated_at)) : date('d-M-Y', strtotime($classrecord->created_at)).'<br/>'. date('h:i A', strtotime($classrecord->created_at))
+            ];
+        });
+    }
+
+    public function all_inactive(Request $request)
+    {   
+        if (Auth::user()->type != 'administrator') {
+            $res = SectionInfo::with([
+                'section' =>  function($q) { 
+                    $q->select(['id', 'code', 'name', 'description']); 
+                },
+                'level' =>  function($q) { 
+                    $q->select(['id', 'code', 'name', 'description']); 
+                }
+            ])
+            ->where([
+                'adviser_id' => (new Staff)->get_column_via_user('id', Auth::user()->id),
+                'is_active' => 1
+            ])
+            ->where('batch_id', '!=', (new Batch)->get_current_batch())
+            ->orderBy('id', 'DESC')
+            ->get();
+        } else {
+            $res = SectionInfo::with([
+                'section' =>  function($q) { 
+                    $q->select(['id', 'code', 'name', 'description']); 
+                },
+                'level' =>  function($q) { 
+                    $q->select(['id', 'code', 'name', 'description']); 
+                }
+            ])
+            ->where([
+                'is_active' => 1
+            ])
+            ->where('batch_id', '!=', (new Batch)->get_current_batch())
+            ->orderBy('id', 'DESC')
+            ->get();
+        }
+
+        return $res->map(function($classrecord) {
+            return [
+                'classrecordID' => $classrecord->id,
+                'classrecordCode' => $classrecord->classcode,
+                'classrecordSection' => $classrecord->section->name,
+                'classrecordLevel' => $classrecord->level->name,
+                'classrecordSubjects' => (new SectionsSubjects)->where(['section_info_id' => $classrecord->id, 'is_active' => 1])->count(),
                 'classrecordStudents' => (new Admission)->where(['section_id' => $classrecord->section->id, 'status' => 'admit', 'is_active' => 1])->count(),
                 'classrecordType' => $classrecord->type,
                 'classrecordModified' => ($classrecord->updated_at !== NULL) ? date('d-M-Y', strtotime($classrecord->updated_at)).'<br/>'. date('h:i A', strtotime($classrecord->updated_at)) : date('d-M-Y', strtotime($classrecord->created_at)).'<br/>'. date('h:i A', strtotime($classrecord->created_at))

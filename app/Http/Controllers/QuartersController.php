@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Quarter;
+use App\Models\EducationType;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -23,32 +24,33 @@ class QuartersController extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
     public function index()
     {
         $menus = $this->load_menus();
-        return view('modules/schools/quarters/manage')->with(compact('menus'));
+        return view('modules/components/schools/quarters/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/schools/quarters/manage')->with(compact('menus'));
+        return view('modules/components/schools/quarters/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/schools/quarters/inactive')->with(compact('menus'));
+        return view('modules/components/schools/quarters/inactive')->with(compact('menus'));
     }
 
     public function all_active(Request $request)
     {
-        $res = Quarter::where('is_active', 1)->orderBy('id', 'DESC')->get();
+        $res = Quarter::
+        with([
+            'edtype' =>  function($q) { 
+                $q->select(['id', 'name']); 
+            }
+        ])
+        ->where('is_active', 1)->orderBy('id', 'DESC')->get();
 
         return $res->map(function($quarter) {
             return [
@@ -58,7 +60,8 @@ class QuartersController extends Controller
                 'quarterDescription' => $quarter->description,
                 'quarterStart' => date('d-M-Y', strtotime($quarter->date_start)),
                 'quarterEnd' => date('d-M-Y', strtotime($quarter->date_end)),
-                'quarterType' => $quarter->type,
+                'quarterTypeID' => $quarter->edtype->id,
+                'quarterType' => $quarter->edtype->name,
                 'quarterModified' => ($quarter->updated_at !== NULL) ? date('d-M-Y', strtotime($quarter->updated_at)).'<br/>'. date('h:i A', strtotime($quarter->updated_at)) : date('d-M-Y', strtotime($quarter->created_at)).'<br/>'. date('h:i A', strtotime($quarter->created_at))
             ];
         });
@@ -66,7 +69,13 @@ class QuartersController extends Controller
 
     public function all_inactive(Request $request)
     {
-        $res = Quarter::where('is_active', 0)->orderBy('id', 'DESC')->get();
+        $res = Quarter::
+        with([
+            'edtype' =>  function($q) { 
+                $q->select(['id', 'name']); 
+            }
+        ])
+        ->where('is_active', 0)->orderBy('id', 'DESC')->get();
 
         return $res->map(function($quarter) {
             return [
@@ -76,7 +85,8 @@ class QuartersController extends Controller
                 'quarterDescription' => $quarter->description,
                 'quarterStart' => date('d-M-Y', strtotime($quarter->date_start)),
                 'quarterEnd' => date('d-M-Y', strtotime($quarter->date_end)),
-                'quarterType' => $quarter->type,
+                'quarterTypeID' => $quarter->edtype->id,
+                'quarterType' => $quarter->edtype->name,
                 'quarterModified' => ($quarter->updated_at !== NULL) ? date('d-M-Y', strtotime($quarter->updated_at)).'<br/>'. date('h:i A', strtotime($quarter->updated_at)) : date('d-M-Y', strtotime($quarter->created_at)).'<br/>'. date('h:i A', strtotime($quarter->created_at))
             ];
         });
@@ -88,8 +98,8 @@ class QuartersController extends Controller
         $flashMessage = self::messages();
         $segment = request()->segment(4);
         $quarter = (new Quarter)->fetch($id);
-        $types = (new Quarter)->types();
-        return view('modules/schools/quarters/add')->with(compact('menus', 'quarter', 'types', 'segment'));
+        $types = (new EducationType)->all_education_types();
+        return view('modules/components/schools/quarters/add')->with(compact('menus', 'quarter', 'types', 'segment'));
     }
     
     public function edit(Request $request, $id)
@@ -98,8 +108,8 @@ class QuartersController extends Controller
         $flashMessage = self::messages();
         $segment = request()->segment(4);
         $quarter = (new Quarter)->fetch($id);
-        $types = (new Quarter)->types();
-        return view('modules/schools/quarters/edit')->with(compact('menus', 'quarter', 'types', 'segment'));
+        $types = (new EducationType)->all_education_types();
+        return view('modules/components/schools/quarters/edit')->with(compact('menus', 'quarter', 'types', 'segment'));
     }
     
     public function store(Request $request)
@@ -125,7 +135,7 @@ class QuartersController extends Controller
             'code' => $request->code,
             'name' => $request->name,
             'description' => $request->description,
-            'type' => $request->type,
+            'education_type_id' => $request->education_type_id,
             'date_start' => date('Y-m-d', strtotime($request->date_start)),
             'date_end' => date('Y-m-d', strtotime($request->date_end)),
             'created_at' => $timestamp,
@@ -158,7 +168,7 @@ class QuartersController extends Controller
         $quarter->code = $request->code;
         $quarter->name = $request->name;
         $quarter->description = $request->description;
-        $quarter->type = $request->type;
+        $quarter->education_type_id = $request->education_type_id;
         $quarter->date_start = date('Y-m-d', strtotime($request->date_start));
         $quarter->date_end = date('Y-m-d', strtotime($request->date_end));
         $quarter->updated_at = $timestamp;

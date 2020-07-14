@@ -181,6 +181,27 @@
         quarterGrade.val(qg);
     },
 
+    gradingsheet.prototype.reload_subject_via_section = function($section)
+    {   
+        var $subject = $('#subject_id');
+        $subject.find('option').remove();
+        $subject.append('<option value="">select a subject</option>');  
+
+        console.log(base_url + 'academics/grading-sheets/all-gradingsheets/reload-subject/' + $section);
+        $.ajax({
+            type: "GET",
+            url: base_url + 'academics/grading-sheets/all-gradingsheets/reload-subject/' + $section,
+            success: function(response) {
+                var data = JSON.parse(response);
+                $.each(data.subjects, function(i, item) {
+                    $subject.append('<option value="' + item.id + '">' + item.name + '</option>');  
+                }); 
+            } 
+        });
+
+        $.gradingsheet.required_fields();
+    },
+
     gradingsheet.prototype.reload_section_subject_quarter = function($type) 
     {   
         var $section = $('#section_id'), $subject = $('#subject_id'), $quarter = $('#quarter_id');
@@ -325,13 +346,21 @@
             $.gradingsheet.compute(self.closest('tr'), '');
         });
 
-
         this.$body.on('change', '#type', function (e){
             e.preventDefault();
             var self = $(this).val();
 
             if (self != '') {
                 $.gradingsheet.reload_section_subject_quarter(self);
+            }
+        });
+
+        this.$body.on('change', '#section_id', function (e){
+            e.preventDefault();
+            var self = $(this).val();
+
+            if (self != '') {
+                $.gradingsheet.reload_subject_via_section(self);
             }
         });
 

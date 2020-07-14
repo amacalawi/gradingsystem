@@ -100,18 +100,18 @@ var DatatableDataLocalDemo = function () {
 			template: function (row, index, datatable) {
 				var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
 
-				if (user_role == 'administrator') {
-					return '\
-						<a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/grading-sheets/components/edit/' + row.componentID + '"><i class="la la-edit"></i></a>\
-						<a title="remove this" data-row-id="' + row.componentID + '" action="Remove" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-remove"></i></a>\
-						<a title="move up this" data-row-id="' + row.componentID + '" action="Up" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-arrow-up"></i></a>\
-						<a title="move down this" data-row-id="' + row.componentID + '" action="Down" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-arrow-down"></i></a>\
-					';
-				} else {
+				// if (user_role == 'administrator') {
+				// 	return '\
+				// 		<a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/grading-sheets/components/edit/' + row.componentID + '"><i class="la la-edit"></i></a>\
+				// 		<a title="remove this" data-row-id="' + row.componentID + '" action="Remove" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-remove"></i></a>\
+				// 		<a title="move up this" data-row-id="' + row.componentID + '" action="Up" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-arrow-up"></i></a>\
+				// 		<a title="move down this" data-row-id="' + row.componentID + '" action="Down" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-arrow-down"></i></a>\
+				// 	';
+				// } else {
 					return '\
 						<a title="add activities" class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/grading-sheets/components/edit/' + row.componentID + '"><i class="la la-edit"></i></a>\
 					';
-				}
+				// }
 			}
 		}]
 	});

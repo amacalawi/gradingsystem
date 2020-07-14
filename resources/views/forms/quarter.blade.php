@@ -73,9 +73,9 @@
         </div>
         <div class="col-md-4">
             <div class="form-group m-form__group required">
-                {{ Form::label('type', 'Type', ['class' => '']) }}
+                {{ Form::label('education_type_id', 'Type', ['class' => '']) }}
                 {{
-                    Form::select('type', $types, $value = $quarter->type, ['class' => 'form-control form-control-lg m-input m-input--solid'])
+                    Form::select('education_type_id', $types, $value = $quarter->education_type_id, ['class' => 'form-control form-control-lg m-input m-input--solid'])
                 }}
                 <span class="m-form__help m--font-danger">
                 </span>

@@ -584,6 +584,29 @@ class GradingSheetsController extends Controller
         echo json_encode( $arr ); exit();
     }
 
+    public function reload_subject($section)
+    {   
+        //--> subjects
+        $arr['subjects'] = (new Subject)
+        ->whereIn('id', 
+            SectionsSubjects::select('subject_id')
+            ->whereIn('section_info_id', 
+                SectionInfo::select('id')->where([
+                    'batch_id' => (new Batch)->get_current_batch(), 
+                    'is_active' => 1,
+                    'section_id' => $section
+                ])
+            )->where([
+                'batch_id' => (new Batch)->get_current_batch(),
+                'is_active' => 1
+            ])
+        )
+        ->where(['is_active' => 1])
+        ->orderBy('id', 'ASC')->get();
+
+        echo json_encode( $arr ); exit();
+    }
+
     public function get_transmutation_value($score, $type)
     {   
         $res = TransmutationElement::with([

@@ -478,11 +478,11 @@
                         <div class="form-group m-form__group required">
                             @if (Auth::user()->type != 'administrator')
                                 {{  
-                                    Form::select('quarter_id', $quarters, !empty($component) ? $component->quarter_id : '', ['class' => 'form-control form-control-lg m-input m-input--solid', 'disabled' => 'disabled'])
+                                    Form::select('quarter_id', $quarters, !empty($component) ? $component->quarters : '', ['class' => 'form-control form-control-lg m-input m-input--solid m-bootstrap-select m_selectpicker', 'disabled' => 'disabled', 'multiple'])
                                 }}
                             @else
                                 {{  
-                                    Form::select('quarter_id', $quarters, !empty($component) ? $component->quarter_id : '', ['class' => 'form-control form-control-lg m-input m-input--solid'])
+                                    Form::select('quarter_id', $quarters, !empty($component) ? $component->quarters : '', ['class' => 'form-control form-control-lg m-input m-input--solid m-bootstrap-select m_selectpicker', 'multiple'])
                                 }}
                             @endif
                             <span class="m-form__help m--font-danger"></span>

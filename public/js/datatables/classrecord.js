@@ -58,14 +58,17 @@ var DatatableDataLocalDemo = function () {
 			textAlign: 'center',
 			selector: {class: 'm-checkbox--solid m-checkbox--brand'}
 		}, {
-            field: "classrecordCode",
-			title: "Class Code"
-		}, {
+        //     field: "classrecordCode",
+		// 	title: "Classcode"
+		// }, {
 			field: "classrecordSection",
 			title: "Section"
 		}, {
             field: "classrecordLevel",
 			title: "Level"
+		}, {
+			field: "classrecordSubjects",
+			title: "No. of Subjects"
 		}, {
             field: "classrecordStudents",
 			title: "No. of Students"

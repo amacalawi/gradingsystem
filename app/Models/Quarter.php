@@ -23,7 +23,7 @@ class Quarter extends Model
                 'description' => ($quarter->description) ? $quarter->description : '',
                 'date_start' => ($quarter->date_start) ? $quarter->date_start : '',
                 'date_end' => ($quarter->date_end) ? $quarter->date_end : '',
-                'type' => ($quarter->type) ? $quarter->type : ''
+                'education_type_id' => ($quarter->education_type_id) ? $quarter->education_type_id : ''
             );
         } else {
             $results = array(
@@ -33,16 +33,10 @@ class Quarter extends Model
                 'description' => '',
                 'date_start' => '',
                 'date_end' => '',
-                'type' => ''
+                'education_type_id' => ''
             );
         }
         return (object) $results;
-    }
-
-    public function types()
-    {	
-        $types = array('' => 'select a type', 'childhood-education' => 'Childhood Education', 'primary-education' => 'Primary Education', 'secondary-education' => 'Secondary Education', 'higher-education' => 'Higher Education');
-        return $types;
     }
 
     public function all_quarters()
@@ -65,6 +59,11 @@ class Quarter extends Model
         }
 
         return $quarters;
+    }
+
+    public function edtype()
+    {
+        return $this->belongsTo('App\Models\EducationType', 'education_type_id', 'id');
     }
 
     public function all_quarters_via_type($type)

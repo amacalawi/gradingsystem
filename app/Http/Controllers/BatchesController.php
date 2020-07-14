@@ -31,19 +31,19 @@ class BatchesController extends Controller
     public function index()
     {
         $menus = $this->load_menus();
-        return view('modules/schools/batches/manage')->with(compact('menus'));
+        return view('modules/components/schools/batches/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/schools/batches/manage')->with(compact('menus'));
+        return view('modules/components/schools/batches/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/schools/batches/inactive')->with(compact('menus'));
+        return view('modules/components/schools/batches/inactive')->with(compact('menus'));
     }
 
     public function all_active(Request $request)
@@ -88,7 +88,7 @@ class BatchesController extends Controller
         $flashMessage = self::messages();
         $segment = request()->segment(4);
         $batch = (new Batch)->fetch($id);
-        return view('modules/schools/batches/add')->with(compact('menus', 'batch', 'segment'));
+        return view('modules/components/schools/batches/add')->with(compact('menus', 'batch', 'segment'));
     }
     
     public function edit(Request $request, $id)
@@ -97,7 +97,7 @@ class BatchesController extends Controller
         $flashMessage = self::messages();
         $segment = request()->segment(4);
         $batch = (new Batch)->find($id);
-        return view('modules/schools/batches/edit')->with(compact('menus', 'batch', 'segment'));
+        return view('modules/components/schools/batches/edit')->with(compact('menus', 'batch', 'segment'));
     }
     
     public function store(Request $request)

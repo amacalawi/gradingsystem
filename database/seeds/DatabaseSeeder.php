@@ -599,6 +599,16 @@ class DatabaseSeeder extends Seeder
                 'icon' => '',
                 'order' => '33',
                 'created_by' => 1
+            ],
+            [   
+                'module_id' => '5',
+                'code' => 'education-types',
+                'name' => 'Education Types',
+                'description' => 'Education Types',
+                'slug' => 'education-types',
+                'icon' => '',
+                'order' => '33',
+                'created_by' => 1
             ]
         ];
         foreach ($sub_modules as $sub_module) {
@@ -1928,6 +1938,40 @@ class DatabaseSeeder extends Seeder
 
         foreach ($transmutations_elements as $transmutation_element) {
             DB::table('transmutations_elements')->insert($transmutation_element);
+        }
+
+        $education_types = [
+            [   
+                'id' => '1',
+                'code' => 'early-childhood',
+                'name' => 'Early Childhood',
+                'description' => 'Early Childhood Description',
+                'created_by' => 1
+            ],
+            [   
+                'id' => '2',
+                'code' => 'grade-school',
+                'name' => 'Grade School',
+                'description' => 'Grade School Description',
+                'created_by' => 1
+            ],
+            [   
+                'id' => '3',
+                'code' => 'junior-highschool',
+                'name' => 'Junior High School',
+                'description' => 'Junior High School Description',
+                'created_by' => 1
+            ],
+            [   
+                'id' => '4',
+                'code' => 'senior-highschool',
+                'name' => 'Senior High School',
+                'description' => 'Senior High School Description',
+                'created_by' => 1
+            ]
+        ];
+        foreach ($education_types as $education_type) {
+            DB::table('education_types')->insert($education_type);
         }
     }
 }
