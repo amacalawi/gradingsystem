@@ -22,7 +22,7 @@ class Component extends Model
             $results = array(
                 'id' => ($component->id) ? $component->id : '',
                 'batch_id' => ($component->batch_id) ? $component->batch_id : '',
-                'quarter_id' => ($component->quarter_id) ? $component->quarter_id : '',
+                'quarters' => '',
                 'section_id' => ($component->section_id) ? $component->section_id : '',
                 'subject_id' => ($component->subject_id) ? $component->subject_id : '',
                 'type' => ($component->type) ? $component->type : '',
@@ -42,7 +42,7 @@ class Component extends Model
             $results = array(
                 'id' => '',
                 'batch_id' => '',
-                'quarter_id' => '',
+                'quarters' => '',
                 'section_id' => '',
                 'subject_id' => '',
                 'type' => '',
@@ -66,6 +66,11 @@ class Component extends Model
     {	
         $types = array('' => 'select a type', 'childhood-education' => 'Childhood Education', 'primary-education' => 'Primary Education', 'secondary-education' => 'Secondary Education', 'higher-education' => 'Higher Education');
         return $types;
+    }
+
+    public function quarters()
+    {
+        return $this->hasMany('App\Models\ComponentQuarter', 'component_id', 'id');    
     }
 
     public function activities()

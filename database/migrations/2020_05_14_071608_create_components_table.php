@@ -16,7 +16,6 @@ class CreateComponentsTable extends Migration
         Schema::create('components', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('batch_id')->unsigned();
-            $table->integer('quarter_id')->unsigned();
             $table->integer('section_id')->unsigned(); 
             $table->integer('subject_id')->unsigned(); 
             $table->string('type', 40);

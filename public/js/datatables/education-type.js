@@ -2,7 +2,7 @@
 
 var DatatableDataLocalDemo = function () {
 	//== Private functions
- 	console.log(base_url + 'components/schools/departments/all-inactive');
+ 	console.log(base_url + 'components/schools/education-types/all-active');
 	
 	var datatable = $('.m_datatable').mDatatable({
 		// datasource definition
@@ -12,7 +12,7 @@ var DatatableDataLocalDemo = function () {
 			  read: {
 				// sample GET method
 				method: 'GET',
-				url: base_url + 'components/schools/departments/all-inactive',
+				url: base_url + 'components/schools/education-types/all-active',
 				map: function(raw) {
 				  // sample data mapping
 				  var dataSet = raw;
@@ -51,40 +51,27 @@ var DatatableDataLocalDemo = function () {
 
 		// columns definition
 		columns: [{
-			field: "departmentID",
+			field: "educationTypeID",
 			title: "#",
 			width: 50,
 			sortable: false,
 			textAlign: 'center',
 			selector: {class: 'm-checkbox--solid m-checkbox--brand'}
 		}, {
-			field: "departmentCode",
+			field: "educationTypeCode",
 			title: "Code"
 		}, {
-			field: "departmentName",
+			field: "educationTypeName",
 			title: "Name",
 		}, {
-			field: "departmentDescription",
+			field: "educationTypeDescription",
 			title: "Description"
         }, {
-			field: "departmentModified",
+			field: "educationTypeModified",
 			title: "Last Modified",
 		}, {
-			field: "departmentType",
-			title: "Type",
-			// callback function support for column rendering
-			template: function (row) {
-				var type = {
-					1 : {'class': 'childhood-bg'},
-					2 : {'class': 'primary-bg'}, 
-                    3 : {'class': 'secondary-bg'},
-                    4 : {'class': 'higher-bg'}
-				};
-				return '<span class="m-badge ' + type[row.departmentTypeID].class + ' m-badge--wide">' + row.departmentType + '</span>';
-			}
-		}, {
 			field: "Actions",
-			width: 70,
+			width: 90,
 			title: "Actions",
 			sortable: false,
 			ordering: false,
@@ -92,10 +79,9 @@ var DatatableDataLocalDemo = function () {
 			template: function (row, index, datatable) {
 				var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
 
-				return '\
-                    <a data-row-id="' + row.departmentID + '" action="Active" href="javascript:;" class="toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="activate this">\
-                        <i class="la la-undo"></i>\
-                    </a>\
+                return '\
+                    <a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'components/schools/education-types/edit/' + row.educationTypeID + '"><i class="la la-edit"></i></a>\
+                    <a title="remove this" data-row-id="' + row.educationTypeID + '" action="Remove" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-remove"></i></a>\
 				';
 			}
 		}]
@@ -108,8 +94,8 @@ var DatatableDataLocalDemo = function () {
 		var query = datatable.getDataSourceQuery();
 
 		$('#m_form_type').on('change', function () {
-			datatable.search($(this).val(), 'departmentType');
-		}).val(typeof query.departmentType !== 'undefined' ? query.departmentType : '');
+			datatable.search($(this).val(), 'educationTypeType');
+		}).val(typeof query.educationTypeType !== 'undefined' ? query.educationTypeType : '');
 
 		// $('#m_form_type').on('change', function () {
 		// 	datatable.search($(this).val(), 'Type');
@@ -145,7 +131,7 @@ jQuery(document).ready(function () {
 		var $rowID = $(this).attr('data-row-id');
 		console.log($rowID);
 		var $action = $(this).attr('action');
-		var $url = base_url + 'components/schools/departments/update-status/' + $rowID;
+		var $url = base_url + 'components/schools/education-types/update-status/' + $rowID;
 		var items = []; items.push({ action: $action });
 
 		console.log($url);

@@ -7531,9 +7531,10 @@ jQuery.fn.extend({
                 //== Skip if this step is already shown
                 console.log('num:' + number + ' ,steps:' + stepStart);
                 if (number > stepStart) {
-                    if (number > wizard.currentStep + 1) {
-                        return false; return false;
-                    }
+                    // din remove
+                    // if (number > wizard.currentStep + 1) {
+                    //     return false; return false;
+                    // }
                 }
 
                 if (number === wizard.currentStep) {

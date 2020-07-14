@@ -408,6 +408,47 @@
             self.closest(".form-group").removeClass("has-danger").find(".form-control-feedback").text("");
         });
 
+        $(".total_1")
+        .map(function(){return $(this).text()})
+        .get()
+        .sort(function(a,b){return a - b })
+        .reduce(function(a, b){ if (b != a[0]) a.unshift(b); return a }, [])
+        .forEach((v,i)=>{
+            $('.total_1').filter(function() {return $(this).text() == v;}).next().text(i + 1);
+        });
+        $(".total_2")
+        .map(function(){return $(this).text()})
+        .get()
+        .sort(function(a,b){return a - b })
+        .reduce(function(a, b){ if (b != a[0]) a.unshift(b); return a }, [])
+        .forEach((v,i)=>{
+            $('.total_2').filter(function() {return $(this).text() == v;}).next().text(i + 1);
+        });
+        $(".total_3")
+        .map(function(){return $(this).text()})
+        .get()
+        .sort(function(a,b){return a - b })
+        .reduce(function(a, b){ if (b != a[0]) a.unshift(b); return a }, [])
+        .forEach((v,i)=>{
+            $('.total_3').filter(function() {return $(this).text() == v;}).next().text(i + 1);
+        });
+        $(".total_4")
+        .map(function(){return $(this).text()})
+        .get()
+        .sort(function(a,b){return a - b })
+        .reduce(function(a, b){ if (b != a[0]) a.unshift(b); return a }, [])
+        .forEach((v,i)=>{
+            $('.total_4').filter(function() {return $(this).text() == v;}).next().text(i + 1);
+        });
+        $(".total_5")
+        .map(function(){return $(this).text()})
+        .get()
+        .sort(function(a,b){return a - b })
+        .reduce(function(a, b){ if (b != a[0]) a.unshift(b); return a }, [])
+        .forEach((v,i)=>{
+            $('.total_5').filter(function() {return $(this).text() == v;}).next().text(i + 1);
+        });
+
         /*
         | ---------------------------------
         | # formality examination report mailing date on blur
