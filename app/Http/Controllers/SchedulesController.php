@@ -22,19 +22,19 @@ class SchedulesController extends Controller
     public function index()
     {   
         $menus = $this->load_menus();
-        return view('modules/schedules/manage')->with(compact('menus'));
+        return view('modules/components/schedules/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/schedules/manage')->with(compact('menus'));
+        return view('modules/components/schedules/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/schedules/inactive')->with(compact('menus'));
+        return view('modules/components/schedules/inactive')->with(compact('menus'));
     }
 
     public function all_active(Request $request)
@@ -81,7 +81,7 @@ class SchedulesController extends Controller
             $schedule = (new Schedule)->fetch($id);
         }
 
-        return view('modules/schedules/add')->with(compact('menus', 'schedule', 'preset_message', 'dtr_time_setting', 'segment', 'flashMessage'));
+        return view('modules/components/schedules/add')->with(compact('menus', 'schedule', 'preset_message', 'dtr_time_setting', 'segment', 'flashMessage'));
     }
 
     public function edit(Request $request, $id)
@@ -99,7 +99,7 @@ class SchedulesController extends Controller
         //die( var_dump($dtr_time_setting_pm) );
         $preset_message = (new PresetMessage)->all_preset_message();
 
-        return view('modules/schedules/edit')->with(compact('menus', 'schedule', 'dtr_time_setting_pm', 'preset_message', 'dtr_time_setting', 'segment', 'flashMessage'));
+        return view('modules/components/schedules/edit')->with(compact('menus', 'schedule', 'dtr_time_setting_pm', 'preset_message', 'dtr_time_setting', 'segment', 'flashMessage'));
     }
 
     public function store(Request $request)

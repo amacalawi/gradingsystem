@@ -19,19 +19,19 @@ class PresetMessageController extends Controller
     public function index()
     {   
         $menus = $this->load_menus();
-        return view('modules/schedules/presetmsg/manage')->with(compact('menus'));
+        return view('modules/components/schedules/presetmsg/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/schedules/presetmsg/manage')->with(compact('menus'));
+        return view('modules/components/schedules/presetmsg/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/schedules/presetmsg/inactive')->with(compact('menus'));
+        return view('modules/components/schedules/presetmsg/inactive')->with(compact('menus'));
     }
 
     public function all_active(Request $request)
@@ -72,7 +72,7 @@ class PresetMessageController extends Controller
             $presetmsg = (new PresetMessage)->fetch($id);
         }
 
-        return view('modules/schedules/presetmsg/add')->with(compact('menus', 'presetmsg', 'segment', 'flashMessage'));
+        return view('modules/components/schedules/presetmsg/add')->with(compact('menus', 'presetmsg', 'segment', 'flashMessage'));
     }
 
     public function edit(Request $request, $id)
@@ -81,7 +81,7 @@ class PresetMessageController extends Controller
         $flashMessage = self::messages();
         $segment = request()->segment(4);
         $presetmsg = (new PresetMessage)->find($id);
-        return view('modules/schedules/presetmsg/edit')->with(compact('menus', 'presetmsg', 'segment', 'flashMessage'));
+        return view('modules/components/schedules/presetmsg/edit')->with(compact('menus', 'presetmsg', 'segment', 'flashMessage'));
     }
 
     public function store(Request $request)

@@ -109,6 +109,7 @@ Route::prefix('components')->group(function () {
     Route::get('groups/all-inactive', 'GroupsController@all_inactive')->name('groups.all.inactive');
     Route::get('groups/group-user-list', 'GroupsController@all_group_users')->name('groups.all.group.users');
     Route::get('groups/all-member', 'GroupsController@all_member')->name('groups.all.member');    
+    Route::get('groups/get-student/{id}', 'GroupsController@get_student')->name('groups.get.member');
     /* End Groups Routes */
 
     /* Start Schedules Routes */
@@ -123,7 +124,6 @@ Route::prefix('components')->group(function () {
     Route::get('schedules/all-active', 'SchedulesController@all_active')->name('schedules.all.active');
     Route::get('schedules/inactive', 'SchedulesController@inactive')->name('schedules.manage.inactive');
     Route::get('schedules/all-inactive', 'SchedulesController@all_inactive')->name('schedules.all.inactive');
-    //Route::get('schedules/group-user-list', 'SchedulesController@all_group_users')->name('schedules.all.group.users');
     Route::get('schedules/all-member', 'SchedulesController@all_member')->name('schedules.all.member');
     Route::get('schedules/get-this-schedule/{id?}', 'SchedulesController@get_this_schedule');
 

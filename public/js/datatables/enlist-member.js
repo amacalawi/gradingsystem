@@ -120,7 +120,7 @@ function addgroupmember($stud_id)
 {
 	$.ajax({
 		type: 'GET',
-		url: base_url + 'memberships/students/get-student/'+$stud_id,
+		url: base_url + 'components/groups/get-student/'+$stud_id,
 		success: function(response) {
 			var data = $.parseJSON(response);
 			console.log(data);
