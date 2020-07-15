@@ -77,7 +77,7 @@
                             <div class="form-group m-form__group required">
                                 {{ Form::label('type', 'Type', ['class' => '']) }}
                                 {{
-                                    Form::select('type', $types, $value = $section->type, ['class' => 'form-control form-control-lg m-input m-input--solid'])
+                                    Form::select('type', $types, $value = $section->education_type_id, ['class' => 'form-control form-control-lg m-input m-input--solid'])
                                 }}
                                 <span class="m-form__help m--font-danger">
                                 </span>

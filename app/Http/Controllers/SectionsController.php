@@ -7,11 +7,13 @@ use Maatwebsite\Excel\Facades\Excel;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 use App\Models\Section;
 use App\Models\Subject;
 use App\Models\Staff;
 use App\Models\Admission;
 use App\Models\Quarter;
+use App\Models\EducationType;
 
 class SectionsController extends Controller
 {
@@ -43,7 +45,13 @@ class SectionsController extends Controller
 
     public function all_active(Request $request)
     {
-        $res = Section::where('is_active', 1)->orderBy('id', 'DESC')->get();
+        $res = Section::
+        with([
+            'edtype' =>  function($q) { 
+                $q->select(['id', 'name']); 
+            }
+        ])
+        ->where('is_active', 1)->orderBy('id', 'DESC')->get();
 
         return $res->map(function($section) {
             return [
@@ -52,14 +60,21 @@ class SectionsController extends Controller
                 'sectionName' => $section->name,
                 'sectionDescription' => $section->description,
                 'sectionModified' => ($section->updated_at !== NULL) ? date('d-M-Y', strtotime($section->updated_at)).'<br/>'. date('h:i A', strtotime($section->updated_at)) : date('d-M-Y', strtotime($section->created_at)).'<br/>'. date('h:i A', strtotime($section->created_at)),
-                'sectionType' => $section->type,
+                'sectionTypeID' => $section->edtype->id,
+                'sectionType' => $section->edtype->name,
             ];
         });
     }
 
     public function all_inactive(Request $request)
     {
-        $res = Section::where('is_active', 0)->orderBy('id', 'DESC')->get();
+        $res = Section::
+        with([
+            'edtype' =>  function($q) { 
+                $q->select(['id', 'name']); 
+            }
+        ])
+        ->where('is_active', 0)->orderBy('id', 'DESC')->get();
 
         return $res->map(function($section) {
             return [
@@ -68,7 +83,8 @@ class SectionsController extends Controller
                 'sectionName' => $section->name,
                 'sectionDescription' => $section->description,
                 'sectionModified' => ($section->updated_at !== NULL) ? date('d-M-Y', strtotime($section->updated_at)).'<br/>'. date('h:i A', strtotime($section->updated_at)) : date('d-M-Y', strtotime($section->created_at)).'<br/>'. date('h:i A', strtotime($section->created_at)),
-                'sectionType' => $section->type,
+                'sectionTypeID' => $section->edtype->id,
+                'sectionType' => $section->edtype->name,
             ];
         });
     }
@@ -81,7 +97,7 @@ class SectionsController extends Controller
         
         $subjects = (new Subject)->all_subjects();
         $admitted = (new Admission)->all_admitted_student();
-        $types = (new Quarter)->types();
+        $types = (new EducationType)->all_education_types();
         $staffs = Staff::select('id', 'lastname', 'firstname', 'middlename', 'identification_no')->where('type','Teacher')->orderBy('lastname', 'asc')->get();
         
         $sections_subjects = 0;
@@ -112,7 +128,7 @@ class SectionsController extends Controller
 
         $allSubjects = Subject::all();
         $allTeachers = Staff::where('is_active', 1)->where('type','Teacher')->orderBy('lastname', 'asc')->get();
-        $types = (new Quarter)->types();
+        $types = (new EducationType)->all_education_types();
         $subjects = (new Subject)->all_subjects();
 
         $staffs = Staff::select('id', 'lastname', 'firstname', 'middlename', 'identification_no')->where('is_active', 1)->where('type','Teacher')->orderBy('lastname', 'asc')->get();
@@ -139,14 +155,13 @@ class SectionsController extends Controller
     
     public function store(Request $request)
     {   
-        
         $timestamp = date('Y-m-d H:i:s');
 
         $section = Section::create([
             'code' => $request->code,
             'name' => $request->name,
             'description' => $request->description,
-            'type' => $request->type,
+            'education_type_id' => $request->type,
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
@@ -175,7 +190,7 @@ class SectionsController extends Controller
         $section->code = $request->code;
         $section->name = $request->name;
         $section->description = $request->description;
-        $section->type = $request->type;
+        $section->education_type_id = $request->type;
         $section->updated_at = $timestamp;
         $section->updated_at = Auth::user()->id;
 

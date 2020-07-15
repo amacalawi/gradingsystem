@@ -22,7 +22,7 @@ class Subject extends Model
                 'code' => ($subject->code) ? $subject->code : '',
                 'name' => ($subject->name) ? $subject->name : '',
                 'description' => ($subject->description) ? $subject->description : '',
-                'type' => ($subject->type) ? $subject->type : '',
+                'education_type_id' => ($subject->education_type_id) ? $subject->education_type_id : '',
                 'is_mapeh' => ($subject->is_mapeh) ? $subject->is_mapeh : '',
                 'is_tle' => ($subject->is_tle) ? $subject->is_tle : '',
             );
@@ -33,7 +33,7 @@ class Subject extends Model
                 'name' => '',
                 'description' => '',
                 'schoolyear_id' => '',
-                'type' => '',
+                'education_type_id' => '',
                 'is_mapeh' => '',
                 'is_tle' => '',
             );
@@ -93,7 +93,7 @@ class Subject extends Model
     
     public function get_all_subjects_bytype($type)
     {
-        $subjects = self::where('is_active', 1)->where('type', $type)->orderBy('id', 'asc')->get();
+        $subjects = self::where('is_active', 1)->where('education_type_id', $type)->orderBy('id', 'asc')->get();
 
         $subs = array();
         $subs[] = array('0' => 'select a subject');
@@ -163,4 +163,8 @@ class Subject extends Model
         return $advisers;  
     }
 
+    public function edtype()
+    {
+        return $this->belongsTo('App\Models\EducationType', 'education_type_id', 'id');
+    }
 }

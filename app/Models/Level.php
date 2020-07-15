@@ -21,7 +21,7 @@ class Level extends Model
                 'code' => ($level->code) ? $level->code : '',
                 'name' => ($level->name) ? $level->name : '',
                 'description' => ($level->description) ? $level->description : '',
-                'type' => ($level->type) ? $level->type : '',
+                'education_type_id' => ($level->education_type_id) ? $level->education_type_id : '',
             );
         } else {
             $results = array(
@@ -29,7 +29,7 @@ class Level extends Model
                 'code' => '',
                 'name' => '',
                 'description' => '',
-                'type' => ''
+                'education_type_id' => ''
             );
         }
         return (object) $results;
@@ -60,7 +60,7 @@ class Level extends Model
 
     public function get_all_levels_bytype($type)
     {
-        $levels = self::where('is_active', 1)->where('type', $type)->orderBy('id', 'asc')->get();
+        $levels = self::where('is_active', 1)->where('education_type_id', $type)->orderBy('id', 'asc')->get();
 
         $lvls = array();
         $lvls[] = array('0' => 'select a level');
@@ -81,4 +81,8 @@ class Level extends Model
         return $levels;  
     }
 
+    public function edtype()
+    {
+        return $this->belongsTo('App\Models\EducationType', 'education_type_id', 'id');
+    }
 }

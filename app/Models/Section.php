@@ -23,7 +23,7 @@ class Section extends Model
                 'code' => ($section->code) ? $section->code : '',
                 'name' => ($section->name) ? $section->name : '',
                 'description' => ($section->description) ? $section->description : '',
-                'type' => ($section->type) ? $section->type : '',
+                'education_type_id' => ($section->education_type_id) ? $section->education_type_id : '',
             );
         } else {
             $results = array(
@@ -31,7 +31,7 @@ class Section extends Model
                 'code' => '',
                 'name' => '',
                 'description' => '',
-                'type' => '',
+                'education_type_id' => '',
             );
         }
         return (object) $results;
@@ -89,7 +89,7 @@ class Section extends Model
 
     public function get_all_sections_bytype($type)
     {
-        $sections = self::where('is_active', 1)->where('type', $type)
+        $sections = self::where('is_active', 1)->where('education_type_id', $type)
         ->whereNotIn('id',function($query) {
             $query->select('section_id')->from('admissions');
         })->orderBy('id', 'asc')->get();
@@ -112,5 +112,10 @@ class Section extends Model
         }
 
         return $sections;  
+    }
+    
+    public function edtype()
+    {
+        return $this->belongsTo('App\Models\EducationType', 'education_type_id', 'id');
     }
 }

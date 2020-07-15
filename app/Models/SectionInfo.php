@@ -39,7 +39,7 @@ class SectionInfo extends Model
                 'level_id' => ($sectioninfos->level_id) ? $sectioninfos->level_id : '',
                 'section_name' => ($sectioninfos->section->name) ? $sectioninfos->section->name : '',
                 'level_name' => ($sectioninfos->level->name) ? $sectioninfos->level->name : '',
-                'type' => ($sectioninfos->type) ? $sectioninfos->type : '',
+                'education_type_id' => ($sectioninfos->education_type_id) ? $sectioninfos->education_type_id : '',
                 'subjects' => ($sectioninfos->section_subjects) ? $sectioninfos->section_subjects : '',
                 'students' => ($sectioninfos->section_students) ? $sectioninfos->section_students : '',
                 'has_tle' => (new SectionsSubjects)->where(['is_active' => 1])->whereIn('subject_id', (new Subject)->select('id')->where(['is_active' => 1, 'is_tle' => 1]))->count(),
@@ -52,7 +52,7 @@ class SectionInfo extends Model
                 'section_id' => '',
                 'adviser_id' => '',
                 'level_id' => '',
-                'type' => '',
+                'education_type_id' => '',
             );
         }
         return (object) $results;

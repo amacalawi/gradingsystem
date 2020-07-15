@@ -18,7 +18,7 @@ class CreateSubjectsTable extends Migration
             $table->string('code', 40);
             $table->string('name', 100);
             $table->text('description')->nullable();
-            $table->string('type', 40);
+            $table->integer('education_type_id')->unsigned();
             $table->boolean('is_mapeh')->default(0);
             $table->boolean('is_tle')->default(0);
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
