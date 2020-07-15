@@ -76,12 +76,12 @@ var DatatableDataLocalDemo = function () {
 			// callback function support for column rendering
 			template: function (row) {
 				var type = {
-					"childhood-education" : {'title': 'Childhood', 'class': 'childhood-bg'},
-					"primary-education": {'title': 'Pimary', 'class': 'primary-bg'}, 
-                    "secondary-education": {'title': 'Secondary', 'class': 'secondary-bg'},
-                    "higher-education": {'title': 'Higher', 'class': 'higher-bg'}
+					1 : {'class': 'childhood-bg'},
+					2 : {'class': 'primary-bg'}, 
+                    3 : {'class': 'secondary-bg'},
+                    4 : {'class': 'higher-bg'}
 				};
-				return '<span class="m-badge ' + type[row.subjectType].class + ' m-badge--wide">' + type[row.subjectType].title + '</span>';
+				return '<span class="m-badge ' + type[row.subjectTypeID].class + ' m-badge--wide">' + row.subjectType + '</span>';
 			}
 		}, {
 			field: "Actions",

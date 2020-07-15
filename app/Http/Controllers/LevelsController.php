@@ -10,6 +10,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\Level;
 use App\Models\Quarter;
+use App\Models\EducationType;
 
 use Illuminate\Http\File;
 
@@ -44,7 +45,13 @@ class LevelsController extends Controller
 
     public function all_active(Request $request)
     {
-        $res = Level::where('is_active', 1)->orderBy('id', 'DESC')->get();
+        $res = Level::
+        with([
+            'edtype' =>  function($q) { 
+                $q->select(['id', 'name']); 
+            }
+        ])
+        ->where('is_active', 1)->orderBy('id', 'DESC')->get();
 
         return $res->map(function($level) {
             return [
@@ -53,14 +60,21 @@ class LevelsController extends Controller
                 'levelName' => $level->name,
                 'levelDescription' => $level->description,
                 'levelModified' => ($level->updated_at !== NULL) ? date('d-M-Y', strtotime($level->updated_at)).'<br/>'. date('h:i A', strtotime($level->updated_at)) : date('d-M-Y', strtotime($level->created_at)).'<br/>'. date('h:i A', strtotime($level->created_at)),
-                'levelType' => $level->type,
+                'levelTypeID' => $level->edtype->id,
+                'levelType' => $level->edtype->name,
             ];
         });
     }
 
     public function all_inactive(Request $request)
     {
-        $res = Level::where('is_active', 0)->orderBy('id', 'DESC')->get();
+        $res = Level::
+        with([
+            'edtype' =>  function($q) { 
+                $q->select(['id', 'name']); 
+            }
+        ])
+        ->where('is_active', 0)->orderBy('id', 'DESC')->get();
 
         return $res->map(function($level) {
             return [
@@ -69,7 +83,8 @@ class LevelsController extends Controller
                 'levelName' => $level->name,
                 'levelDescription' => $level->description,
                 'levelModified' => ($level->updated_at !== NULL) ? date('d-M-Y', strtotime($level->updated_at)).'<br/>'. date('h:i A', strtotime($level->updated_at)) : date('d-M-Y', strtotime($level->created_at)).'<br/>'. date('h:i A', strtotime($level->created_at)),
-                'levelType' => $level->type,            
+                'levelTypeID' => $level->edtype->id,
+                'levelType' => $level->edtype->name,       
             ];
         });
     }
@@ -79,7 +94,7 @@ class LevelsController extends Controller
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
-        $types = (new Quarter)->types();
+        $types = (new EducationType)->all_education_types();
         if (count($flashMessage) && $flashMessage[0]['module'] == 'level') {
             $level = (new Level)->fetch($flashMessage[0]['id']);
         } else {
@@ -93,7 +108,7 @@ class LevelsController extends Controller
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
-        $types = (new Quarter)->types();
+        $types = (new EducationType)->all_education_types();
         $level = (new Level)->find($id);
         return view('modules/academics/levels/edit')->with(compact('menus', 'types', 'level', 'segment', 'flashMessage'));
     }
@@ -107,7 +122,7 @@ class LevelsController extends Controller
             'code' => $request->code,
             'name' => $request->name,
             'description' => $request->description,
-            'type' => $request->type,
+            'education_type_id' => $request->type,
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
@@ -139,7 +154,7 @@ class LevelsController extends Controller
         $level->code = $request->code;
         $level->name = $request->name;
         $level->description = $request->description;
-        $level->type = $request->type;
+        $level->education_type_id = $request->type;
         $level->updated_at = $timestamp;
         $level->updated_by = Auth::user()->id;
 

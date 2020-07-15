@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Subject;
 use App\Models\Staff;
 use App\Models\Quarter;
+use App\Models\EducationType;
 
 class SubjectsController extends Controller
 {
@@ -41,7 +42,13 @@ class SubjectsController extends Controller
 
     public function all_active(Request $request)
     {
-        $res = Subject::where('is_active', 1)->orderBy('id', 'DESC')->get();
+        $res = Subject::
+        with([
+            'edtype' =>  function($q) { 
+                $q->select(['id', 'name']); 
+            }
+        ])
+        ->where('is_active', 1)->orderBy('id', 'DESC')->get();
 
         return $res->map(function($subject) {
             return [
@@ -50,14 +57,21 @@ class SubjectsController extends Controller
                 'subjectName' => $subject->name,
                 'subjectDescription' => $subject->description,
                 'subjectModified' => ($subject->updated_at !== NULL) ? date('d-M-Y', strtotime($subject->updated_at)).'<br/>'. date('h:i A', strtotime($subject->updated_at)) : date('d-M-Y', strtotime($subject->created_at)).'<br/>'. date('h:i A', strtotime($subject->created_at)),
-                'subjectType' => $subject->type,
+                'subjectTypeID' => $subject->edtype->id,
+                'subjectType' => $subject->edtype->name,
             ];
         });
     }
 
     public function all_inactive(Request $request)
     {
-        $res = Subject::where('is_active', 0)->orderBy('id', 'DESC')->get();
+        $res = Subject::
+        with([
+            'edtype' =>  function($q) { 
+                $q->select(['id', 'name']); 
+            }
+        ])
+        ->where('is_active', 0)->orderBy('id', 'DESC')->get();
 
         return $res->map(function($subject) {
             return [
@@ -66,7 +80,8 @@ class SubjectsController extends Controller
                 'subjectName' => $subject->name,
                 'subjectDescription' => $subject->description,
                 'subjectModified' => ($subject->updated_at !== NULL) ? date('d-M-Y', strtotime($subject->updated_at)).'<br/>'. date('h:i A', strtotime($subject->updated_at)) : date('d-M-Y', strtotime($subject->created_at)).'<br/>'. date('h:i A', strtotime($subject->created_at)),
-                'subjectType' => $subject->type,
+                'subjectTypeID' => $subject->edtype->id,
+                'subjectType' => $subject->edtype->name,
             ];
         });
     }
@@ -76,7 +91,7 @@ class SubjectsController extends Controller
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
-        $types = (new Quarter)->types();
+        $types = (new EducationType)->all_education_types();
         if (count($flashMessage) && $flashMessage[0]['module'] == 'subject') {
             $subject = (new Subject)->fetch($flashMessage[0]['id']);
         } else {
@@ -90,7 +105,7 @@ class SubjectsController extends Controller
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
-        $types = (new Quarter)->types();
+        $types = (new EducationType)->all_education_types();
         $subject = (new Subject)->find($id);
         return view('modules/academics/subjects/edit')->with(compact('menus', 'types', 'subject', 'segment', 'flashMessage'));
     }
@@ -104,7 +119,7 @@ class SubjectsController extends Controller
             'code' => $request->code,
             'name' => $request->name,
             'description' => $request->description,
-            'type' => $request->type,
+            'education_type_id' => $request->type,
             'is_mapeh' => ($request->is_mapeh !== NULL) ? 1 : 0,
             'is_tle' => ($request->is_tle !== NULL) ? 1 : 0, 
             'created_at' => $timestamp,
@@ -138,7 +153,7 @@ class SubjectsController extends Controller
         $subject->code = $request->code;
         $subject->name = $request->name;
         $subject->description = $request->description;
-        $subject->type = $request->type;
+        $subject->education_type_id = $request->type;
         $subject->is_mapeh = ($request->is_mapeh !== NULL) ? 1 : 0; 
         $subject->is_tle = ($request->is_tle !== NULL) ? 1 : 0; 
         $subject->updated_at = $timestamp;

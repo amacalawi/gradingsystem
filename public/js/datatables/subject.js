@@ -76,12 +76,12 @@ var DatatableDataLocalDemo = function () {
 			// callback function support for column rendering
 			template: function (row) {
 				var type = {
-					"childhood-education" : {'title': 'Childhood', 'class': 'childhood-bg'},
-					"primary-education": {'title': 'Pimary', 'class': 'primary-bg'}, 
-                    "secondary-education": {'title': 'Secondary', 'class': 'secondary-bg'},
-                    "higher-education": {'title': 'Higher', 'class': 'higher-bg'}
+					1 : {'class': 'childhood-bg'},
+					2 : {'class': 'primary-bg'}, 
+                    3 : {'class': 'secondary-bg'},
+                    4 : {'class': 'higher-bg'}
 				};
-				return '<span class="m-badge ' + type[row.subjectType].class + ' m-badge--wide">' + type[row.subjectType].title + '</span>';
+				return '<span class="m-badge ' + type[row.subjectTypeID].class + ' m-badge--wide">' + row.subjectType + '</span>';
 			}
 		}, {
 			field: "Actions",
@@ -94,16 +94,8 @@ var DatatableDataLocalDemo = function () {
 				var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
 
 				return '\
-					<div class="dropdown ' + dropup + '">\
-						<a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">\
-							<i class="la la-ellipsis-h"></i>\
-						</a>\
-						  <div class="dropdown-menu dropdown-menu-right">\
-							<a title="edit this" class="dropdown-item" href="' + base_url + 'academics/academics/subjects/edit/' + row.subjectID + '"><i class="la la-edit"></i> Edit Details</a>\
-							<a title="remove this" data-row-id="' + row.subjectID + '" action="Remove" class="dropdown-item toggle-status" href="javascript:;"><i class="la la-remove"></i> Remove Details</a>\
-							\
-						  </div>\
-					</div>\
+                    <a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/academics/subjects/edit/' + row.subjectID + '"><i class="la la-edit"></i></a>\
+                    <a title="remove this" data-row-id="' +  row.subjectID + '" action="Remove" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-remove"></i></a>\
 				';
 			}
 		}]
