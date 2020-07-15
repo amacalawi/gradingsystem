@@ -251,6 +251,65 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5 class="m-top-1 m-bottom-1">Contact Details Information</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            {{ Form::label('contact_fullname', 'Fullname', ['class' => '']) }}
+                        </div>
+                        <div class="col-md-9">
+                            <div class="form-group m-form__group required">
+                                {{ 
+                                    Form::text($name = 'contact_fullname', $value = !empty($staff) ? '' : '', 
+                                    $attributes = array(
+                                        'id' => 'contact_fullname',
+                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    )) 
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            {{ Form::label('contact_relation', 'Relation', ['class' => '']) }}
+                        </div>
+                        <div class="col-md-9">
+                            <div class="form-group m-form__group required">
+                                {{ 
+                                    Form::text($name = 'contact_relation', $value = !empty($staff) ? '' : '', 
+                                    $attributes = array(
+                                        'id' => 'contact_relation',
+                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    )) 
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            {{ Form::label('contact_phone', 'Phone No.', ['class' => '']) }}
+                        </div>
+                        <div class="col-md-9">
+                            <div class="form-group m-form__group required">
+                                {{ 
+                                    Form::text($name = 'contact_phone', $value = !empty($staff) ? '' : '', 
+                                    $attributes = array(
+                                        'id' => 'contact_phone',
+                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    )) 
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- OTHER INFOS END -->
@@ -320,6 +379,79 @@
                 </div>
             </div>
             <!-- ACCOUNT END -->
+
+            <!-- BASIC INFOS START -->
+            <div class="m-portlet m-portlet--tab">
+                <div class="m-portlet__body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5 class="m-bottom-1">Benefits Information</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group m-form__group required">
+                                {{ Form::label('sss_no', 'SSS No.', ['class' => '']) }}
+                                {{ 
+                                    Form::text($name = 'sss_no', $value = !empty($staff) ? '' : '', 
+                                    $attributes = array(
+                                        'id' => 'sss_no',
+                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    )) 
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group m-form__group required">
+                                {{ Form::label('tin_no', 'TIN', ['class' => '']) }}
+                                {{ 
+                                    Form::text($name = 'tin_no', $value = !empty($staff) ? '' : '', 
+                                    $attributes = array(
+                                        'id' => 'tin_no',
+                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    )) 
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group m-form__group required">
+                                {{ Form::label('pag_ibig_no', 'HDMF(Pag-ibig) No.', ['class' => '']) }}
+                                {{ 
+                                    Form::text($name = 'pag_ibig_no', $value = !empty($staff) ? '' : '', 
+                                    $attributes = array(
+                                        'id' => 'pag_ibig_no',
+                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    )) 
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group m-form__group required">
+                                {{ Form::label('philhealth_no', 'PhilHealth No', ['class' => '']) }}
+                                {{ 
+                                    Form::text($name = 'philhealth_no', $value = !empty($staff) ? '' : '', 
+                                    $attributes = array(
+                                        'id' => 'philhealth_no',
+                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    )) 
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- BASIC INFOS END -->
+
         </div>
         <div class="col-md-3">
             <!-- AVATAR START -->

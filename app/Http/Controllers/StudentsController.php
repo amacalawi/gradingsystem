@@ -265,6 +265,7 @@ class StudentsController extends Controller
                 'mother_lastname' => $request->mother_lastname,
                 'mother_contact_no' => $request->mother_contact_no,
                 'mother_email' => $request->mother_email,
+                'mother_address' => ($request->mother_address !== NULL) ? $request->mother_address : NULL,
                 'mother_avatar' => $request->get('mother_avatar'),
                 'mother_selected' => ($request->guardian_selected == 'Mother') ? 1 : 0,
                 'father_firstname' => $request->father_firstname,
@@ -272,6 +273,7 @@ class StudentsController extends Controller
                 'father_lastname' => $request->father_lastname,
                 'father_contact_no' => $request->father_contact_no,
                 'father_email' => $request->father_email,
+                'father_address' => ($request->father_address !== NULL) ? $request->father_address : NULL,
                 'father_avatar' => $request->get('father_avatar'),
                 'father_selected' => ($request->guardian_selected == 'Father') ? 1 : 0,
                 'created_at' => $timestamp,
@@ -280,7 +282,7 @@ class StudentsController extends Controller
 
             $mother_user = User::create([
                 'name' => $request->mother_firstname.' '.$request->mother_lastname,
-                'username' => str_replace('S', 'M', $student->identification_no),
+                'username' => 'M'.$student->identification_no,
                 'email' => $request->mother_email,
                 'password' => (new Student)->random(),
                 'type' => 'parent'
@@ -302,7 +304,7 @@ class StudentsController extends Controller
 
             $father_user = User::create([
                 'name' => $request->father_firstname.' '.$request->father_lastname,
-                'username' => str_replace('S', 'F', $student->identification_no),
+                'username' => 'F'.$student->identification_no,
                 'email' => $request->father_email,
                 'password' => (new Student)->random(),
                 'type' => 'parent'
@@ -363,10 +365,8 @@ class StudentsController extends Controller
             throw new NotFoundHttpException();
         }
 
-        $rows = User::where(function($query) use ($email, $mother_email, $father_email){
+        $rows = User::where(function($query) use ($email){
             $query->orWhere('email', $email);
-            $query->orWhere('email', $mother_email);
-            $query->orWhere('email', $father_email);
         })
         ->where('id', '!=', $user_id)
         ->count();
@@ -507,12 +507,14 @@ class StudentsController extends Controller
                     'mother_lastname' => $request->mother_lastname,
                     'mother_contact_no' => $request->mother_contact_no,
                     'mother_email' => $request->mother_email,
+                    'mother_address' => ($request->mother_address !== NULL) ? $request->mother_address : NULL, 
                     'mother_selected' => ($request->guardian_selected == 'Mother') ? 1 : 0,
                     'father_firstname' => $request->father_firstname,
                     'father_middlename' => ($request->father_middlename !== NULL) ? $request->father_middlename : NULL, 
                     'father_lastname' => $request->father_lastname,
                     'father_contact_no' => $request->father_contact_no,
                     'father_email' => $request->father_email,
+                    'father_address' => ($request->father_address !== NULL) ? $request->father_address : NULL, 
                     'father_selected' => ($request->guardian_selected == 'Father') ? 1 : 0,
                     'updated_at' => $timestamp,
                     'updated_by' => Auth::user()->id,
@@ -520,17 +522,25 @@ class StudentsController extends Controller
                 ]);
 
                 if ($request->get('mother_avatar') !== NULL) {
-                    $guardian->mother_avatar = $request->get('mother_avatar');
-                    $guardian->update();
+                    $guardian = Guardian::where([
+                        'student_id' => $id,
+                    ])
+                    ->update([
+                        'mother_avatar' => $request->get('mother_avatar')
+                    ]);
                 }
 
                 if ($request->get('father_avatar') !== NULL) {
-                    $guardian->father_avatar = $request->get('father_avatar');
-                    $guardian->update();
+                    $guardian = Guardian::where([
+                        'student_id' => $id,
+                    ])
+                    ->update([
+                        'father_avatar' => $request->get('father_avatar')
+                    ]);
                 }
 
                 $mother_user = User::where([
-                    'username' => str_replace('S', 'M', $student->identification_no)
+                    'username' => 'M'.$student->identification_no
                 ])
                 ->update([
                     'name' => $request->mother_firstname.' '.$request->mother_lastname,
@@ -551,7 +561,7 @@ class StudentsController extends Controller
                 }
     
                 $father_user = User::where([
-                    'username' => str_replace('S', 'F', $student->identification_no)
+                    'username' => 'F'.$student->identification_no
                 ])
                 ->update([
                     'name' => $request->father_firstname.' '.$request->father_lastname,
@@ -640,6 +650,18 @@ class StudentsController extends Controller
     
             echo json_encode( $data ); exit();
         }   
+    }
+
+    public function import(Request $request)
+    {
+        $data = array(
+            'title' => 'Well done!',
+            'text' => 'The student has been successfully activated.',
+            'type' => 'success',
+            'class' => 'btn-brand'
+        );
+
+        echo json_encode( $data ); exit();
     }
 
     public function get_column_via_id($id, $column)

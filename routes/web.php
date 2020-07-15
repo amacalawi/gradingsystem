@@ -192,6 +192,7 @@ Route::prefix('components')->group(function () {
 });
 
 Route::prefix('memberships')->group(function () {
+    Route::post('students/import', 'StudentsController@import')->name('students.import');
     Route::post('students/uploads', 'StudentsController@uploads')->name('students.uploads');
     Route::get('students/downloads', 'StudentsController@downloads')->name('students.downloads');
     Route::get('students/get-all-siblings', 'StudentsController@get_all_siblings')->name('students.siblings');

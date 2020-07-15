@@ -21,6 +21,7 @@ class CreateGuardiansTable extends Migration
             $table->string('mother_lastname', 40);
             $table->string('mother_contact_no', 40);
             $table->string('mother_email', 100);
+            $table->text('mother_address')->nullable();
             $table->text('mother_avatar')->nullable();
             $table->boolean('mother_selected')->default(0);
             $table->string('father_firstname', 40);
@@ -28,6 +29,7 @@ class CreateGuardiansTable extends Migration
             $table->string('father_lastname', 40);
             $table->string('father_contact_no', 40);
             $table->string('father_email', 100);
+            $table->text('father_address')->nullable();
             $table->text('father_avatar')->nullable();
             $table->boolean('father_selected')->default(0);
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));

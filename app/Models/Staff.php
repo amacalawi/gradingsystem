@@ -123,7 +123,7 @@ class Staff extends Model
 
     public function types()
     {	
-        $marital_status = array('' => 'select a type', 'Staff' => 'Staff', 'Adviser' => 'Adviser', 'Teacher' => 'Teacher');
+        $marital_status = array('' => 'select a type', 'Staff' => 'Staff', 'Adviser' => 'Adviser', 'Teacher' => 'Teacher', 'Coordinator' => 'Coordinator', 'Administrator' => 'Administrator');
         return $marital_status;
     }
 
