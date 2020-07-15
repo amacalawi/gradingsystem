@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\SubjectImport;
+use Maatwebsite\Excel\Facades\Excel;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Subject;
@@ -349,6 +352,18 @@ class SubjectsController extends Controller
         }
 
         echo json_encode( $teachers ); exit();
+    }
+
+    public function import_subject(Request $request)
+    {
+        $this->validate( $request, [
+            'import_file' => 'required|mimes:xls,xlsx'
+        ]);
+        
+        $path = $request->file('import_file')->store('Imports');
+
+        Excel::import(new SubjectImport, $path);
+        return redirect('/academics/academics/subjects'); 
     }
 
 }

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\SectionImport;
+use Maatwebsite\Excel\Facades\Excel;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Section;
@@ -341,6 +344,18 @@ class SectionsController extends Controller
     {
         $sections = (new Section)->get_all_sections_bytype($type);
         echo json_encode( $sections ); exit();
+    }
+
+    public function import_section(Request $request)
+    {
+        $this->validate( $request, [
+            'import_file' => 'required|mimes:xls,xlsx'
+        ]);
+        
+        $path = $request->file('import_file')->store('Imports');
+
+        Excel::import(new SectionImport, $path);
+        return redirect('/academics/academics/sections'); 
     }
 
 }

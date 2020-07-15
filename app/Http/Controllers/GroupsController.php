@@ -22,19 +22,19 @@ class GroupsController extends Controller
     public function index()
     {   
         $menus = $this->load_menus();
-        return view('modules/groups/manage')->with(compact('menus'));
+        return view('modules/components/groups/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/groups/manage')->with(compact('menus'));
+        return view('modules/components/groups/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/groups/inactive')->with(compact('menus'));
+        return view('modules/components/groups/inactive')->with(compact('menus'));
     }
 
     public function all_active(Request $request)
@@ -79,7 +79,7 @@ class GroupsController extends Controller
             $group = (new Group)->fetch($id);
         }
 
-        return view('modules/groups/add')->with(compact('menus', 'group', 'segment', 'flashMessage'));
+        return view('modules/components/groups/add')->with(compact('menus', 'group', 'segment', 'flashMessage'));
     }
 
     public function edit(Request $request, $id)
@@ -89,7 +89,7 @@ class GroupsController extends Controller
         $segment = request()->segment(3);
         $group = (new Group)->find($id);
         $groupusers = (new GroupUser)->get_this_groupsusers($id);
-        return view('modules/groups/edit')->with(compact('menus', 'groupusers', 'group', 'segment', 'flashMessage'));
+        return view('modules/components/groups/edit')->with(compact('menus', 'groupusers', 'group', 'segment', 'flashMessage'));
     }
 
     public function store(Request $request)
@@ -140,45 +140,59 @@ class GroupsController extends Controller
         $timestamp = date('Y-m-d H:i:s');
         $batch_id = Batch::where('is_active','1')->where('status','Current')->pluck('id');
 
-        $group = Group::find($id);
+        if(!$batch_id->isEmpty())
+        {
+            $group = Group::find($id);
 
-        if(!$group) {
-            throw new NotFoundHttpException();
+            if(!$group) {
+                throw new NotFoundHttpException();
+            }
+
+            $group->code = $request->code;
+            $group->name = $request->name;
+            $group->description = $request->description;
+            $group->updated_at = $timestamp;
+            $group->updated_by = Auth::user()->id;
+
+            //UPDATE groupuser
+            $groupuser = GroupUser::where('group_id', $id)->where('is_active', 1);
+            $groupuser->delete();
+            $users = $request->group_member;
+
+            if($users){
+                foreach ($users as $key => $user) {
+                    $user = intval($user);
+                    $groupuser = GroupUser::create([
+                        'group_id' => $id,
+                        'users_id' => $user,
+                        'batch_id' =>  $batch_id[0],
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+                }
+            }
+
+            if ($group->update()) {
+
+                $data = array(
+                    'title' => 'Well done!',
+                    'text' => 'The group has been successfully updated.',
+                    'type' => 'success',
+                    'class' => 'btn-brand'
+                );
+            }
         }
-
-        $group->code = $request->code;
-        $group->name = $request->name;
-        $group->description = $request->description;
-        $group->updated_at = $timestamp;
-        $group->updated_by = Auth::user()->id;
-
-        //UPDATE groupuser
-        $groupuser = GroupUser::where('group_id', $id)->where('is_active', 1);
-        $groupuser->delete();
-        $users = $request->group_member;
-        foreach ($users as $key => $user) {
-            $groupuser = GroupUser::create([
-                'group_id' => $id,
-                'users_id' => $user,
-                'batch_id' =>  $batch_id[0],
-                'created_at' => $timestamp,
-                'created_by' => Auth::user()->id
-            ]);
-        }
-
-
-        if ($group->update()) {
-
+        else 
+        {
             $data = array(
-                'title' => 'Well done!',
-                'text' => 'The group has been successfully updated.',
-                'type' => 'success',
+                'title' => 'Warning',
+                'text' => 'No current batch is active.',
+                'type' => 'warning',
                 'class' => 'btn-brand'
             );
-
-            echo json_encode( $data ); exit();
-
         }
+
+        echo json_encode( $data ); exit();
     }
 
     public function update_status(Request $request, $id)
@@ -248,5 +262,10 @@ class GroupsController extends Controller
         });
     }
 
+    public function get_student($id)
+    {
+        $student = (new Student)->get_this_student( $id );
+        echo json_encode( $student ); exit();
+    }
 
 }

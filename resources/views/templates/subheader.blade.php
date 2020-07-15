@@ -173,6 +173,13 @@
                 @if (Request::segment(3) == 'components' && Auth::user()->type  != 'administrator')
 
                 @elseif (!in_array(Request::segment(3), $invisibles))
+
+                    @if (Request::segment(3) == 'sections' || Request::segment(3) == 'levels' || Request::segment(3) == 'subjects' || Request::segment(3) == 'classes')
+                        <button type="button" class="btn m-btn--pill btn-success m-btn--custom" data-toggle="modal" data-target="#importmodule">
+                            Import {{ ucwords(Request::segment(3)) }}
+                        </button>
+                    @endif
+
                     <a href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/'.Request::segment(3).'/add') }}" class="btn m-btn--pill btn-brand add-btn m-btn--custom">
                         <i class="la la-commenting"></i> 
                         @php 

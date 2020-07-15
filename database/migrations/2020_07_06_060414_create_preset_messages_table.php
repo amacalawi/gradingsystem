@@ -31,6 +31,6 @@ class CreatePresetMessagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('preset__messages');
+        Schema::dropIfExists('preset_messages');
     }
 }

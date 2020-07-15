@@ -87,6 +87,6 @@
             </div>
         </div>
 
-    @include('modules.groups.list')
-    @include('modules.groups.enlist')
+    @include('modules.components.groups.list')
+    @include('modules.components.groups.enlist')
 {{ Form::close() }}
