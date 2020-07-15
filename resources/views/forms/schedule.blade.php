@@ -88,6 +88,6 @@
             </div>
         </div>
 
-    @include('modules.schedules.dtrsettings')
-    @include('modules.schedules.preset')
+    @include('modules.components.schedules.dtrsettings')
+    @include('modules.components.schedules.preset')
 {{ Form::close() }}
