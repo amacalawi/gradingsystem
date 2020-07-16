@@ -86,6 +86,30 @@ class Subject extends Model
         return $subjects;  
     }
 
+    public function get_all_subjects_with_type( $sectioninfo_id )
+    {
+        $sectioninfos = (new SectionInfo)->fetch($sectioninfo_id);
+        $subjects = self::where('education_type_id', $sectioninfos->education_type_id)->where('is_active', 1)->orderBy('id', 'asc')->get();
+
+        $subs = array();
+        $subs[] = array('0' => 'select a subject');
+
+        foreach ($subjects as $subject) {
+            $subs[] = array(
+                $subject->id  => $subject->name,
+            );
+        }
+
+        $subjects = array();
+        foreach($subs as $sub) {
+            foreach($sub as $key => $val) {
+                $subjects[$key] = $val;
+            }
+        }
+
+        return $subjects;  
+    }
+
     public function get_column_via_identifier($column, $id)
     {
         return self::where('id', $id)->first()->$column;

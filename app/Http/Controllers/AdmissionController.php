@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ClassImport;
+use Maatwebsite\Excel\Facades\Excel;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
@@ -15,6 +18,7 @@ use App\Models\Section;
 use App\Models\Level;
 use App\Models\Staff; 
 use App\Models\Subject; 
+use App\Models\EducationType;
 
 class AdmissionController extends Controller
 {
@@ -50,31 +54,33 @@ class AdmissionController extends Controller
     public function all_active(Request $request)
     {
         $batch_id = Batch::where('is_active', 1)->where('status','Current')->pluck('id'); //current batch
-        $res = SectionInfo::select('sections_info.classcode','sections_info.updated_at','sections_info.created_at','sections_info.id','sections_info.batch_id','sections_info.section_id','sections_info.adviser_id','sections_info.level_id','sections.name as secname','staffs.user_id','levels.name as lvlname')
-        ->join('sections','sections.id','=','sections_info.section_id')
-        ->join('staffs','staffs.id','=','sections_info.adviser_id')
-        ->join('levels','levels.id','=','sections_info.level_id')
-        ->where('sections_info.is_active', 1)
-        ->where('sections_info.batch_id', $batch_id[0])
-        ->orderBy('sections_info.id', 'DESC')
-        ->get();
         
-        return $res->map(function($admission) {
-            return [
-                'admissionId' => $admission->id,
-                'admissionSecCode' => $admission->classcode,
-                'admissionBatchId' => $admission->batch_id,
-                'admissionSectionId' => $admission->section_id,
-                'admissionSecName' => $admission->secname,
-                'admissionAdviserId' => ucwords((new Staff)->where('id', $admission->adviser_id)->first()->firstname).' '.ucwords((new Staff)->where('id', $admission->adviser_id)->first()->lastname),
-                'admissionLevel' => $admission->level_id, 
-                'admissionLvlName' => $admission->lvlname,
-                'admissionNoStudent' => (new Admission)->where(['section_id' => $admission->section_id, 'batch_id' => $admission->batch_id, 'is_active' => 1])->count(),
-                'admissionNoSubject' => (new SectionsSubjects)->where(['section_info_id' => $admission->id, 'is_active' => 1])->count(),
-                'admissionModified' => ($admission->updated_at !== NULL) ? date('d-M-Y', strtotime($admission->updated_at)).'<br/>'. date('h:i A', strtotime($admission->updated_at)) : date('d-M-Y', strtotime($admission->created_at)).'<br/>'. date('h:i A', strtotime($admission->created_at))
-            ];
-        });
-        
+        if(!$batch_id->isEmpty()){
+            $res = SectionInfo::select('sections_info.classcode','sections_info.updated_at','sections_info.created_at','sections_info.id','sections_info.batch_id','sections_info.section_id','sections_info.adviser_id','sections_info.level_id','sections.name as secname','staffs.user_id','levels.name as lvlname')
+            ->join('sections','sections.id','=','sections_info.section_id')
+            ->join('staffs','staffs.id','=','sections_info.adviser_id')
+            ->join('levels','levels.id','=','sections_info.level_id')
+            ->where('sections_info.is_active', 1)
+            ->where('sections_info.batch_id', $batch_id[0])
+            ->orderBy('sections_info.id', 'DESC')
+            ->get();
+
+            return $res->map(function($admission) {
+                return [
+                    'admissionId' => $admission->id,
+                    'admissionSecCode' => $admission->classcode,
+                    'admissionBatchId' => $admission->batch_id,
+                    'admissionSectionId' => $admission->section_id,
+                    'admissionSecName' => $admission->secname,
+                    'admissionAdviserId' => ucwords((new Staff)->where('id', $admission->adviser_id)->first()->firstname).' '.ucwords((new Staff)->where('id', $admission->adviser_id)->first()->lastname),
+                    'admissionLevel' => $admission->level_id, 
+                    'admissionLvlName' => $admission->lvlname,
+                    'admissionNoStudent' => (new Admission)->where(['section_id' => $admission->section_id, 'batch_id' => $admission->batch_id, 'is_active' => 1])->count(),
+                    'admissionNoSubject' => (new SectionsSubjects)->where(['section_info_id' => $admission->id, 'is_active' => 1])->count(),
+                    'admissionModified' => ($admission->updated_at !== NULL) ? date('d-M-Y', strtotime($admission->updated_at)).'<br/>'. date('h:i A', strtotime($admission->updated_at)) : date('d-M-Y', strtotime($admission->created_at)).'<br/>'. date('h:i A', strtotime($admission->created_at))
+                ];
+            });
+        }
     }
 
     public function all_inactive(Request $request)
@@ -88,7 +94,7 @@ class AdmissionController extends Controller
             ->where('sections_info.batch_id', $batch_id[0])
             ->orderBy('sections_info.id', 'DESC')
             ->get();
-
+        
         return $res->map(function($admission) {
             return [
                 'admissionId' => $admission->id,
@@ -112,7 +118,7 @@ class AdmissionController extends Controller
         $admission = $this->admission_check();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
-        $types = (new Quarter)->types();
+        $types = (new EducationType)->all_education_types();
         
         if (count($flashMessage) && $flashMessage[0]['module'] == 'sectionstudent') {
             $sectioninfos = (new SectionInfo)->fetch($flashMessage[0]['id']);
@@ -130,7 +136,6 @@ class AdmissionController extends Controller
 
         if(!$batch_id->isEmpty())
         {
-
             $classcode = $this->generate_classcode($request->type, $request->section, $batch_id[0]);
             if(!$batch_id){
                 $batch_id[0] = '0';
@@ -142,7 +147,7 @@ class AdmissionController extends Controller
                 'section_id' => $request->section,
                 'adviser_id' => $request->adviser,
                 'level_id' => $request->level,
-                'type' => $request->type,
+                'education_type_id' => $request->type,
                 'classcode' => $classcode,
                 'created_at' => $timestamp,
                 'created_by' => Auth::user()->id
@@ -210,11 +215,11 @@ class AdmissionController extends Controller
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
-        $types = (new Quarter)->types();
-        $sections = (new Section)->get_all_sections();
-        $levels = (new Level)->get_all_levels();
+        $types = (new EducationType)->all_education_types();
+        $sections = (new Section)->get_all_sections_with_type($id);
+        $levels = (new Level)->get_all_levels_with_type($id);
+        $subjects = (new Subject)->get_all_subjects_with_type($id);
         $advisers = $this->get_all_advisers();
-        $subjects = (new Subject)->get_all_subjects();
         $teachers = (new Subject)->get_all_teachers_bytype();
         $sections_subjects = (new SectionsSubjects)->get_sections_subjects($id);
         
@@ -245,7 +250,7 @@ class AdmissionController extends Controller
         $sectioninfo->section_id = $request->section;
         $sectioninfo->adviser_id = $request->adviser;
         $sectioninfo->level_id = $request->level;
-        $sectioninfo->type = $request->type;
+        $sectioninfo->education_type_id = $request->type;
         $sectioninfo->classcode = $classcode;
         $sectioninfo->updated_at = $timestamp;
         $sectioninfo->updated_by = Auth::user()->id;
@@ -574,6 +579,7 @@ class AdmissionController extends Controller
     public function generate_classcode($type, $section_id, $batch_id)
     {
         //Type
+        $type = $this->check_type($type);
         $tc = '';
         $type_code = explode('-', $type);
         foreach ($type_code as $ty_code) {
@@ -602,4 +608,29 @@ class AdmissionController extends Controller
 
         return $classcode;
     }
+
+    public function check_type($type_id)
+    {
+        $educationtypes = EducationType::select('id', 'code')->where('id', $type_id)->where('is_active', 1)->get();
+        $education_code = 0;
+        foreach($educationtypes as $educationtype){
+            if($educationtype->id){
+                $education_code = $educationtype->code;
+            }
+        }
+        return $education_code;
+    }
+
+    public function import_class(Request $request)
+    {
+        $this->validate( $request, [
+            'import_file' => 'required|mimes:xls,xlsx'
+        ]);
+        
+        $path = $request->file('import_file')->store('Imports');
+
+        Excel::import(new ClassImport, $path);
+        return redirect('/academics/admissions/classes'); 
+    }
+
 }
