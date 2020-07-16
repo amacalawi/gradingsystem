@@ -545,3 +545,28 @@ form[name="infoblast_form"] .btn-primary {
     color: #00a3ee;
     border-bottom: 1px solid #00a3ee;
 }
+
+.modal-content {
+    -webkit-box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.55);
+    -moz-box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.55);
+    box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.55);
+}
+
+.c-white {
+    color: #fff !important;
+}
+
+.bg-accent {
+    background: #00c5dc;
+}
+
+a[data-dismiss="modal"]:hover,
+a[data-dismiss="modal"]:focus,
+a[data-dismiss="modal"] {
+    text-decoration: none;
+}
+
+.dz-success-mark svg,
+.dz-error-mark svg {
+    display: none !important;
+}

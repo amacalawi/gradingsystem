@@ -13,8 +13,12 @@
 
 use App\Mail\UserNotification;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
+    if (Auth::check()) {
+        return redirect('/dashboard');
+    }
     return view('auth/login');
 });
 
@@ -192,6 +196,7 @@ Route::prefix('components')->group(function () {
 });
 
 Route::prefix('memberships')->group(function () {
+    Route::post('students/import', 'StudentsController@import')->name('students.import');
     Route::post('students/uploads', 'StudentsController@uploads')->name('students.uploads');
     Route::get('students/downloads', 'StudentsController@downloads')->name('students.downloads');
     Route::get('students/get-all-siblings', 'StudentsController@get_all_siblings')->name('students.siblings');
@@ -208,6 +213,7 @@ Route::prefix('memberships')->group(function () {
     Route::put('students/update-status/{id}', 'StudentsController@update_status')->name('students.update.status');
 
     /* Staffs */
+    Route::post('staffs/import', 'StaffsController@import')->name('staffs.import');
     Route::post('staffs/uploads', 'StaffsController@uploads')->name('staffs.uploads');
     Route::get('staffs/downloads', 'StaffsController@downloads')->name('staffs.downloads');
     Route::get('staffs/add', 'StaffsController@add')->name('staffs.add');

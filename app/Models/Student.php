@@ -23,7 +23,7 @@ class Student extends Model
                     $q->select(['id', 'email', 'username', 'password']); 
                 },
                 'guardian' =>  function($q) { 
-                    $q->select(['student_id', 'mother_firstname', 'mother_middlename', 'mother_lastname', 'mother_contact_no', 'mother_email', 'mother_avatar', 'mother_selected', 'father_firstname', 'father_middlename', 'father_lastname', 'father_contact_no', 'father_email', 'father_avatar', 'father_selected']); 
+                    $q->select(['student_id', 'mother_firstname', 'mother_middlename', 'mother_lastname', 'mother_contact_no', 'mother_email', 'mother_address', 'mother_avatar', 'mother_selected', 'father_firstname', 'father_middlename', 'father_lastname', 'father_contact_no', 'father_email', 'father_address', 'father_avatar', 'father_selected']); 
                 },
             ])->where('id', $id)->first();
 
@@ -48,6 +48,7 @@ class Student extends Model
                 'mother_lastname' => ($student->guardian && $student->guardian->mother_lastname) ? ($student->guardian->mother_lastname) : '',
                 'mother_contact_no' => ($student->guardian && $student->guardian->mother_contact_no) ? ($student->guardian->mother_contact_no) : '',
                 'mother_email' => ($student->guardian && $student->guardian->mother_email) ? ($student->guardian->mother_email) : '',
+                'mother_address' => ($student->guardian && $student->guardian->mother_address) ? ($student->guardian->mother_address) : '',
                 'mother_avatar' => ($student->guardian && $student->guardian->mother_avatar) ? ($student->guardian->mother_avatar) : '',
                 'mother_selected' => ($student->guardian && $student->guardian->mother_selected == 1) ? 1 : 0,
                 'father_firstname' => ($student->guardian && $student->guardian->father_firstname) ? ($student->guardian->father_firstname) : '',
@@ -55,6 +56,7 @@ class Student extends Model
                 'father_lastname' => ($student->guardian && $student->guardian->father_lastname) ? ($student->guardian->father_lastname) : '',
                 'father_contact_no' => ($student->guardian && $student->guardian->father_contact_no) ? ($student->guardian->father_contact_no) : '',
                 'father_email' => ($student->guardian && $student->guardian->father_email) ? ($student->guardian->father_email) : '',
+                'father_address' => ($student->guardian && $student->guardian->father_address) ? ($student->guardian->father_address) : '',
                 'father_avatar' => ($student->guardian && $student->guardian->father_avatar) ? ($student->guardian->father_avatar) : '',
                 'father_selected' => ($student->guardian && $student->guardian->father_selected) ? 1 : 0,
                 'admitted_date' => ($student->admitted_date) ? $student->admitted_date : '',
@@ -88,6 +90,7 @@ class Student extends Model
                 'mother_lastname' => '',
                 'mother_contact_no' => '',
                 'mother_email' => '',
+                'mother_address' => '',
                 'mother_avatar' => '',
                 'mother_selected' => 0,
                 'father_firstname' => '',
@@ -95,6 +98,7 @@ class Student extends Model
                 'father_lastname' => '',
                 'father_contact_no' => '',
                 'father_email' => '',
+                'father_address' => '',
                 'father_avatar' => '',
                 'father_selected' => 0,
                 'admitted_date' => date('Y-m-d'),

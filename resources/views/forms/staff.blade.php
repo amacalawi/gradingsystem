@@ -251,6 +251,65 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5 class="m-top-1 m-bottom-1">Contact Details Information</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            {{ Form::label('contact_fullname', 'Fullname', ['class' => '']) }}
+                        </div>
+                        <div class="col-md-9">
+                            <div class="form-group m-form__group">
+                                {{ 
+                                    Form::text($name = 'contact_fullname', $value = !empty($staff) ? $staff->contact_fullname : '', 
+                                    $attributes = array(
+                                        'id' => 'contact_fullname',
+                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    )) 
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            {{ Form::label('contact_relation', 'Relation', ['class' => '']) }}
+                        </div>
+                        <div class="col-md-9">
+                            <div class="form-group m-form__group">
+                                {{ 
+                                    Form::text($name = 'contact_relation', $value = !empty($staff) ? $staff->contact_relation : '', 
+                                    $attributes = array(
+                                        'id' => 'contact_relation',
+                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    )) 
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            {{ Form::label('contact_phone_no', 'Phone No.', ['class' => '']) }}
+                        </div>
+                        <div class="col-md-9">
+                            <div class="form-group m-form__group">
+                                {{ 
+                                    Form::text($name = 'contact_phone_no', $value = !empty($staff) ? $staff->contact_phone_no : '', 
+                                    $attributes = array(
+                                        'id' => 'contact_phone_no',
+                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    )) 
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- OTHER INFOS END -->
@@ -320,6 +379,249 @@
                 </div>
             </div>
             <!-- ACCOUNT END -->
+
+            <!-- BENEFITS INFOS START -->
+            <div class="m-portlet m-portlet--tab">
+                <div class="m-portlet__body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5 class="m-bottom-1">Benefits Information</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group m-form__group">
+                                {{ Form::label('sss_no', 'SSS No.', ['class' => '']) }}
+                                {{ 
+                                    Form::text($name = 'sss_no', $value = !empty($staff) ? $staff->sss_no : '', 
+                                    $attributes = array(
+                                        'id' => 'sss_no',
+                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    )) 
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group m-form__group">
+                                {{ Form::label('tin_no', 'TIN', ['class' => '']) }}
+                                {{ 
+                                    Form::text($name = 'tin_no', $value = !empty($staff) ? $staff->tin_no : '', 
+                                    $attributes = array(
+                                        'id' => 'tin_no',
+                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    )) 
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group m-form__group">
+                                {{ Form::label('pag_ibig_no', 'HDMF(Pag-ibig) No.', ['class' => '']) }}
+                                {{ 
+                                    Form::text($name = 'pag_ibig_no', $value = !empty($staff) ? $staff->pag_ibig_no : '', 
+                                    $attributes = array(
+                                        'id' => 'pag_ibig_no',
+                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    )) 
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group m-form__group">
+                                {{ Form::label('philhealth_no', 'PhilHealth No', ['class' => '']) }}
+                                {{ 
+                                    Form::text($name = 'philhealth_no', $value = !empty($staff) ? $staff->philhealth_no : '', 
+                                    $attributes = array(
+                                        'id' => 'philhealth_no',
+                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    )) 
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- BENEFITS INFOS END -->
+
+            <!-- EDUCATIONAL BACKGROUND INFOS START -->
+            <div class="m-portlet m-portlet--tab">
+                <div class="m-portlet__body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5 class="m-bottom-1">Educational Background Information</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group m-form__group">
+                                {{ Form::label('elementary_graduated', 'Elementary School/Year Graduated', ['class' => '']) }}
+                                {{ 
+                                    Form::text($name = 'elementary_graduated', $value = !empty($staff) ? $staff->elementary_graduated : '', 
+                                    $attributes = array(
+                                        'id' => 'elementary_graduated',
+                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    )) 
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group m-form__group">
+                                {{ Form::label('secondary_graduated', 'Secondary School/Year Graduated', ['class' => '']) }}
+                                {{ 
+                                    Form::text($name = 'secondary_graduated', $value = !empty($staff) ? $staff->secondary_graduated : '', 
+                                    $attributes = array(
+                                        'id' => 'secondary_graduated',
+                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    )) 
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group m-form__group">
+                                {{ Form::label('tertiary_graduated', 'Tertiary School/Year Graduated', ['class' => '']) }}
+                                {{ 
+                                    Form::text($name = 'tertiary_graduated', $value = !empty($staff) ? $staff->tertiary_graduated : '', 
+                                    $attributes = array(
+                                        'id' => 'tertiary_graduated',
+                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    )) 
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group m-form__group">
+                                {{ Form::label('course_taken', 'Course/Major', ['class' => '']) }}
+                                {{ 
+                                    Form::text($name = 'course_taken', $value = !empty($staff) ? $staff->course_taken : '', 
+                                    $attributes = array(
+                                        'id' => 'course_taken',
+                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    )) 
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group m-form__group">
+                                {{ Form::label('master_graduated', 'Masters Deg. Graduate School/Address', ['class' => '']) }}
+                                {{ 
+                                    Form::text($name = 'master_graduated', $value = !empty($staff) ? $staff->master_graduated : '', 
+                                    $attributes = array(
+                                        'id' => 'master_graduated',
+                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    )) 
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group m-form__group">
+                                {{ Form::label('course_specialization', 'Course/Specialization', ['class' => '']) }}
+                                {{ 
+                                    Form::text($name = 'course_specialization', $value = !empty($staff) ? $staff->course_specialization : '', 
+                                    $attributes = array(
+                                        'id' => 'course_specialization',
+                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    )) 
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group m-form__group">
+                                {{ Form::label('graduate_school_status', 'Graduate School Status', ['class' => '']) }}
+                                {{
+                                    Form::select('graduate_school_status', $statuses, !empty($staff) ? $staff->graduate_school_status : '', ['class' => 'form-control form-control-lg m-input m-input--solid'])
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group m-form__group">
+                                {{ Form::label('date_of_graduation', 'Date of Graduation', ['class' => '']) }}
+                                {{ 
+                                    Form::text($name = 'date_of_graduation', $value = !empty($staff) ? $staff->date_of_graduation : '', 
+                                    $attributes = array(
+                                        'id' => 'date_of_graduation',
+                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    )) 
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group m-form__group">
+                                {{ Form::label('other_educational_attainment', 'Other Educational Attainment', ['class' => '']) }}
+                                {{ 
+                                    Form::text($name = 'other_educational_attainment', $value = !empty($staff) ? $staff->other_educational_attainment : '', 
+                                    $attributes = array(
+                                        'id' => 'other_educational_attainment',
+                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    )) 
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group m-form__group">
+                                {{ Form::label('government_examination', 'Government Examination Acquired (Government Exam-Major/PRC Number/Month Year Acquired)', ['class' => '']) }}
+                                {{ 
+                                    Form::text($name = 'government_examination', $value = !empty($staff) ? $staff->government_examination : '', 
+                                    $attributes = array(
+                                        'id' => 'government_examination',
+                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    )) 
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group m-form__group">
+                                {{ Form::label('work_experience', 'Work Experience before HCCS (Year Of Service/Job Position/Company Name)', ['class' => '']) }}
+                                {{ 
+                                    Form::text($name = 'work_experience', $value = !empty($staff) ? $staff->work_experience : '', 
+                                    $attributes = array(
+                                        'id' => 'work_experience',
+                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    )) 
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- EDUCATIONAL BACKGROUND INFOS END -->
+
         </div>
         <div class="col-md-3">
             <!-- AVATAR START -->
@@ -454,7 +756,7 @@
                         </div>
                         <div class="col-md-12">
                             <div class="form-group m-form__group">
-                                {{ Form::label('date_resigned', 'Date Joined', ['class' => '']) }}
+                                {{ Form::label('date_resigned', 'Date Resigned', ['class' => '']) }}
                                 {{ 
                                     Form::date($name = 'date_resigned', $value = !empty($staff) ? $staff->date_resigned : '', 
                                     $attributes = array(

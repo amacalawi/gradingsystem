@@ -449,6 +449,26 @@
             }
             $.student.required_fields();
         });
+
+        /*
+        | ---------------------------------
+        | # student no on keyup & blur
+        | ---------------------------------
+        */
+       this.$body.on('keyup', '#identification_no', function (e) {
+            var $self = $(this);
+            if ($self.val() != '') {
+                $('#username').val('S' + $self.val());
+                $('#username').closest('.form-group').find('.m-form__help').text('');
+            }
+        });
+        this.$body.on('blur', '#identification_no', function (e) {
+            var $self = $(this);
+            if ($self.val() != '') {
+                $('#username').val('S' + $self.val());
+                $('#username').closest('.form-group').find('.m-form__help').text('');
+            }
+        });
     }
 
     //init student

@@ -607,7 +607,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Education Types',
                 'slug' => 'education-types',
                 'icon' => '',
-                'order' => '33',
+                'order' => '34',
                 'created_by' => 1
             ]
         ];
@@ -905,6 +905,12 @@ class DatabaseSeeder extends Seeder
             [   
                 'role_id' => '1',
                 'sub_module_id' => '33',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '34',
                 'permissions' => '1,1,1,1',
                 'created_by' => 1
             ]

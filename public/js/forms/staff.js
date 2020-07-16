@@ -321,7 +321,28 @@
         this.$body.on('change', '.avatar-upload input[type="file"]', function (e) {
             $.staff.readURL(this);
         });
+
+        /*
+        | ---------------------------------
+        | # staff no on keyup & blur
+        | ---------------------------------
+        */
+        this.$body.on('keyup', '#identification_no', function (e) {
+            var $self = $(this);
+            if ($self.val() != '') {
+                $('#username').val('P' + $self.val());
+                $('#username').closest('.form-group').find('.m-form__help').text('');
+            }
+        });
+        this.$body.on('blur', '#identification_no', function (e) {
+            var $self = $(this);
+            if ($self.val() != '') {
+                $('#username').val('P' + $self.val());
+                $('#username').closest('.form-group').find('.m-form__help').text('');
+            }
+        });
         
+
         this.$body.on('click', '.close-file', function (e) {
             e.preventDefault();
             var $self = $(this);

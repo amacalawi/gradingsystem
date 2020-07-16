@@ -38,7 +38,7 @@ class EducationType extends Model
     	$education_types = self::where('is_active', 1)->orderBy('id', 'asc')->get();
 
         $deps = array();
-        $deps[] = array('' => 'select an type');
+        $deps[] = array('' => 'select a type');
         foreach ($education_types as $education_type) {
             $deps[] = array(
                 $education_type->id => $education_type->name

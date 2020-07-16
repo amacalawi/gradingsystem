@@ -382,6 +382,20 @@
                                             </span>
                                         </div>
                                     </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group m-form__group">
+                                            {{ Form::label('mother_address', 'Address', ['class' => '']) }}
+                                            {{ 
+                                                Form::text($name = 'mother_address', $value = !empty($student) ? $student->mother_address : '', 
+                                                $attributes = array(
+                                                    'id' => 'mother_address',
+                                                    'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                )) 
+                                            }}
+                                            <span class="m-form__help m--font-danger">
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -485,6 +499,20 @@
                                                 Form::email($name = 'father_email', $value = !empty($student) ? $student->father_email : '', 
                                                 $attributes = array(
                                                     'id' => 'father_email',
+                                                    'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                )) 
+                                            }}
+                                            <span class="m-form__help m--font-danger">
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group m-form__group">
+                                            {{ Form::label('father_address', 'Address', ['class' => '']) }}
+                                            {{ 
+                                                Form::text($name = 'father_address', $value = !empty($student) ? $student->father_address : '', 
+                                                $attributes = array(
+                                                    'id' => 'father_address',
                                                     'class' => 'form-control form-control-lg m-input m-input--solid'
                                                 )) 
                                             }}

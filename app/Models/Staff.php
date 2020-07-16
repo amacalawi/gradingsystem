@@ -43,6 +43,24 @@ class Staff extends Model
                 'mobile_no' => ($staff->mobile_no) ? $staff->mobile_no : '',
                 'telephone_no' => ($staff->telephone_no) ? $staff->telephone_no : '',
                 'avatar' => ($staff->avatar) ? $staff->avatar : '',
+                'contact_fullname' => ($staff->contact_fullname) ? $staff->contact_fullname : '',
+                'contact_relation' => ($staff->contact_relation) ? $staff->contact_relation : '',
+                'contact_phone_no' => ($staff->contact_phone_no) ? $staff->contact_phone_no : '',
+                'sss_no' => ($staff->sss_no) ? $staff->sss_no : '',
+                'tin_no' => ($staff->tin_no) ? $staff->tin_no : '',
+                'pag_ibig_no' => ($staff->pag_ibig_no) ? $staff->pag_ibig_no : '',
+                'philhealth_no' => ($staff->philhealth_no) ? $staff->philhealth_no : '',
+                'elementary_graduated' => ($staff->elementary_graduated) ? $staff->elementary_graduated : '',
+                'secondary_graduated' => ($staff->secondary_graduated) ? $staff->secondary_graduated : '',
+                'tertiary_graduated' => ($staff->tertiary_graduated) ? $staff->tertiary_graduated : '',
+                'course_taken' => ($staff->course_taken) ? $staff->course_taken : '',
+                'master_graduated' => ($staff->master_graduated) ? $staff->master_graduated : '',
+                'course_specialization' => ($staff->course_specialization) ? $staff->course_specialization : '',
+                'graduate_school_status' => ($staff->graduate_school_status) ? $staff->graduate_school_status : '',
+                'date_of_graduation' => ($staff->date_of_graduation) ? $staff->date_of_graduation : '',
+                'other_educational_attainment' => ($staff->other_educational_attainment) ? $staff->other_educational_attainment : '',
+                'government_examination' => ($staff->government_examination) ? $staff->government_examination : '',
+                'work_experience' => ($staff->work_experience) ? $staff->work_experience : '',
                 'email' => $staff->user->email,
                 'username' => ($staff->user->username) ? $staff->user->username : '',
                 'password' => ($staff->user->password) ? $staff->user->password : '',
@@ -71,6 +89,24 @@ class Staff extends Model
                 'mobile_no' => '',
                 'telephone_no' => '',
                 'avatar' => '',
+                'contact_fullname' => '',
+                'contact_relation' => '',
+                'contact_phone_no' => '',
+                'sss_no' => '',
+                'tin_no' => '',
+                'pag_ibig_no' => '',
+                'philhealth_no' => '',
+                'elementary_graduated' => '',
+                'secondary_graduated' => '',
+                'tertiary_graduated' => '',
+                'course_taken' => '',
+                'master_graduated' => '',
+                'course_specialization' => '',
+                'graduate_school_status' => '',
+                'date_of_graduation' => '',
+                'other_educational_attainment' => '',
+                'government_examination' => '',
+                'work_experience' => '',
                 'email' => '',
                 'username' => '',
                 'password' => $this->random(),
@@ -109,21 +145,37 @@ class Staff extends Model
         }
     }
 
+    public function specifications()
+    {	
+        $specifications = array('' => 'select a specification', 'childhood-education' => 'Childhood Education', 'primary-education' => 'Primary Education', 'secondary-education' => 'Secondary Education', 'higher-education' => 'Higher Education');
+        return $specifications;
+    }
+    
     public function marital_status()
     {	
         $marital_status = array('' => 'select a status', 'Single' => 'Single', 'Married' => 'Married', 'Widowed' => 'Widowed', 'Divorced' => 'Divorced');
         return $marital_status;
     }
 
-    public function specifications()
+    public function graduate_school_status()
     {	
-        $specifications = array('' => 'select a specification', 'childhood-education' => 'Childhood Education', 'primary-education' => 'Primary Education', 'secondary-education' => 'Secondary Education', 'higher-education' => 'Higher Education');
-        return $specifications;
+        $marital_status = 
+        array(
+            '' => 'select a status', 
+            'Graduated' => 'Graduated', 
+            'Comprehensive Exam Passer' => 'Comprehensive Exam Passer', 
+            'Completed Academic Requirements' => 'Completed Academic Requirements', 
+            'Earned 9 Units' => 'Earned 9 Units',
+            'Earned 18 Units' => 'Earned 18 Units',
+            'Earned 27 Units' => 'Earned 27 Units',
+            'Not Applicable' => 'Not Applicable'
+        );
+        return $marital_status;
     }
 
     public function types()
     {	
-        $marital_status = array('' => 'select a type', 'Staff' => 'Staff', 'Adviser' => 'Adviser', 'Teacher' => 'Teacher');
+        $marital_status = array('' => 'select a type', 'Staff' => 'Staff', 'Adviser' => 'Adviser', 'Teacher' => 'Teacher', 'Coordinator' => 'Coordinator', 'Administrator' => 'Administrator');
         return $marital_status;
     }
 

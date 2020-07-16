@@ -11,6 +11,7 @@ use App\Models\Staff;
 use App\Models\Department;
 use App\Models\Designation;
 use App\Models\UserRole;
+use App\Models\EducationType;
 use App\User;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -98,8 +99,9 @@ class StaffsController extends Controller
         $types = (new Staff)->types();
         $departments = (new Department)->all_departments();
         $designations = (new Designation)->all_designations();
-        $specifications = (new Staff)->specifications();
-        return view('modules/memberships/staffs/add')->with(compact('menus', 'staff', 'civils', 'types', 'departments', 'designations', 'specifications', 'segment'));
+        $specifications = (new EducationType)->all_education_types();
+        $statuses = (new Staff)->graduate_school_status();
+        return view('modules/memberships/staffs/add')->with(compact('menus', 'staff', 'civils', 'types', 'departments', 'designations', 'specifications', 'segment', 'statuses'));
     }
     
     public function edit(Request $request, $id)
@@ -111,8 +113,9 @@ class StaffsController extends Controller
         $types = (new Staff)->types();
         $departments = (new Department)->all_departments();
         $designations = (new Designation)->all_designations();
-        $specifications = (new Staff)->specifications();
-        return view('modules/memberships/staffs/edit')->with(compact('menus', 'staff', 'civils', 'types', 'departments', 'designations', 'specifications', 'segment'));
+        $specifications = (new EducationType)->all_education_types();
+        $statuses = (new Staff)->graduate_school_status();
+        return view('modules/memberships/staffs/edit')->with(compact('menus', 'staff', 'civils', 'types', 'departments', 'designations', 'specifications', 'segment', 'statuses'));
     }
     
     public function uploads(Request $request)
@@ -235,6 +238,24 @@ class StaffsController extends Controller
             'date_joined' => date('Y-m-d', strtotime($request->date_joined)),
             'date_resigned' => ($request->date_resigned !== NULL) ? date('Y-m-d', strtotime($request->date_resigned)) : NULL,
             'avatar' => $request->get('avatar'),
+            'contact_fullname' => ($request->contact_fullname !== NULL) ? $request->contact_fullname : NULL,
+            'contact_relation' => ($request->contact_relation !== NULL) ? $request->contact_relation : NULL,
+            'contact_phone_no' => ($request->contact_phone_no !== NULL) ? $request->contact_phone_no : NULL,
+            'sss_no' => ($request->sss_no !== NULL) ? $request->sss_no : NULL,
+            'tin_no' => ($request->tin_no !== NULL) ? $request->tin_no : NULL,
+            'pag_ibig_no' => ($request->pag_ibig_no !== NULL) ? $request->pag_ibig_no : NULL,
+            'philhealth_no' => ($request->philhealth_no !== NULL) ? $request->philhealth_no : NULL,
+            'elementary_graduated' => ($request->elementary_graduated !== NULL) ? $request->elementary_graduated : NULL,
+            'secondary_graduated' => ($request->secondary_graduated !== NULL) ? $request->secondary_graduated : NULL,
+            'tertiary_graduated' => ($request->tertiary_graduated !== NULL) ? $request->tertiary_graduated : NULL,
+            'course_taken' => ($request->course_taken !== NULL) ? $request->course_taken : NULL,
+            'master_graduated' => ($request->master_graduated !== NULL) ? $request->master_graduated : NULL,
+            'course_specialization' => ($request->course_specialization !== NULL) ? $request->course_specialization : NULL,
+            'graduate_school_status' => ($request->graduate_school_status !== NULL) ? $request->graduate_school_status : NULL,
+            'date_of_graduation' => ($request->date_of_graduation !== NULL) ? $request->date_of_graduation : NULL,
+            'other_educational_attainment' => ($request->other_educational_attainment !== NULL) ? $request->other_educational_attainment : NULL,
+            'government_examination' => ($request->government_examination !== NULL) ? $request->government_examination : NULL,
+            'work_experience' => ($request->work_experience !== NULL) ? $request->work_experience : NULL,
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
@@ -340,6 +361,24 @@ class StaffsController extends Controller
         if ($request->get('avatar') !== NULL) {
             $staff->avatar = $request->get('avatar');
         }
+        $staff->contact_fullname = ($request->contact_fullname !== NULL) ? $request->contact_fullname : NULL;
+        $staff->contact_relation = ($request->contact_relation !== NULL) ? $request->contact_relation : NULL;
+        $staff->contact_phone_no = ($request->contact_phone_no !== NULL) ? $request->contact_phone_no : NULL;
+        $staff->sss_no = ($request->sss_no !== NULL) ? $request->sss_no : NULL;
+        $staff->tin_no = ($request->tin_no !== NULL) ? $request->tin_no : NULL;
+        $staff->pag_ibig_no = ($request->pag_ibig_no !== NULL) ? $request->pag_ibig_no : NULL;
+        $staff->philhealth_no = ($request->philhealth_no !== NULL) ? $request->philhealth_no : NULL;
+        $staff->elementary_graduated = ($request->elementary_graduated !== NULL) ? $request->elementary_graduated : NULL;
+        $staff->secondary_graduated = ($request->secondary_graduated !== NULL) ? $request->secondary_graduated : NULL;
+        $staff->tertiary_graduated = ($request->tertiary_graduated !== NULL) ? $request->tertiary_graduated : NULL;
+        $staff->course_taken = ($request->course_taken !== NULL) ? $request->course_taken : NULL;
+        $staff->master_graduated = ($request->master_graduated !== NULL) ? $request->master_graduated : NULL;
+        $staff->course_specialization = ($request->course_specialization !== NULL) ? $request->course_specialization : NULL;
+        $staff->graduate_school_status = ($request->graduate_school_status !== NULL) ? $request->graduate_school_status : NULL;
+        $staff->date_of_graduation = ($request->date_of_graduation !== NULL) ? $request->date_of_graduation : NULL;
+        $staff->other_educational_attainment = ($request->other_educational_attainment !== NULL) ? $request->other_educational_attainment : NULL;
+        $staff->government_examination = ($request->government_examination !== NULL) ? $request->government_examination : NULL;
+        $staff->work_experience = ($request->work_experience !== NULL) ? $request->work_experience : NULL;
         $staff->updated_at = $timestamp;
         $staff->updated_by = Auth::user()->id;
 
@@ -362,10 +401,10 @@ class StaffsController extends Controller
                 ]);
             }
 
-            $exist = UserRole::where('user_id', $user->id)->count();
+            $exist = UserRole::where('user_id', $user_id)->count();
             if (!($exist > 0)) {
                 $userRole = UserRole::create([
-                    'user_id' => $user->id,
+                    'user_id' => $user_id,
                     'role_id' => 3,
                     'created_at' => $timestamp,
                     'created_by' => Auth::user()->id
@@ -426,6 +465,172 @@ class StaffsController extends Controller
     
             echo json_encode( $data ); exit();
         }   
+    }
+
+    public function import(Request $request)
+    {   
+        foreach($_FILES as $file)
+        {   
+            $row = 0; $timestamp = date('Y-m-d H:i:s');
+            if (($files = fopen($file['tmp_name'], "r")) !== FALSE) 
+            {
+                while (($data = fgetcsv($files, 3000, ",")) !== FALSE) 
+                {
+                    $row++; 
+                    if ($row > 1) {   
+                        if ($data[0] !== '') {
+                            $exist = Staff::where('identification_no', $data[0])->get();
+                            if ($exist->count() > 0) {
+                                $staff = Staff::find($exist->first()->id);
+                                $user_id = $staff->user_id;
+                                $staff->role_id = 3;
+                                $staff->identification_no = $data[0];
+                                $staff->department_id = Department::where('name', $data[19])->first()->id;
+                                $staff->designation_id = Designation::where('name', $data[20])->first()->id;
+                                $staff->type = $data[18];
+                                $staff->specification = $data[21];
+                                $staff->firstname = $data[1];
+                                $staff->middlename = $data[2];
+                                $staff->lastname = $data[3];
+                                $staff->suffix = $data[4];
+                                $staff->gender = $data[7];
+                                $staff->marital_status = $data[5];
+                                $staff->birthdate = date('Y-m-d', strtotime($data[6]));
+                                $staff->current_address = $data[8];
+                                $staff->permanent_address = ($data[9] !== '') ? $data[9] : NULL;
+                                $staff->mobile_no = ($data[11] !== '') ? $data[11] : NULL;
+                                $staff->telephone_no = ($data[10] !== '') ? $data[10] : NULL;
+                                $staff->date_joined =  date('Y-m-d', strtotime($data[22]));
+                                $staff->date_resigned = ($data[23] !== NULL) ? date('Y-m-d', strtotime($data[23])) : NULL;
+                                $staff->contact_fullname = ($data[12] !== '') ? $data[12] : NULL;
+                                $staff->contact_relation = ($data[13] !== '') ? $data[13] : NULL;
+                                $staff->contact_phone_no = ($data[14] !== '') ? $data[14] : NULL;
+                                $staff->sss_no = ($data[24] !== '') ? $data[24] : NULL;
+                                $staff->tin_no = ($data[25] !== '') ? $data[25] : NULL;
+                                $staff->pag_ibig_no = ($data[26] !== '') ? $data[26] : NULL;
+                                $staff->philhealth_no = ($data[27] !== '') ? $data[27] : NULL;
+                                $staff->elementary_graduated = ($data[28] !== '') ? $data[28] : NULL;
+                                $staff->secondary_graduated = ($data[29] !== '') ? $data[29] : NULL;
+                                $staff->tertiary_graduated = ($data[30] !== '') ? $data[30] : NULL;
+                                $staff->course_taken = ($data[31] !== '') ? $data[31] : NULL;
+                                $staff->master_graduated = ($data[32] !== '') ? $data[32] : NULL;
+                                $staff->course_specialization = ($data[33] !== '') ? $data[33] : NULL;
+                                $staff->graduate_school_status = ($data[34] !== '') ? $data[34] : NULL;
+                                $staff->date_of_graduation = ($data[35] !== '') ? $data[35] : NULL;
+                                $staff->other_educational_attainment = ($data[36] !== '') ? $data[36] : NULL;
+                                $staff->government_examination = ($data[37] !== '') ? $data[37] : NULL;
+                                $staff->work_experience = ($data[38] !== '') ? $data[38] : NULL;
+                                $staff->is_active = 1;
+                                $staff->updated_at = $timestamp;
+                                $staff->updated_by = Auth::user()->id;
+
+                                if ($staff->update()) {
+                                    $user = User::where('id', '=', $user_id)->first();
+                                    if ($user->password != $data[17]) {
+                                        User::where('id', '=', $user_id)
+                                        ->update([
+                                            'name' => $data[1].' '.$data[3],
+                                            'email' => $data[15],
+                                            'username' => $data[16],
+                                            'password' => Hash::make($data[17])
+                                        ]);
+                                    } else {
+                                        User::where('id', '=', $user_id)
+                                        ->update([
+                                            'name' => $data[1].' '.$data[3],
+                                            'email' => $data[15],
+                                            'username' => $data[16]
+                                        ]);
+                                    }
+
+                                    $exist = UserRole::where('user_id', $user_id)->count();
+                                    if (!($exist > 0)) {
+                                        $userRole = UserRole::create([
+                                            'user_id' => $user_id,
+                                            'role_id' => 3,
+                                            'created_at' => $timestamp,
+                                            'created_by' => Auth::user()->id
+                                        ]);
+                                    }
+                                }
+                            } else {
+                                $user = User::create([
+                                    'name' => $data[1].' '.$data[3],
+                                    'username' => $data[16],
+                                    'email' => $data[15],
+                                    'password' => $data[17],
+                                    'type' => 'staff'
+                                ]);
+                        
+                                if (!$user) {
+                                    throw new NotFoundHttpException();
+                                }  
+                        
+                                $userRole = UserRole::create([
+                                    'user_id' => $user->id,
+                                    'role_id' => 3,
+                                    'created_at' => $timestamp,
+                                    'created_by' => Auth::user()->id
+                                ]);
+                        
+                                $staff = Staff::create([
+                                    'user_id' => $user->id,
+                                    'role_id' => 3,
+                                    'department_id' => Department::where('name', $data[19])->first()->id,
+                                    'designation_id' => Designation::where('name', $data[20])->first()->id,
+                                    'identification_no' => $data[0],
+                                    'type' => $data[18],
+                                    'specification' => $data[21],
+                                    'firstname' => $data[1],
+                                    'middlename' => $data[2],
+                                    'lastname' => $data[3],
+                                    'suffix' => $data[4],
+                                    'gender' => $data[7],
+                                    'marital_status' => $data[5],
+                                    'birthdate' => date('Y-m-d', strtotime($data[6])),
+                                    'current_address' => $data[8],
+                                    'permanent_address' => ($data[9] !== '') ? $data[9] : NULL,
+                                    'mobile_no' => ($data[11] !== '') ? $data[11] : NULL,
+                                    'telephone_no' => ($data[10] !== '') ? $data[10] : NULL,
+                                    'date_joined' => date('Y-m-d', strtotime($data[22])),
+                                    'date_resigned' => ($data[23] !== '') ? date('Y-m-d', strtotime($data[23])) : NULL,
+                                    'avatar' => NULL,
+                                    'contact_fullname' => ($data[12] !== '') ? $data[12] : NULL,
+                                    'contact_relation' => ($data[13] !== '') ? $data[13] : NULL,
+                                    'contact_phone_no' => ($data[14] !== '') ? $data[14] : NULL,
+                                    'sss_no' => ($data[24] !== '') ? $data[24] : NULL,
+                                    'tin_no' => ($data[25] !== '') ? $data[25] : NULL,
+                                    'pag_ibig_no' => ($data[26] !== '') ? $data[26] : NULL,
+                                    'philhealth_no' => ($data[27] !== '') ? $data[27] : NULL,
+                                    'elementary_graduated' => ($data[28] !== '') ? $data[28] : NULL,
+                                    'secondary_graduated' => ($data[29] !== '') ? $data[29] : NULL,
+                                    'tertiary_graduated' => ($data[30] !== '') ? $data[30] : NULL,
+                                    'course_taken' => ($data[31] !== '') ? $data[31] : NULL,
+                                    'master_graduated' => ($data[32] !== '') ? $data[32] : NULL,
+                                    'course_specialization' => ($data[33] !== '') ? $data[33] : NULL,
+                                    'graduate_school_status' => ($data[34] !== '') ? $data[34] : NULL,
+                                    'date_of_graduation' => ($data[35] !== '') ? $data[35] : NULL,
+                                    'other_educational_attainment' => ($data[36] !== '') ? $data[36] : NULL,
+                                    'government_examination' => ($data[37] !== '') ? $data[37] : NULL,
+                                    'work_experience' => ($data[38] !== '') ? $data[38] : NULL,
+                                    'created_at' => $timestamp,
+                                    'created_by' => Auth::user()->id
+                                ]);
+                            }
+                        }
+                    } // close for if $row > 1 condition                    
+                }
+                fclose($files);
+            }
+        }
+
+        $data = array(
+            'message' => 'success'
+        );
+
+        echo json_encode( $data );
+
+        exit();
     }
 
     public function generate_staff_no()

@@ -265,6 +265,7 @@ class StudentsController extends Controller
                 'mother_lastname' => $request->mother_lastname,
                 'mother_contact_no' => $request->mother_contact_no,
                 'mother_email' => $request->mother_email,
+                'mother_address' => ($request->mother_address !== NULL) ? $request->mother_address : NULL,
                 'mother_avatar' => $request->get('mother_avatar'),
                 'mother_selected' => ($request->guardian_selected == 'Mother') ? 1 : 0,
                 'father_firstname' => $request->father_firstname,
@@ -272,6 +273,7 @@ class StudentsController extends Controller
                 'father_lastname' => $request->father_lastname,
                 'father_contact_no' => $request->father_contact_no,
                 'father_email' => $request->father_email,
+                'father_address' => ($request->father_address !== NULL) ? $request->father_address : NULL,
                 'father_avatar' => $request->get('father_avatar'),
                 'father_selected' => ($request->guardian_selected == 'Father') ? 1 : 0,
                 'created_at' => $timestamp,
@@ -280,7 +282,7 @@ class StudentsController extends Controller
 
             $mother_user = User::create([
                 'name' => $request->mother_firstname.' '.$request->mother_lastname,
-                'username' => str_replace('S', 'M', $student->identification_no),
+                'username' => 'M'.$student->identification_no,
                 'email' => $request->mother_email,
                 'password' => (new Student)->random(),
                 'type' => 'parent'
@@ -302,7 +304,7 @@ class StudentsController extends Controller
 
             $father_user = User::create([
                 'name' => $request->father_firstname.' '.$request->father_lastname,
-                'username' => str_replace('S', 'F', $student->identification_no),
+                'username' => 'F'.$student->identification_no,
                 'email' => $request->father_email,
                 'password' => (new Student)->random(),
                 'type' => 'parent'
@@ -363,10 +365,8 @@ class StudentsController extends Controller
             throw new NotFoundHttpException();
         }
 
-        $rows = User::where(function($query) use ($email, $mother_email, $father_email){
+        $rows = User::where(function($query) use ($email){
             $query->orWhere('email', $email);
-            $query->orWhere('email', $mother_email);
-            $query->orWhere('email', $father_email);
         })
         ->where('id', '!=', $user_id)
         ->count();
@@ -507,12 +507,14 @@ class StudentsController extends Controller
                     'mother_lastname' => $request->mother_lastname,
                     'mother_contact_no' => $request->mother_contact_no,
                     'mother_email' => $request->mother_email,
+                    'mother_address' => ($request->mother_address !== NULL) ? $request->mother_address : NULL, 
                     'mother_selected' => ($request->guardian_selected == 'Mother') ? 1 : 0,
                     'father_firstname' => $request->father_firstname,
                     'father_middlename' => ($request->father_middlename !== NULL) ? $request->father_middlename : NULL, 
                     'father_lastname' => $request->father_lastname,
                     'father_contact_no' => $request->father_contact_no,
                     'father_email' => $request->father_email,
+                    'father_address' => ($request->father_address !== NULL) ? $request->father_address : NULL, 
                     'father_selected' => ($request->guardian_selected == 'Father') ? 1 : 0,
                     'updated_at' => $timestamp,
                     'updated_by' => Auth::user()->id,
@@ -520,17 +522,25 @@ class StudentsController extends Controller
                 ]);
 
                 if ($request->get('mother_avatar') !== NULL) {
-                    $guardian->mother_avatar = $request->get('mother_avatar');
-                    $guardian->update();
+                    $guardian = Guardian::where([
+                        'student_id' => $id,
+                    ])
+                    ->update([
+                        'mother_avatar' => $request->get('mother_avatar')
+                    ]);
                 }
 
                 if ($request->get('father_avatar') !== NULL) {
-                    $guardian->father_avatar = $request->get('father_avatar');
-                    $guardian->update();
+                    $guardian = Guardian::where([
+                        'student_id' => $id,
+                    ])
+                    ->update([
+                        'father_avatar' => $request->get('father_avatar')
+                    ]);
                 }
 
                 $mother_user = User::where([
-                    'username' => str_replace('S', 'M', $student->identification_no)
+                    'username' => 'M'.$student->identification_no
                 ])
                 ->update([
                     'name' => $request->mother_firstname.' '.$request->mother_lastname,
@@ -539,6 +549,7 @@ class StudentsController extends Controller
                 ]);
 
                 if ($mother_user) {
+                    $mother_user = User::where(['username' => 'M'.$student->identification_no])->first();
                     $motherExist = UserRole::where('user_id', $mother_user->id)->count();
                     if (!($motherExist > 0)) {
                         $userRole = UserRole::create([
@@ -551,7 +562,7 @@ class StudentsController extends Controller
                 }
     
                 $father_user = User::where([
-                    'username' => str_replace('S', 'F', $student->identification_no)
+                    'username' => 'F'.$student->identification_no
                 ])
                 ->update([
                     'name' => $request->father_firstname.' '.$request->father_lastname,
@@ -560,6 +571,7 @@ class StudentsController extends Controller
                 ]);
 
                 if ($father_user) {
+                    $father_user = User::where(['username' => 'F'.$student->identification_no])->first();
                     $fatherExist = UserRole::where('user_id', $father_user->id)->count();
                     if (!($fatherExist > 0)) {
                         $userRole = UserRole::create([
@@ -640,6 +652,303 @@ class StudentsController extends Controller
     
             echo json_encode( $data ); exit();
         }   
+    }
+
+    public function import(Request $request)
+    {   
+        foreach($_FILES as $file)
+        {   
+            $row = 0; $timestamp = date('Y-m-d H:i:s');
+            if (($files = fopen($file['tmp_name'], "r")) !== FALSE) 
+            {
+                while (($data = fgetcsv($files, 3000, ",")) !== FALSE) 
+                {
+                    $row++; 
+                    if ($row > 1) {   
+                        if ($data[0] !== '') {
+                            $exist = Student::where('identification_no', $data[0])->get();
+                            if ($exist->count() > 0) {
+                                $student = Student::find($exist->first()->id);
+                                $student->identification_no = $data[0];
+                                $student->firstname = $data[1];
+                                $student->middlename = $data[2];
+                                $student->lastname = $data[3];
+                                $student->suffix = $data[4];
+                                $student->gender = $data[7];
+                                $student->marital_status = $data[5];
+                                $student->birthdate = date('Y-m-d', strtotime($data[6]));
+                                $student->current_address = $data[8];
+                                $student->permanent_address = ($data[9] !== '') ? $data[9] : NULL;
+                                $student->mobile_no = ($data[11] !== '') ? $data[11] : NULL;
+                                $student->telephone_no = ($data[10] !== '') ? $data[10] : NULL;
+                                $student->admitted_date = date('Y-m-d');
+                                $student->special_remarks = ($data[12] !== '') ? $data[12] : NULL;
+                                $student->is_guardian = ($data[16] !== '' || $data[22] !== '') ? 1 : 0; 
+                                $student->is_sibling = ($data[29] !== '') ? 1 : 0; 
+                                $student->updated_at = $timestamp;
+                                $student->updated_by = Auth::user()->id;
+                                $student->is_active = 1;
+                                $user_id = $student->user_id;
+                        
+                                if ($student->update()) {
+                                    $password = User::where('id', $user_id)->pluck('password');
+                                    if ($password != $data[15]) {
+                                        User::where('id', $user_id)
+                                        ->update([
+                                            'name' => $data[1].' '.$data[3],
+                                            'email' => $data[13],
+                                            'username' => $data[14],
+                                            'password' => Hash::make($data[15])
+                                        ]);
+                                    } else {
+                                        User::where('id', $user_id)
+                                        ->update([
+                                            'name' => $data[1].' '.$data[3],
+                                            'email' => $data[13],
+                                            'username' => $data[14],
+                                        ]);
+                                    }
+                                    
+                                    $exist = UserRole::where('user_id', $user_id)->count();
+                                    if (!($exist > 0)) {
+                                        $userRole = UserRole::create([
+                                            'user_id' => $user_id,
+                                            'role_id' => 4,
+                                            'created_at' => $timestamp,
+                                            'created_by' => Auth::user()->id
+                                        ]);
+                                    }
+                        
+                                    if ($data[16] !== '' || $data[22] !== '') {
+                                        $guardian = Guardian::where([
+                                            'student_id' => $student->id,
+                                        ])
+                                        ->update([
+                                            'mother_firstname' => $data[16],
+                                            'mother_middlename' => ($data[17] !== '') ? $data[17] : NULL, 
+                                            'mother_lastname' => $data[18],
+                                            'mother_contact_no' => $data[19],
+                                            'mother_email' => $data[20],
+                                            'mother_address' => ($data[21] !== '') ? $request->mother_address : NULL, 
+                                            'mother_selected' => ($data[28] == 'Mother') ? 1 : 0,
+                                            'father_firstname' => $data[22],
+                                            'father_middlename' => ($data[23] !== '') ? $data[23] : NULL, 
+                                            'father_lastname' => $data[24],
+                                            'father_contact_no' => $data[25],
+                                            'father_email' => $data[26],
+                                            'father_address' => ($data[27] !== '') ? $data[27] : NULL, 
+                                            'father_selected' => ($data[28] == 'Father') ? 1 : 0,
+                                            'updated_at' => $timestamp,
+                                            'updated_by' => Auth::user()->id,
+                                            'is_active' => 1
+                                        ]);
+                        
+                                        $mother_user = User::where([
+                                            'username' => 'M'.$student->identification_no
+                                        ])
+                                        ->update([
+                                            'name' => $data[16].' '.$data[18],
+                                            'email' => $data[20],
+                                            'updated_at' => $timestamp
+                                        ]);
+                        
+                                        if ($mother_user) {
+                                            $mother_user = User::where(['username' => 'M'.$student->identification_no])->first();
+                                            $motherExist = UserRole::where('user_id', $mother_user->id)->count();
+                                            if (!($motherExist > 0)) {
+                                                $userRole = UserRole::create([
+                                                    'user_id' => $mother_user->first()->id,
+                                                    'role_id' => 5,
+                                                    'created_at' => $timestamp,
+                                                    'created_by' => Auth::user()->id
+                                                ]);
+                                            }
+                                        }
+                            
+                                        $father_user = User::where([
+                                            'username' => 'F'.$student->identification_no
+                                        ])
+                                        ->update([
+                                            'name' => $data[22].' '.$data[24],
+                                            'email' => $data[26],
+                                            'updated_at' => $timestamp
+                                        ]);
+                        
+                                        if ($father_user) {
+                                            $father_user = User::where(['username' => 'F'.$student->identification_no])->first();
+                                            $fatherExist = UserRole::where('user_id', $father_user->id)->count();
+                                            if (!($fatherExist > 0)) {
+                                                $userRole = UserRole::create([
+                                                    'user_id' => $father_user->id,
+                                                    'role_id' => 5,
+                                                    'created_at' => $timestamp,
+                                                    'created_by' => Auth::user()->id
+                                                ]);
+                                            }
+                                        }
+                                    }
+                        
+                                    Sibling::where('student_id', $student->id)->forceDelete();
+                                    if ($data[29] !== '') {
+                                        $siblingz = explode('-', $data[29]);
+                                        foreach ($siblingz as $sibling) {
+                                            if ($sibling !== '') {
+                                                $siblingExist = Student::where('identification_no', substr($sibling, 0, 10))->count();
+                                                if ($siblingExist > 0) {
+                                                    $siblings = Sibling::create([
+                                                        'student_id' => $student->id,
+                                                        'sibling_id' => Student::where('identification_no', substr($sibling, 0, 10))->first()->id,
+                                                        'created_at' => $timestamp,
+                                                        'created_by' => Auth::user()->id
+                                                    ]);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            } else {
+                                $user = User::create([
+                                    'name' => $data[1].' '.$data[3],
+                                    'username' => $data[14],
+                                    'email' => $data[13],
+                                    'password' => $data[15],
+                                    'type' => 'student'
+                                ]);
+                        
+                                if (!$user) {
+                                    throw new NotFoundHttpException();
+                                }  
+                        
+                                $userRole = UserRole::create([
+                                    'user_id' => $user->id,
+                                    'role_id' => 4,
+                                    'created_at' => $timestamp,
+                                    'created_by' => Auth::user()->id
+                                ]);
+                        
+                                $student = Student::create([
+                                    'user_id' => $user->id,
+                                    'role_id' => 4,
+                                    'identification_no' => $data[0],
+                                    'firstname' => $data[1],
+                                    'middlename' => $data[2],
+                                    'lastname' => $data[3],
+                                    'suffix' => $data[4],
+                                    'gender' => $data[7],
+                                    'marital_status' => $data[5],
+                                    'birthdate' => date('Y-m-d', strtotime($data[6])),
+                                    'current_address' => $data[8],
+                                    'permanent_address' => ($data[9] !== '') ? $data[9] : NULL,
+                                    'mobile_no' => ($data[11] !== '') ? $data[11] : NULL,
+                                    'telephone_no' => ($data[10] !== '') ? $data[10] : NULL,
+                                    'admitted_date' => date('Y-m-d'),
+                                    'special_remarks' => ($data[12] !== '') ? $data[12] : NULL, 
+                                    'is_guardian' => ($data[16] !== '' || $data[22] !== '') ? 1 : 0, 
+                                    'is_sibling' => ($data[29] !== '') ? 1 : 0, 
+                                    'avatar' => NULL,
+                                    'created_at' => $timestamp,
+                                    'created_by' => Auth::user()->id
+                                ]);
+                        
+                                if ($data[16] !== '' || $data[22] !== '') {
+                                    $guardian = Guardian::create([
+                                        'student_id' => $student->id,
+                                        'mother_firstname' => $data[16],
+                                        'mother_middlename' => ($data[17] !== '') ? $data[17] : NULL, 
+                                        'mother_lastname' => $data[18],
+                                        'mother_contact_no' => $data[19],
+                                        'mother_email' => $data[20],
+                                        'mother_address' => ($data[21] !== '') ? $data[21] : NULL,
+                                        'mother_avatar' => NULL,
+                                        'mother_selected' => ($data[28] == 'Mother') ? 1 : 0,
+                                        'father_firstname' => $data[22],
+                                        'father_middlename' => ($data[23] !== '') ? $data[23] : NULL, 
+                                        'father_lastname' => $data[24],
+                                        'father_contact_no' => $data[25],
+                                        'father_email' => $data[26],
+                                        'father_address' => ($data[27] !== '') ? $data[27] : NULL,
+                                        'father_avatar' => NULL,
+                                        'father_selected' => ($data[28] == 'Father') ? 1 : 0,
+                                        'created_at' => $timestamp,
+                                        'created_by' => Auth::user()->id
+                                    ]);
+                        
+                                    $mother_user = User::create([
+                                        'name' => $data[16].' '.$data[18],
+                                        'username' => 'M'.$student->identification_no,
+                                        'email' => ($data[20] !== NULL) ? $data[20] : NULL,
+                                        'password' => (new Student)->random(),
+                                        'type' => 'parent'
+                                    ]);
+                        
+                                    $motherRole = UserRole::create([
+                                        'user_id' => $mother_user->id,
+                                        'role_id' => 5,
+                                        'created_at' => $timestamp,
+                                        'created_by' => Auth::user()->id
+                                    ]);
+                        
+                                    $mother_guardian_user = GuardianUser::create([
+                                        'guardian_id' => $guardian->id,
+                                        'user_id' => $mother_user->id,
+                                        'created_at' => $timestamp,
+                                        'created_by' => Auth::user()->id
+                                    ]);
+                        
+                                    $father_user = User::create([
+                                        'name' => $data[22].' '.$data[24],
+                                        'username' => 'F'.$student->identification_no,
+                                        'email' => ($data[26] !== NULL) ? $data[26] : NULL,
+                                        'password' => (new Student)->random(),
+                                        'type' => 'parent'
+                                    ]);
+                        
+                                    $fatherRole = UserRole::create([
+                                        'user_id' => $father_user->id,
+                                        'role_id' => 5,
+                                        'created_at' => $timestamp,
+                                        'created_by' => Auth::user()->id
+                                    ]);
+                        
+                                    $father_guardian_user = GuardianUser::create([
+                                        'guardian_id' => $guardian->id,
+                                        'user_id' => $father_user->id,
+                                        'created_at' => $timestamp,
+                                        'created_by' => Auth::user()->id
+                                    ]);
+                                }
+                        
+                                if ($data[29] !== NULL) {
+                                    $siblingz = explode('-',$data[29]);
+                                    foreach ($siblingz as $sibling) {
+                                        if ($sibling != '') {
+                                            $siblingExist = Student::where('identification_no', substr($sibling, 0, 10))->count();
+                                            if ($siblingExist > 0) {
+                                                $siblings = Sibling::create([
+                                                    'student_id' => $student->id,
+                                                    'sibling_id' => Student::where('identification_no', substr($sibling, 0, 10))->first()->id,
+                                                    'created_at' => $timestamp,
+                                                    'created_by' => Auth::user()->id
+                                                ]);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } // close for if $row > 1 condition                    
+                }
+                fclose($files);
+            }
+        }
+
+        $data = array(
+            'message' => 'success'
+        );
+
+        echo json_encode( $data );
+
+        exit();
     }
 
     public function get_column_via_id($id, $column)
