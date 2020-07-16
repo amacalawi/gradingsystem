@@ -25,10 +25,10 @@
             </div>
             <div>
                 @php 
-                    $imports = ['students'];
+                    $imports = ['students', 'staffs'];
                 @endphp
                 @if (in_array(Request::segment(2), $imports))
-                <a href="javascript:;" class="btn m-btn--pill btn-accent add-btn m-btn--custom" data-toggle="modal" data-target="#import-student">
+                <a href="javascript:;" class="btn m-btn--pill btn-accent add-btn m-btn--custom" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#import-{{ substr(strtolower(str_replace('-',' ', Request::segment(2))), 0, -1) }}">
                     <i class="la la-upload"></i> 
                         Import {{ substr(ucwords(str_replace('-',' ', Request::segment(2))), 0, -1) }}
                 </a>

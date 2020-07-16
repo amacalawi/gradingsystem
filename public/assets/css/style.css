@@ -565,3 +565,8 @@ a[data-dismiss="modal"]:focus,
 a[data-dismiss="modal"] {
     text-decoration: none;
 }
+
+.dz-success-mark svg,
+.dz-error-mark svg {
+    display: none !important;
+}

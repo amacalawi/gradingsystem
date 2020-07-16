@@ -47,6 +47,6 @@
     <link href="{{ asset('assets/vendors/dropzone/dropzone.css') }}" rel="stylesheet" type="text/css" />
 @endpush
 @push('scripts')
-    <script src="{{ asset('assets/vendors/dropzone/dropzone.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/vendors/dropzone/dropzone.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/datatables/student.js') }}" type="text/javascript"></script>
 @endpush
