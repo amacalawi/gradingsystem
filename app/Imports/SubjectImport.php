@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Subject;
+use App\Models\EducationType;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -48,16 +49,20 @@ class SubjectImport implements ToModel, WithCalculatedFormulas, WithMappedCells
             $score = $col.$row;
             
             if($checkexist){
-                $subject = Subject::create([
-                    'code' => $rows[$col++.$row],
-                    'name' => $rows[$col++.$row],
-                    'description' => $rows[$col++.$row],
-                    'type' => $rows[$col++.$row],
-                    'is_mapeh' => $rows[$col++.$row],
-                    'is_tle' => $rows[$col++.$row],
-                    'created_at' => $timestamp,
-                    'created_by' => Auth::user()->id
-                ]);
+
+                $educationtype_id = $this->check_type( $rows['D'.$row] ); //type coloumn
+                if($educationtype_id){
+                    $subject = Subject::create([
+                        'code' => $rows[$col++.$row],
+                        'name' => $rows[$col++.$row],
+                        'description' => $rows[$col++.$row],
+                        'education_type_id' => $educationtype_id,
+                        'is_mapeh' => $rows[$col++.$row],
+                        'is_tle' => $rows[$col++.$row],
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+                }
             }
             $row++;
         }
@@ -87,4 +92,15 @@ class SubjectImport implements ToModel, WithCalculatedFormulas, WithMappedCells
         }
     }
 
+    public function check_type($typecoloumn)
+    {
+        $educationtypes = EducationType::select('id')->where('code', $typecoloumn)->where('is_active', 1)->get();
+        $education_id = 0;
+        foreach($educationtypes as $educationtype){
+            if($educationtype->id){
+                $education_id = $educationtype->id;
+            }
+        }
+        return $education_id;
+    }   
 }

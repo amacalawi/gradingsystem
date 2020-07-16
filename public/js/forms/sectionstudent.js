@@ -345,49 +345,6 @@ function($) {
     $.sectionstudent.init();
 }(window.jQuery);
 
-/*
-//Added JS
-function loadSubjects()
-{
-    $.ajax({
-        type: "GET",
-        url: base_url + 'academics/academics/subjects/get-all-subjects',
-        success: function (data) {
-            var data = $.parseJSON( data );
-
-            var subject = $("<select></select>").attr("id", "subjects").attr("name", "subjects[]").attr("class", "form-control form-control-lg m-input m-input--solid");
-            $.each(data,function(index, data){
-                subject.append($("<option></option>").attr("value", index).text(data));
-            });
-            $("#option-subject").append('<label> Subject: </label>');
-            $("#option-subject").append(subject);
-
-        },
-        async: false
-    });
-}
-
-function loadTeacher()
-{
-    $.ajax({
-        type: "GET",
-        url: base_url + 'academics/academics/subjects/get-all-teachers',
-        success: function (data) {
-            var data = $.parseJSON( data );
-            
-            var teacher = $("<select></select>").attr("id", "teachers").attr("name", "teachers[]").attr("class", "form-control form-control-lg m-input m-input--solid");
-            $.each(data,function(index, data){
-                teacher.append($("<option></option>").attr("value", index).text(data));
-            });
-            $("#option-teacher").append('<label> Teacher: </label>');
-            $("#option-teacher").append(teacher);
-        
-        },
-        async: false
-    });  
-}
-*/
-
 function clearsubjectteacher(limit)
 {
     //var limit = $('[name=remove-button]').length;

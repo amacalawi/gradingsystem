@@ -13,6 +13,7 @@ use App\Models\Subject;
 use App\Models\Section;
 use App\Models\Batch;
 use App\Models\Admission;
+use App\Models\EducationType;
 
 class SectionsStudentsController extends Controller
 {
@@ -84,7 +85,7 @@ class SectionsStudentsController extends Controller
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
-        $types = (new Quarter)->types();
+        $types = (new EducationType)->all_education_types();
 
         $sections_subjects = 0;
         $allTeachers = Staff::where('is_active', 1)->where('type','Teacher')->orderBy('lastname', 'asc')->get();
@@ -104,7 +105,7 @@ class SectionsStudentsController extends Controller
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
-        $types = (new Quarter)->types();
+        $types = (new EducationType)->all_education_types();
         $sectionstudent = (new SectionsStudents)->find($id);
 
         $allSubjects = Subject::all();

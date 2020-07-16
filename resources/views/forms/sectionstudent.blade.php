@@ -26,7 +26,7 @@
 
                     {{ Form::label('type', 'Type', ['class' => '']) }}
                     {{
-                        Form::select('type', $types, $value = $sectioninfos->type, ['class' => 'form-control form-control-lg m-input m-input--solid', 'id' => 'type'])
+                        Form::select('type', $types, $value = $sectioninfos->education_type_id, ['class' => 'form-control form-control-lg m-input m-input--solid', 'id' => 'type'])
                     }}
                     <span class="m-form__help m--font-danger">
                     </span>
