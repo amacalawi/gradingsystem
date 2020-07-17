@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Imports\SectionImport;
 use Maatwebsite\Excel\Facades\Excel;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -192,7 +190,7 @@ class SectionsController extends Controller
         $section->description = $request->description;
         $section->education_type_id = $request->type;
         $section->updated_at = $timestamp;
-        $section->updated_at = Auth::user()->id;
+        $section->updated_by = Auth::user()->id;
 
         if ($section->update()) {
 
@@ -361,16 +359,54 @@ class SectionsController extends Controller
         echo json_encode( $sections ); exit();
     }
 
-    public function import_section(Request $request)
+    public function import(Request $request)
     {
-        $this->validate( $request, [
-            'import_file' => 'required|mimes:xls,xlsx'
-        ]);
-        
-        $path = $request->file('import_file')->store('Imports');
+        foreach($_FILES as $file)
+        {  
+            $row = 0; $timestamp = date('Y-m-d H:i:s');
+            if (($files = fopen($file['tmp_name'], "r")) !== FALSE) 
+            {
+                while (($data = fgetcsv($files, 3000, ",")) !== FALSE) 
+                {
+                    $row++;
+                    if ($row > 1) { 
+                        if ($data[0] !== '') {
+                            $exist = Section::where('code', $data[0])->get();
+                            $exist_type = EducationType::where('code', $data[3])->get();
+                            if($exist_type->count() > 0) {
+                                if ($exist->count() > 0) {
+                                    $section = Section::find($exist->first()->id);
+                                    $section->code = $data[0];
+                                    $section->name = $data[1];
+                                    $section->description = $data[2];
+                                    $section->education_type_id = EducationType::where('code', $data[3])->first()->id;
+                                    $section->updated_at = $timestamp;
+                                    $section->updated_by = Auth::user()->id;
+                                    $section->update();
+                                } else {
+                                    $section = Section::create([
+                                        'code' => $data[0],
+                                        'name' => $data[1],
+                                        'description' => $data[2],
+                                        'education_type_id' => EducationType::where('code', $data[3])->first()->id,
+                                        'created_at' => $timestamp,
+                                        'created_by' => Auth::user()->id
+                                    ]);
+                                }
+                            }
+                        }
+                    }
+                }
+                fclose($files);
+            }
+        }
 
-        Excel::import(new SectionImport, $path);
-        return redirect('/academics/academics/sections'); 
+        $data = array(
+            'message' => 'success'
+        );
+
+        echo json_encode( $data );
+        exit();
     }
 
 }

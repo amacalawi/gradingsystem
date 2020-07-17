@@ -174,10 +174,14 @@
 
                 @elseif (!in_array(Request::segment(3), $invisibles))
 
-                    @if (Request::segment(3) == 'sections' || Request::segment(3) == 'levels' || Request::segment(3) == 'subjects' || Request::segment(3) == 'classes')
-                        <button type="button" class="btn m-btn--pill btn-success m-btn--custom" data-toggle="modal" data-target="#importmodule">
-                            Import {{ ucwords(Request::segment(3)) }}
-                        </button>
+                    @php 
+                        $imports_academics = ['levels', 'sections', 'subjects'];
+                    @endphp
+                    @if (in_array(Request::segment(3), $imports_academics))
+                    <a href="javascript:;" class="btn m-btn--pill btn-accent add-btn m-btn--custom" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#import-{{ substr(strtolower(str_replace('-',' ', Request::segment(3))), 0, -1) }}">
+                        <i class="la la-upload"></i> 
+                            Import {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1) }}
+                    </a>
                     @endif
 
                     <a href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/'.Request::segment(3).'/add') }}" class="btn m-btn--pill btn-brand add-btn m-btn--custom">
