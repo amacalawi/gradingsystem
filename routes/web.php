@@ -273,7 +273,7 @@ Route::prefix('academics')->group(function () {
         Route::get('sections/all-inactive', 'SectionsController@all_inactive')->name('sections.all.inactive');
         Route::put('sections/update-status/{id}', 'SectionsController@update_status')->name('sections.update.status');
         Route::get('sections/get-all-sections-bytype/{type}', 'SectionsController@get_all_sections_bytype');
-        Route::post('sections/import-sections', 'SectionsController@import_section')->name('sections.fetch.import.section');
+        Route::post('sections/import', 'SectionsController@import')->name('sections.import');
         /* End Sections Routes */
 
         /* Levels */
