@@ -111,22 +111,34 @@
                 <div class="col-md-5">
                     @if ( $segment == 'edit' )
                         @php
-                            $x=1;
+                            $x=1; 
                         @endphp
-                        @foreach( $sections_subjects as $section_subject)
-                            <input type="text" value="{{$section_subject->id}}" id="sections_subjects_{{$x}}" name="sections_subjects[]" hidden>
-                            <div class="form-group m-form__group subject-div required" id="subject-div_{{$x}}">
+                        @if(count($sections_subjects))
+                            @foreach( $sections_subjects as $section_subject)
+                                <input type="text" value="{{$section_subject->id}}" id="sections_subjects_{{$x}}" name="sections_subjects[]" hidden>
+                                <div class="form-group m-form__group subject-div required" id="subject-div_{{$x}}">
+                                    {{ Form::label('subject', 'Subject', ['class' => '']) }}
+                                    {{
+                                        Form::select('subjects[]', $subjects, $value = $section_subject->subject_id, ['class' => 'form-control form-control-lg m-input m-input--solid'])
+                                    }}
+                                    <span class="m-form__help m--font-danger">
+                                    </span>
+                                </div>
+                                @php
+                                    $x++;
+                                @endphp
+                            @endforeach
+                        @else
+                            <input type="text" value="0" id="sections_subjects_1" name="sections_subjects[]" hidden>
+                            <div class="form-group m-form__group subject-div required" id="subject-div_1">
                                 {{ Form::label('subject', 'Subject', ['class' => '']) }}
                                 {{
-                                    Form::select('subjects[]', $subjects, $value = $section_subject->subject_id, ['class' => 'form-control form-control-lg m-input m-input--solid'])
+                                    Form::select('subjects[]', $subjects, $value = '0', ['class' => 'form-control form-control-lg m-input m-input--solid'])
                                 }}
                                 <span class="m-form__help m--font-danger">
                                 </span>
                             </div>
-                            @php
-                                $x++;
-                            @endphp
-                        @endforeach
+                        @endif
                     @else
                         <div class="form-group m-form__group subject-div required" id="subject-div_1" ></div>
                     @endif
@@ -137,19 +149,30 @@
                         @php
                             $x=1;
                         @endphp
-                        @foreach( $sections_subjects as $section_subject)
-                            <div class="form-group m-form__group teacher-div required" id="teacher-div_{{$x}}">
+                        @if(count($sections_subjects))
+                            @foreach( $sections_subjects as $section_subject)
+                                <div class="form-group m-form__group teacher-div required" id="teacher-div_{{$x}}">
+                                    {{ Form::label('teacher', 'Teacher', ['class' => '']) }}
+                                    {{
+                                        Form::select('teachers[]', $teachers, $value = $section_subject->teacher_id, ['class' => 'form-control form-control-lg m-input m-input--solid'])
+                                    }}
+                                    <span class="m-form__help m--font-danger">
+                                    </span>
+                                </div>
+                                @php
+                                    $x++;
+                                @endphp
+                            @endforeach
+                        @else
+                            <div class="form-group m-form__group teacher-div required" id="teacher-div_1">
                                 {{ Form::label('teacher', 'Teacher', ['class' => '']) }}
                                 {{
-                                    Form::select('teachers[]', $teachers, $value = $section_subject->teacher_id, ['class' => 'form-control form-control-lg m-input m-input--solid'])
+                                    Form::select('teachers[]', $teachers, $value = '0', ['class' => 'form-control form-control-lg m-input m-input--solid'])
                                 }}
                                 <span class="m-form__help m--font-danger">
                                 </span>
                             </div>
-                            @php
-                                $x++;
-                            @endphp
-                        @endforeach
+                        @endif                            
                     @else
                         <div class="form-group m-form__group teacher-div required" id="teacher-div_1" ></div>
                     @endif
@@ -160,19 +183,26 @@
                         @php
                             $x=1;
                         @endphp
-                        @foreach( $sections_subjects as $section_subject)
-                            <div class="form-group m-form__group remove-div required" id="remove-div_{{$x}}" >
+                        @if(count($sections_subjects))
+                            @foreach( $sections_subjects as $section_subject)
+                                <div class="form-group m-form__group remove-div required" id="remove-div_{{$x}}" >
+                                    <label style="visibility:hidden;"> Delete: </label><br/>
+                                    @if ( $x >= 2 )
+                                        <button style="visibility:;" name="remove-button" type="button" id="remove_{{$x}}" class="btn btn-lg btn-danger remove">-</button>
+                                    @else
+                                    <button style="visibility:hidden;" name="remove-button" type="button" id="remove_1" class="btn btn-lg btn-danger remove">-</button>
+                                    @endif
+                                </div>
+                                @php
+                                    $x++;
+                                @endphp
+                            @endforeach
+                        @else
+                            <div class="form-group m-form__group remove-div required" id="remove-div_1" >
                                 <label style="visibility:hidden;"> Delete: </label><br/>
-                                @if ( $x >= 2 )
-                                    <button style="visibility:;" name="remove-button" type="button" id="remove_{{$x}}" class="btn btn-lg btn-danger remove">-</button>
-                                @else
                                 <button style="visibility:hidden;" name="remove-button" type="button" id="remove_1" class="btn btn-lg btn-danger remove">-</button>
-                                @endif
                             </div>
-                            @php
-                                $x++;
-                            @endphp
-                        @endforeach
+                        @endif  
                     @else
                         <div class="form-group m-form__group remove-div required" id="remove-div_1" ></div>
                     @endif 

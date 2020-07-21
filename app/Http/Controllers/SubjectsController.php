@@ -369,16 +369,58 @@ class SubjectsController extends Controller
         echo json_encode( $teachers ); exit();
     }
 
-    public function import_subject(Request $request)
+    public function import(Request $request)
     {
-        $this->validate( $request, [
-            'import_file' => 'required|mimes:xls,xlsx'
-        ]);
-        
-        $path = $request->file('import_file')->store('Imports');
+        foreach($_FILES as $file)
+        {  
+            $row = 0; $timestamp = date('Y-m-d H:i:s');
+            if (($files = fopen($file['tmp_name'], "r")) !== FALSE) 
+            {
+                while (($data = fgetcsv($files, 3000, ",")) !== FALSE) 
+                {
+                    $row++;
+                    if ($row > 1) { 
+                        if ($data[0] !== '') {
+                            $exist = Subject::where('code', $data[0])->get();
+                            $exist_type = EducationType::where('code', $data[3])->get();
+                            if($exist_type->count() > 0) {
+                                if ($exist->count() > 0) {
+                                    $subject = Subject::find($exist->first()->id);
+                                    $subject->code = $data[0];
+                                    $subject->name = $data[1];
+                                    $subject->description = $data[2];
+                                    $subject->education_type_id = EducationType::where('code', $data[3])->first()->id;
+                                    $subject->is_mapeh = $data[4];
+                                    $subject->is_tle = $data[5];
+                                    $subject->updated_at = $timestamp;
+                                    $subject->updated_by = Auth::user()->id;
+                                    $subject->update();
+                                } else {
+                                    $subject = Subject::create([
+                                        'code' => $data[0],
+                                        'name' => $data[1],
+                                        'description' => $data[2],
+                                        'education_type_id' => EducationType::where('code', $data[3])->first()->id,
+                                        'is_mapeh' =>$data[4],
+                                        'is_tle' =>$data[5],
+                                        'created_at' => $timestamp,
+                                        'created_by' => Auth::user()->id
+                                    ]);
+                                }
+                            }
+                        }
+                    }
+                }
+                fclose($files);
+            }
+        }
 
-        Excel::import(new SubjectImport, $path);
-        return redirect('/academics/academics/subjects'); 
+        $data = array(
+            'message' => 'success'
+        );
+
+        echo json_encode( $data );
+        exit();
     }
 
 }
