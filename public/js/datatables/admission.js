@@ -183,4 +183,28 @@ jQuery(document).ready(function (e) {
 		});
 	});
 	
+	Dropzone.autoDiscover = false;
+	var accept = ".csv";
+
+	$('#import-class-dropzone').dropzone({
+		acceptedFiles: accept,
+		init: function () {
+		this.on("processing", function(file) {
+			this.options.url = base_url + '/academics/admissions/classes/import';
+			console.log(this.options.url);
+		}).on("queuecomplete", function (file, response) {
+			// console.log(response);
+		}).on("success", function (file, response) {
+			console.log(response);
+			var data = $.parseJSON(response);
+			if (data.message == 'success') {
+				if ( $('.m_datatable').length ) {
+					$('.m_datatable').mDatatable().reload();
+				}
+			}
+		});  
+		this.on("error", function(file){if (!file.accepted) this.removeFile(file);});          
+		}
+	});
+
 });

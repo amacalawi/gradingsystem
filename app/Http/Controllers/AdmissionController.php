@@ -255,14 +255,13 @@ class AdmissionController extends Controller
         $sectioninfo->updated_at = $timestamp;
         $sectioninfo->updated_by = Auth::user()->id;
         //end sections_info
-
-
+        
         //section_subject
         $all_subjects = $request->subjects;
         $all_teachers = $request->teachers;
         $ids_sections_subjects = $request->sections_subjects;
         $counter = 1;
-
+        
         foreach($ids_sections_subjects as $id_section_subject)
         {
             $ss = SectionsSubjects::find($id_section_subject);
@@ -621,16 +620,160 @@ class AdmissionController extends Controller
         return $education_code;
     }
 
-    public function import_class(Request $request)
+    public function import(Request $request)
     {
-        $this->validate( $request, [
-            'import_file' => 'required|mimes:xls,xlsx'
-        ]);
-        
-        $path = $request->file('import_file')->store('Imports');
+        foreach($_FILES as $file)
+        {  
+            $row = 0; $timestamp = date('Y-m-d H:i:s');
+            if (($files = fopen($file['tmp_name'], "r")) !== FALSE) 
+            {
+                while (($data = fgetcsv($files, 3000, ",")) !== FALSE) 
+                {
+                    $row++;
+                    if ($row > 1) { 
+                        if ($data[0] !== '') {
 
-        Excel::import(new ClassImport, $path);
-        return redirect('/academics/admissions/classes'); 
+                            $batch_id = Batch::where('is_active', 1)->where('status','Current')->pluck('id');
+                            
+                            if(!$batch_id->isEmpty())
+                            {   
+                                $exist_type = EducationType::where('code', $data[2])->pluck('id');
+                                $exist_section = Section::where('code', $data[0])->where('education_type_id', $exist_type[0])->first();
+                                $exist_level = Level::where('code', $data[1])->where('education_type_id', $exist_type[0])->first();
+                                $exist_adviser = Staff::where('identification_no', $data[3])->first();
+
+                                if($exist_section && $exist_level && $exist_adviser)
+                                {
+                                    $classcode = $this->generate_classcode($exist_type[0], $exist_section->id, $batch_id[0]);
+                                    $exist_classcode = SectionInfo::where('classcode', $classcode)->get();
+                                   
+                                    if (($exist_classcode->count() > 0) ) { //UPDATE
+                                        
+                                        //Section info
+                                        $sectioninfo = SectionInfo::find($exist_classcode->first()->id);
+                                        $sectioninfo->batch_id = $batch_id[0];
+                                        $sectioninfo->section_id = Section::where('code', $data[0])->first()->id;
+                                        $sectioninfo->adviser_id = Staff::where('identification_no', $data[3])->first()->id;
+                                        $sectioninfo->level_id = Level::where('code', $data[1])->first()->id;
+                                        $sectioninfo->education_type_id = EducationType::where('code', $data[2])->first()->id;
+                                        $sectioninfo->classcode = $classcode;
+                                        $sectioninfo->updated_at = $timestamp;
+                                        $sectioninfo->updated_by = Auth::user()->id;
+                                        $sectioninfo->update();
+
+                                        //Section subject
+                                        $sections_subjects_str = $data[4];
+                                        $sections_subjects_arr = explode(",", $sections_subjects_str);
+
+                                        $ss = SectionsSubjects::where('section_info_id', $exist_classcode->first()->id);
+                                        $ss->delete();
+                                       
+                                        foreach($sections_subjects_arr as $sections_subjects)
+                                        {
+                                            $sec_subs = explode("&", $sections_subjects);
+                                            $exist_subject = Subject::where('code', $sec_subs[0])->first();
+                                            $exist_teacher = Staff::where('identification_no', $sec_subs[1])->where('type', 'Teacher')->first();
+
+                                            if($exist_subject && $exist_teacher)
+                                            {  
+                                                $sections_subjects = SectionsSubjects::create([
+                                                    'batch_id' => $batch_id[0],
+                                                    'subject_id' => Subject::where('code', $sec_subs[0])->first()->id,
+                                                    'teacher_id' => Staff::where('identification_no', $sec_subs[1])->where('type', 'Teacher')->first()->id,
+                                                    'section_info_id' => $exist_classcode->first()->id,
+                                                    'created_at' => $timestamp,
+                                                    'created_by' => Auth::user()->id
+                                                ]); 
+                                                /*
+                                                $sectionsubject = SectionsSubjects::where([
+                                                    'section_info_id' => $exist_classcode->first()->id,
+                                                ])
+                                                ->update([
+                                                    'batch_id' => $batch_id[0],
+                                                    'subject_id' => Subject::where('code', $sec_subs[0])->first()->id,
+                                                    'teacher_id' => Staff::where('identification_no', $sec_subs[1])->where('type', 'Teacher')->first()->id,
+                                                    'updated_at' => $timestamp,
+                                                    'updated_by' => Auth::user()->id,
+                                                ]);
+                                                */
+                                            }
+                                        }
+
+                                    }else { //ADD
+
+                                        $check_sec_sub = $this->validate_sec_sub($data[4]);
+
+                                        if($check_sec_sub > 0)
+                                        {
+                                            $sectioninfo = SectionInfo::create([
+                                                'batch_id' => $batch_id[0],
+                                                'section_id' => $exist_section->id,
+                                                'adviser_id' => $exist_adviser->id,
+                                                'level_id' => $exist_level->id,
+                                                'education_type_id' => $exist_type[0],
+                                                'classcode' => $classcode,
+                                                'created_at' => $timestamp,
+                                                'created_by' => Auth::user()->id
+                                            ]);
+                                            
+                                            //Section subject
+                                            $sections_subjects_str = $data[4];
+                                            $sections_subjects_arr = explode(",", $sections_subjects_str);
+                                            foreach($sections_subjects_arr as $sections_subjects)
+                                            {
+                                                $sec_subs = explode("&", $sections_subjects);
+                                                $exist_subject = Subject::where('code', $sec_subs[0])->first();
+                                                $exist_teacher = Staff::where('identification_no', $sec_subs[1])->where('type', 'Teacher')->first();
+
+                                                if($exist_subject && $exist_teacher)
+                                                {   
+                                                    $sections_subjects = SectionsSubjects::create([
+                                                        'batch_id' => $batch_id[0],
+                                                        'subject_id' => Subject::where('code', $sec_subs[0])->first()->id,
+                                                        'teacher_id' => Staff::where('identification_no', $sec_subs[1])->where('type', 'Teacher')->first()->id,
+                                                        'section_info_id' => $sectioninfo->id,
+                                                        'created_at' => $timestamp,
+                                                        'created_by' => Auth::user()->id
+                                                    ]);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    
+                                }
+                            }
+                        }
+                    }
+                }
+                fclose($files);
+            }
+        }
+
+        $data = array(
+            'message' => 'success'
+        );
+
+        echo json_encode( $data );
+        exit();
+    }
+
+    public function validate_sec_sub($sec_sub)
+    {
+        $check_sec_sub = 0;
+        $sections_subjects_str = $sec_sub;
+        $sections_subjects_arr = explode(",", $sections_subjects_str);
+        foreach($sections_subjects_arr as $sections_subjects)
+        {
+            $sec_subs = explode("&", $sections_subjects);
+            $exist_subject = Subject::where('code', $sec_subs[0])->first();
+            $exist_teacher = Staff::where('identification_no', $sec_subs[1])->where('type', 'Teacher')->first();
+            if($exist_subject && $exist_teacher)
+            {   
+                $check_sec_sub++;
+            }
+        }
+
+        return $check_sec_sub;
     }
 
 }

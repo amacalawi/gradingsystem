@@ -488,11 +488,12 @@ $(document).ready(function(){
         $('#subject-teacher-main-div').css("display","block");
         
     }
-    //if ( $('#option-subject').css('display') == 'block' ){
-        //loadSubjects();
-    //}
-    //if ($('#option-teacher').css('display') == 'block' ){
-        //loadTeacher();
-    //}
-
+    
+    if ( ( $('.no-subject').css('display') == 'block' ) || ( $('.no-teacher').css('display') == 'block' ) ){
+        getSubjectList_type($('#type').val())
+        getTeacherList_type($('#type').val())
+        $('#subject-teacher-main-div').css("display","block");
+        $("#remove-div_1").append('<label style="visibility:hidden;"> Delete: </label><br/>');
+        $("#remove-div_1").append('<button style="visibility:hidden;" name="remove-button" type="button" id="remove_1" class="btn btn-lg remove">s</button>');
+    }
 });

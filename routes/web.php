@@ -289,7 +289,7 @@ Route::prefix('academics')->group(function () {
         Route::get('levels/all-inactive', 'LevelsController@all_inactive')->name('levels.all.inactive');
         Route::put('levels/update-status/{id}', 'LevelsController@update_status')->name('levels.update.status');
         Route::get('levels/get-all-levels-bytype/{type}', 'LevelsController@get_all_levels_bytype');
-        Route::post('levels/import-levels', 'LevelsController@import_level')->name('levels.fetch.import.level');
+        Route::post('levels/import', 'LevelsController@import')->name('levels.import');
         /* End Levels Routes */
 
         /* Subjects */
@@ -307,7 +307,7 @@ Route::prefix('academics')->group(function () {
         Route::get('subjects/get-all-subjects', 'SubjectsController@get_all_subjects');
         Route::get('subjects/get-all-subjects-bytype/{type}', 'SubjectsController@get_all_subjects_bytype');
         Route::get('subjects/get-all-teachers', 'SubjectsController@get_all_teachers'); 
-        Route::post('subjects/import-subjects', 'SubjectsController@import_subject')->name('subjects.fetch.import.subject');
+        Route::post('subjects/import', 'SubjectsController@import')->name('subjects.import');
         /* End Subjects Routes */
 
         /* Staff */ //move this in future
@@ -336,7 +336,8 @@ Route::prefix('academics')->group(function () {
         Route::get('classes/get-student-admitted-section/{secid?}', 'AdmissionController@get_this_admitted_section');
         Route::get('classes/save-this-admitted/{id?}/{secid?}', 'AdmissionController@save_this_admitted');
         Route::get('classes/delete-this-admitted/{id?}/{secid?}', 'AdmissionController@delete_this_admitted');
-        Route::post('classes/import-classes', 'AdmissionController@import_class')->name('sectionstudent.fetch.import.class');
+        //Route::post('classes/import-classes', 'AdmissionController@import_class')->name('sectionstudent.fetch.import.class');
+        Route::post('classes/import', 'AdmissionController@import')->name('sectionstudent.import');
         /* End Admissions Routes */
     });
 
