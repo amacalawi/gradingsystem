@@ -92,13 +92,12 @@ class SubjectsController extends Controller
         $flashMessage = self::messages();
         $segment = request()->segment(4);
         $types = (new EducationType)->all_education_types();
-        $material = '1'; //default
         if (count($flashMessage) && $flashMessage[0]['module'] == 'subject') {
             $subject = (new Subject)->fetch($flashMessage[0]['id']);
         } else {
             $subject = (new Subject)->fetch($id);
         }
-        return view('modules/academics/subjects/add')->with(compact('menus', 'material', 'types', 'subject', 'segment', 'flashMessage'));
+        return view('modules/academics/subjects/add')->with(compact('menus', 'types', 'subject', 'segment', 'flashMessage'));
     }
     
     public function edit(Request $request, $id)
@@ -113,7 +112,6 @@ class SubjectsController extends Controller
     
     public function store(Request $request)
     {   
-
         if($request->material > 1){
             $exist_material = Subject::where('material_id', $request->material)->first();
         } else {
@@ -161,35 +159,51 @@ class SubjectsController extends Controller
     }
 
     public function update(Request $request, $id)
-    {    
-        $timestamp = date('Y-m-d H:i:s');
-        $subject = Subject::find($id);
+    {
+        if($request->material > 1){
+            $exist_material = Subject::where('material_id', $request->material)->first();
+        } else {
+            $exist_material = 0;
+        }   
 
-        if(!$subject) {
-            throw new NotFoundHttpException();
-        }
+        if(!$exist_material)
+        {
+            $timestamp = date('Y-m-d H:i:s');
+            $subject = Subject::find($id);
+            if(!$subject) {
+                throw new NotFoundHttpException();
+            }
 
-        $subject->code = $request->code;
-        $subject->name = $request->name;
-        $subject->description = $request->description;
-        $subject->education_type_id = $request->type;
-        $subject->is_mapeh = ($request->is_mapeh !== NULL) ? 1 : 0; 
-        $subject->is_tle = ($request->is_tle !== NULL) ? 1 : 0; 
-        $subject->updated_at = $timestamp;
-        $subject->updated_by = Auth::user()->id;
+            $subject->code = $request->code;
+            $subject->name = $request->name;
+            $subject->description = $request->description;
+            $subject->education_type_id = $request->type;
+            $subject->is_mapeh = ($request->is_mapeh !== NULL) ? 1 : 0; 
+            $subject->is_tle = ($request->is_tle !== NULL) ? 1 : 0;
+            $subject->material_id = ($request->material !== NULL) ? $request->material : 1;
+            $subject->updated_at = $timestamp;
+            $subject->updated_by = Auth::user()->id;
 
-        if ($subject->update()) {
+            if ($subject->update()) {
 
+                $data = array(
+                    'title' => 'Well done!',
+                    'text' => 'The subject has been successfully updated.',
+                    'type' => 'success',
+                    'class' => 'btn-brand'
+                );
+                
+            }
+        } else {
             $data = array(
-                'title' => 'Well done!',
-                'text' => 'The subject has been successfully updated.',
-                'type' => 'success',
+                'title' => 'Warning',
+                'text' => 'The material already exist in subject',
+                'type' => 'warning',
                 'class' => 'btn-brand'
             );
-
-            echo json_encode( $data ); exit();
-
         }
+
+        echo json_encode( $data ); exit();
     }
 
     public function update_status(Request $request, $id)

@@ -25,6 +25,7 @@ class Subject extends Model
                 'education_type_id' => ($subject->education_type_id) ? $subject->education_type_id : '',
                 'is_mapeh' => ($subject->is_mapeh) ? $subject->is_mapeh : '',
                 'is_tle' => ($subject->is_tle) ? $subject->is_tle : '',
+                'material_id' => ($subject->material_id) ? $subject->material_id : '',
             );
         } else {
             $results = array(
@@ -34,8 +35,9 @@ class Subject extends Model
                 'description' => '',
                 'schoolyear_id' => '',
                 'education_type_id' => '',
-                'is_mapeh' => '',
-                'is_tle' => '',
+                'is_mapeh' => '1',
+                'is_tle' => '1',
+                'material_id' => '1',
             );
         }
         return (object) $results;
