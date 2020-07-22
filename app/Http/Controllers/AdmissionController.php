@@ -85,13 +85,13 @@ class AdmissionController extends Controller
 
     public function all_inactive(Request $request)
     {
-        $batch_id = Batch::where('is_active', 1)->where('status','Current')->pluck('id'); //current batch
+        $batch_id = Batch::where('is_active', 1)->where('status', 'Current')->pluck('id'); //current batch
         $res = SectionInfo::select('sections_info.classcode','sections_info.updated_at','sections_info.created_at','sections_info.id','sections_info.batch_id','sections_info.section_id','sections_info.adviser_id','sections_info.level_id','sections.name as secname','staffs.user_id','levels.name as lvlname')
             ->join('sections','sections.id','=','sections_info.section_id')
             ->join('staffs','staffs.id','=','sections_info.adviser_id')
             ->join('levels','levels.id','=','sections_info.level_id')
-            ->where('sections_info.is_active', 0)
-            ->where('sections_info.batch_id', $batch_id[0])
+            ->where('sections_info.is_active', 1)
+            ->where('sections_info.batch_id', '!=', $batch_id[0])
             ->orderBy('sections_info.id', 'DESC')
             ->get();
         
@@ -140,61 +140,73 @@ class AdmissionController extends Controller
             if(!$batch_id){
                 $batch_id[0] = '0';
             } 
-        
-            //sections_info
-            $sectioninfo = SectionInfo::create([
-                'batch_id' => $batch_id[0],
-                'section_id' => $request->section,
-                'adviser_id' => $request->adviser,
-                'level_id' => $request->level,
-                'education_type_id' => $request->type,
-                'classcode' => $classcode,
-                'created_at' => $timestamp,
-                'created_by' => Auth::user()->id
-            ]);
-            
-            
-            //sections_subjects
-            $subjects = $request->subjects;
-            $teachers = $request->teachers;
 
-            if($subjects[0] != "0" && $teachers[0] != "0")
+            $exist_classcode = SectionInfo::where('classcode', $classcode)->get();  //die(var_dump($classcode));                    
+            if (($exist_classcode->count() <= 0) )
             {
-                foreach ($subjects as $key => $subject) {
-                    $sections_subjects = SectionsSubjects::create([
-                        'batch_id' => $batch_id[0],
-                        'subject_id' => $subject,
-                        'teacher_id' => $teachers[$key],
-                        'section_info_id' => $sectioninfo->id,
-                        'created_at' => $timestamp,
-                        'created_by' => Auth::user()->id
-                    ]);
-                } 
-            }
+                //sections_info
+                $sectioninfo = SectionInfo::create([
+                    'batch_id' => $batch_id[0],
+                    'section_id' => $request->section,
+                    'adviser_id' => $request->adviser,
+                    'level_id' => $request->level,
+                    'education_type_id' => $request->type,
+                    'classcode' => $classcode,
+                    'created_at' => $timestamp,
+                    'created_by' => Auth::user()->id
+                ]);
+                
+                
+                //sections_subjects
+                $subjects = $request->subjects;
+                $teachers = $request->teachers;
 
-            
-            $members = $request->list_admitted_student;
-            if($members)
-            {
-                foreach ($members as $key => $member) {
-                    //admission
-                    $enliststudent = Admission::create([
-                        'batch_id' => $batch_id[0],
-                        'section_id' => $request->section,
-                        'student_id' =>  $member,
-                        'status' => 'admit',
-                        'created_at' => $timestamp,
-                        'created_by' => Auth::user()->id
-                    ]);
+                if($subjects[0] != "0" && $teachers[0] != "0")
+                {
+                    foreach ($subjects as $key => $subject) {
+                        $sections_subjects = SectionsSubjects::create([
+                            'batch_id' => $batch_id[0],
+                            'subject_id' => $subject,
+                            'teacher_id' => $teachers[$key],
+                            'section_info_id' => $sectioninfo->id,
+                            'created_at' => $timestamp,
+                            'created_by' => Auth::user()->id
+                        ]);
+                    } 
                 }
-            }
 
-            $data = array(
-                'title' => 'Well done!',
-                'text' => 'The classes has been successfully saved.',
-                'type' => 'success',
-                'class' => 'btn-brand'
-            );
+                
+                $members = $request->list_admitted_student;
+                if($members)
+                {
+                    foreach ($members as $key => $member) {
+                        //admission
+                        $enliststudent = Admission::create([
+                            'batch_id' => $batch_id[0],
+                            'section_id' => $request->section,
+                            'student_id' =>  $member,
+                            'status' => 'admit',
+                            'created_at' => $timestamp,
+                            'created_by' => Auth::user()->id
+                        ]);
+                    }
+                }
+
+                $data = array(
+                    'title' => 'Well done!',
+                    'text' => 'The classes has been successfully saved.',
+                    'type' => 'success',
+                    'class' => 'btn-brand'
+                );
+            
+            } else {
+                $data = array(
+                    'title' => 'Warning',
+                    'text' => 'Class already exist.',
+                    'type' => 'warning',
+                    'class' => 'btn-brand'
+                );
+            }
         }
         else 
         {
@@ -684,18 +696,6 @@ class AdmissionController extends Controller
                                                     'created_at' => $timestamp,
                                                     'created_by' => Auth::user()->id
                                                 ]); 
-                                                /*
-                                                $sectionsubject = SectionsSubjects::where([
-                                                    'section_info_id' => $exist_classcode->first()->id,
-                                                ])
-                                                ->update([
-                                                    'batch_id' => $batch_id[0],
-                                                    'subject_id' => Subject::where('code', $sec_subs[0])->first()->id,
-                                                    'teacher_id' => Staff::where('identification_no', $sec_subs[1])->where('type', 'Teacher')->first()->id,
-                                                    'updated_at' => $timestamp,
-                                                    'updated_by' => Auth::user()->id,
-                                                ]);
-                                                */
                                             }
                                         }
 

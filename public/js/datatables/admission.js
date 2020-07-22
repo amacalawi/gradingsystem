@@ -59,10 +59,12 @@ var DatatableDataLocalDemo = function () {
 			sortable: false,
 			textAlign: 'center',
 			selector: {class: 'm-checkbox--solid m-checkbox--brand'}
-		}, {
+		}, 
+		/*{
 			field: "admissionSecCode",
 			title: "Classcode"
-		}, {
+		},*/
+		{
 			field: "admissionSecName",
 			title: "Section"
 		}, {
@@ -92,8 +94,12 @@ var DatatableDataLocalDemo = function () {
 
                 return '\
                     <a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/admissions/classes/edit/' + row.admissionId +'"><i class="la la-edit"></i></a>\
-                    <a title="remove this" data-row-id="' + row.admissionId + '" action="Remove" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-remove"></i></a>\
 				';
+
+				/*return '\
+                    <a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/admissions/classes/edit/' + row.admissionId +'"><i class="la la-edit"></i></a>\
+                    <a title="remove this" data-row-id="' + row.admissionId + '" action="Remove" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-remove"></i></a>\
+				';*/
 			}
 		}]
 	

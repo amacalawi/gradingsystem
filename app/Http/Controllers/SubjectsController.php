@@ -92,12 +92,13 @@ class SubjectsController extends Controller
         $flashMessage = self::messages();
         $segment = request()->segment(4);
         $types = (new EducationType)->all_education_types();
+        $material = '1'; //default
         if (count($flashMessage) && $flashMessage[0]['module'] == 'subject') {
             $subject = (new Subject)->fetch($flashMessage[0]['id']);
         } else {
             $subject = (new Subject)->fetch($id);
         }
-        return view('modules/academics/subjects/add')->with(compact('menus', 'types', 'subject', 'segment', 'flashMessage'));
+        return view('modules/academics/subjects/add')->with(compact('menus', 'material', 'types', 'subject', 'segment', 'flashMessage'));
     }
     
     public function edit(Request $request, $id)
@@ -112,30 +113,48 @@ class SubjectsController extends Controller
     
     public function store(Request $request)
     {   
-        
-        $timestamp = date('Y-m-d H:i:s');
 
-        $subject = Subject::create([
-            'code' => $request->code,
-            'name' => $request->name,
-            'description' => $request->description,
-            'education_type_id' => $request->type,
-            'is_mapeh' => ($request->is_mapeh !== NULL) ? 1 : 0,
-            'is_tle' => ($request->is_tle !== NULL) ? 1 : 0, 
-            'created_at' => $timestamp,
-            'created_by' => Auth::user()->id
-        ]);
-        /* 
-        if (!$subject) {
-            throw new NotFoundHttpException();
+        if($request->material > 1){
+            $exist_material = Subject::where('material_id', $request->material)->first();
+        } else {
+            $exist_material = 0;
         }
-        */
-        $data = array(
-            'title' => 'Well done!',
-            'text' => 'The subject has been successfully saved.',
-            'type' => 'success',
-            'class' => 'btn-brand'
-        );
+
+        if(!$exist_material){
+
+            $timestamp = date('Y-m-d H:i:s');
+
+            $subject = Subject::create([
+                'code' => $request->code,
+                'name' => $request->name,
+                'description' => $request->description,
+                'education_type_id' => $request->type,
+                'is_mapeh' => ($request->is_mapeh !== NULL) ? 1 : 0,
+                'is_tle' => ($request->is_tle !== NULL) ? 1 : 0,
+                'material_id' => ($request->material !== NULL) ? $request->material : 1,
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+            /* 
+            if (!$subject) {
+                throw new NotFoundHttpException();
+            }
+            */
+            $data = array(
+                'title' => 'Well done!',
+                'text' => 'The subject has been successfully saved.',
+                'type' => 'success',
+                'class' => 'btn-brand'
+            );
+
+        } else {
+            $data = array(
+                'title' => 'Warning',
+                'text' => 'The material already exist in subject',
+                'type' => 'warning',
+                'class' => 'btn-brand'
+            );
+        }
 
         echo json_encode( $data ); exit();
 

@@ -207,7 +207,17 @@
                 });
             }
         });
-        
+
+        this.$body.on('change', 'input[name=material]', function (e){
+            e.preventDefault();
+            if ( $('input[name=material]:checked').val() == 1 ){
+                $('input[name=is_mapeh]').prop('checked', true).removeAttr("disabled");
+                $('input[name=is_tle]').prop('checked', true).removeAttr("disabled");
+            } else {
+                $('input[name=is_mapeh]').prop('checked', false).attr("disabled", true);
+                $('input[name=is_tle]').prop('checked', false).attr("disabled", true);
+            }
+        });
     }
 
     //init subject

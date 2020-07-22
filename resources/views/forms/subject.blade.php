@@ -85,14 +85,50 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-12">
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <div class="form-group m-form__group">
+                <label class="m-checkbox m-checkbox--solid" style="position: absolute;">
+                    {{ Form::radio('material', '1', ($material == '1') ? 1 : 0 ) }}
+                    Substance <span></span>
+                </label>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group m-form__group">
+                    <label class="m-checkbox m-checkbox--solid" style="position: absolute;">
+                    {{ Form::radio('material', '2', ($material == '2') ? 1 : 0 ) }}
+                    Conduct <span></span>
+                </label>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group m-form__group">
+                    <label class="m-checkbox m-checkbox--solid" style="position: absolute;">
+                    {{ Form::radio('material', '3', ($material == '3') ? 1 : 0 ) }}
+                    Homeroom <span></span>
+                </label>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group m-form__group">
+                    <label class="m-checkbox m-checkbox--solid" style="position: absolute;">
+                    {{ Form::radio('material', '4', ($material == '4') ? 1 : 0 ) }}
+                    Co-curricular <span></span>
+                </label>
+            </div>
+        </div>        
+    </div>
+
+    
+    <div class="row mt-4 ml-2">
+        <div class="col-md-3">
             <div class="form-group m-form__group">
                 <label class="m-checkbox m-checkbox--solid" style="position: absolute;">
                     @if ($subject->is_mapeh > 0) 
                         {{ Form::checkbox('is_mapeh', '1', true, array('id' => 'parent-cell')) }}
                     @else
-                        {{ Form::checkbox('is_mapeh', '1', false, array('id' => 'parent-cell')) }}
+                        {{ Form::checkbox('is_mapeh', '1', true, array('id' => 'parent-cell')) }}
                     @endif
                     <span></span>
                 </label>    
@@ -102,15 +138,14 @@
             </div>
         </div>
     </div>
-
-    <div class="row">
+    <div class="row ml-2">
         <div class="col-md-12">
             <div class="form-group m-form__group">
                 <label class="m-checkbox m-checkbox--solid" style="position: absolute;">
                     @if ($subject->is_tle > 0) 
                         {{ Form::checkbox('is_tle', '1', true, array('id' => 'parent-cell')) }}
                     @else
-                        {{ Form::checkbox('is_tle', '1', false, array('id' => 'parent-cell')) }}
+                        {{ Form::checkbox('is_tle', '1', true, array('id' => 'parent-cell')) }}
                     @endif
                     <span></span>
                 </label>    
@@ -120,5 +155,4 @@
             </div>
         </div>
     </div>
-
 {{ Form::close() }}
