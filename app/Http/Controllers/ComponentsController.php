@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Component;
+use App\Models\ComponentQuarter;
 use App\Models\Activity;
 use App\Models\Batch;
 use App\Models\Quarter;
@@ -16,6 +17,7 @@ use App\Models\Staff;
 use App\Models\SectionsSubjects;
 use App\Models\SectionInfo;
 use App\Models\Section;
+use App\Models\EducationType;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -82,7 +84,13 @@ class ComponentsController extends Controller
                 'subject' =>  function($q) { 
                     $q->select(['id', 'name']); 
                 },
-                'quarter' =>  function($q) { 
+                'quarters' =>  function($q) { 
+                    $q->select(['components_quarters.id', 'components_quarters.component_id', 'components_quarters.quarter_id', 'quarters.name'])->join('quarters', function($join)
+                    {
+                        $join->on('quarters.id', '=', 'components_quarters.quarter_id');
+                    });
+                },
+                'edtype' =>  function($q) { 
                     $q->select(['id', 'name']); 
                 }
             ])
@@ -98,8 +106,16 @@ class ComponentsController extends Controller
                     'componentName' => $component->name,
                     'componentDescription' => $component->description,
                     'componentOrder' => $component->order,
-                    'componentType' => $component->type,
-                    'componentQuarter' => $component->quarter->name,
+                    'componentTypeID' => $component->edtype->id,
+                    'componentType' => $component->edtype->name,
+                    'componentQuarter' => $component->quarters->map(function($a, $iteration=0) { 
+                        $iteration++;
+                        if ($iteration > 1) {
+                            return '<br/>'.$a->name;
+                        }  else {
+                            return $a->name;
+                        }
+                    }),
                     'componentSubject' => $component->subject->name,
                     'componentModified' => ($component->updated_at !== NULL) ? date('d-M-Y', strtotime($component->updated_at)).'<br/>'. date('h:i A', strtotime($component->updated_at)) : date('d-M-Y', strtotime($component->created_at)).'<br/>'. date('h:i A', strtotime($component->created_at))
                 ];
@@ -120,7 +136,13 @@ class ComponentsController extends Controller
                 'subject' =>  function($q) { 
                     $q->select(['id', 'name']); 
                 },
-                'quarter' =>  function($q) { 
+                'quarters' =>  function($q) { 
+                    $q->select(['components_quarters.id', 'components_quarters.component_id', 'components_quarters.quarter_id', 'quarters.name'])->join('quarters', function($join)
+                    {
+                        $join->on('quarters.id', '=', 'components_quarters.quarter_id');
+                    });
+                },
+                'edtype' =>  function($q) { 
                     $q->select(['id', 'name']); 
                 }
             ])
@@ -137,8 +159,16 @@ class ComponentsController extends Controller
                     'componentName' => $component->name,
                     'componentDescription' => $component->description,
                     'componentOrder' => $component->order,
-                    'componentType' => $component->type,
-                    'componentQuarter' => $component->quarter->name,
+                    'componentTypeID' => $component->edtype->id,
+                    'componentType' => $component->edtype->name,
+                    'componentQuarter' => $component->quarters->map(function($a, $iteration=0) { 
+                        $iteration++;
+                        if ($iteration > 1) {
+                            return '<br/>'.$a->name;
+                        }  else {
+                            return $a->name;
+                        }
+                    }),
                     'componentSubject' => $component->subject->name,
                     'componentModified' => ($component->updated_at !== NULL) ? date('d-M-Y', strtotime($component->updated_at)).'<br/>'. date('h:i A', strtotime($component->updated_at)) : date('d-M-Y', strtotime($component->created_at)).'<br/>'. date('h:i A', strtotime($component->created_at))
                 ];
@@ -154,7 +184,13 @@ class ComponentsController extends Controller
                 'subject' =>  function($q) { 
                     $q->select(['id', 'name']); 
                 },
-                'quarter' =>  function($q) { 
+                'quarters' =>  function($q) { 
+                    $q->select(['components_quarters.id', 'components_quarters.component_id', 'components_quarters.quarter_id', 'quarters.name'])->join('quarters', function($join)
+                    {
+                        $join->on('quarters.id', '=', 'components_quarters.quarter_id');
+                    });
+                },
+                'edtype' =>  function($q) { 
                     $q->select(['id', 'name']); 
                 }
             ])
@@ -171,8 +207,16 @@ class ComponentsController extends Controller
                     'componentName' => $component->name,
                     'componentDescription' => $component->description,
                     'componentOrder' => $component->order,
-                    'componentType' => $component->type,
-                    'componentQuarter' => $component->quarter->name,
+                    'componentTypeID' => $component->edtype->id,
+                    'componentType' => $component->edtype->name,
+                    'componentQuarter' => $component->quarters->map(function($a, $iteration=0) { 
+                        $iteration++;
+                        if ($iteration > 1) {
+                            return '<br/>'.$a->name;
+                        }  else {
+                            return $a->name;
+                        }
+                    }),
                     'componentSubject' => $component->subject->name,
                     'componentModified' => ($component->updated_at !== NULL) ? date('d-M-Y', strtotime($component->updated_at)).'<br/>'. date('h:i A', strtotime($component->updated_at)) : date('d-M-Y', strtotime($component->created_at)).'<br/>'. date('h:i A', strtotime($component->created_at))
                 ];
@@ -193,7 +237,13 @@ class ComponentsController extends Controller
                 'subject' =>  function($q) { 
                     $q->select(['id', 'name']); 
                 },
-                'quarter' =>  function($q) { 
+                'quarters' =>  function($q) { 
+                    $q->select(['components_quarters.id', 'components_quarters.component_id', 'components_quarters.quarter_id', 'quarters.name'])->join('quarters', function($join)
+                    {
+                        $join->on('quarters.id', '=', 'components_quarters.quarter_id');
+                    });
+                },
+                'edtype' =>  function($q) { 
                     $q->select(['id', 'name']); 
                 }
             ])
@@ -210,8 +260,16 @@ class ComponentsController extends Controller
                     'componentName' => $component->name,
                     'componentDescription' => $component->description,
                     'componentOrder' => $component->order,
-                    'componentType' => $component->type,
-                    'componentQuarter' => $component->quarter->name,
+                    'componentTypeID' => $component->edtype->id,
+                    'componentType' => $component->edtype->name,
+                    'componentQuarter' => $component->quarters->map(function($a, $iteration=0) { 
+                        $iteration++;
+                        if ($iteration > 1) {
+                            return '<br/>'.$a->name;
+                        }  else {
+                            return $a->name;
+                        }
+                    }),
                     'componentSubject' => $component->subject->name,
                     'componentModified' => ($component->updated_at !== NULL) ? date('d-M-Y', strtotime($component->updated_at)).'<br/>'. date('h:i A', strtotime($component->updated_at)) : date('d-M-Y', strtotime($component->created_at)).'<br/>'. date('h:i A', strtotime($component->created_at))
                 ];
@@ -225,7 +283,7 @@ class ComponentsController extends Controller
         $segment = request()->segment(4);
         $component = (new Component)->fetch($id);
         $activities = (new Activity)->lookup('component_id', $id);
-        $types = (new Component)->types();
+        $types = (new EducationType)->all_education_types();
         $quarters = (new Quarter)->all_quarters();
         $subjects = (new Subject)->all_subjects();
         $sections = (new Section)->all_sections();
@@ -239,8 +297,8 @@ class ComponentsController extends Controller
         $segment = request()->segment(4);
         $component = (new Component)->fetch($id);
         $activities = (new Activity)->lookup('component_id', $id);
-        $types = (new Component)->types();
-        $quarters = (new Quarter)->all_quarters();
+        $types = (new EducationType)->all_education_types();
+        $quarters = (new Component)->all_quarters($id);
         $subjects = (new Subject)->all_subjects();
         $sections = (new Section)->all_sections();
         return view('modules/academics/gradingsheets/components/edit')->with(compact('menus', 'component', 'segment', 'quarters', 'subjects', 'activities', 'types', 'sections'));
@@ -254,11 +312,11 @@ class ComponentsController extends Controller
 
         $component = Component::create([
             'batch_id' => (new Batch)->get_current_batch(),
-            'quarter_id' => $request->quarter_id,
             'section_id' => $request->section_id,
             'subject_id' => $request->subject_id,
             'percentage' => $request->percentage,
-            'type' => $request->type,
+            'education_type_id' => $request->education_type_id,
+            'material_id' => (new Subject)->where('id', $request->subject_id)->first()->material_id,
             'name' => $request->name,
             'description' => $request->description,
             'palette' => $request->palette,
@@ -269,6 +327,17 @@ class ComponentsController extends Controller
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
+
+        foreach ($request->quarter_id as $quarter) {
+            $component_quarter = ComponentQuarter::create([
+                'component_id' => $component->id,
+                'batch_id' => (new Batch)->get_current_batch(),
+                'quarter_id' => $quarter,
+                'education_type_id' => $request->education_type_id,
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+        }
 
         /*
             if (!empty($request->activity_name)) {
@@ -314,11 +383,11 @@ class ComponentsController extends Controller
         }
 
         if (Auth::user()->type == 'administrator') {
-            $component->quarter_id = $request->quarter_id;
             $component->section_id = $request->section_id;
             $component->subject_id = $request->subject_id;
             $component->percentage = $request->percentage;
-            $component->type = $request->type;
+            $component->education_type_id = $request->education_type_id;
+            $component->material_id = (new Subject)->where('id', $request->subject_id)->first()->material_id;
             $component->name = $request->name;
             $component->description = $request->description;
             $component->palette = $request->palette;
@@ -328,6 +397,20 @@ class ComponentsController extends Controller
             $component->updated_at = $timestamp;
             $component->updated_by = Auth::user()->id;
             $component->update();
+
+            ComponentQuarter::where('component_id', $id)->update(['updated_at' => $timestamp, 'updated_by' => Auth::user()->id,'is_active' => 0]);
+            foreach ($request->quarter_id as $quarter) {
+                $component_quarter = ComponentQuarter::where(['component_id' => $id, 'quarter_id' => $quarter])
+                ->update([
+                    'component_id' => $component->id,
+                    'quarter_id' => $quarter,
+                    'education_type_id' => $request->education_type_id,
+                    'updated_at' => $timestamp,
+                    'updated_by' => Auth::user()->id,
+                    'is_active' => 1
+                ]);
+            }
+
         } else {
             Activity::where('component_id', $id)->update(['is_active' => 0]);
             if (!empty($request->activity_name)) {
@@ -480,4 +563,51 @@ class ComponentsController extends Controller
         }   
     }
 
+    public function reload_quarter($type)
+    {
+        $arr['quarters'] = (new Quarter)
+        // ->whereNotIn('id',
+        //     (new ComponentQuarter)->select('quarter_id')->where([
+        //         'is_active' => 1,
+        //         'education_type_id' => $type,
+        //         'batch_id' => (new Batch)->get_current_batch()
+        //     ])
+        // )
+        ->where([
+            'is_active' => 1, 
+            'education_type_id' => $type
+        ])
+        ->orderBy('id', 'ASC')->get();
+
+        $arr['sections'] = (new Section)
+        ->where([
+            'is_active' => 1, 
+            'education_type_id' => $type
+        ])
+        ->orderBy('id', 'ASC')->get();
+
+        echo json_encode( $arr ); exit();
+    }
+
+    public function reload_subject($section)
+    {
+        $arr['subjects'] = (new Subject)
+        ->whereIn('id',
+            SectionsSubjects::select('subject_id')
+            ->whereIn('section_info_id', 
+                SectionInfo::select('id')->where([
+                    'batch_id' => (new Batch)->get_current_batch(), 
+                    'is_active' => 1,
+                    'section_id' => $section
+                ])
+            )->where([
+                'batch_id' => (new Batch)->get_current_batch(),
+                'is_active' => 1
+            ])
+        )
+        ->where(['is_active' => 1])
+        ->orderBy('id', 'ASC')->get();
+
+        echo json_encode( $arr ); exit();
+    }
 }

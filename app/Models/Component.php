@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\GradingSheet;
 use App\Models\Batch;
 use App\Models\Activity;
+use App\Models\Quarter;
+use App\Models\Component;
 
 class Component extends Model
 {	
@@ -17,15 +19,26 @@ class Component extends Model
 
     public function fetch($id)
     {
-        $component = self::find($id);
-        if ($component) {
+        $component = self::with([
+            'quarters' =>  function($q) { 
+                $q->select(['components_quarters.id', 'components_quarters.component_id', 'components_quarters.quarter_id', 'quarters.name'])->join('quarters', function($join)
+                {
+                    $join->on('quarters.id', '=', 'components_quarters.quarter_id');
+                });
+            }
+        ])
+        ->where('id', $id)->get();
+
+        if ($component->count() > 0) {
+            $component = $component->first();
             $results = array(
                 'id' => ($component->id) ? $component->id : '',
                 'batch_id' => ($component->batch_id) ? $component->batch_id : '',
-                'quarters' => '',
+                'quarters' =>  ($component->id) ? $component->quarters->map(function($a) { return $a->quarter_id; }) : '',
                 'section_id' => ($component->section_id) ? $component->section_id : '',
                 'subject_id' => ($component->subject_id) ? $component->subject_id : '',
-                'type' => ($component->type) ? $component->type : '',
+                'education_type_id' => ($component->education_type_id) ? $component->education_type_id : '',
+                'material_id' => ($component->material_id) ? $component->material_id : '',
                 'percentage' => ($component->percentage) ? $component->percentage : '',
                 'name' => ($component->name) ? $component->name : '',
                 'description' => ($component->description) ? $component->description : '',
@@ -45,7 +58,8 @@ class Component extends Model
                 'quarters' => '',
                 'section_id' => '',
                 'subject_id' => '',
-                'type' => '',
+                'education_type_id' => '',
+                'material_id' => '',
                 'percentage' => '',
                 'name' => '',
                 'description' => '',
@@ -70,7 +84,7 @@ class Component extends Model
 
     public function quarters()
     {
-        return $this->hasMany('App\Models\ComponentQuarter', 'component_id', 'id');    
+        return $this->hasMany('App\Models\ComponentQuarter', 'component_id', 'id')->where('components_quarters.is_active', 1);
     }
 
     public function activities()
@@ -83,9 +97,9 @@ class Component extends Model
         return $this->belongsTo('App\Models\Subject');
     }
 
-    public function quarter()
-    {   
-        return $this->belongsTo('App\Models\Quarter');
+    public function edtype()
+    {
+        return $this->belongsTo('App\Models\EducationType', 'education_type_id', 'id');
     }
 
     public function get_components_via_gradingsheet($id)
@@ -96,10 +110,20 @@ class Component extends Model
             },
         ])->where([
             'batch_id' => (new Batch)->get_current_batch(),
-            'quarter_id' => (new GradingSheet)->get_column_via_identifier('quarter_id', $id),
+            'education_type_id' => (new GradingSheet)->get_column_via_identifier('education_type_id', $id),
             'subject_id' => (new GradingSheet)->get_column_via_identifier('subject_id', $id),
             'is_active' => 1
-        ])->orderBy('id', 'ASC')->get();
+        ])
+        ->whereIn('id', 
+            (new ComponentQuarter)->select('component_id')
+            ->where([
+                'batch_id' => (new Batch)->get_current_batch(),
+                'education_type_id' => (new GradingSheet)->get_column_via_identifier('education_type_id', $id),
+                'quarter_id' => (new GradingSheet)->get_column_via_identifier('quarter_id', $id),
+                'is_active' => 1
+            ])
+        )
+        ->orderBy('id', 'ASC')->get();
 
         $components = $components->map(function($component) {
             $cell = 1; $sum = 0;
@@ -109,7 +133,6 @@ class Component extends Model
             return (object) [
                 'id' => $component->id,
                 'batch_id' => $component->batch_id,
-                'quarter_id' => $component->quarter_id,
                 'subject_id' => $component->subject_id,
                 'name' => $component->name,
                 'palette' => $component->palette,
@@ -124,6 +147,31 @@ class Component extends Model
         });
 
         return $components;
+    }
+
+    public function all_quarters($componentID)
+    {	
+    	$quarters = Quarter::where([
+            'is_active' => 1,
+            'education_type_id' => (new Component)->where('id', $componentID)->pluck('education_type_id')
+        ])
+        ->orderBy('id', 'asc')->get();
+
+        $quarterx = array();
+        foreach ($quarters as $quarter) {
+            $quarterx[] = array(
+                $quarter->id => $quarter->name
+            );
+        }
+
+        $quarters = array();
+        foreach($quarterx as $quarter) {
+            foreach($quarter as $key => $val) {
+                $quarters[$key] = $val;
+            }
+        }
+
+        return $quarters;
     }
 }
 

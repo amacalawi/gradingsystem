@@ -922,31 +922,31 @@ class DatabaseSeeder extends Seeder
 
         $transmutations = [
             [   
-                'code' => 'ce-transmutation',
-                'name' => 'Childhood Education Transmutation',
-                'description' => 'Childhood Education Transmutation',
-                'type' => 'childhood-education',
+                'code' => 'early-childhood-transmutation',
+                'name' => 'Early Childhood Transmutation',
+                'description' => 'Early Childhood Description Transmutation',
+                'education_type_id' => '1',
                 'created_by' => 1
             ], 
             [   
-                'code' => 'pe-transmutation',
-                'name' => 'Primary Education Transmutation',
-                'description' => 'Primary Education Transmutation',
-                'type' => 'primary-education',
+                'code' => 'grade-school-transmutation',
+                'name' => 'Grade School Transmutation',
+                'description' => 'Grade School Description Transmutation',
+                'education_type_id' => '2',
                 'created_by' => 1
             ], 
             [   
-                'code' => 'se-transmutation',
-                'name' => 'Secondary Education Transmutation',
-                'description' => 'Secondary Education Transmutation',
-                'type' => 'secondary-education',
+                'code' => 'junior-highschool-transmutation',
+                'name' => 'Junior High School Transmutation',
+                'description' => 'Junior High School Description Transmutation',
+                'education_type_id' => '3',
                 'created_by' => 1
             ], 
             [   
-                'code' => 'he-transmutation',
-                'name' => 'Higher Education Transmutation',
-                'description' => 'Higher Education Transmutation',
-                'type' => 'higher-education',
+                'code' => 'senior-highschool-transmutation',
+                'name' => 'Senior High School Transmutation',
+                'description' => 'Senior High School Description Transmutation',
+                'education_type_id' => '4',
                 'created_by' => 1
             ]
         ];

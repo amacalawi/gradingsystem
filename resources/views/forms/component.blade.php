@@ -5,6 +5,134 @@
 @endif
 <div class="row">
     <div class="col-md-9">
+        @if (Auth::user()->type != 'administrator' && ($component->material_id == 1 || $component->material_id == 2))
+            <div class="m-portlet m-portlet--tab">
+                <div class="m-portlet__body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5 class="m-bottom-1">Activity Cells</h5>
+                        </div>
+                    </div>
+                    @if (!empty($activities))
+                        @php $i = 0; @endphp
+                        <div id="activity-panel">
+                            @foreach ($activities as $activitiez)
+                                <div class="row activity-panel-layout">
+                                    <div class="col-md-11">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group m-form__group required">
+                                                    {{ Form::label('activity_name', 'Code', ['class' => '']) }}
+                                                    {{ 
+                                                        Form::text($activity = 'activity_name[]', $value = $activitiez->activity, 
+                                                        $attributes = array(
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
+                                                    <span class="m-form__help m--font-danger">
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group m-form__group required">
+                                                    {{ Form::label('activity_value', 'Value', ['class' => '']) }}
+                                                    {{ 
+                                                        Form::text($name = 'activity_value[]', $value = $activitiez->value, 
+                                                        $attributes = array(
+                                                            'class' => 'numeric-double form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
+                                                    <span class="m-form__help m--font-danger">
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group m-form__group required">
+                                                    {{ Form::label('activity_description', 'Description', ['class' => '']) }}
+                                                    {{ 
+                                                        Form::text($name = 'activity_description[]', $value = $activitiez->description, 
+                                                        $attributes = array(
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
+                                                    <span class="m-form__help m--font-danger">
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @if ($i == 0)
+                                    <div class="col-md-1"></div>
+                                    @else
+                                    <div class="col-md-1"><div class="row"><div class="col-md-12"><button type="button" class="minus-activity btn"><i class="la la-minus"></i></button></div></div></div>
+                                    @endif
+                                </div>
+                                @php $i++ @endphp
+                            @endforeach
+                        </div>
+                    @else
+                        <div id="activity-panel">
+                            <div class="row activity-panel-layout">
+                                <div class="col-md-11">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group m-form__group required">
+                                                {{ Form::label('activity_name', 'Code', ['class' => '']) }}
+                                                {{ 
+                                                    Form::text($activity = 'activity_name[]', $value = '', 
+                                                    $attributes = array(
+                                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                    )) 
+                                                }}
+                                                <span class="m-form__help m--font-danger">
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group m-form__group required">
+                                                {{ Form::label('activity_value', 'Value', ['class' => '']) }}
+                                                {{ 
+                                                    Form::text($name = 'activity_value[]', $value = '', 
+                                                    $attributes = array(
+                                                        'class' => 'numeric-double form-control form-control-lg m-input m-input--solid'
+                                                    )) 
+                                                }}
+                                                <span class="m-form__help m--font-danger">
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group m-form__group required">
+                                                {{ Form::label('activity_description', 'Description', ['class' => '']) }}
+                                                {{ 
+                                                    Form::text($name = 'activity_description[]', $value = '', 
+                                                    $attributes = array(
+                                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                    )) 
+                                                }}
+                                                <span class="m-form__help m--font-danger">
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button id="add-activity" type="button" class="btn btn-brand">
+                                <i class="la la-plus"></i>&nbsp;Add Activity
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+
         <div class="m-portlet m-portlet--tab">
             <div class="m-portlet__body">
                 <div class="row">
@@ -313,134 +441,6 @@
                 </div>
             </div>
         </div>
-
-        @if (Auth::user()->type != 'administrator')
-            <div class="m-portlet m-portlet--tab">
-                <div class="m-portlet__body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h5 class="m-bottom-1">Activity Cells</h5>
-                        </div>
-                    </div>
-                    @if (!empty($activities))
-                        @php $i = 0; @endphp
-                        <div id="activity-panel">
-                            @foreach ($activities as $activitiez)
-                                <div class="row activity-panel-layout">
-                                    <div class="col-md-11">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="form-group m-form__group required">
-                                                    {{ Form::label('activity_name', 'Name', ['class' => '']) }}
-                                                    {{ 
-                                                        Form::text($activity = 'activity_name[]', $value = $activitiez->activity, 
-                                                        $attributes = array(
-                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
-                                                        )) 
-                                                    }}
-                                                    <span class="m-form__help m--font-danger">
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group m-form__group required">
-                                                    {{ Form::label('activity_value', 'Value', ['class' => '']) }}
-                                                    {{ 
-                                                        Form::text($name = 'activity_value[]', $value = $activitiez->value, 
-                                                        $attributes = array(
-                                                            'class' => 'numeric-double form-control form-control-lg m-input m-input--solid'
-                                                        )) 
-                                                    }}
-                                                    <span class="m-form__help m--font-danger">
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group m-form__group required">
-                                                    {{ Form::label('activity_description', 'Description', ['class' => '']) }}
-                                                    {{ 
-                                                        Form::text($name = 'activity_description[]', $value = $activitiez->description, 
-                                                        $attributes = array(
-                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
-                                                        )) 
-                                                    }}
-                                                    <span class="m-form__help m--font-danger">
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @if ($i == 0)
-                                    <div class="col-md-1"></div>
-                                    @else
-                                    <div class="col-md-1"><div class="row"><div class="col-md-12"><button type="button" class="minus-activity btn"><i class="la la-minus"></i></button></div></div></div>
-                                    @endif
-                                </div>
-                                @php $i++ @endphp
-                            @endforeach
-                        </div>
-                    @else
-                        <div id="activity-panel">
-                            <div class="row activity-panel-layout">
-                                <div class="col-md-11">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group m-form__group required">
-                                                {{ Form::label('activity_name', 'Name', ['class' => '']) }}
-                                                {{ 
-                                                    Form::text($activity = 'activity_name[]', $value = '', 
-                                                    $attributes = array(
-                                                        'class' => 'form-control form-control-lg m-input m-input--solid'
-                                                    )) 
-                                                }}
-                                                <span class="m-form__help m--font-danger">
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group m-form__group required">
-                                                {{ Form::label('activity_value', 'Value', ['class' => '']) }}
-                                                {{ 
-                                                    Form::text($name = 'activity_value[]', $value = '', 
-                                                    $attributes = array(
-                                                        'class' => 'numeric-double form-control form-control-lg m-input m-input--solid'
-                                                    )) 
-                                                }}
-                                                <span class="m-form__help m--font-danger">
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group m-form__group required">
-                                                {{ Form::label('activity_description', 'Description', ['class' => '']) }}
-                                                {{ 
-                                                    Form::text($name = 'activity_description[]', $value = '', 
-                                                    $attributes = array(
-                                                        'class' => 'form-control form-control-lg m-input m-input--solid'
-                                                    )) 
-                                                }}
-                                                <span class="m-form__help m--font-danger">
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-1">
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-                    
-                    <div class="row">
-                        <div class="col-md-12">
-                            <button id="add-activity" type="button" class="btn btn-brand">
-                                <i class="la la-plus"></i>&nbsp;Add Activity
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endif
     </div>
 
     <div class="col-md-3">
@@ -454,11 +454,11 @@
                         <div class="form-group m-form__group required">
                             @if (Auth::user()->type != 'administrator')
                                 {{  
-                                    Form::select('type', $types, !empty($component) ? $component->type : '', ['class' => 'form-control form-control-lg m-input m-input--solid', 'disabled' => 'disabled'])
+                                    Form::select('education_type_id', $types, !empty($component) ? $component->education_type_id : '', ['id' => 'education_type_id', 'class' => 'form-control form-control-lg m-input m-input--solid', 'disabled' => 'disabled'])
                                 }}
                             @else
                                 {{  
-                                    Form::select('type', $types, !empty($component) ? $component->type : '', ['class' => 'form-control form-control-lg m-input m-input--solid'])
+                                    Form::select('education_type_id', $types, !empty($component) ? $component->education_type_id : '', ['id' => 'education_type_id', 'class' => 'form-control form-control-lg m-input m-input--solid'])
                                 }}
                             @endif
                             <span class="m-form__help m--font-danger"></span>
@@ -478,11 +478,11 @@
                         <div class="form-group m-form__group required">
                             @if (Auth::user()->type != 'administrator')
                                 {{  
-                                    Form::select('quarter_id', $quarters, !empty($component) ? $component->quarters : '', ['class' => 'form-control form-control-lg m-input m-input--solid m-bootstrap-select m_selectpicker', 'disabled' => 'disabled', 'multiple'])
+                                    Form::select('quarter_id[]', $quarters, !empty($component) ? $component->quarters : '', ['id' => 'quarter_id', 'class' => 'form-control form-control-lg m-input m-input--solid m-bootstrap-select m_selectpicker', 'disabled' => 'disabled', 'multiple'])
                                 }}
                             @else
                                 {{  
-                                    Form::select('quarter_id', $quarters, !empty($component) ? $component->quarters : '', ['class' => 'form-control form-control-lg m-input m-input--solid m-bootstrap-select m_selectpicker', 'multiple'])
+                                    Form::select('quarter_id[]', $quarters, !empty($component) ? $component->quarters : '', ['id' => 'quarter_id', 'class' => 'form-control form-control-lg m-input m-input--solid m-bootstrap-select m_selectpicker', 'multiple'])
                                 }}
                             @endif
                             <span class="m-form__help m--font-danger"></span>
@@ -502,11 +502,11 @@
                         <div class="form-group m-form__group required">
                             @if (Auth::user()->type != 'administrator')
                                 {{  
-                                    Form::select('section_id', $sections, !empty($component) ? $component->section_id : '', ['class' => 'form-control form-control-lg m-input m-input--solid', 'disabled' => 'disabled'])
+                                    Form::select('section_id', $sections, !empty($component) ? $component->section_id : '', ['id' => 'section_id', 'class' => 'form-control form-control-lg m-input m-input--solid', 'disabled' => 'disabled'])
                                 }}
                             @else
                                 {{  
-                                    Form::select('section_id', $sections, !empty($component) ? $component->section_id : '', ['class' => 'form-control form-control-lg m-input m-input--solid'])
+                                    Form::select('section_id', $sections, !empty($component) ? $component->section_id : '', ['id' => 'section_id', 'class' => 'form-control form-control-lg m-input m-input--solid'])
                                 }}
                             @endif
                             <span class="m-form__help m--font-danger"></span>
@@ -526,11 +526,11 @@
                         <div class="form-group m-form__group required">
                             @if (Auth::user()->type != 'administrator')
                                 {{  
-                                    Form::select('subject_id', $subjects, !empty($component) ? $component->subject_id : '', ['class' => 'form-control form-control-lg m-input m-input--solid', 'disabled' => 'disabled'])
+                                    Form::select('subject_id', $subjects, !empty($component) ? $component->subject_id : '', ['id' => 'subject_id', 'class' => 'form-control form-control-lg m-input m-input--solid', 'disabled' => 'disabled'])
                                 }}
                             @else
                                 {{  
-                                    Form::select('subject_id', $subjects, !empty($component) ? $component->subject_id : '', ['class' => 'form-control form-control-lg m-input m-input--solid'])
+                                    Form::select('subject_id', $subjects, !empty($component) ? $component->subject_id : '', ['id' => 'subject_id', 'class' => 'form-control form-control-lg m-input m-input--solid'])
                                 }}
                             @endif
                             <span class="m-form__help m--font-danger"></span>

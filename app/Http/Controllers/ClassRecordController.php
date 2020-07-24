@@ -167,6 +167,7 @@ class ClassRecordController extends Controller
                 'classrecordSubjects' => (new SectionsSubjects)->where(['section_info_id' => $classrecord->id, 'is_active' => 1])->count(),
                 'classrecordStudents' => (new Admission)->where(['section_id' => $classrecord->section->id, 'status' => 'admit', 'is_active' => 1])->count(),
                 'classrecordType' => $classrecord->type,
+                'classrecordType' => $classrecord->type,
                 'classrecordModified' => ($classrecord->updated_at !== NULL) ? date('d-M-Y', strtotime($classrecord->updated_at)).'<br/>'. date('h:i A', strtotime($classrecord->updated_at)) : date('d-M-Y', strtotime($classrecord->created_at)).'<br/>'. date('h:i A', strtotime($classrecord->created_at))
             ];
         });

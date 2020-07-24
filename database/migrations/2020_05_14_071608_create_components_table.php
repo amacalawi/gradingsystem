@@ -18,7 +18,8 @@ class CreateComponentsTable extends Migration
             $table->integer('batch_id')->unsigned();
             $table->integer('section_id')->unsigned(); 
             $table->integer('subject_id')->unsigned(); 
-            $table->string('type', 40);
+            $table->integer('education_type_id')->unsigned();
+            $table->integer('material_id')->unsigned();
             $table->string('name', 40);
             $table->double('percentage');
             $table->text('description')->nullable();

@@ -19,12 +19,14 @@ use App\Models\Batch;
 use App\Models\Component;
 use App\Models\Admission;
 use App\Models\GradingSheetActivity;
+use App\Models\GradingSheetHomeroom;
 use App\Models\GradingSheetQuarter;
 use App\Models\SectionInfo;
 use App\Models\SectionsSubjects;
 use App\Models\Staff;
 use App\Models\TransmutationElement;
 use App\Models\Transmutation;
+use App\Models\EducationType;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -250,7 +252,7 @@ class GradingSheetsController extends Controller
         $quarters = (new Quarter)->all_quarters();
         $sections = (new Section)->all_sections();
         $subjects = (new Subject)->all_subjects();
-        $types = (new GradingSheet)->types();
+        $types = (new EducationType)->all_education_types();
         return view('modules/academics/gradingsheets/all/add')->with(compact('menus', 'grading', 'quarters', 'sections', 'subjects', 'types', 'segment'));
     }
     
@@ -276,7 +278,7 @@ class GradingSheetsController extends Controller
             'section_id' => $request->section_id,
             'subject_id' => $request->subject_id,
             'quarter_id' => $request->quarter_id,
-            'type' => $request->type,
+            'education_type_id' => $request->education_type_id,
             'batch_id' => (new Batch)->get_current_batch()
         ])->count();
 
@@ -298,7 +300,8 @@ class GradingSheetsController extends Controller
             'section_id' => $request->section_id,
             'subject_id' => $request->subject_id,
             'quarter_id' => $request->quarter_id,
-            'type' => $request->type,
+            'material_id' => (new Subject)->where('id', $request->subject_id)->first()->material_id,
+            'education_type_id' => $request->education_type_id,
             'batch_id' => (new Batch)->get_current_batch(),
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
@@ -326,40 +329,77 @@ class GradingSheetsController extends Controller
         if(!$grading) {
             throw new NotFoundHttpException();
         }
-        
-        $iteration = 0; $students = array();
-        foreach ($request->activity as $activity) 
-        {
-            $activities = explode("_", $activity);
-            if (!in_array($activities[1], $students)) {
-                $students[] = $activities[1];
-            }
 
-            $row = GradingSheetActivity::where([
-                'gradingsheet_id' => $id,
-                'activity_id' => $activities[0],
-                'student_id' => $activities[1]
-            ])->get();
+        if ($grading->material_id <= 2) {
+            $iteration = 0; $students = array();
+            foreach ($request->activity as $activity) 
+            {
+                $activities = explode("_", $activity);
+                if (!in_array($activities[1], $students)) {
+                    $students[] = $activities[1];
+                }
 
-            if ($row->count() > 0) {
-                $gradingActivtity = GradingSheetActivity::where('id', '=', $row->first()->id)
-                ->update([
-                    'score' => ($request->score[$iteration] !== NULL) ? $request->score[$iteration] : NULL,
-                    'updated_at' => $timestamp,
-                    'updated_by' => Auth::user()->id
-                ]);
-            } else {
-                $gradingActivtity = GradingSheetActivity::create([
+                $row = GradingSheetActivity::where([
                     'gradingsheet_id' => $id,
                     'activity_id' => $activities[0],
-                    'student_id' => $activities[1],
-                    'score' => ($request->score[$iteration] !== NULL) ? $request->score[$iteration] : NULL,
-                    'created_at' => $timestamp,
-                    'created_by' => Auth::user()->id
-                ]);
+                    'student_id' => $activities[1]
+                ])->get();
+
+                if ($row->count() > 0) {
+                    $gradingActivtity = GradingSheetActivity::where('id', '=', $row->first()->id)
+                    ->update([
+                        'score' => ($request->score[$iteration] !== NULL) ? $request->score[$iteration] : NULL,
+                        'updated_at' => $timestamp,
+                        'updated_by' => Auth::user()->id
+                    ]);
+                } else {
+                    $gradingActivtity = GradingSheetActivity::create([
+                        'gradingsheet_id' => $id,
+                        'activity_id' => $activities[0],
+                        'student_id' => $activities[1],
+                        'score' => ($request->score[$iteration] !== NULL) ? $request->score[$iteration] : NULL,
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+                }
+                
+                $iteration++;
             }
-            
-            $iteration++;
+        } else {
+            $iteration = 0; $students = array();
+            foreach ($request->component as $component) 
+            {
+                $components = explode("_", $component);
+                if (!in_array($components[1], $students)) {
+                    $students[] = $components[1];
+                }
+
+                $row = GradingSheetHomeroom::where([
+                    'gradingsheet_id' => $id,
+                    'component_id' => $components[0],
+                    'student_id' => $components[1]
+                ])->get();
+
+                if ($row->count() > 0) {
+                    $gradingActivtity = GradingSheetHomeroom::where('id', '=', $row->first()->id)
+                    ->update([
+                        'score' => ($request->score[$iteration] !== NULL) ? $request->score[$iteration] : NULL,
+                        'updated_at' => $timestamp,
+                        'updated_by' => Auth::user()->id
+                    ]);
+                } else {
+                    $gradingActivtity = GradingSheetHomeroom::create([
+                        'gradingsheet_id' => $id,
+                        'component_id' => $components[0],
+                        'student_id' => $components[1],
+                        'score' => ($request->score[$iteration] !== NULL) ? $request->score[$iteration] : NULL,
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+                }
+                
+                $iteration++;
+            }
         }
 
         $iteration = 0;
@@ -376,6 +416,8 @@ class GradingSheetsController extends Controller
                     'initial_grade' => ($request->init_grade[$iteration] !== NULL) ? $request->init_grade[$iteration] : NULL,
                     'adjustment_grade' => ($request->tc_score[$iteration] !== NULL) ? $request->tc_score[$iteration] : NULL,
                     'quarter_grade' => ($request->quarter_grade[$iteration] !== NULL) ? $request->quarter_grade[$iteration] : NULL,
+                    'rating' => ($request->rating[$iteration] !== NULL) ? $request->rating[$iteration] : NULL,
+                    'ranking' => ($request->ranking[$iteration] !== NULL) ? $request->ranking[$iteration] : NULL,
                     'updated_at' => $timestamp,
                     'updated_by' => Auth::user()->id
                 ]);
@@ -388,6 +430,8 @@ class GradingSheetsController extends Controller
                     'initial_grade' => ($request->init_grade[$iteration] !== NULL) ? $request->init_grade[$iteration] : NULL,
                     'adjustment_grade' => ($request->tc_score[$iteration] !== NULL) ? $request->tc_score[$iteration] : NULL,
                     'quarter_grade' => ($request->quarter_grade[$iteration] !== NULL) ? $request->quarter_grade[$iteration] : NULL,
+                    'rating' => ($request->rating[$iteration] !== NULL) ? $request->rating[$iteration] : NULL,
+                    'ranking' => ($request->ranking[$iteration] !== NULL) ? $request->ranking[$iteration] : NULL,
                     'created_at' => $timestamp,
                     'created_by' => Auth::user()->id
                 ]);
@@ -508,6 +552,11 @@ class GradingSheetsController extends Controller
         return (new GradingSheetActivity)->get_activity_score_via_activity($id, $student, $grading);
     }
 
+    public function get_component_score_via_component($id, $student, $grading)
+    {
+        return (new GradingSheetHomeroom)->get_component_score_via_component($id, $student, $grading);
+    }
+
     public function reload($type)
     {   
         if (Auth::user()->type == 'administrator') 
@@ -520,7 +569,7 @@ class GradingSheetsController extends Controller
                     'is_active' => 1
                 ])
             )
-            ->where(['is_active' => 1, 'type' => $type])
+            ->where(['is_active' => 1, 'education_type_id' => $type])
             ->orderBy('id', 'ASC')->get();
 
             //--> subjects
@@ -533,11 +582,13 @@ class GradingSheetsController extends Controller
                     ])
                 )
             )
-            ->where(['is_active' => 1, 'type' => $type])
+            ->where(['is_active' => 1, 'education_type_id' => $type])
             ->orderBy('id', 'ASC')->get();
 
             //--> quarters
-            $arr['quarters'] = (new Quarter)->where(['is_active' => 1, 'type' => $type])->orderBy('id', 'ASC')->get();
+            $arr['quarters'] = (new Quarter)
+            ->where(['is_active' => 1, 'education_type_id' => $type])
+            ->orderBy('id', 'ASC')->get();
         }
         else
         {   
@@ -556,7 +607,7 @@ class GradingSheetsController extends Controller
                     'is_active' => 1
                 ])
             )
-            ->where(['is_active' => 1, 'type' => $type])
+            ->where(['is_active' => 1, 'education_type_id' => $type])
             ->orderBy('id', 'ASC')->get();
 
             //--> subjects
@@ -574,11 +625,13 @@ class GradingSheetsController extends Controller
                     'is_active' => 1
                 ])
             )
-            ->where(['is_active' => 1, 'type' => $type])
+            ->where(['is_active' => 1, 'education_type_id' => $type])
             ->orderBy('id', 'ASC')->get();
 
             //--> quarters
-            $arr['quarters'] = (new Quarter)->where(['is_active' => 1, 'type' => $type])->orderBy('id', 'ASC')->get();
+            $arr['quarters'] = (new Quarter)
+            ->where(['is_active' => 1, 'education_type_id' => $type])
+            ->orderBy('id', 'ASC')->get();
         }
 
         echo json_encode( $arr ); exit();
@@ -614,7 +667,7 @@ class GradingSheetsController extends Controller
                 $q->select(['id', 'name']);
             },
         ])
-        ->whereIn('transmutation_id', Transmutation::select('id')->where('type', $type))
+        ->whereIn('transmutation_id', Transmutation::select('id')->where('education_type_id', $type))
         ->where('score', '<=', $score)
         ->max('equivalent');
 
@@ -625,10 +678,10 @@ class GradingSheetsController extends Controller
     {
         $res = TransmutationElement::with([
             'transmutation' =>  function($q) use ($type) { 
-                $q->select(['id', 'name'])->where('type', $type);
+                $q->select(['id', 'name'])->where('education_type_id', $type);
             },
         ])
-        ->whereIn('transmutation_id', Transmutation::select('id')->where('type', $type))
+        ->whereIn('transmutation_id', Transmutation::select('id')->where('education_type_id', $type))
         ->get();
 
         $res = $res->map(function($grading) {

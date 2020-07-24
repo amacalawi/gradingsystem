@@ -369,8 +369,10 @@ Route::prefix('academics')->group(function () {
         /* End Class Record Routes */
 
         /* Start Components Routes */
+        Route::get('components/reload-quarter-via-type/{id}', 'ComponentsController@reload_quarter')->name('components.reload.quarter');
+        Route::get('components/reload-subject-via-section/{id}', 'ComponentsController@reload_subject')->name('components.reload.subject');
         Route::get('components/add', 'ComponentsController@add')->name('components.add');
-        Route::get('components/edit/{id?}', 'ComponentsController@edit')->name('components.edit');
+        Route::get('components/edit/{id}', 'ComponentsController@edit')->name('components.edit');
         Route::post('components/store', 'ComponentsController@store')->name('components.store');
         Route::put('components/update/{id}', 'ComponentsController@update')->name('components.update');
         Route::get('components', 'ComponentsController@manage')->name('components.manage.active');

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGradingsheetsQuartersTable extends Migration
+class CreateGradingsheetsHomeroomsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,12 @@ class CreateGradingsheetsQuartersTable extends Migration
      */
     public function up()
     {
-        Schema::create('gradingsheets_quarters', function (Blueprint $table) {
+        Schema::create('gradingsheets_homerooms', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('gradingsheet_id')->unsigned();
-            $table->integer('batch_id')->unsigned();
-            $table->integer('quarter_id')->unsigned();
+            $table->integer('component_id')->unsigned();
             $table->integer('student_id')->unsigned();
-            $table->double('initial_grade')->nullable();
-            $table->double('adjustment_grade')->nullable();
-            $table->double('quarter_grade')->nullable();
-            $table->string('rating', 40)->nullable();
-            $table->string('ranking', 40)->nullable();
+            $table->double('score')->nullable();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('created_by')->unsigned();
             $table->timestamp('updated_at')->nullable();
@@ -39,6 +34,6 @@ class CreateGradingsheetsQuartersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('gradingsheets_quarters');
+        Schema::dropIfExists('gradingsheets_homerooms');
     }
 }
