@@ -10,5 +10,4 @@
 @endpush
 @push('scripts')
     <script src="{{ asset('js/freezepane-table.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/forms/gradingsheet.js') }}" type="text/javascript"></script>
 @endpush

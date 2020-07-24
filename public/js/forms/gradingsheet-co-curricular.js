@@ -90,52 +90,25 @@
     gradingsheet.prototype.compute = function($rows, $group = '') 
     {   
         if ($group != '') {
-            var $sumCell = $rows.find('.sum-cell[group="'+ $group + '"]');
-            var $hpsCell = $rows.find('.hps-cell[group="'+ $group + '"]');
-            var $psCell  = $rows.find('.ps-cell[group="'+ $group + '"]');
             var $tcCell  = $rows.find('.tc-cell input[name="tc_score[]"]');
             var $qcCell  = $rows.find('.quarter-cell');
-            var $percentageCell = $rows.find('.percentage-cell[group="'+ $group + '"]');
             var $initialCell = $rows.find('.initial-cell');
-            var $sumHeader = $('#gradingsheet-table th.sum-header[group="'+ $group + '"]');
-            var $psHeader = $('#gradingsheet-table th.ps-header[group="'+ $group + '"]');
     
-            var $sum = 0, $hps = 0;
-            $.each($rows.find('td[group="'+ $group + '"] .activity-cell'), function(){
+            var $sum = 0, $division = 0;
+            $.each($rows.find('td .component-cell'), function(){
                 var $score = $(this).val();
-                var $maxscore = $(this).attr('maxvalue');
 
-                if ($score > 0) {
+                if ($score != '') {
                     $sum += parseFloat($score);
-                    $hps += parseFloat($maxscore);
-                }
+                    $division++;
+                } 
             });
-            
-            $hpsCell.text($hps);
-
-            if (parseFloat($hpsCell.text()) > 0) {
-                var $percentage = (parseFloat($sum) / parseFloat($hpsCell.text())) * 100; 
-                var $totalPercentage = (parseFloat($sum) / parseFloat($hpsCell.text())) * $percentageCell.attr('maxvalue');
-            } else if (parseFloat($sumHeader.text()) > 0) {
-                var $percentage = (parseFloat($sum) / parseFloat($sumHeader.text())) * 100; 
-                var $totalPercentage = $percentage * parseFloat('.' + $percentageCell.attr('maxvalue'));
-            } else {
-                var $percentage = (parseFloat($sum) / parseFloat($psHeader.attr('maxvalue'))) * 100; 
-                var $totalPercentage = $percentage * parseFloat('.' + $percentageCell.attr('maxvalue'));
-            }
-
-            $sumCell.text($sum);
-            $psCell.text($percentage.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]);
-            $percentageCell.text($totalPercentage.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]);
 
             var $initPercent = 0;
-            $.each($rows.find('.percentage-cell'), function(){
-                var $score = $(this).text();
-
-                if ($score > 0) {
-                    $initPercent += parseFloat($score);
-                }
-            });
+            if ($sum > 0) {
+                $initPercent += parseFloat($sum) / parseFloat($division);
+                console.log('init percent: ' + parseFloat($initPercent));
+            }
 
             if ( parseFloat($tcCell.val()) > 0 ) {
                 $initPercent = parseFloat($initPercent) + parseFloat($tcCell.val());
@@ -143,6 +116,7 @@
 
             var $scoring = $initPercent.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
             $initialCell.text($scoring);
+            console.log('scoring: ' + $scoring);
 
             var filters = transmutations.filter(x => x.score <= $scoring);
             var qg = Math.max.apply(Math, filters.map(function(o) { return o.equivalent; }));
@@ -154,16 +128,20 @@
             var $initialCell = $rows.find('.initial-cell');
             var $qcCell  = $rows.find('.quarter-cell');
 
-            var $initPercent = 0;
-            $.each($rows.find('.percentage-cell'), function(){
-                var $score = $(this).text();
+            var $initPercent = 0, $division = 0;
+            $.each($rows.find('td .component-cell'), function(){
+                var $score = $(this).val();
 
-                if ($score > 0) {
+                if ($score != '') {
                     $initPercent += parseFloat($score);
+                    $division++;
                 }
             });
 
-            if ( parseFloat($tcCell.val()) > 0 ) {
+            if ($division > 0) {
+                $initPercent = parseFloat($initPercent) / parseFloat($division);
+            }
+            if ($tcCell.val() != '') {
                 $initPercent = parseFloat($initPercent) + parseFloat($tcCell.val());
             }
 
@@ -179,6 +157,28 @@
         var quarterGrade = $rows.find('.tc-cell input[name="quarter_grade[]"]');
         initGrade.val($scoring);
         quarterGrade.val(qg);
+
+        if (parseFloat(qg) >= 95) {
+            $rows.find('.rating-cell').text('E');
+            $rows.find('input[name="rating[]"]').val('E');
+        } else if (parseFloat(qg) >= 90) {
+            $rows.find('.rating-cell').text('VS');
+            $rows.find('input[name="rating[]"]').val('VS');
+        } else if (parseFloat(qg) >= 85) {
+            $rows.find('.rating-cell').text('S');
+            $rows.find('input[name="rating[]"]').val('S');
+        } else if (parseFloat(qg) >= 80) {
+            $rows.find('.rating-cell').text('MS');
+            $rows.find('input[name="rating[]"]').val('MS');
+        } else if (parseFloat(qg) >= 75) {
+            $rows.find('.rating-cell').text('FS');
+            $rows.find('input[name="rating[]"]').val('FS');
+        } else {
+            $rows.find('.rating-cell').text('NI');
+            $rows.find('input[name="rating[]"]').val('NI');
+        }
+
+        $.gradingsheet.rankings();
     },
 
     gradingsheet.prototype.reload_subject_via_section = function($section)
@@ -245,10 +245,23 @@
         console.log(transmutations);
     },
 
+    gradingsheet.prototype.rankings = function()
+    {
+        $(".quarter-cell")
+        .map(function(){return $(this).text()})
+        .get()
+        .sort(function(a,b){return a - b })
+        .reduce(function(a, b){ if (b != a[0]) a.unshift(b); return a }, [])
+        .forEach((v,i)=>{
+            var $i = i + 1;
+            $('.quarter-cell').filter(function() {return $(this).text() == v;}).next().find('input[name="ranking[]"]').val($i).parents('td').next().next().text($i);
+        });
+    },
+
     gradingsheet.prototype.init = function()
     {   
         $.gradingsheet.fetch_transmutations();
-
+        $.gradingsheet.rankings();
         /*
         | ---------------------------------
         | # select, input, and textarea on change or keyup remove error
@@ -312,7 +325,7 @@
             $('#slug').val(self.replace(/\s+/g, '-').toLowerCase());
         });
 
-        this.$body.on('keyup', '.activity-cell', function (e){
+        this.$body.on('keyup', '.component-cell', function (e){
             e.preventDefault();
             var self = $(this);
             var maxValue = $(this).attr('maxvalue');
@@ -323,7 +336,7 @@
             $.gradingsheet.compute(self.closest('tr'), self.closest('td').attr('group'));
         });
 
-        this.$body.on('blur', '.activity-cell', function (e){
+        this.$body.on('blur', '.component-cell', function (e){
             e.preventDefault();
             var self = $(this);
             var maxValue = $(this).attr('maxvalue');

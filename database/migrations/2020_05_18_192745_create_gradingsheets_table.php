@@ -17,9 +17,10 @@ class CreateGradingsheetsTable extends Migration
             $table->increments('id');
             $table->integer('batch_id')->unsigned();
             $table->integer('quarter_id')->unsigned();
+            $table->integer('education_type_id')->unsigned();
             $table->integer('section_id')->unsigned();
+            $table->integer('material_id')->unsigned();
             $table->integer('subject_id')->unsigned();
-            $table->string('type', 40);
             $table->string('code', 100);
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('created_by')->unsigned();

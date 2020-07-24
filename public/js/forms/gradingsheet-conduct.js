@@ -105,7 +105,7 @@
                 var $score = $(this).val();
                 var $maxscore = $(this).attr('maxvalue');
 
-                if ($score > 0) {
+                if ($score != '') {
                     $sum += parseFloat($score);
                     $hps += parseFloat($maxscore);
                 }
@@ -114,14 +114,17 @@
             $hpsCell.text($hps);
 
             if (parseFloat($hpsCell.text()) > 0) {
+                console.log('11');
                 var $percentage = (parseFloat($sum) / parseFloat($hpsCell.text())) * 100; 
                 var $totalPercentage = (parseFloat($sum) / parseFloat($hpsCell.text())) * $percentageCell.attr('maxvalue');
             } else if (parseFloat($sumHeader.text()) > 0) {
                 var $percentage = (parseFloat($sum) / parseFloat($sumHeader.text())) * 100; 
-                var $totalPercentage = $percentage * parseFloat('.' + $percentageCell.attr('maxvalue'));
+                var $rate = ($percentageCell.attr('maxvalue') == 100) ? 1 : parseFloat('.' + $percentageCell.attr('maxvalue'));
+                var $totalPercentage = $percentage * $rate;
             } else {
                 var $percentage = (parseFloat($sum) / parseFloat($psHeader.attr('maxvalue'))) * 100; 
-                var $totalPercentage = $percentage * parseFloat('.' + $percentageCell.attr('maxvalue'));
+                var $rate = ($percentageCell.attr('maxvalue') == 100) ? 1 : parseFloat('.' + $percentageCell.attr('maxvalue'));
+                var $totalPercentage = $percentage * $rate;
             }
 
             $sumCell.text($sum);
@@ -131,11 +134,13 @@
             var $initPercent = 0;
             $.each($rows.find('.percentage-cell'), function(){
                 var $score = $(this).text();
+                console.log('score: ' + $score);
 
                 if ($score > 0) {
                     $initPercent += parseFloat($score);
                 }
             });
+            console.log($initPercent);
 
             if ( parseFloat($tcCell.val()) > 0 ) {
                 $initPercent = parseFloat($initPercent) + parseFloat($tcCell.val());
@@ -179,6 +184,41 @@
         var quarterGrade = $rows.find('.tc-cell input[name="quarter_grade[]"]');
         initGrade.val($scoring);
         quarterGrade.val(qg);
+
+        if (parseFloat(qg) >= 95) {
+            $rows.find('.rating-cell').text('E');
+            $rows.find('input[name="rating[]"]').val('E');
+        } else if (parseFloat(qg) >= 90) {
+            $rows.find('.rating-cell').text('VS');
+            $rows.find('input[name="rating[]"]').val('VS');
+        } else if (parseFloat(qg) >= 85) {
+            $rows.find('.rating-cell').text('S');
+            $rows.find('input[name="rating[]"]').val('S');
+        } else if (parseFloat(qg) >= 80) {
+            $rows.find('.rating-cell').text('MS');
+            $rows.find('input[name="rating[]"]').val('MS');
+        } else if (parseFloat(qg) >= 75) {
+            $rows.find('.rating-cell').text('FS');
+            $rows.find('input[name="rating[]"]').val('FS');
+        } else {
+            $rows.find('.rating-cell').text('NI');
+            $rows.find('input[name="rating[]"]').val('NI');
+        }
+
+        $.gradingsheet.rankings();
+    },
+    
+    gradingsheet.prototype.rankings = function()
+    {
+        $(".quarter-cell")
+        .map(function(){return $(this).text()})
+        .get()
+        .sort(function(a,b){return a - b })
+        .reduce(function(a, b){ if (b != a[0]) a.unshift(b); return a }, [])
+        .forEach((v,i)=>{
+            var $i = i + 1;
+            $('.quarter-cell').filter(function() {return $(this).text() == v;}).next().find('input[name="ranking[]"]').val($i).parents('td').next().next().text($i);
+        });
     },
 
     gradingsheet.prototype.reload_subject_via_section = function($section)
@@ -248,6 +288,7 @@
     gradingsheet.prototype.init = function()
     {   
         $.gradingsheet.fetch_transmutations();
+        $.gradingsheet.rankings();
 
         /*
         | ---------------------------------

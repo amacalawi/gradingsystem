@@ -462,6 +462,7 @@ span[aria-expanded="true"]:before {
 .class-record,
 #gradingsheet-table {
     table-layout: fixed;
+    min-width: 100%;
 }
 
 .class-record td,
@@ -569,4 +570,11 @@ a[data-dismiss="modal"] {
 .dz-success-mark svg,
 .dz-error-mark svg {
     display: none !important;
+}
+
+.bootstrap-select button[data-toggle="dropdown"] {
+    padding: 1rem 1.5rem !important;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    border-radius: 0.3rem;
 }

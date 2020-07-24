@@ -105,7 +105,7 @@
                 var $score = $(this).val();
                 var $maxscore = $(this).attr('maxvalue');
 
-                if ($score > 0) {
+                if ($score != '') {
                     $sum += parseFloat($score);
                     $hps += parseFloat($maxscore);
                 }
@@ -118,10 +118,12 @@
                 var $totalPercentage = (parseFloat($sum) / parseFloat($hpsCell.text())) * $percentageCell.attr('maxvalue');
             } else if (parseFloat($sumHeader.text()) > 0) {
                 var $percentage = (parseFloat($sum) / parseFloat($sumHeader.text())) * 100; 
-                var $totalPercentage = $percentage * parseFloat('.' + $percentageCell.attr('maxvalue'));
+                var $rate = ($percentageCell.attr('maxvalue') == 100) ? 1 : parseFloat('.' + $percentageCell.attr('maxvalue'));
+                var $totalPercentage = $percentage * $rate;
             } else {
                 var $percentage = (parseFloat($sum) / parseFloat($psHeader.attr('maxvalue'))) * 100; 
-                var $totalPercentage = $percentage * parseFloat('.' + $percentageCell.attr('maxvalue'));
+                var $rate = ($percentageCell.attr('maxvalue') == 100) ? 1 : parseFloat('.' + $percentageCell.attr('maxvalue'));
+                var $totalPercentage = $percentage * $rate;
             }
 
             $sumCell.text($sum);
@@ -179,6 +181,20 @@
         var quarterGrade = $rows.find('.tc-cell input[name="quarter_grade[]"]');
         initGrade.val($scoring);
         quarterGrade.val(qg);
+        $.gradingsheet.rankings();
+    },
+
+    gradingsheet.prototype.rankings = function()
+    {
+        $(".quarter-cell")
+        .map(function(){return $(this).text()})
+        .get()
+        .sort(function(a,b){return a - b })
+        .reduce(function(a, b){ if (b != a[0]) a.unshift(b); return a }, [])
+        .forEach((v,i)=>{
+            var $i = i + 1;
+            $('.quarter-cell').filter(function() {return $(this).text() == v;}).next().find('input[name="ranking[]"]').val($i).parents('td').next().text($i);
+        });
     },
 
     gradingsheet.prototype.reload_subject_via_section = function($section)
@@ -248,6 +264,7 @@
     gradingsheet.prototype.init = function()
     {   
         $.gradingsheet.fetch_transmutations();
+        $.gradingsheet.rankings();
 
         /*
         | ---------------------------------

@@ -25,7 +25,7 @@ class GradingSheet extends Model
                 $q->select(['id', 'name']); 
             },
             'section' =>  function($q) { 
-                $q->select(['staffs.firstname as adviser_firstname', 'staffs.lastname as adviser_lastname', 'sections.id', 'sections.name as section_name', 'levels.name as level_name', 'sections_info.type as type'])
+                $q->select(['staffs.firstname as adviser_firstname', 'staffs.lastname as adviser_lastname', 'sections.id', 'sections.name as section_name', 'levels.name as level_name', 'sections_info.education_type_id as type'])
                 ->join('sections_info', function($join)
                 {
                     $join->on('sections_info.section_id', '=', 'sections.id');
@@ -65,12 +65,15 @@ class GradingSheet extends Model
                 'batch_name' => ($grading->batch->name) ? $grading->batch->name : '',
                 'quarter_id' => ($grading->quarter_id) ? $grading->quarter_id : '',
                 'quarter_name' => ($grading->quarter->name) ? $grading->quarter->name : '',
+                'material_id' => ($grading->material_id) ? $grading->material_id : '',
                 'section_id' => ($grading->section_id) ? $grading->section_id : '',
                 'section_name' => ($grading->section->section_name) ? $grading->section->section_name : '',
                 'subject_id' => ($grading->subject_id) ? $grading->subject_id : '',
                 'subject_name' => ($grading->subject->name) ? $grading->subject->name : '',
                 'level_name' => ($grading->section->level_name) ? $grading->section->level_name : '',
-                'type' => ($grading->section->type) ? $grading->section->type : '',
+                // 'type' => ($grading->section->type) ? $grading->section->type : '',
+                'type' => '',
+                'education_type_id' => ($grading->education_type_id) ? $grading->education_type_id : '',
                 'adviser' => ($grading->section->adviser_firstname) ? ucfirst($grading->section->adviser_firstname).' '.ucfirst($grading->section->adviser_lastname) : '',
                 'teacher' => ($grading->subject->teacher_firstname) ? ucfirst($grading->subject->teacher_firstname).' '.ucfirst($grading->subject->teacher_lastname) : ''
             );
@@ -80,9 +83,10 @@ class GradingSheet extends Model
                 'code' => '',
                 'batch_id' => '',
                 'quarter_id' => '',
+                'material_id' => '',
                 'section_id' => '',
                 'subject_id' => '',
-                'type' => ''
+                'education_type_id' => ''
             );
         }
         return (object) $results;

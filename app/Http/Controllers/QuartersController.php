@@ -48,7 +48,10 @@ class QuartersController extends Controller
         with([
             'edtype' =>  function($q) { 
                 $q->select(['id', 'name']); 
-            }
+            },
+            'quarters.quarter' => function($q) { 
+                $q->select(['component_id','name']); 
+            },
         ])
         ->where('is_active', 1)->orderBy('id', 'DESC')->get();
 
@@ -117,7 +120,8 @@ class QuartersController extends Controller
         $timestamp = date('Y-m-d H:i:s');
 
         $rows = Quarter::where([
-            'code' => $request->code
+            'code' => $request->code,
+            'education_type_id' => $request->education_type_id
         ])->count();
 
         if ($rows > 0) {

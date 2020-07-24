@@ -12,7 +12,7 @@
         '<div class="row">' +
         '<div class="col-md-4">' +
         '<div class="form-group m-form__group required">' +
-        '<label for="activity" class="">Name</label>' +
+        '<label for="activity" class="">Code</label>' +
         '<input class="form-control form-control-lg m-input m-input--solid required" name="activity_name[]" type="text" value="">' +
         '<span class="m-form__help m--font-danger"></span>' +
         '</div>' +
@@ -138,6 +138,55 @@
         return true;
     },
 
+    component.prototype.reload_quarter = function($type) 
+    {   
+        var $quarter = $('#quarter_id'), $section = $('#section_id');
+        $quarter.find('option').remove(); $section.find('option').remove();
+        $section.append('<option value="">select a section</option>');  
+
+        console.log(base_url + 'academics/grading-sheets/components/reload-quarter-via-type/' + $type);
+        $.ajax({
+            type: "GET",
+            url: base_url + 'academics/grading-sheets/components/reload-quarter-via-type/' + $type,
+            success: function(response) {
+                var data = JSON.parse(response);
+                console.log(data.quarters);
+                $.each(data.quarters, function(i, item) {
+                    $quarter.append('<option value="' + item.id + '">' + item.name + '</option>');  
+                }); 
+                $.each(data.sections, function(i, item) {
+                    $section.append('<option value="' + item.id + '">' + item.name + '</option>');  
+                }); 
+            },
+            async: false
+        });
+        
+        $('.m_selectpicker').selectpicker('refresh');
+        $.component.required_fields();
+    },
+
+    component.prototype.reload_subject = function($section) 
+    {   
+        var $subject = $('#subject_id');
+        $subject.find('option').remove(); 
+        $subject.append('<option value="">select a subject</option>');  
+
+        console.log(base_url + 'academics/grading-sheets/components/reload-subject-via-section/' + $section);
+        $.ajax({
+            type: "GET",
+            url: base_url + 'academics/grading-sheets/components/reload-subject-via-section/' + $section,
+            success: function(response) {
+                var data = JSON.parse(response);
+                $.each(data.subjects, function(i, item) {
+                    $subject.append('<option value="' + item.id + '">' + item.name + '</option>');  
+                }); 
+            },
+            async: false
+        });
+
+        $.component.required_fields();
+    },
+
     component.prototype.init = function()
     {   
         /*
@@ -250,6 +299,22 @@
             var $self = $(this);
             var $panel = $self.closest('.activity-panel-layout');
             $panel.remove();
+        });
+
+        this.$body.on('change', 'select[name="education_type_id"]', function (e) {
+            e.preventDefault();
+            var $self = $(this);
+            if ($self.val() > 0) {
+                $.component.reload_quarter($self.val());
+            }
+        });
+
+        this.$body.on('change', 'select[name="section_id"]', function (e) {
+            e.preventDefault();
+            var $self = $(this);
+            if ($self.val() > 0) {
+                $.component.reload_subject($self.val());
+            }
         });
 
         this.$body.on('click', '.submit-btn', function (e){

@@ -16,7 +16,9 @@ class CreateComponentsQuarters extends Migration
         Schema::create('components_quarters', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('component_id')->unsigned();
+            $table->integer('batch_id')->unsigned();
             $table->integer('quarter_id')->unsigned();
+            $table->integer('education_type_id')->unsigned();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('created_by')->unsigned();
             $table->timestamp('updated_at')->nullable();

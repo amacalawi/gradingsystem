@@ -58,9 +58,6 @@ var DatatableDataLocalDemo = function () {
 			textAlign: 'center',
 			selector: {class: 'm-checkbox--solid m-checkbox--brand'}
 		}, {
-			field: "componentOrder",
-			title: "Order"
-		}, {
 			field: "componentName",
 			title: "Name",
 		}, {
@@ -71,7 +68,8 @@ var DatatableDataLocalDemo = function () {
 			title: "Percentage"
 		}, {
 			field: "componentQuarter",
-			title: "Quarter"
+			title: "Quarter",
+			width: 120
 		}, {
 			field: "componentSubject",
 			title: "Subject"
@@ -81,14 +79,15 @@ var DatatableDataLocalDemo = function () {
 		}, {
 			field: "componentType",
 			title: "Type",
+			width: 120,
 			template: function (row) {
 				var type = {
-					"childhood-education" : {'title': 'Childhood', 'class': 'childhood-bg'},
-					"primary-education": {'title': 'Pimary', 'class': 'primary-bg'}, 
-                    "secondary-education": {'title': 'Secondary', 'class': 'secondary-bg'},
-                    "higher-education": {'title': 'Higher', 'class': 'higher-bg'}
+					1 : {'class': 'childhood-bg'},
+					2 : {'class': 'primary-bg'}, 
+                    3 : {'class': 'secondary-bg'},
+                    4 : {'class': 'higher-bg'}
 				};
-				return '<span class="m-badge ' + type[row.componentType].class + ' m-badge--wide">' + type[row.componentType].title + '</span>';
+				return '<span class="m-badge ' + type[row.componentTypeID].class + ' m-badge--wide">' + row.componentType + '</span>';
 			}
 		}, {
 			field: "Actions",

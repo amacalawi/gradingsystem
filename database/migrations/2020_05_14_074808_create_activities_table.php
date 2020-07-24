@@ -16,7 +16,7 @@ class CreateActivitiesTable extends Migration
         Schema::create('activities', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('component_id')->unsigned();
-            $table->string('activity', 40);
+            $table->string('activity', 100);
             $table->double('value')->nullable();
             $table->text('description')->nullable();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));

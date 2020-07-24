@@ -12,3 +12,10 @@ php artisan db:seed
 php artisan db:seed --class=UserSeeder
 php artisan migrate:fresh --seed
 php artisan db:seed --force
+
+Overtime
+Failure to Swipe
+Official Undertime
+Official Business
+Leave of Absence
+Change of Work Schedule
