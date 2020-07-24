@@ -112,65 +112,98 @@ class SubjectsController extends Controller
     
     public function store(Request $request)
     {   
-        
-        $timestamp = date('Y-m-d H:i:s');
-
-        $subject = Subject::create([
-            'code' => $request->code,
-            'name' => $request->name,
-            'description' => $request->description,
-            'education_type_id' => $request->type,
-            'is_mapeh' => ($request->is_mapeh !== NULL) ? 1 : 0,
-            'is_tle' => ($request->is_tle !== NULL) ? 1 : 0, 
-            'created_at' => $timestamp,
-            'created_by' => Auth::user()->id
-        ]);
-        /* 
-        if (!$subject) {
-            throw new NotFoundHttpException();
+        if($request->material > 1){
+            $exist_material = Subject::where('material_id', $request->material)->first();
+        } else {
+            $exist_material = 0;
         }
-        */
-        $data = array(
-            'title' => 'Well done!',
-            'text' => 'The subject has been successfully saved.',
-            'type' => 'success',
-            'class' => 'btn-brand'
-        );
+
+        if(!$exist_material){
+
+            $timestamp = date('Y-m-d H:i:s');
+
+            $subject = Subject::create([
+                'code' => $request->code,
+                'name' => $request->name,
+                'description' => $request->description,
+                'education_type_id' => $request->type,
+                'is_mapeh' => ($request->is_mapeh !== NULL) ? 1 : 0,
+                'is_tle' => ($request->is_tle !== NULL) ? 1 : 0,
+                'material_id' => ($request->material !== NULL) ? $request->material : 1,
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+            /* 
+            if (!$subject) {
+                throw new NotFoundHttpException();
+            }
+            */
+            $data = array(
+                'title' => 'Well done!',
+                'text' => 'The subject has been successfully saved.',
+                'type' => 'success',
+                'class' => 'btn-brand'
+            );
+
+        } else {
+            $data = array(
+                'title' => 'Warning',
+                'text' => 'The material already exist in subject',
+                'type' => 'warning',
+                'class' => 'btn-brand'
+            );
+        }
 
         echo json_encode( $data ); exit();
 
     }
 
     public function update(Request $request, $id)
-    {    
-        $timestamp = date('Y-m-d H:i:s');
-        $subject = Subject::find($id);
+    {
+        if($request->material > 1){
+            $exist_material = Subject::where('material_id', $request->material)->first();
+        } else {
+            $exist_material = 0;
+        }   
 
-        if(!$subject) {
-            throw new NotFoundHttpException();
-        }
+        if(!$exist_material)
+        {
+            $timestamp = date('Y-m-d H:i:s');
+            $subject = Subject::find($id);
+            if(!$subject) {
+                throw new NotFoundHttpException();
+            }
 
-        $subject->code = $request->code;
-        $subject->name = $request->name;
-        $subject->description = $request->description;
-        $subject->education_type_id = $request->type;
-        $subject->is_mapeh = ($request->is_mapeh !== NULL) ? 1 : 0; 
-        $subject->is_tle = ($request->is_tle !== NULL) ? 1 : 0; 
-        $subject->updated_at = $timestamp;
-        $subject->updated_by = Auth::user()->id;
+            $subject->code = $request->code;
+            $subject->name = $request->name;
+            $subject->description = $request->description;
+            $subject->education_type_id = $request->type;
+            $subject->is_mapeh = ($request->is_mapeh !== NULL) ? 1 : 0; 
+            $subject->is_tle = ($request->is_tle !== NULL) ? 1 : 0;
+            $subject->material_id = ($request->material !== NULL) ? $request->material : 1;
+            $subject->updated_at = $timestamp;
+            $subject->updated_by = Auth::user()->id;
 
-        if ($subject->update()) {
+            if ($subject->update()) {
 
+                $data = array(
+                    'title' => 'Well done!',
+                    'text' => 'The subject has been successfully updated.',
+                    'type' => 'success',
+                    'class' => 'btn-brand'
+                );
+                
+            }
+        } else {
             $data = array(
-                'title' => 'Well done!',
-                'text' => 'The subject has been successfully updated.',
-                'type' => 'success',
+                'title' => 'Warning',
+                'text' => 'The material already exist in subject',
+                'type' => 'warning',
                 'class' => 'btn-brand'
             );
-
-            echo json_encode( $data ); exit();
-
         }
+
+        echo json_encode( $data ); exit();
     }
 
     public function update_status(Request $request, $id)
@@ -369,16 +402,58 @@ class SubjectsController extends Controller
         echo json_encode( $teachers ); exit();
     }
 
-    public function import_subject(Request $request)
+    public function import(Request $request)
     {
-        $this->validate( $request, [
-            'import_file' => 'required|mimes:xls,xlsx'
-        ]);
-        
-        $path = $request->file('import_file')->store('Imports');
+        foreach($_FILES as $file)
+        {  
+            $row = 0; $timestamp = date('Y-m-d H:i:s');
+            if (($files = fopen($file['tmp_name'], "r")) !== FALSE) 
+            {
+                while (($data = fgetcsv($files, 3000, ",")) !== FALSE) 
+                {
+                    $row++;
+                    if ($row > 1) { 
+                        if ($data[0] !== '') {
+                            $exist = Subject::where('code', $data[0])->get();
+                            $exist_type = EducationType::where('code', $data[3])->get();
+                            if($exist_type->count() > 0) {
+                                if ($exist->count() > 0) {
+                                    $subject = Subject::find($exist->first()->id);
+                                    $subject->code = $data[0];
+                                    $subject->name = $data[1];
+                                    $subject->description = $data[2];
+                                    $subject->education_type_id = EducationType::where('code', $data[3])->first()->id;
+                                    $subject->is_mapeh = $data[4];
+                                    $subject->is_tle = $data[5];
+                                    $subject->updated_at = $timestamp;
+                                    $subject->updated_by = Auth::user()->id;
+                                    $subject->update();
+                                } else {
+                                    $subject = Subject::create([
+                                        'code' => $data[0],
+                                        'name' => $data[1],
+                                        'description' => $data[2],
+                                        'education_type_id' => EducationType::where('code', $data[3])->first()->id,
+                                        'is_mapeh' =>$data[4],
+                                        'is_tle' =>$data[5],
+                                        'created_at' => $timestamp,
+                                        'created_by' => Auth::user()->id
+                                    ]);
+                                }
+                            }
+                        }
+                    }
+                }
+                fclose($files);
+            }
+        }
 
-        Excel::import(new SubjectImport, $path);
-        return redirect('/academics/academics/subjects'); 
+        $data = array(
+            'message' => 'success'
+        );
+
+        echo json_encode( $data );
+        exit();
     }
 
 }

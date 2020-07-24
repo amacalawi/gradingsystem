@@ -1,8 +1,7 @@
 @extends('layouts.app')
 
-@include('modules.academics.sections.import')
-
 @section('content')
+
 <div class="row">
     <div class="col-xl-12">
         <div class="m-portlet m-portlet--full-height ">
@@ -43,8 +42,15 @@
     </div>
 </div>
 
+@include('modals.import-section')
+
 @endsection
 
+@push('styles')
+    <link href="{{ asset('assets/vendors/dropzone/dropzone.css') }}" rel="stylesheet" type="text/css" />
+@endpush
+
 @push('scripts')
+    <script src="{{ asset('assets/vendors/dropzone/dropzone.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/datatables/section.js') }}" type="text/javascript"></script>
 @endpush

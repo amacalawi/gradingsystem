@@ -85,8 +85,43 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-12">
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <div class="form-group m-form__group">
+                <label class="m-checkbox m-checkbox--solid" style="position: absolute;">
+                    {{ Form::radio('material', '1', ($subject->material_id == '1') ? 1 : 0 ) }}
+                    Substance <span></span>
+                </label>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group m-form__group">
+                    <label class="m-checkbox m-checkbox--solid" style="position: absolute;">
+                    {{ Form::radio('material', '2', ($subject->material_id == '2') ? 1 : 0 ) }}
+                    Conduct <span></span>
+                </label>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group m-form__group">
+                    <label class="m-checkbox m-checkbox--solid" style="position: absolute;">
+                    {{ Form::radio('material', '3', ($subject->material_id == '3') ? 1 : 0 ) }}
+                    Homeroom <span></span>
+                </label>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group m-form__group">
+                    <label class="m-checkbox m-checkbox--solid" style="position: absolute;">
+                    {{ Form::radio('material', '4', ($subject->material_id == '4') ? 1 : 0 ) }}
+                    Co-curricular <span></span>
+                </label>
+            </div>
+        </div>        
+    </div>
+    
+    <div class="row mt-4 ml-2">
+        <div class="col-md-3">
             <div class="form-group m-form__group">
                 <label class="m-checkbox m-checkbox--solid" style="position: absolute;">
                     @if ($subject->is_mapeh > 0) 
@@ -102,8 +137,7 @@
             </div>
         </div>
     </div>
-
-    <div class="row">
+    <div class="row ml-2">
         <div class="col-md-12">
             <div class="form-group m-form__group">
                 <label class="m-checkbox m-checkbox--solid" style="position: absolute;">
@@ -120,5 +154,4 @@
             </div>
         </div>
     </div>
-
 {{ Form::close() }}

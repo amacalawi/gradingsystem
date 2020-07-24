@@ -325,16 +325,54 @@ class LevelsController extends Controller
         echo json_encode( $levels ); exit();
     }
 
-    public function import_level(Request $request)
-    {   
-        $this->validate( $request, [
-            'import_file' => 'required|mimes:xls,xlsx'
-        ]);
-        
-        $path = $request->file('import_file')->store('Imports');
+    public function import(Request $request)
+    {
+        foreach($_FILES as $file)
+        {  
+            $row = 0; $timestamp = date('Y-m-d H:i:s');
+            if (($files = fopen($file['tmp_name'], "r")) !== FALSE) 
+            {
+                while (($data = fgetcsv($files, 3000, ",")) !== FALSE) 
+                {
+                    $row++;
+                    if ($row > 1) { 
+                        if ($data[0] !== '') {
+                            $exist = Level::where('code', $data[0])->get();
+                            $exist_type = EducationType::where('code', $data[3])->get();
+                            if($exist_type->count() > 0) {
+                                if ($exist->count() > 0) {
+                                    $level = Level::find($exist->first()->id);
+                                    $level->code = $data[0];
+                                    $level->name = $data[1];
+                                    $level->description = $data[2];
+                                    $level->education_type_id = EducationType::where('code', $data[3])->first()->id;
+                                    $level->updated_at = $timestamp;
+                                    $level->updated_by = Auth::user()->id;
+                                    $level->update();
+                                } else {
+                                    $level = Level::create([
+                                        'code' => $data[0],
+                                        'name' => $data[1],
+                                        'description' => $data[2],
+                                        'education_type_id' => EducationType::where('code', $data[3])->first()->id,
+                                        'created_at' => $timestamp,
+                                        'created_by' => Auth::user()->id
+                                    ]);
+                                }
+                            }
+                        }
+                    }
+                }
+                fclose($files);
+            }
+        }
 
-        Excel::import(new LevelImport, $path);
-        return redirect('/academics/academics/levels');
+        $data = array(
+            'message' => 'success'
+        );
+
+        echo json_encode( $data );
+        exit();
     }
 
 }

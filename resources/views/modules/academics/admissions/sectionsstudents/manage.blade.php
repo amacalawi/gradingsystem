@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@include('modules.academics.admissions.sectionsstudents.import')
-
 @section('content')
 <div class="row">
     <div class="col-xl-12">
@@ -42,8 +40,16 @@
         </div>
     </div>
 </div>
+
+@include('modals.import-class')
+
 @endsection
 
+@push('styles')
+    <link href="{{ asset('assets/vendors/dropzone/dropzone.css') }}" rel="stylesheet" type="text/css" />
+@endpush
+
 @push('scripts')
+    <script src="{{ asset('assets/vendors/dropzone/dropzone.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/datatables/admission.js') }}" type="text/javascript"></script>
 @endpush
