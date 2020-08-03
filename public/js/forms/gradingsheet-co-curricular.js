@@ -118,8 +118,9 @@
             $initialCell.text($scoring);
             console.log('scoring: ' + $scoring);
 
-            var filters = transmutations.filter(x => x.score <= $scoring);
-            var qg = Math.max.apply(Math, filters.map(function(o) { return o.equivalent; }));
+            // var filters = transmutations.filter(x => x.score <= $scoring);
+            // var qg = Math.max.apply(Math, filters.map(function(o) { return o.equivalent; }));
+            var qg = $scoring;
             $qcCell.text(qg);
         } 
         else
@@ -148,8 +149,9 @@
             var $scoring = $initPercent.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
             $initialCell.text($scoring)
 
-            var filters = transmutations.filter(x => x.score <= $scoring);
-            var qg = Math.max.apply(Math, filters.map(function(o) { return o.equivalent; }));
+            // var filters = transmutations.filter(x => x.score <= $scoring);
+            // var qg = Math.max.apply(Math, filters.map(function(o) { return o.equivalent; }));
+            var qg = $scoring;
             $qcCell.text(qg);
         }
 

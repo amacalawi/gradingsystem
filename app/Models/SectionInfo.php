@@ -20,6 +20,9 @@ class SectionInfo extends Model
             'section' =>  function($q) { 
                 $q->select(['id', 'code', 'name', 'description']); 
             },
+            'batch' =>  function($q) { 
+                $q->select(['id', 'code', 'name', 'description']); 
+            },
             'level' =>  function($q) { 
                 $q->select(['id', 'code', 'name', 'description']); 
             },
@@ -34,8 +37,10 @@ class SectionInfo extends Model
             $results = array(
                 'id' => ($sectioninfos->id) ? $sectioninfos->id : '',
                 'batch_id' => ($sectioninfos->batch_id) ? $sectioninfos->batch_id : '',
+                'batch_name' => ($sectioninfos->batch->name) ? $sectioninfos->batch->name : '',
                 'section_id' => ($sectioninfos->section_id) ? $sectioninfos->section_id : '',
                 'adviser_id' => ($sectioninfos->adviser_id) ? $sectioninfos->adviser_id : '',
+                'adviser_name' => ($sectioninfos->adviser_id) ? ucfirst((new Staff)->where('id', $sectioninfos->adviser_id)->first()->firstname).' '.ucfirst((new Staff)->where('id', $sectioninfos->adviser_id)->first()->lastname) : '',
                 'level_id' => ($sectioninfos->level_id) ? $sectioninfos->level_id : '',
                 'section_name' => ($sectioninfos->section->name) ? $sectioninfos->section->name : '',
                 'level_name' => ($sectioninfos->level->name) ? $sectioninfos->level->name : '',
@@ -68,6 +73,11 @@ class SectionInfo extends Model
         return $this->belongsTo('App\Models\Level');
     }
 
+    public function batch()
+    {   
+        return $this->belongsTo('App\Models\Batch');
+    }
+
     public function section_subjects()
     {
         return $this->hasMany('App\Models\SectionsSubjects', 'section_info_id', 'id')
@@ -78,5 +88,10 @@ class SectionInfo extends Model
     public function section_students()
     {
         return $this->hasMany('App\Models\Admission', 'section_id', 'section_id')->where('is_active', 1);      
+    }
+
+    public function edtype()
+    {
+        return $this->belongsTo('App\Models\EducationType', 'education_type_id', 'id');
     }
 }

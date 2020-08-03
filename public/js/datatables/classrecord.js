@@ -111,8 +111,8 @@ var DatatableDataLocalDemo = function () {
 		var query = datatable.getDataSourceQuery();
 
 		$('#m_form_type').on('change', function () {
-			datatable.search($(this).val(), 'classrecordType');
-		}).val(typeof query.classrecordType !== 'undefined' ? query.classrecordType : '');
+			datatable.search($(this).val(), 'classrecordTypeID');
+		}).val(typeof query.classrecordTypeID !== 'undefined' ? query.classrecordTypeID : '');
 
 		$('#m_form_status, #m_form_type').selectpicker();
 	};

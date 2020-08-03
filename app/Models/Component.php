@@ -135,6 +135,7 @@ class Component extends Model
                 'batch_id' => $component->batch_id,
                 'subject_id' => $component->subject_id,
                 'name' => $component->name,
+                'description' => $component->description,
                 'palette' => $component->palette,
                 'percentage' => $component->percentage,
                 'is_sum_cell' => $component->is_sum_cell,

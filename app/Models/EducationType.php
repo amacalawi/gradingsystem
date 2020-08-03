@@ -55,5 +55,26 @@ class EducationType extends Model
         return $education_types;
     }
 
+    public function manage_education_types()
+    {	
+    	$education_types = self::where('is_active', 1)->orderBy('id', 'asc')->get();
+
+        $deps = array();
+        $deps[] = array('' => 'All');
+        foreach ($education_types as $education_type) {
+            $deps[] = array(
+                $education_type->id => $education_type->name
+            );
+        }
+
+        $education_types = array();
+        foreach($deps as $dep) {
+            foreach($dep as $key => $val) {
+                $education_types[$key] = $val;
+            }
+        }
+
+        return $education_types;
+    }
 }
 
