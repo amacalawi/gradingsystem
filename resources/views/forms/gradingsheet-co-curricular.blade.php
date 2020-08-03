@@ -5,13 +5,13 @@
                 <th class="shaded fixed freeze text-center scrolling_table_1">#</th>
                 <th class="shaded fixed freeze text-center scrolling_table_1">Student</th>
                 @foreach ($components as $component)
-                    <th class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 component-header" colspan="{{ $component->columns }}">{{ $component->name }}</th>
+                    <th class="quarter-bg fixed freeze_vertical text-center scrolling_table_1 component-header" colspan="{{ $component->columns }}" data-toggle="m-tooltip" data-placement="bottom" title="quarterly grade">QG</th>
                 @endforeach
                 <th class="shaded fixed freeze_vertical text-center scrolling_table_1 hidden" title="initial grade">Initial</th>
-                <th class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg" title="quarterly grade">QG</th>
+                <th class="shaded fixed freeze_vertical text-center scrolling_table_1 hidden quarter-bg" title="quarterly grade">QG</th>
                 <th class="shaded fixed freeze_vertical text-center scrolling_table_1 hidden" title="transmutation value">TC</th>
-                <th class="shaded fixed freeze_vertical text-center scrolling_table_1" title="rating value">Rating</th>
-                <th class="shaded fixed freeze_vertical text-center scrolling_table_1" title="ranking value">Ranking</th>
+                <th class="shaded fixed freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="rating value">Rating</th>
+                <th class="shaded fixed freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="ranking value">Ranking</th>
             </tr>
             <tr>
                 <th class="shaded fixed freeze text-center scrolling_table_1"><strong>0</strong></th>
@@ -19,11 +19,11 @@
                 @php $component_percentage = 0; @endphp
                 @foreach ($components as $component)
                     @php $iteration = 1; @endphp
-                    <th class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1" title="quarterly percentage">{{ $component->percentage }}%</th>
+                    <th class="quarter-bg fixed freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="quarterly percentage">{{ $component->percentage }}%</th>
                     @php $component_percentage += $component->percentage; @endphp
                 @endforeach
                 <th class="shaded fixed freeze_vertical text-center scrolling_table_1 hidden" title="total quarterly percentage">{{ $component_percentage }}%</th>
-                <th class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg">&nbsp;</th>
+                <th class="shaded fixed freeze_vertical text-center scrolling_table_1 hidden quarter-bg">&nbsp;</th>
                 <th class="shaded fixed freeze_vertical text-center scrolling_table_1 hidden">&nbsp;</th>
                 <th class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</th>
                 <th class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</th>
@@ -42,7 +42,7 @@
                         @php 
                             $score = $gradings->get_component_score_via_component($component->id, $student->student_id, $grading->id);
                         @endphp
-                        <td group="{{ $component->id }}" percentage="{{ $component->percentage }} " maxvalue="100" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1">
+                        <td group="{{ $component->id }}" percentage="{{ $component->percentage }} " maxvalue="100" class="quarter-bg fixed freeze_vertical text-center scrolling_table_1">
                             <input value="{{ $component->id.'_'.$student->student_id }}" name="component[]" class="hidden text-cell" type="text"/>    
                             <input maxvalue="100" value="{{ $score }}" name="score[]" class="numeric-double component-cell text-cell" type="text"/>
                         </td>
@@ -50,7 +50,7 @@
                     <td class="shaded fixed freeze_vertical text-center scrolling_table_1 initial-cell hidden">
                         {{ $gradings->get_colum_via_gradingsheet_student('initial_grade', $grading->id, $student->student_id) }}
                     </td>
-                    <td class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg quarter-cell">
+                    <td class="shaded fixed freeze_vertical text-center scrolling_table_1 hidden quarter-bg quarter-cell">
                         {{ $gradings->get_colum_via_gradingsheet_student('quarter_grade', $grading->id, $student->student_id) }}
                     </td>
                     <td class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell hidden">

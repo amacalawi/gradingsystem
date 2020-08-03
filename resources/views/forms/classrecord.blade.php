@@ -25,6 +25,20 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col-md-6">
+                        <h5>
+                            <strong>Adviser:</strong>
+                            {{ $class_records->adviser_name }}
+                        </h5>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>
+                            <strong>Batch:</strong> 
+                            {{ $class_records->batch_name }}
+                        </h5>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-md-12">
                         <div class="m-wizard m-wizard--1 m-wizard--success" id="m_wizard">
                             <div class="m-wizard__head m-b-0">
@@ -137,7 +151,7 @@
                                                                             @php $i++; $quarterGrade = 0; $gradeCounter = 0; @endphp
                                                                             <tr class="tr_shaded">
                                                                                 <td class="shaded fixed freeze text-center scrolling_table_1">{{ $i }}</td>
-                                                                                <td class="shaded fixed freeze text-center scrolling_table_1">{{ $students->student->firstname.' '. $students->student->lastname }}</td>
+                                                                                <td class="shaded fixed freeze text-center scrolling_table_1">{{ ucfirst($students->student->firstname).' '. ucfirst($students->student->lastname) }}</td>
                                                                                 @foreach ($class_records->subjects as $subjects)
                                                                                     @php
                                                                                         $gradeCounter++;
@@ -224,7 +238,7 @@
                                                                             @php $i++; $quarterGrade = 0; $gradeCounter = 0; @endphp
                                                                             <tr class="tr_shaded">
                                                                                 <td class="shaded fixed freeze text-center scrolling_table_1">{{ $i }}</td>
-                                                                                <td class="shaded fixed freeze text-center scrolling_table_1">{{ $students->student->firstname.' '. $students->student->lastname }}</td>
+                                                                                <td class="shaded fixed freeze text-center scrolling_table_1">{{ ucfirst($students->student->firstname).' '. ucfirst($students->student->lastname) }}</td>
                                                                                 @foreach ($class_records->subjects as $subjects)
                                                                                     @php
                                                                                         $gradeCounter++;
@@ -304,7 +318,7 @@
                                                                 @foreach ($class_records->students as $students)
                                                                     <tr class="tr_shaded">
                                                                         <td class="shaded fixed freeze text-center scrolling_table_1">{{ $i }}</td>
-                                                                        <td class="shaded fixed freeze text-center scrolling_table_1">{{ $students->student->firstname.' '. $students->student->lastname }}</td>
+                                                                        <td class="shaded fixed freeze text-center scrolling_table_1">{{ ucfirst($students->student->firstname).' '. ucfirst($students->student->lastname) }}</td>
                                                                         @php $finalgrades = 0; $fgcounter = 0; @endphp
                                                                         @foreach ($grades[$students->student->id] as $grade) 
                                                                             <td class="shaded fixed freeze_vertical text-center scrolling_table_1">

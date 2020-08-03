@@ -5,13 +5,13 @@
                 <th class="shaded fixed freeze text-center scrolling_table_1">#</th>
                 <th class="shaded fixed freeze text-center scrolling_table_1">STUDENT</th>
                 @foreach ($components as $component)
-                    <th class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 component-header" colspan="{{ $component->columns }}">{{ $component->name }}</th>
+                    <th class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 component-header" colspan="{{ floatval($component->columns) - floatval(1) }}" data-toggle="m-tooltip" data-placement="bottom" title="{{ $component->description }}">{{ $component->name }}</th>
                 @endforeach
-                <th class="shaded fixed freeze_vertical text-center scrolling_table_1" title="initial grade">Initial</th>
-                <th class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg" title="quarterly grade">QG</th>
-                <th class="shaded fixed freeze_vertical text-center scrolling_table_1" title="transmutation value">TC</th>
-                <th class="shaded fixed freeze_vertical text-center scrolling_table_1" title="transmutation value">Rating</th>
-                <th class="shaded fixed freeze_vertical text-center scrolling_table_1" title="transmutation value">Ranking</th>
+                <th class="shaded fixed freeze_vertical text-center scrolling_table_1 hidden" title="initial grade">Initial</th>
+                <th class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg" data-toggle="m-tooltip" data-placement="bottom" title="quarterly grade">QG</th>
+                <th class="shaded fixed freeze_vertical text-center scrolling_table_1 hidden" title="transmutation value">TC</th>
+                <th class="shaded fixed freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="rating value">Rating</th>
+                <th class="shaded fixed freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="ranking value">Ranking</th>
             </tr>
             <tr>
                 <th class="shaded fixed freeze text-center scrolling_table_1"><strong>-</strong></th>
@@ -20,11 +20,11 @@
                 @foreach ($components as $component)
                     @php $iteration = 1; @endphp
                     @foreach ($component->activities as $activity)
-                        <th class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1" title="{{ $activity->description }}">{{  $activity->activity }}</th>
+                        <th class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="{{ $activity->description }}">{{  $activity->activity }}</th>
                         @php $iteration++; @endphp
                     @endforeach
                     @if ($component->is_sum_cell > 0)
-                        <th class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1" title="total activities">SUM</th>
+                        <th class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="total activities">SUM</th>
                     @endif
                     @if ($component->is_hps_cell > 0)
                         <th class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1" title="highest possible score">HPS</th>
@@ -32,12 +32,12 @@
                     @if ($component->is_ps_cell > 0)
                         <th class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1" title="percentage score">PS</th>
                     @endif
-                    <th class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1" title="quarterly percentage">{{ $component->percentage }}%</th>
+                    <th class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 hidden" title="quarterly percentage">{{ $component->percentage }}%</th>
                     @php $component_percentage += $component->percentage; @endphp
                 @endforeach
-                <th class="shaded fixed freeze_vertical text-center scrolling_table_1" title="total quarterly percentage">{{ $component_percentage }}%</th>
+                <th class="shaded fixed freeze_vertical text-center scrolling_table_1 hidden" title="total quarterly percentage">{{ $component_percentage }}%</th>
                 <th class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg">&nbsp;</th>
-                <th class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</th>
+                <th class="shaded fixed freeze_vertical text-center scrolling_table_1 hidden">&nbsp;</th>
                 <th class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</th>
                 <th class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</th>
             </tr>
@@ -59,11 +59,11 @@
                     @if ($component->is_ps_cell > 0)
                         <th group="{{ $component->id }}" maxvalue="{{ $component->sum_value }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 ps-header">100%</th>
                     @endif
-                    <td group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 percentage-header">&nbsp;</td>
+                    <td group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 percentage-header hidden">&nbsp;</td>
                 @endforeach
-                <td class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</td>
+                <td class="shaded fixed freeze_vertical text-center scrolling_table_1 hidden">&nbsp;</td>
                 <td class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg">&nbsp;</td>
-                <td class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</td>
+                <td class="shaded fixed freeze_vertical text-center scrolling_table_1 hidden">&nbsp;</td>
                 <td class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</td>
                 <td class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</td>
             </tr>
@@ -117,7 +117,7 @@
                                 {{ floor($ps*100)/100 }}
                             </td>
                         @endif
-                        <td group="{{ $component->id }}" maxvalue="{{ $component->percentage }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 percentage-cell">
+                        <td group="{{ $component->id }}" maxvalue="{{ $component->percentage }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 percentage-cell hidden">
                             @php 
                                 if (floatval($sum) > 0) {
                                     $percentage = (floatval($sum) / floatval($hps)) * $component->percentage; 
@@ -127,13 +127,13 @@
                             {{ floor($percentage*100)/100 }}
                         </td>
                     @endforeach
-                    <td class="shaded fixed freeze_vertical text-center scrolling_table_1 initial-cell">
+                    <td class="shaded fixed freeze_vertical text-center scrolling_table_1 initial-cell hidden">
                         {{ $gradings->get_colum_via_gradingsheet_student('initial_grade', $grading->id, $student->student_id) }}
                     </td>
                     <td class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg quarter-cell">
                         {{ $gradings->get_colum_via_gradingsheet_student('quarter_grade', $grading->id, $student->student_id) }}
                     </td>
-                    <td class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell">
+                    <td class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell hidden">
                         <input maxvalue="100" name="init_grade[]" value="{{ $gradings->get_colum_via_gradingsheet_student('initial_grade', $grading->id, $student->student_id) }}" class="hidden numeric-double text-cell" type="text"/>
                         <input maxvalue="100" name="quarter_grade[]" value="{{ $gradings->get_colum_via_gradingsheet_student('quarter_grade', $grading->id, $student->student_id) }}" class="hidden numeric-double text-cell" type="text"/>
                         <input maxvalue="100" name="tc_score[]" value="{{ $gradings->get_colum_via_gradingsheet_student('adjustment_grade', $grading->id, $student->student_id) }}" class="numeric-double text-cell" type="text"/>

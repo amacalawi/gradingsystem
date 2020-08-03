@@ -94,19 +94,19 @@
             var $qcCell  = $rows.find('.quarter-cell');
             var $initialCell = $rows.find('.initial-cell');
     
-            var $sum = 0, $division = 0;
+            var $sum = 0;
             $.each($rows.find('td .component-cell'), function(){
                 var $score = $(this).val();
+                var $percentage = parseFloat($(this).parents('td').attr('percentage')) / parseFloat(100);
 
                 if ($score != '') {
-                    $sum += parseFloat($score);
-                    $division++;
+                    $sum += parseFloat($score) * parseFloat($percentage);
                 } 
             });
 
             var $initPercent = 0;
             if ($sum > 0) {
-                $initPercent += parseFloat($sum) / parseFloat($division);
+                $initPercent += parseFloat($sum);
                 console.log('init percent: ' + parseFloat($initPercent));
             }
 
@@ -118,9 +118,9 @@
             $initialCell.text($scoring);
             console.log('scoring: ' + $scoring);
 
-            var filters = transmutations.filter(x => x.score <= $scoring);
-            var qg = Math.max.apply(Math, filters.map(function(o) { return o.equivalent; }));
-            $qcCell.text(qg);
+            // var filters = transmutations.filter(x => x.score <= $scoring);
+            // var qg = Math.max.apply(Math, filters.map(function(o) { return o.equivalent; }));
+            $qcCell.text($scoring);
         } 
         else
         {   
@@ -128,18 +128,19 @@
             var $initialCell = $rows.find('.initial-cell');
             var $qcCell  = $rows.find('.quarter-cell');
 
-            var $initPercent = 0, $division = 0;
+            var $sum = 0;
             $.each($rows.find('td .component-cell'), function(){
                 var $score = $(this).val();
+                var $percentage = parseFloat($(this).parents('td').attr('percentage')) / parseFloat(100);
 
                 if ($score != '') {
-                    $initPercent += parseFloat($score);
-                    $division++;
-                }
+                    $sum += parseFloat($score) * parseFloat($percentage);
+                } 
             });
 
-            if ($division > 0) {
-                $initPercent = parseFloat($initPercent) / parseFloat($division);
+            var $initPercent = 0;
+            if ($sum > 0) {
+                $initPercent += parseFloat($sum);
             }
             if ($tcCell.val() != '') {
                 $initPercent = parseFloat($initPercent) + parseFloat($tcCell.val());
@@ -148,29 +149,29 @@
             var $scoring = $initPercent.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
             $initialCell.text($scoring)
 
-            var filters = transmutations.filter(x => x.score <= $scoring);
-            var qg = Math.max.apply(Math, filters.map(function(o) { return o.equivalent; }));
-            $qcCell.text(qg);
+            // var filters = transmutations.filter(x => x.score <= $scoring);
+            // var qg = Math.max.apply(Math, filters.map(function(o) { return o.equivalent; }));
+            $qcCell.text($scoring);
         }
 
         var initGrade = $rows.find('.tc-cell input[name="init_grade[]"]');
         var quarterGrade = $rows.find('.tc-cell input[name="quarter_grade[]"]');
         initGrade.val($scoring);
-        quarterGrade.val(qg);
+        quarterGrade.val($scoring);
 
-        if (parseFloat(qg) >= 95) {
+        if (parseFloat($scoring) >= 95) {
             $rows.find('.rating-cell').text('E');
             $rows.find('input[name="rating[]"]').val('E');
-        } else if (parseFloat(qg) >= 90) {
+        } else if (parseFloat($scoring) >= 90) {
             $rows.find('.rating-cell').text('VS');
             $rows.find('input[name="rating[]"]').val('VS');
-        } else if (parseFloat(qg) >= 85) {
+        } else if (parseFloat($scoring) >= 85) {
             $rows.find('.rating-cell').text('S');
             $rows.find('input[name="rating[]"]').val('S');
-        } else if (parseFloat(qg) >= 80) {
+        } else if (parseFloat($scoring) >= 80) {
             $rows.find('.rating-cell').text('MS');
             $rows.find('input[name="rating[]"]').val('MS');
-        } else if (parseFloat(qg) >= 75) {
+        } else if (parseFloat($scoring) >= 75) {
             $rows.find('.rating-cell').text('FS');
             $rows.find('input[name="rating[]"]').val('FS');
         } else {

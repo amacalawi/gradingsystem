@@ -15,6 +15,7 @@ use App\Models\Subject;
 use App\Models\SectionsSubjects;
 use App\Models\GradingSheet;
 use App\Models\GradingSheetQuarter;
+use App\Models\EducationType;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -48,13 +49,15 @@ class ClassRecordController extends Controller
     public function manage(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/academics/gradingsheets/classrecord/manage')->with(compact('menus'));
+        $types = (new EducationType)->manage_education_types();
+        return view('modules/academics/gradingsheets/classrecord/manage')->with(compact('menus', 'types'));
     }
 
     public function inactive(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/schools/classrecords/inactive')->with(compact('menus'));
+        $types = (new EducationType)->manage_education_types();
+        return view('modules/academics/gradingsheets/classrecord/inactive')->with(compact('menus', 'types'));
     }
 
     public function validated($id)
@@ -83,6 +86,9 @@ class ClassRecordController extends Controller
                 },
                 'level' =>  function($q) { 
                     $q->select(['id', 'code', 'name', 'description']); 
+                },
+                'edtype' =>  function($q) { 
+                    $q->select(['id', 'name']); 
                 }
             ])
             ->where([
@@ -99,6 +105,9 @@ class ClassRecordController extends Controller
                 },
                 'level' =>  function($q) { 
                     $q->select(['id', 'code', 'name', 'description']); 
+                },
+                'edtype' =>  function($q) { 
+                    $q->select(['id', 'name']); 
                 }
             ])
             ->where([
@@ -117,7 +126,8 @@ class ClassRecordController extends Controller
                 'classrecordLevel' => $classrecord->level->name,
                 'classrecordSubjects' => (new SectionsSubjects)->where(['section_info_id' => $classrecord->id, 'is_active' => 1])->count(),
                 'classrecordStudents' => (new Admission)->where(['section_id' => $classrecord->section->id, 'status' => 'admit', 'is_active' => 1])->count(),
-                'classrecordType' => $classrecord->type,
+                'classrecordTypeID' => $classrecord->edtype->id,
+                'classrecordType' => $classrecord->edtype->name,
                 'classrecordModified' => ($classrecord->updated_at !== NULL) ? date('d-M-Y', strtotime($classrecord->updated_at)).'<br/>'. date('h:i A', strtotime($classrecord->updated_at)) : date('d-M-Y', strtotime($classrecord->created_at)).'<br/>'. date('h:i A', strtotime($classrecord->created_at))
             ];
         });
@@ -132,6 +142,9 @@ class ClassRecordController extends Controller
                 },
                 'level' =>  function($q) { 
                     $q->select(['id', 'code', 'name', 'description']); 
+                },
+                'edtype' =>  function($q) { 
+                    $q->select(['id', 'name']); 
                 }
             ])
             ->where([
@@ -148,6 +161,9 @@ class ClassRecordController extends Controller
                 },
                 'level' =>  function($q) { 
                     $q->select(['id', 'code', 'name', 'description']); 
+                },
+                'edtype' =>  function($q) { 
+                    $q->select(['id', 'name']); 
                 }
             ])
             ->where([
@@ -166,8 +182,8 @@ class ClassRecordController extends Controller
                 'classrecordLevel' => $classrecord->level->name,
                 'classrecordSubjects' => (new SectionsSubjects)->where(['section_info_id' => $classrecord->id, 'is_active' => 1])->count(),
                 'classrecordStudents' => (new Admission)->where(['section_id' => $classrecord->section->id, 'status' => 'admit', 'is_active' => 1])->count(),
-                'classrecordType' => $classrecord->type,
-                'classrecordType' => $classrecord->type,
+                'classrecordTypeID' => $classrecord->edtype->id,
+                'classrecordType' => $classrecord->edtype->name,
                 'classrecordModified' => ($classrecord->updated_at !== NULL) ? date('d-M-Y', strtotime($classrecord->updated_at)).'<br/>'. date('h:i A', strtotime($classrecord->updated_at)) : date('d-M-Y', strtotime($classrecord->created_at)).'<br/>'. date('h:i A', strtotime($classrecord->created_at))
             ];
         });
@@ -178,7 +194,7 @@ class ClassRecordController extends Controller
         $this->validated($id);
         $menus = $this->load_menus();
         $class_records = (new SectionInfo)->fetch($id);
-        $quarters = (new Quarter)->all_quarters_via_type((new SectionInfo)->fetch($id)->type);
+        $quarters = (new Quarter)->all_quarters_via_type((new SectionInfo)->fetch($id)->education_type_id);
         return view('modules/academics/gradingsheets/classrecord/view')->with(compact('menus', 'class_records', 'quarters'));
     }
 

@@ -181,6 +181,27 @@
         var quarterGrade = $rows.find('.tc-cell input[name="quarter_grade[]"]');
         initGrade.val($scoring);
         quarterGrade.val(qg);
+
+        if (parseFloat(qg) >= 95) {
+            $rows.find('.rating-cell').text('E');
+            $rows.find('input[name="rating[]"]').val('E');
+        } else if (parseFloat(qg) >= 90) {
+            $rows.find('.rating-cell').text('VS');
+            $rows.find('input[name="rating[]"]').val('VS');
+        } else if (parseFloat(qg) >= 85) {
+            $rows.find('.rating-cell').text('S');
+            $rows.find('input[name="rating[]"]').val('S');
+        } else if (parseFloat(qg) >= 80) {
+            $rows.find('.rating-cell').text('MS');
+            $rows.find('input[name="rating[]"]').val('MS');
+        } else if (parseFloat(qg) >= 75) {
+            $rows.find('.rating-cell').text('FS');
+            $rows.find('input[name="rating[]"]').val('FS');
+        } else {
+            $rows.find('.rating-cell').text('NI');
+            $rows.find('input[name="rating[]"]').val('NI');
+        }
+        
         $.gradingsheet.rankings();
     },
 
@@ -193,7 +214,7 @@
         .reduce(function(a, b){ if (b != a[0]) a.unshift(b); return a }, [])
         .forEach((v,i)=>{
             var $i = i + 1;
-            $('.quarter-cell').filter(function() {return $(this).text() == v;}).next().find('input[name="ranking[]"]').val($i).parents('td').next().text($i);
+            $('.quarter-cell').filter(function() {return $(this).text() == v;}).next().find('input[name="ranking[]"]').val($i).parents('td').next().next().text($i);
         });
     },
 

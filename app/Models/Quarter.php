@@ -69,7 +69,7 @@ class Quarter extends Model
     public function all_quarters_via_type($type)
     {
         $quarters = self::where([
-            'type' => $type,
+            'education_type_id' => $type,
             'is_active' => 1
         ])
         ->orderBy('id', 'asc')

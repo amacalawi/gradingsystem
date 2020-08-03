@@ -5,7 +5,7 @@
         this.$body = $("body");
     };
 
-    var $required = 0; var files = []; var transmutations = [];
+    var $required = 0; var files = []; var transmutations = []; var transmutations2 = [];
 
     gradingsheet.prototype.validate = function($form, $required)
     {   
@@ -149,7 +149,8 @@
             var $scoring = $initPercent.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
             $initialCell.text($scoring);
 
-            var filters = transmutations.filter(x => x.score <= $scoring);
+            var filters = transmutations2.filter(x => x.score <= $sum);
+            console.log(filters);
             var qg = Math.max.apply(Math, filters.map(function(o) { return o.equivalent; }));
             $qcCell.text(qg);
         } 
@@ -175,7 +176,7 @@
             var $scoring = $initPercent.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
             $initialCell.text($scoring)
 
-            var filters = transmutations.filter(x => x.score <= $scoring);
+            var filters = transmutations2.filter(x => x.score <= $scoring);
             var qg = Math.max.apply(Math, filters.map(function(o) { return o.equivalent; }));
             $qcCell.text(qg);
         }
@@ -285,9 +286,45 @@
         console.log(transmutations);
     },
 
+    gradingsheet.prototype.fetch_transmutations2 = function()
+    { 
+        transmutations2.push({score: 0, equivalent: 60});
+        transmutations2.push({score: 11, equivalent: 62});
+        transmutations2.push({score: 12, equivalent: 63});
+        transmutations2.push({score: 13, equivalent: 65});
+        transmutations2.push({score: 14, equivalent: 66});
+        transmutations2.push({score: 15, equivalent: 68});
+        transmutations2.push({score: 16, equivalent: 69});
+        transmutations2.push({score: 17, equivalent: 71});
+        transmutations2.push({score: 18, equivalent: 72});
+        transmutations2.push({score: 19, equivalent: 74});
+        transmutations2.push({score: 20, equivalent: 75});
+        transmutations2.push({score: 21, equivalent: 76});
+        transmutations2.push({score: 22, equivalent: 78});
+        transmutations2.push({score: 23, equivalent: 79});
+        transmutations2.push({score: 24, equivalent: 80});
+        transmutations2.push({score: 25, equivalent: 81});
+        transmutations2.push({score: 26, equivalent: 83});
+        transmutations2.push({score: 27, equivalent: 84});
+        transmutations2.push({score: 28, equivalent: 85});
+        transmutations2.push({score: 29, equivalent: 86});
+        transmutations2.push({score: 30, equivalent: 88});
+        transmutations2.push({score: 31, equivalent: 89});
+        transmutations2.push({score: 32, equivalent: 90});
+        transmutations2.push({score: 33, equivalent: 91});
+        transmutations2.push({score: 34, equivalent: 93});
+        transmutations2.push({score: 35, equivalent: 94});
+        transmutations2.push({score: 36, equivalent: 95});
+        transmutations2.push({score: 37, equivalent: 96});
+        transmutations2.push({score: 38, equivalent: 98});
+        transmutations2.push({score: 39, equivalent: 99});
+        transmutations2.push({score: 40, equivalent: 100});
+        console.log(transmutations2);
+    },
+
     gradingsheet.prototype.init = function()
     {   
-        $.gradingsheet.fetch_transmutations();
+        $.gradingsheet.fetch_transmutations2();
         $.gradingsheet.rankings();
 
         /*
