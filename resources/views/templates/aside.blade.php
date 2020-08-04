@@ -155,6 +155,52 @@
                                                             </ul>
                                                         </div>
                                                     </li>
+
+                                                @elseif($submodule['name'] == 'Student Attendance' || $submodule['name'] == 'Staff Attendance')
+                                                    <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion" data-redirect="true">
+                                                        <a href="#" class="m-menu__link m-menu__toggle">
+                                                            <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                                                <span></span>
+                                                            </i>
+                                                            <span class="m-menu__link-text">
+                                                                {{ $submodule['name'] }}
+                                                            </span>
+                                                            <i class="m-menu__ver-arrow la la-angle-right"></i>
+                                                        </a>
+                                                        <div class="m-menu__submenu " style="">
+                                                            <span class="m-menu__arrow"></span>
+                                                            <ul class="m-menu__subnav">
+                                                                <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
+                                                                    <a href="{{ url($menu['slug'].'/'.$module['slug'].'/'.$submodule['slug'].'/file-attendance') }}" class="m-menu__link ">
+                                                                        <i class="m-menu__link-icon flaticon-clipboard"></i>
+                                                                        <span class="m-menu__link-title">
+                                                                            <span class="m-menu__link-wrap">
+                                                                                <span class="m-menu__link-text">
+                                                                                    File Attendance
+                                                                                </span>
+                                                                                <span class="m-menu__link-badge">
+                                                                                </span>
+                                                                            </span>
+                                                                        </span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
+                                                                    <a href="{{ url($menu['slug'].'/'.$module['slug'].'/'.$submodule['slug'].'/settings') }}" class="m-menu__link ">
+                                                                        <i class="m-menu__link-icon flaticon-clipboard"></i>
+                                                                        <span class="m-menu__link-title">
+                                                                            <span class="m-menu__link-wrap">
+                                                                                <span class="m-menu__link-text">
+                                                                                    Settings
+                                                                                </span>
+                                                                                <span class="m-menu__link-badge">
+                                                                                </span>
+                                                                            </span>
+                                                                        </span>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </li>
                                                 @else
                                                     <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
                                                         <a  href="{{ url($menu['slug'].'/'.$module['slug'].'/'.$submodule['slug']) }}" class="m-menu__link ">

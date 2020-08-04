@@ -381,13 +381,23 @@ class DatabaseSeeder extends Seeder
                 'created_by' => 1
             ],
             [   
+                'module_id' => '4',
+                'code' => 'for-approval',
+                'name' => 'For Approval',
+                'description' => 'For Approval Description',
+                'slug' => 'for-approval',
+                'icon' => '',
+                'order' => '12',
+                'created_by' => 1
+            ],            
+            [   
                 'module_id' => '5',
                 'code' => 'batches',
                 'name' => 'Batches',
                 'description' => 'Batches Description',
                 'slug' => 'batches',
                 'icon' => '',
-                'order' => '12',
+                'order' => '13',
                 'created_by' => 1
             ],
             [   
@@ -397,7 +407,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Quarters Description',
                 'slug' => 'quarters',
                 'icon' => '',
-                'order' => '13',
+                'order' => '14',
                 'created_by' => 1
             ],
             [   
@@ -407,7 +417,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Departments Description',
                 'slug' => 'departments',
                 'icon' => '',
-                'order' => '14',
+                'order' => '15',
                 'created_by' => 1
             ],
             [   
@@ -417,7 +427,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Designations Description',
                 'slug' => 'designations',
                 'icon' => '',
-                'order' => '15',
+                'order' => '16',
                 'created_by' => 1
             ],
             [   
@@ -427,7 +437,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Manage All Groups Description',
                 'slug' => '',
                 'icon' => '',
-                'order' => '16',
+                'order' => '17',
                 'created_by' => 1
             ],
             [   
@@ -437,7 +447,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Manage All Inactive Groups Description',
                 'slug' => 'inactive',
                 'icon' => '',
-                'order' => '17',
+                'order' => '18',
                 'created_by' => 1
             ],
             [   
@@ -447,7 +457,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'All Active Schedules Description',
                 'slug' => '',
                 'icon' => '',
-                'order' => '18',
+                'order' => '19',
                 'created_by' => 1
             ],
             [   
@@ -457,7 +467,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'All Inactive Schedules Description',
                 'slug' => 'inactive',
                 'icon' => '',
-                'order' => '19',
+                'order' => '20',
                 'created_by' => 1
             ],
             [   
@@ -467,7 +477,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'All Preset Messages Description',
                 'slug' => 'preset-message',
                 'icon' => '',
-                'order' => '20',
+                'order' => '21',
                 'created_by' => 1
             ],
             [   
@@ -477,7 +487,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Headers Description',
                 'slug' => 'headers',
                 'icon' => '',
-                'order' => '21',
+                'order' => '22',
                 'created_by' => 1
             ],
             [   
@@ -487,7 +497,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Modules Description',
                 'slug' => 'modules',
                 'icon' => '',
-                'order' => '22',
+                'order' => '23',
                 'created_by' => 1
             ],
             [   
@@ -497,7 +507,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Sub Modules Description',
                 'slug' => 'sub-modules',
                 'icon' => '',
-                'order' => '23',
+                'order' => '24',
                 'created_by' => 1
             ],
             [   
@@ -507,7 +517,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'All Active Students Description',
                 'slug' => '',
                 'icon' => '',
-                'order' => '24',
+                'order' => '25',
                 'created_by' => 1
             ],
             [   
@@ -517,7 +527,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'All Inactive Students Description',
                 'slug' => 'inactive',
                 'icon' => '',
-                'order' => '25',
+                'order' => '26',
                 'created_by' => 1
             ],
             [   
@@ -527,7 +537,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'All Active Staffs Description',
                 'slug' => '',
                 'icon' => '',
-                'order' => '26',
+                'order' => '27',
                 'created_by' => 1
             ],
             [   
@@ -537,7 +547,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'All Inactive Staffs Description',
                 'slug' => 'inactive',
                 'icon' => '',
-                'order' => '27',
+                'order' => '28',
                 'created_by' => 1
             ],
             [   
@@ -547,7 +557,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Accounts Description',
                 'slug' => 'accounts',
                 'icon' => '',
-                'order' => '28',
+                'order' => '29',
                 'created_by' => 1
             ],
             [   
@@ -557,7 +567,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Roles And Permissions Description',
                 'slug' => 'roles',
                 'icon' => '',
-                'order' => '29',
+                'order' => '30',
                 'created_by' => 1
             ],
             [   
@@ -567,7 +577,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Infoblast Description',
                 'slug' => 'infoblast',
                 'icon' => '',
-                'order' => '30',
+                'order' => '31',
                 'created_by' => 1
             ],
             [   
@@ -577,7 +587,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Emailblast Description',
                 'slug' => 'emailblast',
                 'icon' => '',
-                'order' => '31',
+                'order' => '32',
                 'created_by' => 1
             ],
             [   
@@ -587,7 +597,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Systemblast Description',
                 'slug' => 'systemblast',
                 'icon' => '',
-                'order' => '32',
+                'order' => '33',
                 'created_by' => 1
             ],
             [   
@@ -597,7 +607,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Configuration Description',
                 'slug' => 'configuration',
                 'icon' => '',
-                'order' => '33',
+                'order' => '34',
                 'created_by' => 1
             ],
             [   
@@ -607,7 +617,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Education Types',
                 'slug' => 'education-types',
                 'icon' => '',
-                'order' => '34',
+                'order' => '35',
                 'created_by' => 1
             ]
         ];
