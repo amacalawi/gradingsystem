@@ -400,6 +400,28 @@ Route::prefix('academics')->group(function () {
         /* End Transmutation Routes */
     });
     /* End Grading Sheets Routes */
+
+    //not push
+    /* Start Attendance Sheets */
+    Route::prefix('attendance-sheets')->group(function () {
+        
+        /* Start Student Attendance */
+        Route::prefix('staff-attendance')->group(function () {
+            Route::get('file-attendance', 'StaffFileAttendanceController@manage')->name('file.attendance.manage.active');
+            Route::get('file-attendance/all-active', 'StaffFileAttendanceController@all_active')->name('file.attendance.all.active');
+            Route::get('file-attendance/inactive', 'StaffFileAttendanceController@all_inactive')->name('file.attendance.all.inactive');
+            Route::get('file-attendance/add', 'StaffFileAttendanceController@add')->name('file.attendance.all.add');
+            Route::get('file-attendance/edit/{id?}', 'StaffFileAttendanceController@edit')->name('file.attendance.edit');
+            Route::post('file-attendance/store', 'StaffFileAttendanceController@store')->name('file.attendance.store');
+            Route::put('file-attendance/update/{id}', 'StaffFileAttendanceController@update')->name('file.attendance.update');
+        });
+        /* End Student Attendance */
+
+
+    });
+    /* End Attendance Sheets */
+    //not push
+    
 });
 
 /* Notifications Routes */
