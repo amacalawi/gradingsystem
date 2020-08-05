@@ -421,5 +421,74 @@
             </div>
         </div>
     </div>
+
+
+@elseif (\Request::is('*/*/*/*')  && Request::segment(5) == '' || (\Request::is('*/*/*/*/add') && Request::segment(6) == '') || (\Request::is('*/*/*/*/edit/*') ))  
+
+    <div class="m-subheader ">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto">
+                <h3 class="m-subheader__title m-subheader__title--separator">
+                    {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
+                </h3>
+                <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+                    <li class="m-nav__item m-nav__item--home">
+                        <a href="{{ url('/dashboard') }}" class="m-nav__link m-nav__link--icon">
+                            <i class="m-nav__link-icon la la-home"></i>
+                        </a>
+                    </li>
+                    <li class="m-nav__separator">
+                        -
+                    </li>
+                    <li class="m-nav__item">
+                        <a href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/'.Request::segment(3).'/file-attendance') }}" class="m-nav__link">
+                        </a>
+                    </li>
+                    <li class="m-nav__item">
+                        <a href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/'.Request::segment(3).'/file-attendance') }}" class="m-nav__link">
+                            <span class="m-nav__link-text">
+                                @php 
+                                    $string = substr(ucwords(Request::segment(3)), 0, -1);
+                                    $exemptions = ['modules', 'sub-modules'];
+                                @endphp
+                                
+                                @php 
+                                    $exempted = [''];
+                                @endphp
+                                @if (substr($string, -1) == 'e' && !in_array(Request::segment(3), $exemptions))
+                                    Manage {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2) }}
+                                @else
+                                    @if (!in_array(Request::segment(1), $exempted))
+                                        Manage {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
+                                    @else
+                                        Manage {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1) }}
+                                    @endif
+                                @endif
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            @if (Request::segment(5) == '')   
+                <div>
+                    <a href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/'.Request::segment(3).'/'.Request::segment(4).'/add') }}" class="btn m-btn--pill btn-brand add-btn m-btn--custom">
+                        <i class="la la-commenting"></i> 
+                        Add New {{ ucwords(str_replace('-',' ', Request::segment(3))) }} 
+                    </a>
+                </div>
+            @endif
+            
+            @if (\Request::is('*/*/*/*/add') || (\Request::is('*/*/*/*/edit/*')) )
+                <div>
+                    <button type="button" class="submit-btn btn m-btn--pill btn-brand m-btn--custom">
+                            <i class="la la-save"></i> Save Changes
+                    </button>
+                </div>
+            @endif
+
+        </div>
+    </div>
+
 @endif
 
