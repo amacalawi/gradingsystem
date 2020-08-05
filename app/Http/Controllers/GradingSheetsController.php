@@ -273,52 +273,260 @@ class GradingSheetsController extends Controller
     public function store(Request $request)
     {    
         $timestamp = date('Y-m-d H:i:s');
+        $subjects = Subject::find($request->subject_id);
 
-        $rows = GradingSheet::where([
-            'section_id' => $request->section_id,
-            'subject_id' => $request->subject_id,
-            'quarter_id' => $request->quarter_id,
-            'education_type_id' => $request->education_type_id,
-            'batch_id' => (new Batch)->get_current_batch()
-        ])->count();
+        if ($subjects->is_mapeh > 0) 
+        {
+            if ($subjects->code == 'health') {
+                $rows = GradingSheet::where([
+                    'section_id' => $request->section_id,
+                    'subject_id' => $request->subject_id,
+                    'education_type_id' => $request->education_type_id,
+                    'batch_id' => (new Batch)->get_current_batch()
+                ])->count();
 
-        if ($rows > 0) {
-            $data = array(
-                'title' => 'Oh snap!',
-                'text' => 'This section, subject and quarter is already exist.',
-                'type' => 'error',
-                'class' => 'btn-danger'
-            );
+                if ($rows == 0) {
+                    $count = GradingSheet::all()->count() + 1;
+
+                    $grading = GradingSheet::create([
+                        'code' => (new Section)->get_column_via_identifier('name', $request->section_id).': '.(new Subject)->get_column_via_identifier('name', $request->subject_id),
+                        'section_id' => $request->section_id,
+                        'subject_id' => $request->subject_id,
+                        'quarter_id' => $request->quarter_id,
+                        'material_id' => (new Subject)->where('id', $request->subject_id)->first()->material_id,
+                        'education_type_id' => $request->education_type_id,
+                        'batch_id' => (new Batch)->get_current_batch(),
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+
+                    if (!$grading) {
+                        throw new NotFoundHttpException();
+                    }
+
+                    $data = array(
+                        'title' => 'Well done!',
+                        'text' => 'The grading sheet has been successfully saved.',
+                        'type' => 'success',
+                        'class' => 'btn-brand'
+                    );
+
+                    echo json_encode( $data ); exit();
+                } else {
+                    $data = array(
+                        'title' => 'Oh snap!',
+                        'text' => 'This section, subject and quarter is already exist.',
+                        'type' => 'error',
+                        'class' => 'btn-danger'
+                    );
+            
+                    echo json_encode( $data ); exit();
+                }
+            } else if ($subjects->code == 'arts') {
+                $rows = GradingSheet::where([
+                    'section_id' => $request->section_id,
+                    'subject_id' => $request->subject_id,
+                    'education_type_id' => $request->education_type_id,
+                    'batch_id' => (new Batch)->get_current_batch()
+                ])->count();
+
+                if ($rows == 0) {
+                    $count = GradingSheet::all()->count() + 1;
+
+                    $grading = GradingSheet::create([
+                        'code' => (new Section)->get_column_via_identifier('name', $request->section_id).': '.(new Subject)->get_column_via_identifier('name', $request->subject_id),
+                        'section_id' => $request->section_id,
+                        'subject_id' => $request->subject_id,
+                        'quarter_id' => $request->quarter_id,
+                        'material_id' => (new Subject)->where('id', $request->subject_id)->first()->material_id,
+                        'education_type_id' => $request->education_type_id,
+                        'batch_id' => (new Batch)->get_current_batch(),
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+
+                    if (!$grading) {
+                        throw new NotFoundHttpException();
+                    }
+
+                    $data = array(
+                        'title' => 'Well done!',
+                        'text' => 'The grading sheet has been successfully saved.',
+                        'type' => 'success',
+                        'class' => 'btn-brand'
+                    );
+
+                    echo json_encode( $data ); exit();
+                } else {
+                    $data = array(
+                        'title' => 'Oh snap!',
+                        'text' => 'This section, subject and quarter is already exist.',
+                        'type' => 'error',
+                        'class' => 'btn-danger'
+                    );
+            
+                    echo json_encode( $data ); exit();
+                }
+            } else if ($subjects->code == 'pe') {
+                $rows = GradingSheet::where([
+                    'section_id' => $request->section_id,
+                    'subject_id' => $request->subject_id,
+                    'education_type_id' => $request->education_type_id,
+                    'batch_id' => (new Batch)->get_current_batch()
+                ])->count();
+
+                if ($rows < 2) {
+                    $rowx = GradingSheet::where([
+                        'section_id' => $request->section_id,
+                        'subject_id' => $request->subject_id,
+                        'quarter_id' => $request->quarter_id,
+                        'education_type_id' => $request->education_type_id,
+                        'batch_id' => (new Batch)->get_current_batch()
+                    ])->count();
+        
+                    if ($rowx > 0) {
+                        $data = array(
+                            'title' => 'Oh snap!',
+                            'text' => 'This section, subject and quarter is already exist.',
+                            'type' => 'error',
+                            'class' => 'btn-danger'
+                        );
+                
+                        echo json_encode( $data ); exit();
+                    }
+        
+                    $count = GradingSheet::all()->count() + 1;
+        
+                    $grading = GradingSheet::create([
+                        'code' => (new Section)->get_column_via_identifier('name', $request->section_id).': '.(new Subject)->get_column_via_identifier('name', $request->subject_id),
+                        'section_id' => $request->section_id,
+                        'subject_id' => $request->subject_id,
+                        'quarter_id' => $request->quarter_id,
+                        'material_id' => (new Subject)->where('id', $request->subject_id)->first()->material_id,
+                        'education_type_id' => $request->education_type_id,
+                        'batch_id' => (new Batch)->get_current_batch(),
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+        
+                    if (!$grading) {
+                        throw new NotFoundHttpException();
+                    }
+        
+                    $data = array(
+                        'title' => 'Well done!',
+                        'text' => 'The grading sheet has been successfully saved.',
+                        'type' => 'success',
+                        'class' => 'btn-brand'
+                    );
+        
+                    echo json_encode( $data ); exit();
+                } else {
+                    $data = array(
+                        'title' => 'Oh snap!',
+                        'text' => 'This section, subject and quarter is already exist.',
+                        'type' => 'error',
+                        'class' => 'btn-danger'
+                    );
+            
+                    echo json_encode( $data ); exit();
+                }
+            } else {
+                $rows = GradingSheet::where([
+                    'section_id' => $request->section_id,
+                    'subject_id' => $request->subject_id,
+                    'quarter_id' => $request->quarter_id,
+                    'education_type_id' => $request->education_type_id,
+                    'batch_id' => (new Batch)->get_current_batch()
+                ])->count();
     
+                if ($rows > 0) {
+                    $data = array(
+                        'title' => 'Oh snap!',
+                        'text' => 'This section, subject and quarter is already exist.',
+                        'type' => 'error',
+                        'class' => 'btn-danger'
+                    );
+            
+                    echo json_encode( $data ); exit();
+                }
+    
+                $count = GradingSheet::all()->count() + 1;
+    
+                $grading = GradingSheet::create([
+                    'code' => (new Section)->get_column_via_identifier('name', $request->section_id).': '.(new Subject)->get_column_via_identifier('name', $request->subject_id),
+                    'section_id' => $request->section_id,
+                    'subject_id' => $request->subject_id,
+                    'quarter_id' => $request->quarter_id,
+                    'material_id' => (new Subject)->where('id', $request->subject_id)->first()->material_id,
+                    'education_type_id' => $request->education_type_id,
+                    'batch_id' => (new Batch)->get_current_batch(),
+                    'created_at' => $timestamp,
+                    'created_by' => Auth::user()->id
+                ]);
+    
+                if (!$grading) {
+                    throw new NotFoundHttpException();
+                }
+    
+                $data = array(
+                    'title' => 'Well done!',
+                    'text' => 'The grading sheet has been successfully saved.',
+                    'type' => 'success',
+                    'class' => 'btn-brand'
+                );
+    
+                echo json_encode( $data ); exit();
+            }
+        } 
+        else 
+        {
+            $rows = GradingSheet::where([
+                'section_id' => $request->section_id,
+                'subject_id' => $request->subject_id,
+                'quarter_id' => $request->quarter_id,
+                'education_type_id' => $request->education_type_id,
+                'batch_id' => (new Batch)->get_current_batch()
+            ])->count();
+
+            if ($rows > 0) {
+                $data = array(
+                    'title' => 'Oh snap!',
+                    'text' => 'This section, subject and quarter is already exist.',
+                    'type' => 'error',
+                    'class' => 'btn-danger'
+                );
+        
+                echo json_encode( $data ); exit();
+            }
+
+            $count = GradingSheet::all()->count() + 1;
+
+            $grading = GradingSheet::create([
+                'code' => (new Section)->get_column_via_identifier('name', $request->section_id).': '.(new Subject)->get_column_via_identifier('name', $request->subject_id),
+                'section_id' => $request->section_id,
+                'subject_id' => $request->subject_id,
+                'quarter_id' => $request->quarter_id,
+                'material_id' => (new Subject)->where('id', $request->subject_id)->first()->material_id,
+                'education_type_id' => $request->education_type_id,
+                'batch_id' => (new Batch)->get_current_batch(),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+
+            if (!$grading) {
+                throw new NotFoundHttpException();
+            }
+
+            $data = array(
+                'title' => 'Well done!',
+                'text' => 'The grading sheet has been successfully saved.',
+                'type' => 'success',
+                'class' => 'btn-brand'
+            );
+
             echo json_encode( $data ); exit();
         }
-
-        $count = GradingSheet::all()->count() + 1;
-
-        $grading = GradingSheet::create([
-            'code' => (new Section)->get_column_via_identifier('name', $request->section_id).': '.(new Subject)->get_column_via_identifier('name', $request->subject_id),
-            'section_id' => $request->section_id,
-            'subject_id' => $request->subject_id,
-            'quarter_id' => $request->quarter_id,
-            'material_id' => (new Subject)->where('id', $request->subject_id)->first()->material_id,
-            'education_type_id' => $request->education_type_id,
-            'batch_id' => (new Batch)->get_current_batch(),
-            'created_at' => $timestamp,
-            'created_by' => Auth::user()->id
-        ]);
-
-        if (!$grading) {
-            throw new NotFoundHttpException();
-        }
-
-        $data = array(
-            'title' => 'Well done!',
-            'text' => 'The grading sheet has been successfully saved.',
-            'type' => 'success',
-            'class' => 'btn-brand'
-        );
-
-        echo json_encode( $data ); exit();
     }
 
     public function update(Request $request, $id)

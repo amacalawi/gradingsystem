@@ -110,9 +110,9 @@
                 console.log('init percent: ' + parseFloat($initPercent));
             }
 
-            if ( parseFloat($tcCell.val()) > 0 ) {
-                $initPercent = parseFloat($initPercent) + parseFloat($tcCell.val());
-            }
+            // if ( parseFloat($tcCell.val()) > 0 ) {
+            //     $initPercent = parseFloat($initPercent) + parseFloat($tcCell.val());
+            // }
 
             var $scoring = $initPercent.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
             $initialCell.text($scoring);
