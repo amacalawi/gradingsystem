@@ -43,4 +43,9 @@ class AttendanceSheets extends Model
     {
         return $this->belongsTo('App\Models\Staff', 'user_id', 'id');
     }
+
+    public function student()
+    {
+        return $this->belongsTo('App\Models\Student', 'user_id', 'id');
+    }
 }

@@ -10,9 +10,8 @@ use App\Http\Controllers\Controller;
 use App\Models\AttendanceSheets;
 use App\Models\EducationType;
 use App\Models\Student;
-use App\Models\Staff;
 
-class StaffFileAttendanceController extends Controller
+class StudentFileAttendanceController extends Controller
 {
     private $models;
 
@@ -30,29 +29,29 @@ class StaffFileAttendanceController extends Controller
     public function index()
     {
         $menus = $this->load_menus();
-        return view('modules/attendancesheets/staffs/manage')->with(compact('menus'));
+        return view('modules/attendancesheets/students/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/attendancesheets/staffs/manage')->with(compact('menus'));
+        return view('modules/attendancesheets/students/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/attendancesheets/staffs/inactive')->with(compact('menus'));
+        return view('modules/attendancesheets/students/inactive')->with(compact('menus'));
     }
 
     public function all_active(Request $request)
     {   
         $res = AttendanceSheets::with([
-            'staff' =>  function($q) { 
+            'student' =>  function($q) { 
                 $q->select(['id', 'firstname', 'middlename', 'lastname']); 
             }
         ])
-        ->where('role_id', 3)
+        ->where('role_id', 4)
         ->where([
             'is_active' => 1
         ])->orderBy('id', 'ASC')->get();
@@ -60,7 +59,7 @@ class StaffFileAttendanceController extends Controller
         return $res->map(function($attendancesheet) {
             return [
                 'attendancesheetID' => $attendancesheet->id,
-                'attendancesheetUserName' => $attendancesheet->staff->lastname.', '.$attendancesheet->staff->firstname.' '.$attendancesheet->staff->middlename,
+                'attendancesheetUserName' => $attendancesheet->student->lastname.', '.$attendancesheet->student->firstname.' '.$attendancesheet->student->middlename,
                 'attendancesheetTimedIn' => $attendancesheet->timed_in,
                 'attendancesheetTimedOut' => $attendancesheet->timed_out,
                 'attendancesheetCategoryID' => $attendancesheet->attendance_category_id,
@@ -74,7 +73,7 @@ class StaffFileAttendanceController extends Controller
     public function all_inactive(Request $request)
     {
         $res = AttendanceSheets::with([
-            'staff' =>  function($q) { 
+            'student' =>  function($q) { 
                 $q->select(['id', 'firstname', 'middlename', 'lastname']); 
             }
         ])
@@ -85,7 +84,7 @@ class StaffFileAttendanceController extends Controller
         return $res->map(function($attendancesheet) {
             return [
                 'attendancesheetID' => $attendancesheet->id,
-                'attendancesheetUserName' => $attendancesheet->staff->lastname.', '.$attendancesheet->staff->firstname.' '.$attendancesheet->staff->middlename,
+                'attendancesheetUserName' => $attendancesheet->student->lastname.', '.$attendancesheet->student->firstname.' '.$attendancesheet->student->middlename,
                 'attendancesheetTimedIn' => $attendancesheet->timed_in,
                 'attendancesheetTimedOut' => $attendancesheet->timed_out,
                 'attendancesheetCategoryID' => $attendancesheet->attendance_category_id,
@@ -102,13 +101,13 @@ class StaffFileAttendanceController extends Controller
         $flashMessage = self::messages();
         $segment = request()->segment(5);
         $types = (new EducationType)->all_education_types();
-        $student = (new Staff)->fetch($id);
+        $student = (new Student)->fetch($id);
         if (count($flashMessage) && $flashMessage[0]['module'] == 'Attendancesheets') {
             $attendancesheets = (new AttendanceSheets)->fetch($flashMessage[0]['id']);
         } else {
             $attendancesheets = (new AttendanceSheets)->fetch($id);
         }
-        return view('modules/attendancesheets/staffs/add')->with(compact('menus', 'attendancesheets', 'student', 'types', 'segment', 'flashMessage'));
+        return view('modules/attendancesheets/students/add')->with(compact('menus', 'attendancesheets', 'student', 'types', 'segment', 'flashMessage'));
     }
 
     public function edit(Request $request, $id)
@@ -117,27 +116,27 @@ class StaffFileAttendanceController extends Controller
         $flashMessage = self::messages();
         $segment = request()->segment(5);
         $types = (new EducationType)->all_education_types();
-        $staff_id = AttendanceSheets::where('id', $id )->first()->user_id;
-        $staff = (new Staff)->fetch($staff_id);
-        //die(var_dump($student));
+        $student_id = AttendanceSheets::where('id', $id )->first()->user_id;
+        $student = (new Student)->fetch($student_id);
         if (count($flashMessage) && $flashMessage[0]['module'] == 'Attendancesheets') {
             $attendancesheets = (new AttendanceSheets)->fetch($flashMessage[0]['id']);
         } else {
             $attendancesheets = (new AttendanceSheets)->fetch($id);
         }
 
-        return view('modules/attendancesheets/staffs/edit')->with(compact('menus', 'attendancesheets', 'staff', 'types', 'segment', 'flashMessage'));
+        return view('modules/attendancesheets/students/edit')->with(compact('menus', 'attendancesheets', 'student', 'types', 'segment', 'flashMessage'));
     }
 
     public function store(Request $request)
     {   
         $timestamp = date('Y-m-d H:i:s');
-        $staff_arr = explode(' - ', $request->member);
-        $staff_dtl = Staff::where('identification_no', $staff_arr[0] )->first(['id', 'role_id']);
+
+        $student_arr = explode(' - ', $request->member);
+        $student_dtl = Student::where('identification_no', $student_arr[0] )->first(['id', 'role_id']);
 
         $attendancesheets = AttendanceSheets::create([
-            'user_id' => $staff_dtl->id,
-            'role_id' => $staff_dtl->role_id,
+            'user_id' => $student_dtl->id,
+            'role_id' => $student_dtl->role_id,
             'timed_in' => $request->timed_in,
             'timed_out' => $request->timed_out,
             'attendance_category_id' => $request->attendance_category_id,
@@ -163,8 +162,8 @@ class StaffFileAttendanceController extends Controller
             throw new NotFoundHttpException();
         }
         
-        $staff_arr = explode(' - ', $request->member);        
-        $staff_dtl = Staff::where('identification_no', $staff_arr[0] )->first(['id', 'role_id']);
+        $staff_arr = explode(' - ', $request->member);
+        $staff_dtl = Student::where('identification_no', $staff_arr[0] )->first(['id', 'role_id']);
 
         $attendancesheets->user_id = $staff_dtl->id;
         $attendancesheets->role_id = $staff_dtl->role_id;

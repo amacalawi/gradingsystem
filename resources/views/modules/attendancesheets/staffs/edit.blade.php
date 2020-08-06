@@ -6,7 +6,7 @@
         <div class="m-portlet m-portlet--tab">
             @include('partials.messages')
             <div class="m-portlet__body">
-                @include('forms.file-attendance')
+                @include('forms.staff-file-attendance')
             </div>
         </div>
     </div>
@@ -14,5 +14,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('js/forms/file-attendance.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/forms/staff-file-attendance.js') }}" type="text/javascript"></script>
 @endpush

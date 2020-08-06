@@ -1,4 +1,4 @@
-@inject('students', 'App\Http\Controllers\StudentsController')
+@inject('staffs', 'App\Http\Controllers\StaffsController')
 @if ( $segment == 'edit' )
     {{ Form::open(array('url' => 'academics/attendance-sheets/staff-attendance/file-attendance/update/'.$attendancesheets->id, 'name' => 'attendancesheets_form', 'method' => 'PUT')) }}
 @else
@@ -29,32 +29,26 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            @if (!empty($student->siblings))
-                @foreach ($student->siblings as $sibling)
-                    <div class="form-group m-form__group">
-                        {{ Form::label('staff', 'Staff', ['class' => '']) }}
-                        {{ 
-                            Form::text($name = 'staff', $value = 
-                            $students->get_column_via_id($sibling->sibling_id, 'identification_no') . 
-                            ' - ' . ucfirst($students->get_column_via_id($sibling->sibling_id, 'lastname')) .
-                            ', ' . ucfirst($students->get_column_via_id($sibling->sibling_id, 'firstname')) .
-                            ' ' . ucfirst($students->get_column_via_id($sibling->sibling_id, 'middlename')[0]) . '.'
-                            , 
-                            $attributes = array(
-                                'class' => 'full-width typeahead sibling form-control form-control-lg m-input m-input--solid',
-                                'placeholder' => 'search for student number, firstname or lastname'
-                            )) 
-                        }}
-                        <span class="m-form__help m--font-danger"></span>
-                    </div>
-                @endforeach
+            @if (!empty($staff->id)) 
+                    <div class="form-group m-form__group required">
+                    {{ Form::label('member', 'Staff', ['class' => '']) }}
+                    {{ 
+                        Form::text($name = 'member', $value = $staff->identification_no.' - '.$staff->lastname.', '.$staff->firstname.' '.ucfirst($staff->middlename[0])
+                        , 
+                        $attributes = array(
+                            'class' => 'full-width typeahead sibling form-control form-control-lg m-input m-input--solid',
+                            'placeholder' => 'search for staff number, firstname or lastname'
+                        )) 
+                    }}
+                    <span class="m-form__help m--font-danger"></span>
+                </div>
             @else
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="form-group m-form__group">
-                            {{ Form::label('staff', 'Staff', ['class' => '']) }}
+                        <div class="form-group m-form__group required">
+                            {{ Form::label('member', 'Staff', ['class' => '']) }}
                             {{ 
-                                Form::text($name = 'staff', $value = '', 
+                                Form::text($name = 'member', $value = '', 
                                 $attributes = array(
                                     'class' => 'full-width typeahead sibling form-control form-control-lg m-input m-input--solid',
                                     'placeholder' => 'search for student number, firstname or lastname'
@@ -66,7 +60,7 @@
                 </div>
             @endif
         </div>
-        
+
         <div class="col-md-6">
             <div class="form-group m-form__group required date" data-provide="datetimepicker" data-date-format="yyyy-mm-dd HH:ii:ss">
                 {{ Form::label('timed_in', 'Timed in', ['class' => '']) }}

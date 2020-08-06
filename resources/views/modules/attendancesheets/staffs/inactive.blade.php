@@ -14,7 +14,7 @@
                                 </h3> 
                             </div>
                             <div>
-                                <a title="move to active {{ strtolower(Request::segment(3)) }}" href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/'.Request::segment(3)) }}" class="pull-right moves moves-back m--font-info">
+                                <a title="move to active {{ strtolower(Request::segment(3)) }}" href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/'.Request::segment(3).'/'.Request::segment(4)) }}" class="pull-right moves moves-back m--font-info">
                                     <i class="la la-angle-double-left"></i> ACTIVE {{ strtoupper(Request::segment(3)) }} 
                                 </a>
                             </div>
