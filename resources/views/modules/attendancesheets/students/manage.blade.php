@@ -48,5 +48,5 @@
 @endpush
 
 @push('scripts')
-    <script src="{{ asset('js/datatables/staff-file-attendance.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/datatables/student-file-attendance.js') }}" type="text/javascript"></script>
 @endpush

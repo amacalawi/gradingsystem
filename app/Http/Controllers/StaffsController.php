@@ -633,6 +633,12 @@ class StaffsController extends Controller
         exit();
     }
 
+    public function get_all_staffs(Request $request)
+    {
+        $staffs = (new Staff)->get_all_staffs($request->get('id'));
+        echo json_encode( $staffs ); exit();
+    }
+
     public function generate_staff_no()
     {
         $staffNo = (new Staff)->generate_staff_no();

@@ -204,5 +204,19 @@ class Staff extends Model
         return self::where('user_id', $id)->first()->$column;
         return $sections;  
     }
+    
+    public function get_all_staffs($id)
+    {
+        $resources = self::where('is_active', '1')->where('identification_no', '!=', $id)->get();
+
+        $staffs = $resources->map(function($res) {
+            $middlename = $res->middlename ? strtoupper($res->middlename[0]).'.' : '';
+            return [
+                $res->identification_no.' - '. ucwords($res->lastname) .', '. ucwords($res->firstname) . ' ' . $middlename
+            ];
+        });
+
+        return $staffs;
+    }
 }
 

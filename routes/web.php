@@ -216,6 +216,7 @@ Route::prefix('memberships')->group(function () {
     Route::post('staffs/import', 'StaffsController@import')->name('staffs.import');
     Route::post('staffs/uploads', 'StaffsController@uploads')->name('staffs.uploads');
     Route::get('staffs/downloads', 'StaffsController@downloads')->name('staffs.downloads');
+    Route::get('staffs/get-all-staffs', 'StaffsController@get_all_staffs')->name('staffs.get_all');
     Route::get('staffs/add', 'StaffsController@add')->name('staffs.add');
     Route::get('staffs/edit/{id?}', 'StaffsController@edit')->name('staffs.edit');
     Route::post('staffs/store', 'StaffsController@store')->name('staffs.store');
@@ -401,26 +402,38 @@ Route::prefix('academics')->group(function () {
     });
     /* End Grading Sheets Routes */
 
-    //not push
     /* Start Attendance Sheets */
     Route::prefix('attendance-sheets')->group(function () {
         
-        /* Start Student Attendance */
+        /* Start Staff Attendance */
         Route::prefix('staff-attendance')->group(function () {
-            Route::get('file-attendance', 'StaffFileAttendanceController@manage')->name('file.attendance.manage.active');
-            Route::get('file-attendance/all-active', 'StaffFileAttendanceController@all_active')->name('file.attendance.all.active');
-            Route::get('file-attendance/inactive', 'StaffFileAttendanceController@all_inactive')->name('file.attendance.all.inactive');
-            Route::get('file-attendance/add', 'StaffFileAttendanceController@add')->name('file.attendance.all.add');
-            Route::get('file-attendance/edit/{id?}', 'StaffFileAttendanceController@edit')->name('file.attendance.edit');
-            Route::post('file-attendance/store', 'StaffFileAttendanceController@store')->name('file.attendance.store');
-            Route::put('file-attendance/update/{id}', 'StaffFileAttendanceController@update')->name('file.attendance.update');
+            Route::get('file-attendance', 'StaffFileAttendanceController@manage')->name('file.staff.attendance.manage.active');
+            Route::get('file-attendance/all-active', 'StaffFileAttendanceController@all_active')->name('file.staff.attendance.all.active');
+            Route::get('file-attendance/inactive', 'StaffFileAttendanceController@inactive')->name('file.staff.attendance.all.inactive');
+            Route::get('file-attendance/add', 'StaffFileAttendanceController@add')->name('file.staff.attendance.all.add');
+            Route::get('file-attendance/edit/{id?}', 'StaffFileAttendanceController@edit')->name('file.staff.attendance.edit');
+            Route::post('file-attendance/store', 'StaffFileAttendanceController@store')->name('file.staff.attendance.store');
+            Route::put('file-attendance/update/{id}', 'StaffFileAttendanceController@update')->name('file.staff.attendance.update');
+            Route::get('file-attendance/all-inactive', 'StaffFileAttendanceController@all_inactive')->name('menus.transmutations.all.inactive');
+        });
+        /* End Staff Attendance */
+
+        /* Start Student Attendance */
+        Route::prefix('student-attendance')->group(function () {
+            Route::get('file-attendance', 'StudentFileAttendanceController@manage')->name('file.student.attendance.manage.active');
+            Route::get('file-attendance/all-active', 'StudentFileAttendanceController@all_active')->name('file.student.attendance.all.active');
+            Route::get('file-attendance/inactive', 'StudentFileAttendanceController@inactive')->name('file.student.attendance.all.inactive');
+            Route::get('file-attendance/add', 'StudentFileAttendanceController@add')->name('file.student.attendance.all.add');
+            Route::get('file-attendance/edit/{id?}', 'StudentFileAttendanceController@edit')->name('file.student.attendance.edit');
+            Route::post('file-attendance/store', 'StudentFileAttendanceController@store')->name('file.student.attendance.store');
+            Route::put('file-attendance/update/{id}', 'StudentFileAttendanceController@update')->name('file.student.attendance.update');
+            Route::get('file-attendance/all-inactive', 'StudentFileAttendanceController@all_inactive')->name('menus.transmutations.all.inactive');
         });
         /* End Student Attendance */
 
 
     });
     /* End Attendance Sheets */
-    //not push
     
 });
 

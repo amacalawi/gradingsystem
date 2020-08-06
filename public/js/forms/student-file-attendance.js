@@ -224,7 +224,7 @@
                                     confirmButtonClass: "btn " + data.class + " btn-focus m-btn m-btn--pill m-btn--air m-btn--custom",
                                     onClose: () => {
                                         if ($form.find("input[name='method']").val() == 'add') {
-                                            window.location.replace(base_url + 'academics/attendance-sheets/staff-attendance/file-attendance');
+                                            window.location.replace(base_url + 'academics/attendance-sheets/student-attendance/file-attendance');
                                         }
                                     }
                                 });
