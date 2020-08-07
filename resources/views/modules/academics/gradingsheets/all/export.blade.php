@@ -129,6 +129,10 @@
             <th style="text-align: center; background-color:#f4f5f8; border: 1px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1" title="initial grade">Initial</th>
             <th style="text-align: center; background-color:#fffcbe; border: 1px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg" title="quarterly grade">QG</th>
             <th style="text-align: center; background-color:#f4f5f8; border: 1px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1" title="transmutation value">TC</th>
+
+            <th style="text-align: center; background-color:#f4f5f8; border: 1px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1" title="transmutation value">Rating</th>
+            <th style="text-align: center; background-color:#f4f5f8; border: 1px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1" title="transmutation value">Ranking</th>
+            
         </tr>
         <tr>
             <th style="text-align: center; background-color:#f4f5f8; border: 1px solid black;" class="shaded fixed freeze text-center scrolling_table_1">1</th> @php $column_letter_repo['#'] = $column_letter++; @endphp
@@ -152,6 +156,10 @@
             <th style="text-align: center; background-color:#f4f5f8; border: 1px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1" title="total quarterly percentage">{{ $component_percentage }}%</th>@php $column_letter_repo['initial'] =  $column_letter++; @endphp
             <th style="text-align: center; background-color:#fffcbe; border: 1px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg">&nbsp;</th>@php $column_letter_repo['QG'] =  $column_letter++; @endphp
             <th style="text-align: center; background-color:#f4f5f8; border: 1px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</th>@php $column_letter_repo['TC'] =  $column_letter++; @endphp
+        
+            <th style="text-align: center; background-color:#f4f5f8; border: 1px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</th>
+            <th style="text-align: center; background-color:#f4f5f8; border: 1px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</th>
+
         </tr>
         <tr class="tr_shaded">
             <td style="text-align: center; background-color:#f4f5f8; border: 1px solid black;" class="shaded fixed freeze text-center scrolling_table_1">2</td>
@@ -171,6 +179,10 @@
             <td style="text-align: center; border: 1px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</td>
             <td style="text-align: center; border: 1px solid black; background-color:#fffcbe;" class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg">&nbsp;</td>
             <td style="text-align: center; border: 1px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</td>
+        
+            <th style="text-align: center; border: 1px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</th>
+            <th style="text-align: center; border: 1px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</th>
+
         </tr>
         
         @php 
@@ -364,6 +376,16 @@
                 <td style="text-align: center; border: 1px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell">
                     {{ $gradings->get_colum_via_gradingsheet_student('adjustment_grade', $grading->id, $student->student_id) }}
                 </td>
+
+                <!-- Rating -->
+                <td style="text-align: center; border: 1px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell">
+                    {{ $gradings->get_colum_via_gradingsheet_student('rating', $grading->id, $student->student_id) }}
+                </td>
+
+                <!-- Ranking -->
+                <td style="text-align: center; border: 1px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell">
+                    {{ $gradings->get_colum_via_gradingsheet_student('ranking', $grading->id, $student->student_id) }}
+                </td>                
             </tr>
 
             @php $iteration++; $rownumber++; @endphp
