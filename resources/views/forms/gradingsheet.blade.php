@@ -144,7 +144,7 @@
                 <button type="button" class="btn btn-success pull-right m-2">
                     Export gradingsheet
                 </button>
-            </a>
+            </a>x
         </div>
     </div>
 
