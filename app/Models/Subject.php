@@ -35,8 +35,8 @@ class Subject extends Model
                 'description' => '',
                 'schoolyear_id' => '',
                 'education_type_id' => '',
-                'is_mapeh' => '1',
-                'is_tle' => '1',
+                'is_mapeh' => '0',
+                'is_tle' => '0',
                 'material_id' => '1',
             );
         }
