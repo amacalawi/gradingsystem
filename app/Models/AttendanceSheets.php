@@ -41,11 +41,11 @@ class AttendanceSheets extends Model
 
     public function staff()
     {
-        return $this->belongsTo('App\Models\Staff', 'user_id', 'id');
+        return $this->belongsTo('App\Models\Staff', 'user_id', 'user_id');
     }
 
     public function student()
     {
-        return $this->belongsTo('App\Models\Student', 'user_id', 'id');
+        return $this->belongsTo('App\Models\Student', 'user_id', 'user_id');
     }
 }
