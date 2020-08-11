@@ -428,9 +428,17 @@
     <div class="m-subheader ">
         <div class="d-flex align-items-center">
             <div class="mr-auto">
+                @php
+                    $url = ['staff-attendance', 'student-attendance'];
+                @endphp
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
+                    @if (in_array(Request::segment(3), $url) && ( \Request::is('*/*/*/file-attendance') || \Request::is('*/*/*/file-attendance/*') ) )
+                        {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
+                    @elseif( in_array(Request::segment(3), $url) && ( \Request::is('*/*/*/settings') || \Request::is('*/*/*/settings/*') ) )
+                        {{ ucwords(str_replace('-',' ', Request::segment(3).' '.Request::segment(4))) }}
+                    @endif
                 </h3>
+
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
                         <a href="{{ url('/dashboard') }}" class="m-nav__link m-nav__link--icon">
@@ -445,27 +453,40 @@
                         </a>
                     </li>
                     <li class="m-nav__item">
-                        <a href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/'.Request::segment(3).'/file-attendance') }}" class="m-nav__link">
-                            <span class="m-nav__link-text">
-                                @php 
-                                    $string = substr(ucwords(Request::segment(3)), 0, -1);
-                                    $exemptions = ['modules', 'sub-modules'];
-                                @endphp
-                                
-                                @php 
-                                    $exempted = [''];
-                                @endphp
-                                @if (substr($string, -1) == 'e' && !in_array(Request::segment(3), $exemptions))
-                                    Manage {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2) }}
-                                @else
-                                    @if (!in_array(Request::segment(1), $exempted))
-                                        Manage {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
+                        @php 
+                            $string = substr(ucwords(Request::segment(3)), 0, -1);
+                            $url = ['staff-attendance', 'student-attendance'];
+                        @endphp
+
+                        @if(Request::segment(4) == 'settings')
+                            <a href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/'.Request::segment(3).'/settings') }}" class="m-nav__link">
+                                <span class="m-nav__link-text">
+                                    @if (substr($string, -1) == 'e' && in_array(Request::segment(3), $url))
+                                        Manage {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2).' '.Request::segment(4) }}
                                     @else
-                                        Manage {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1) }}
+                                        @if( in_array(Request::segment(3), $url) && \Request::is('*/*/*/settings') )
+                                            Manage {{ substr(ucwords(str_replace('-',' ', Request::segment(3)).' '.Request::segment(4) ), 0, -1) }}
+                                        @else
+                                            Manage {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1).' '.Request::segment(4) }}
+                                        @endif
                                     @endif
-                                @endif
-                            </span>
-                        </a>
+                                </span>
+                            </a>
+                        @else
+                            <a href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/'.Request::segment(3).'/file-attendance') }}" class="m-nav__link">
+                                <span class="m-nav__link-text">
+                                    @if (substr($string, -1) == 'e' && in_array(Request::segment(3), $url))
+                                        Manage {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2) }}
+                                    @else
+                                        @if (in_array(Request::segment(3), $url) && \Request::is('*/*/*/file-attendance'))
+                                            Manage {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
+                                        @else
+                                            Manage {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1) }}
+                                        @endif
+                                    @endif
+                                </span>
+                            </a>
+                        @endif
                     </li>
                 </ul>
             </div>
@@ -473,8 +494,12 @@
             @if (Request::segment(5) == '')   
                 <div>
                     <a href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/'.Request::segment(3).'/'.Request::segment(4).'/add') }}" class="btn m-btn--pill btn-brand add-btn m-btn--custom">
-                        <i class="la la-commenting"></i> 
-                        Add New {{ ucwords(str_replace('-',' ', Request::segment(3))) }} 
+                        <i class="la la-commenting"></i>
+                        @if(Request::segment(4) == 'settings')
+                            Add New {{ ucwords(str_replace('-',' ', Request::segment(3))).' '.Request::segment(4) }}
+                        @else
+                            Add New {{ ucwords(str_replace('-',' ', Request::segment(3)))}}
+                        @endif
                     </a>
                 </div>
             @endif

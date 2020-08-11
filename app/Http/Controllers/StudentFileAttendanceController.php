@@ -48,7 +48,7 @@ class StudentFileAttendanceController extends Controller
     {   
         $res = AttendanceSheets::with([
             'student' =>  function($q) { 
-                $q->select(['id', 'firstname', 'middlename', 'lastname']); 
+                $q->select(['id', 'user_id', 'firstname', 'middlename', 'lastname']); 
             }
         ])
         ->where('role_id', 4)
@@ -74,7 +74,7 @@ class StudentFileAttendanceController extends Controller
     {
         $res = AttendanceSheets::with([
             'student' =>  function($q) { 
-                $q->select(['id', 'firstname', 'middlename', 'lastname']); 
+                $q->select(['id', 'user_id', 'firstname', 'middlename', 'lastname']); 
             }
         ])
         ->where([
@@ -132,10 +132,10 @@ class StudentFileAttendanceController extends Controller
         $timestamp = date('Y-m-d H:i:s');
 
         $student_arr = explode(' - ', $request->member);
-        $student_dtl = Student::where('identification_no', $student_arr[0] )->first(['id', 'role_id']);
+        $student_dtl = Student::where('identification_no', $student_arr[0] )->first(['id', 'user_id', 'role_id']);
 
         $attendancesheets = AttendanceSheets::create([
-            'user_id' => $student_dtl->id,
+            'user_id' => $student_dtl->user_id,
             'role_id' => $student_dtl->role_id,
             'timed_in' => $request->timed_in,
             'timed_out' => $request->timed_out,
@@ -163,9 +163,9 @@ class StudentFileAttendanceController extends Controller
         }
         
         $staff_arr = explode(' - ', $request->member);
-        $staff_dtl = Student::where('identification_no', $staff_arr[0] )->first(['id', 'role_id']);
+        $staff_dtl = Student::where('identification_no', $staff_arr[0] )->first(['id', 'user_id', 'role_id']);
 
-        $attendancesheets->user_id = $staff_dtl->id;
+        $attendancesheets->user_id = $staff_dtl->user_id;
         $attendancesheets->role_id = $staff_dtl->role_id;
         $attendancesheets->timed_in = $request->timed_in;
         $attendancesheets->timed_out = $request->timed_out;
