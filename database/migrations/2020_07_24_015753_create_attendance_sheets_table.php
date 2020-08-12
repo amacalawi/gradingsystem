@@ -17,8 +17,8 @@ class CreateAttendanceSheetsTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->integer('role_id')->unsigned();
-            $table->datetime('timed_in');
-            $table->datetime('timed_out');
+            $table->datetime('timed_in')->nullable();
+            $table->datetime('timed_out')->nullable();
             $table->integer('attendance_category_id')->unsigned();
             $table->text('reason')->nullable();
             $table->string('status', 50);
