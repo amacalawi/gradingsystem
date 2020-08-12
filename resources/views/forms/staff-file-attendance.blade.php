@@ -62,7 +62,7 @@
         </div>
 
         <div class="col-md-6">
-            <div class="form-group m-form__group required date" data-provide="datetimepicker" data-date-format="yyyy-mm-dd HH:ii:ss">
+            <div class="form-group m-form__group date" data-provide="datetimepicker" data-date-format="yyyy-mm-dd HH:ii:ss">
                 {{ Form::label('timed_in', 'Timed in', ['class' => '']) }}
                 {{ 
                     Form::text($name = 'timed_in', $value = $attendancesheets->timed_in, 
@@ -77,7 +77,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="form-group m-form__group required date" data-provide="datetimepicker" data-date-format="yyyy-mm-dd HH:ii:ss">
+            <div class="form-group m-form__group date" data-provide="datetimepicker" data-date-format="yyyy-mm-dd HH:ii:ss">
                 {{ Form::label('timed_out', 'Timed out', ['class' => '']) }}
                 {{ 
                     Form::text($name = 'timed_out', $value = $attendancesheets->timed_out, 

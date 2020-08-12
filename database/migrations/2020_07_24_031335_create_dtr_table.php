@@ -21,6 +21,7 @@ class CreateDtrTable extends Migration
             $table->date('dateout');
             $table->time('timeout');
             $table->time('total_late')->nullable()->default('00:00:00');
+            $table->integer('attendance_sheet_id')->unsigned();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('created_by')->unsigned();
             $table->timestamp('updated_at')->nullable();

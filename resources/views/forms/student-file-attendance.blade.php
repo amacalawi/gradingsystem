@@ -33,10 +33,10 @@
                 <div class="form-group m-form__group">
                     {{ Form::label('member', 'Student', ['class' => '']) }}
                     {{ 
-                        Form::text($name = 'member', $value = $students->get_column_via_id($attendancesheets->user_id. '.', 'identification_no').
-                            ' - ' . ucfirst($students->get_column_via_id($attendancesheets->user_id, 'lastname')) .
-                            ', ' . ucfirst($students->get_column_via_id($attendancesheets->user_id, 'firstname')) .
-                            ' ' . ucfirst($students->get_column_via_id($attendancesheets->user_id, 'middlename')[0]) , $attributes = array( 'class' => 'full-width typeahead sibling form-control form-control-lg m-input m-input--solid',
+                        Form::text($name = 'member', $value = $students->get_column_via_id($attendancesheets->user_id_id, 'identification_no').
+                            ' - ' . ucfirst($students->get_column_via_id($attendancesheets->user_id_id, 'lastname')) .
+                            ', ' . ucfirst($students->get_column_via_id($attendancesheets->user_id_id, 'firstname')) .
+                            ' ' . ucfirst($students->get_column_via_id($attendancesheets->user_id_id, 'middlename')[0]) , $attributes = array( 'class' => 'full-width typeahead sibling form-control form-control-lg m-input m-input--solid',
                             'placeholder' => 'search for student number, firstname or lastname'
                         )) 
                     }}
@@ -62,7 +62,7 @@
         </div>
         
         <div class="col-md-6">
-            <div class="form-group m-form__group required date" data-provide="datetimepicker" data-date-format="yyyy-mm-dd HH:ii:ss">
+            <div class="form-group m-form__group date" data-provide="datetimepicker" data-date-format="yyyy-mm-dd HH:ii:ss">
                 {{ Form::label('timed_in', 'Timed in', ['class' => '']) }}
                 {{ 
                     Form::text($name = 'timed_in', $value = $attendancesheets->timed_in, 
@@ -77,7 +77,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="form-group m-form__group required date" data-provide="datetimepicker" data-date-format="yyyy-mm-dd HH:ii:ss">
+            <div class="form-group m-form__group date" data-provide="datetimepicker" data-date-format="yyyy-mm-dd HH:ii:ss">
                 {{ Form::label('timed_out', 'Timed out', ['class' => '']) }}
                 {{ 
                     Form::text($name = 'timed_out', $value = $attendancesheets->timed_out, 

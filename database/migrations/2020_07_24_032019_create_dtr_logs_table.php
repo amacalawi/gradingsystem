@@ -20,6 +20,7 @@ class CreateDtrLogsTable extends Migration
             $table->integer('device_id')->unsigned();
             $table->integer('mode');
             $table->string('status', 50)->nullable();
+            $table->integer('attendance_sheet_id')->unsigned();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('created_by')->unsigned();
             $table->timestamp('updated_at')->nullable();
