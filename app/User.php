@@ -6,6 +6,9 @@ use Hash;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Models\Student;
+use App\Models\Staff;
+use App\Models\GuardianUser;
 
 class User extends Authenticatable
 {
@@ -81,5 +84,33 @@ class User extends Authenticatable
     public function role()
     {
         return $this->hasOne('App\Models\UserRole', 'user_id', 'id');
+    }
+
+    public function get_msisdn_via_user($userID)
+    {
+        $user = self::where('id', $userID)->get();
+        if ($user->count() > 0) {
+            if ($user->first()->type == 'student') {
+                return ((new Student)->where('user_id', $user->first()->id)->pluck('mobile_no') !== NULL) ? (new Student)->where('user_id', $user->first()->id)->pluck('mobile_no') : '';
+            } else if ($user->first()->type == 'parent') {
+                $guardian = (new GuardianUser)->with([
+                    'guardian' =>  function($q) { 
+                        $q->select(['id', 'mother_contact_no', 'mother_email', 'father_contact_no', 'father_email']);
+                    },
+                ])->where('user_id', '=', $user->first()->id)->get();
+
+                if ($guardian->count() > 0) {
+                    if ($user->first()->email == $guardian->first()->mother_email) {
+                        return ($guardian->first()->mother_contact_no !== NULL) ? $guardian->first()->mother_contact_no : '';
+                    } else {
+                        return ($guardian->first()->father_contact_no !== NULL) ? $guardian->first()->father_contact_no : '';
+                    }
+                }
+            } else if ($user->first()->type == 'staff') {
+                return ((new Staff)->where('user_id', $user->first()->id)->pluck('mobile_no') !== NULL) ? (new Staff)->where('user_id', $user->first()->id)->pluck('mobile_no') : '';
+            } else {
+                return '09283164164';
+            }
+        }
     }
 }

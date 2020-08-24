@@ -145,12 +145,12 @@
             var self = $(this);
             $(this).closest(".form-group").find(".m-form__help").text("");
         });
-        this.$body.on('keyup', 'input, textarea', function (e) {
+        this.$body.on('keyup', 'input', function (e) {
             e.preventDefault();
             var self = $(this);
             $(this).closest(".form-group").find(".m-form__help").text("");
         });
-        this.$body.on('blur', 'input, textarea, select', function (e) {
+        this.$body.on('blur', 'input, select', function (e) {
             e.preventDefault();
             var self = $(this);
             self.closest(".form-group").find(".m-form__help").text("");

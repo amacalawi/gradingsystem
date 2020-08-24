@@ -383,6 +383,12 @@
                                             Edit {{ substr(ucwords(Request::segment(3)), 0, -1) }}
                                         @endif
                                     @endif
+                                @elseif (\Request::is('*/*/infoblast/*'))
+                                    @if (Request::segment(4) == 'new')
+                                        New Infoblast
+                                    @else
+                                        @php echo ucwords(Request::segment(4)); @endphp
+                                    @endif
                                 @else
                                     @php 
                                         $exempted = ['infoblast'];
@@ -407,7 +413,10 @@
                 </ul>
             </div>
             <div>
-                @if (\Request::is('*/*/view/*'))
+                @php 
+                    $exemptions = ['outbox'];
+                @endphp
+                @if (\Request::is('*/*/view/*') || in_array(Request::segment(4), $exemptions))
 
                 @else
                     <button type="button" class="submit-btn btn m-btn--pill btn-brand m-btn--custom">

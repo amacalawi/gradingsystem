@@ -85,7 +85,7 @@
                                                                     </a>
                                                                 </li>
                                                                 <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
-                                                                    <a href="inner.html" class="m-menu__link ">
+                                                                    <a href="{{ url($menu['slug'].'/'.$module['slug'].'/'.$submodule['slug'].'/inbox') }}" class="m-menu__link ">
                                                                         <i class="m-menu__link-icon flaticon-signs-2"></i>
                                                                         <span class="m-menu__link-title">
                                                                             <span class="m-menu__link-wrap">
@@ -102,7 +102,7 @@
                                                                     </a>
                                                                 </li>
                                                                 <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
-                                                                    <a href="inner.html" class="m-menu__link ">
+                                                                    <a href="{{ url($menu['slug'].'/'.$module['slug'].'/'.$submodule['slug'].'/outbox') }}" class="m-menu__link ">
                                                                         <i class="m-menu__link-icon flaticon-clipboard"></i>
                                                                         <span class="m-menu__link-title">
                                                                             <span class="m-menu__link-wrap">
@@ -119,7 +119,7 @@
                                                                     </a>
                                                                 </li>
                                                                 <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
-                                                                    <a href="inner.html" class="m-menu__link ">
+                                                                    <a href="{{ url($menu['slug'].'/'.$module['slug'].'/'.$submodule['slug'].'/tracking') }}" class="m-menu__link ">
                                                                         <i class="m-menu__link-icon flaticon-multimedia-2"></i>
                                                                         <span class="m-menu__link-title">
                                                                             <span class="m-menu__link-wrap">
@@ -136,7 +136,7 @@
                                                                     </a>
                                                                 </li>
                                                                 <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
-                                                                    <a href="inner.html" class="m-menu__link ">
+                                                                    <a href="{{ url($menu['slug'].'/'.$module['slug'].'/'.$submodule['slug'].'/templates') }}" class="m-menu__link ">
                                                                         <i class="m-menu__link-icon flaticon-multimedia-2"></i>
                                                                         <span class="m-menu__link-title">
                                                                             <span class="m-menu__link-wrap">
