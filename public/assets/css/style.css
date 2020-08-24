@@ -590,3 +590,13 @@ a[data-dismiss="modal"] {
     line-height: 1.5;
     border-radius: 0.3rem;
 }
+
+.m-checkbox.m-checkbox--air a {
+    text-decoration: none;   
+    color: #eaeaea;
+    z-index: 9999999;
+}
+
+.m-checkbox.m-checkbox--air {
+    width: 100%;
+}

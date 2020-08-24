@@ -38,4 +38,9 @@ class GroupUser extends Model
         $groupsusers = GroupUser::select('groups_users.*', 'students.id as stud_id', 'students.user_id', 'students.identification_no', 'students.firstname', 'students.lastname')->where('groups_users.group_id', $id)->join('students', 'students.id', 'groups_users.users_id')->get();
         return $groupsusers;
     }
+
+    public function guardian()
+    {
+        return $this->belongsTo('App\Models\Guardian', 'guardian_id', 'id');
+    }
 }

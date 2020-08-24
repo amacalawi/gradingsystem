@@ -1989,5 +1989,58 @@ class DatabaseSeeder extends Seeder
         foreach ($education_types as $education_type) {
             DB::table('education_types')->insert($education_type);
         }
+
+        $messages_types = [
+            [   
+                'id' => '1',
+                'code' => 'messaging',
+                'name' => 'Messaging',
+                'description' => 'Messaging',
+                'created_by' => 1
+            ],
+            [   
+                'id' => '2',
+                'code' => 'soa',
+                'name' => 'SOA',
+                'description' => 'Statement of Account',
+                'created_by' => 1
+            ],
+            [   
+                'id' => '3',
+                'code' => 'gradingsheet',
+                'name' => 'Gradingsheet',
+                'description' => 'Gradingsheet',
+                'created_by' => 1
+            ]
+        ];
+        foreach ($messages_types as $messages_type) {
+            DB::table('messages_types')->insert($messages_type);
+        }
+
+        $prefixes = [
+            [   
+                'id' => '1',
+                'access' => '222,2870,00905,0906,0915,0916,0917,0926,0927,0935,0936,0945,0955,0956,0965,0966,0967,0975,0976,0977,0978,0979,0994,0995,0997,08130937,0973,09173,09175,09176,09178,09253,09255,09256,09257,09258,0904',
+                'network' => 'globe',
+                'created_by' => 1
+            ],
+            [   
+                'id' => '2',
+                'access' => '0248,214,258,808,0813,0908,0911,0913,0914,0918,0919,0920,0921,0928,0929,0939,0947,0949,0961,0970,0981,0989,0998,0999,0907,0909,0910,0912,0930,0938,0946,0948,0950',
+                'network' => 'smart',
+                'created_by' => 1
+            ],
+            [   
+                'id' => '3',
+                'access' => '0922,0923,0924,0925,0931,0932,0933,0934,0941,0942,0943,0944',
+                'network' => 'sun',
+                'created_by' => 1
+            ]
+        ];
+        foreach ($prefixes as $prefix) {
+            DB::table('prefixes')->insert($prefix);
+        }
+
+        
     }
 }

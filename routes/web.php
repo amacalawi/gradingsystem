@@ -469,8 +469,11 @@ Route::prefix('notifications')->group(function () {
             Route::get('new', 'InfoblastController@new')->name('messaging.infoblast.new');
             Route::get('inbox', 'InfoblastController@inbox')->name('messaging.infoblast.inbox');
             Route::get('outbox', 'InfoblastController@outbox')->name('messaging.infoblast.outbox');
+            Route::get('active-outbox', 'InfoblastController@active_outbox')->name('messaging.infoblast.active_outbox');
             Route::get('tracking', 'InfoblastController@tracking')->name('messaging.infoblast.tracking');
             Route::get('templates', 'InfoblastController@templates')->name('messaging.infoblast.templates');
+            Route::post('send', 'InfoblastController@send')->name('messaging.infoblast.send');
+            Route::get('dlr?type=%d&answer=%A', 'InfoblastController@dlr')->name('messaging.infoblast.dlr');
         });
         /* End Infoblast Routes */
     });
