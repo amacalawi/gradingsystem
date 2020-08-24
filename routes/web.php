@@ -418,6 +418,18 @@ Route::prefix('academics')->group(function () {
         });
         /* End Staff Attendance */
 
+        /* Start Staff Attendance Settings */
+        Route::prefix('staff-attendance')->group(function () {
+            Route::get('settings', 'StaffSettingsController@manage')->name('staff.settings.manage.active');
+            Route::get('settings/add', 'StaffSettingsController@add')->name('staff.settings.add');
+            Route::get('settings/edit/{id?}', 'StaffSettingsController@edit')->name('staff.settings.edit');
+            Route::post('settings/store', 'StaffSettingsController@store')->name('staff.settings.store');
+            Route::put('settings/update/{id}', 'StaffSettingsController@update')->name('staff.settings.update');
+            Route::get('settings/all-active', 'StaffSettingsController@all_active')->name('staff.settings.all.active');
+            
+        });
+        /* End Staff Attendance Settings */
+
         /* Start Student Attendance */
         Route::prefix('student-attendance')->group(function () {
             Route::get('file-attendance', 'StudentFileAttendanceController@manage')->name('file.student.attendance.manage.active');
@@ -431,6 +443,17 @@ Route::prefix('academics')->group(function () {
         });
         /* End Student Attendance */
 
+        /* Start Student Attendance Settings */
+        Route::prefix('student-attendance')->group(function () {
+            Route::get('settings', 'StudentSettingsController@manage')->name('student.settings.manage.active');
+            Route::get('settings/add', 'StudentSettingsController@add')->name('student.settings.add');
+            Route::get('settings/edit/{id?}', 'StudentSettingsController@edit')->name('student.settings.edit');
+            Route::post('settings/store', 'StudentSettingsController@store')->name('student.settings.store');
+            Route::put('settings/update/{id}', 'StudentSettingsController@update')->name('student.settings.update');
+            Route::get('settings/all-active', 'StudentSettingsController@all_active')->name('student.settings.all.active');
+            
+        });
+        /* End Student Attendance Settings */        
 
     });
     /* End Attendance Sheets */

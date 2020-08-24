@@ -38,4 +38,25 @@ class Schedule extends Model
         $schedule = self::join('dtr_time_settings', 'schedules.id', 'dtr_time_settings.schedule_id')->join('dtr_time_days', 'dtr_time_days.dtr_time_settings_id','dtr_time_settings.id')->where('schedules.id', $id)->where('schedules.is_active', 1)->orderBy('schedules.id', 'desc')->get();
         return $schedule;
     }
+
+    public function all_schedule(){
+    	$schedules = self::where('is_active', 1)->orderBy('id', 'asc')->get();
+
+        $schs = array();
+        $schs[] = array('' => 'select a shedule');
+        foreach ($schedules as $schedule) {
+            $schs[] = array(
+                $schedule->id => $schedule->name
+            );
+        }
+
+        $schedules = array();
+        foreach($schs as $sch) {
+            foreach($sch as $key => $val) {
+                $schedules[$key] = $val;
+            }
+        }
+
+        return $schedules;
+    } 
 }
