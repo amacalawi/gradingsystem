@@ -438,6 +438,88 @@
         </div>
     </div>
 
+    @elseif (\Request::is('*/*/emailblast/*')  && Request::segment(4) != '')  
+    <div class="m-subheader ">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto">
+                <h3 class="m-subheader__title m-subheader__title--separator">
+                    {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
+                </h3>
+                <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+                    <li class="m-nav__item m-nav__item--home">
+                        <a href="{{ url('/dashboard') }}" class="m-nav__link m-nav__link--icon">
+                            <i class="m-nav__link-icon la la-home"></i>
+                        </a>
+                    </li>
+                    <li class="m-nav__separator">
+                        -
+                    </li>
+                    <li class="m-nav__item">
+                        <a href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/'.Request::segment(3).'/tracking') }}" class="m-nav__link">
+                            <span class="m-nav__link-text">
+                                Manage {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
+                            </span>
+                        </a>
+                    </li>
+                    <li class="m-nav__separator">
+                        -
+                    </li>
+                    <li class="m-nav__item">
+                        <a href="#" class="m-nav__link">
+                            <span class="m-nav__link-text">
+                                @php 
+                                    $string = substr(ucwords(Request::segment(3)), 0, -1);
+                                    $exemptions = ['modules', 'sub-modules'];
+                                @endphp
+                                @if (\Request::is('*/*/edit/*'))
+                                    @if (Request::segment(3) == 'all-gradingsheets')
+                                        Edit Grading Sheet
+                                    @else
+                                        @if (substr($string, -1) == 'e' && !in_array(Request::segment(3), $exemptions))
+                                            Edit {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2) }}
+                                        @else
+                                            Edit {{ substr(ucwords(Request::segment(3)), 0, -1) }}
+                                        @endif
+                                    @endif
+                                @else
+                                    @php 
+                                        $exempted = ['emailblast'];
+                                    @endphp
+                                    @if (Request::segment(3) == 'all-gradingsheets')
+                                        New Grading Sheet
+                                    @else
+                                        @if (substr($string, -1) == 'e' && !in_array(Request::segment(3), $exemptions))
+                                            New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2) }}
+                                        @else
+                                            @if (!in_array(Request::segment(1), $exempted))
+                                                New {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
+                                            @else
+                                                New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1) }}
+                                            @endif
+                                        @endif
+                                    @endif
+                                @endif
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                @if (\Request::is('*/*/view/*'))
+
+                @else
+                    <button type="button" class="submit-btn btn m-btn--pill btn-brand m-btn--custom">
+                        @if (\Request::is('*/*/edit/*'))
+                            <i class="la la-save"></i> Save Changes
+                        @else
+                            <i class="la la-send"></i> Send Message
+                        @endif
+                    </button>
+                @endif
+            </div>
+        </div>
+    </div>
+
 
 @elseif (\Request::is('*/*/*/*')  && Request::segment(5) == '' || (\Request::is('*/*/*/*/add') && Request::segment(6) == '') || (\Request::is('*/*/*/*/edit/*') )) 
     <div class="m-subheader ">
