@@ -340,7 +340,7 @@
             </div>
         </div>
     </div>
-@elseif (\Request::is('*/*/infoblast/*')  && Request::segment(4) != '')  
+@elseif (\Request::is('*/*/infoblast/*') && Request::segment(4) != '')  
     <div class="m-subheader ">
         <div class="d-flex align-items-center">
             <div class="mr-auto">
@@ -374,13 +374,13 @@
                                     $exemptions = ['modules', 'sub-modules'];
                                 @endphp
                                 @if (\Request::is('*/*/edit/*'))
-                                    @if (Request::segment(3) == 'all-gradingsheets')
+                                    @if (Request::segment(4) == 'all-gradingsheets')
                                         Edit Grading Sheet
                                     @else
-                                        @if (substr($string, -1) == 'e' && !in_array(Request::segment(3), $exemptions))
-                                            Edit {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2) }}
+                                        @if (substr($string, -1) == 'e' && !in_array(Request::segment(4), $exemptions))
+                                            Edit {{ substr(ucwords(str_replace('-',' ', Request::segment(4))), 0, -2) }}
                                         @else
-                                            Edit {{ substr(ucwords(Request::segment(3)), 0, -1) }}
+                                            Edit {{ substr(ucwords(Request::segment(4)), 0, -1) }}
                                         @endif
                                     @endif
                                 @elseif (\Request::is('*/*/infoblast/*'))
@@ -414,26 +414,32 @@
             </div>
             <div>
                 @php 
-                    $exemptions = ['outbox'];
+                    $exemptions = ['outbox', 'tracking'];
                 @endphp
                 @if (\Request::is('*/*/view/*') || in_array(Request::segment(4), $exemptions))
 
                 @else
+                    @if(Request::segment(4) == 'templates' && Request::segment(5) == '') 
+                        <a href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/'.Request::segment(3).'/'.Request::segment(4).'/add') }}" class="btn m-btn--pill btn-brand add-btn m-btn--custom">
+                            <i class="la la-commenting"></i>
+                            Add New Template
+                        </a>
+                    @else
                     <button type="button" class="submit-btn btn m-btn--pill btn-brand m-btn--custom">
-                        @if (\Request::is('*/*/edit/*'))
+                        @if (\Request::is('*/*/edit/*') || \Request::is('*/*/add'))
                             <i class="la la-save"></i> Save Changes
                         @else
                             <i class="la la-send"></i> Send Message
                         @endif
                     </button>
+                    @endif
                 @endif
             </div>
         </div>
     </div>
 
 
-@elseif (\Request::is('*/*/*/*')  && Request::segment(5) == '' || (\Request::is('*/*/*/*/add') && Request::segment(6) == '') || (\Request::is('*/*/*/*/edit/*') ))  
-
+@elseif (\Request::is('*/*/*/*')  && Request::segment(5) == '' || (\Request::is('*/*/*/*/add') && Request::segment(6) == '') || (\Request::is('*/*/*/*/edit/*') )) 
     <div class="m-subheader ">
         <div class="d-flex align-items-center">
             <div class="mr-auto">
@@ -523,6 +529,5 @@
 
         </div>
     </div>
-
 @endif
 

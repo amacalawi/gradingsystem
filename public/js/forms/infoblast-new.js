@@ -121,8 +121,152 @@
         return $recipient;
     },
 
+    infoblast.prototype.search_group = function($group) {
+        var $groupList = $('.group-list'); $groupList.empty();
+        console.log(base_url + 'notifications/messaging/infoblast/search-group?group=' + $group);
+        $.ajax({
+            type: 'GET',
+            url: base_url + 'notifications/messaging/infoblast/search-group?group=' + $group,
+            success: function(response) {
+                var data = $.parseJSON(response); 
+                $.each(data, function(i, item) {
+                    var $radio = '<label class="m-checkbox m-checkbox--air">' +
+                             '<input name="group[]" type="checkbox" value="' + item.id + '">' +
+                             item.name +
+                             '<span></span>' +
+                             '</label>';
+                    $groupList.append($radio);
+                }); 
+            }, 
+            complete: function() {
+                $.infoblast.validate_group_checklist();
+            }
+        });
+    },
+
+    infoblast.prototype.validate_group_checklist = function() {
+        $.each($groups, function (ix) {
+            $('.group-list').find('input[type="checkbox"][value="' + $groups[ix] + '"]').prop('checked', true);
+        });
+    },
+    
+    infoblast.prototype.search_section = function($section) {
+        var $sectionList = $('.section-list'); $sectionList.empty();
+        console.log(base_url + 'notifications/messaging/infoblast/search-section?section=' + $section);
+        $.ajax({
+            type: 'GET',
+            url: base_url + 'notifications/messaging/infoblast/search-section?section=' + $section,
+            success: function(response) {
+                var data = $.parseJSON(response); 
+                $.each(data, function(i, item) {
+                    var $radio = '<label class="m-checkbox m-checkbox--air">' +
+                             '<input name="section[]" type="checkbox" value="' + item.id + '">' +
+                             item.name +
+                             '<span></span>' +
+                             '</label>';
+                    $sectionList.append($radio);
+                }); 
+            }, 
+            complete: function() {
+                $.infoblast.validate_section_checklist();
+            }
+        });
+    },
+    
+    infoblast.prototype.validate_section_checklist = function() {
+        $.each($sections, function (ix) {
+            $('.section-list').find('input[type="checkbox"][value="' + $sections[ix] + '"]').prop('checked', true);
+        });
+    },
+
+    infoblast.prototype.search_user = function($user) {
+        var $userList = $('.user-list'); $userList.empty();
+        console.log(base_url + 'notifications/messaging/infoblast/search-user?user=' + $user);
+        $.ajax({
+            type: 'GET',
+            url: base_url + 'notifications/messaging/infoblast/search-user?user=' + $user,
+            success: function(response) {
+                var data = $.parseJSON(response); 
+                $.each(data, function(i, item) {
+                    var $radio = '<label class="m-checkbox m-checkbox--air">' +
+                             '<input name="user[]" type="checkbox" value="' + item.id + '">' +
+                             item.name +
+                             '<span></span>' +
+                             '</label>';
+                    $userList.append($radio);
+                }); 
+            }, 
+            complete: function() {
+                $.infoblast.validate_user_checklist();
+            }
+        });
+    },
+    
+    infoblast.prototype.validate_user_checklist = function() {
+        $.each($users, function (ix) {
+            $('.user-list').find('input[type="checkbox"][value="' + $users[ix] + '"]').prop('checked', true);
+        });
+    },
+
     infoblast.prototype.init = function()
     {   
+        /*
+        | ---------------------------------
+        | # search group
+        | ---------------------------------
+        */
+        $.infoblast.search_group($('input[name="search-group"]').val());
+        this.$body.on('keypress', 'input[name="search-group"]', function (e){
+            var self = $(this);
+            if (e.which == 13) {
+                $.infoblast.search_group(self.val());
+            } 
+        });
+        this.$body.on('keydown', 'input[name="search-group"]', function (e){
+            var self = $(this);
+            if (e.which == 8 && self.val().length == 1) {
+                $.infoblast.search_group('');
+            } 
+        });
+
+        /*
+        | ---------------------------------
+        | # search section
+        | ---------------------------------
+        */
+        $.infoblast.search_section($('input[name="search-section"]').val());
+        this.$body.on('keypress', 'input[name="search-section"]', function (e){
+            var self = $(this);
+            if (e.which == 13) {
+                $.infoblast.search_section(self.val());
+            } 
+        });
+        this.$body.on('keydown', 'input[name="search-section"]', function (e){
+            var self = $(this);
+            if (e.which == 8 && self.val().length == 1) {
+                $.infoblast.search_section('');
+            } 
+        });
+
+        /*
+        | ---------------------------------
+        | # search user
+        | ---------------------------------
+        */
+        $.infoblast.search_user($('input[name="search-user"]').val());
+        this.$body.on('keypress', 'input[name="search-user"]', function (e){
+            var self = $(this);
+            if (e.which == 13) {
+                $.infoblast.search_user(self.val());
+            } 
+        });
+        this.$body.on('keydown', 'input[name="search-user"]', function (e){
+            var self = $(this);
+            if (e.which == 8 && self.val().length == 1) {
+                $.infoblast.search_user('');
+            } 
+        });
+
         /*
         | ---------------------------------
         | # select, input, and textarea on change or keyup remove error

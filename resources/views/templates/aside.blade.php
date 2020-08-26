@@ -110,9 +110,6 @@
                                                                                     Outbox
                                                                                 </span>
                                                                                 <span class="m-menu__link-badge">
-                                                                                    <span class="m-badge m-badge--success">
-                                                                                        2
-                                                                                    </span>
                                                                                 </span>
                                                                             </span>
                                                                         </span>
@@ -120,16 +117,13 @@
                                                                 </li>
                                                                 <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
                                                                     <a href="{{ url($menu['slug'].'/'.$module['slug'].'/'.$submodule['slug'].'/tracking') }}" class="m-menu__link ">
-                                                                        <i class="m-menu__link-icon flaticon-multimedia-2"></i>
+                                                                        <i class="m-menu__link-icon flaticon-graph"></i>
                                                                         <span class="m-menu__link-title">
                                                                             <span class="m-menu__link-wrap">
                                                                                 <span class="m-menu__link-text">
                                                                                     Tracking
                                                                                 </span>
                                                                                 <span class="m-menu__link-badge">
-                                                                                    <span class="m-badge m-badge--info m-badge--wide">
-                                                                                        245
-                                                                                    </span>
                                                                                 </span>
                                                                             </span>
                                                                         </span>
@@ -144,9 +138,6 @@
                                                                                     Templates
                                                                                 </span>
                                                                                 <span class="m-menu__link-badge">
-                                                                                    <span class="m-badge m-badge--info m-badge--wide">
-                                                                                        245
-                                                                                    </span>
                                                                                 </span>
                                                                             </span>
                                                                         </span>

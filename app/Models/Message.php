@@ -19,17 +19,17 @@ class Message extends Model
 
     private static function DLR_URL()
     {   
-        return 'http://'.$_SERVER['SERVER_NAME'].'/notifications/messaging/infoblast/dlr?type=%d&answer=%A';
+        return 'http://127.0.0.1/smartschoolapp/kannel/dlr.php?type=%d&answer=%A';
     }
     
     public function sendItem($id, $msisdn, $smsc, $body, $groups=null)
     {
         $dlr = self::DLR_URL() . '&outbox_id=' . $id;
         $url = self::SEND_URL() . '&to=' . $msisdn . '&text=' . urlencode($body) . '&smsc=' . $smsc . '&dlr-url=' . urlencode($dlr);
-
+        
         $ch = curl_init ($url);
         ob_start();
-        curl_exec($ch);
+        curl_exec($ch); 
         $str = ob_get_contents();
         ob_end_clean();
         curl_close ($ch);

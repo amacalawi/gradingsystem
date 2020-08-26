@@ -600,3 +600,11 @@ a[data-dismiss="modal"] {
 .m-checkbox.m-checkbox--air {
     width: 100%;
 }
+
+.m-b-10 {
+    margin-bottom: 10px;
+}
+
+.m-n-t-10 {
+    margin-top: -10px !important;
+}

@@ -87,45 +87,54 @@
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane active show" id="m_tabs_6_1" role="tabpanel">
-                                    <div class="m-checkbox-list">
-                                        @foreach ($groups as $group)
-                                            <label class="m-checkbox m-checkbox--air">
-                                                {{ Form::checkbox('group[]', $group->id, false, array()) }}
-                                                {{ $group->name }}
-                                                <span></span>
-                                            </label>
-                                        @endforeach
+                                    <div class="form-group m-form__group">
+                                        <div class="input-group">
+                                            <input type="text" name="search-group" class="form-control" placeholder="search group here...">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" type="button">
+                                                    <i class="fa fa-search"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-checkbox-list group-list">
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="m_tabs_6_2" role="tabpanel">
-                                    <div class="m-checkbox-list">
-                                        @foreach ($sections as $section)
-                                            <label class="m-checkbox m-checkbox--air">
-                                                {{ Form::checkbox('section[]', $section->id, false, array()) }}
-                                                {{ $section->name }}
-                                                <span></span>
-                                            </label>
-                                        @endforeach
+                                    <div class="form-group m-form__group">
+                                        <div class="input-group">
+                                            <input type="text" name="search-section" class="form-control" placeholder="search section here...">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" type="button">
+                                                    <i class="fa fa-search"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-checkbox-list section-list">
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="m_tabs_6_3" role="tabpanel">
-                                    <div class="m-checkbox-list">
-                                        @foreach ($users as $user)
-                                            <label class="m-checkbox m-checkbox--air">
-                                                {{ Form::checkbox('user[]', $user->id, false, array()) }}
-                                                {{ $user->name }}
-                                                <span></span>
-                                            </label>
-                                        @endforeach
+                                    <div class="form-group m-form__group">
+                                        <div class="input-group">
+                                            <input type="text" name="search-user" class="form-control" placeholder="search user here...">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" type="button">
+                                                    <i class="fa fa-search"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-checkbox-list user-list">
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="m_tabs_6_4" role="tabpanel">
                                     <div class="form-group m-form__group">
                                         <div class="input-group">
-                                            <input type="text" name="anonymous" class="form-control" placeholder="Add mobile number here...">
+                                            <input type="text" name="anonymous" class="form-control" placeholder="add mobile number here...">
                                             <div class="input-group-append">
                                                 <button class="btn btn-primary" type="button">
-                                                    Add
+                                                    <i class="fa fa-plus"></i>
                                                 </button>
                                             </div>
                                         </div>
