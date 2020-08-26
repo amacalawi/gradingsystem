@@ -28,8 +28,9 @@ class Mailer extends Mailable
      */
     public function build()
     {
+        $dtl = $this->details;
         return $this->subject($this->details['subject'])
-                    ->view('email.contact')
+                    ->view('mails.email')->with(compact('dtl'))
                     ->from($this->details['from'], $this->details['from']);
     }
 }
