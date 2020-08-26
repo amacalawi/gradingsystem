@@ -477,6 +477,8 @@ Route::prefix('notifications')->group(function () {
         /* Emailblast Routes */
         Route::prefix('emailblast')->group(function () {
             Route::get('new', 'EmailblastController@new')->name('messaging.emailblast.new');
+            Route::post('store', 'EmailblastController@store')->name('messaging.emailblast.store');
+            Route::get('send', 'EmailblastController@send')->name('messaging.emailblast.send');
             Route::get('inbox', 'EmailblastController@inbox')->name('messaging.emailblast.inbox');
             Route::get('outbox', 'EmailblastController@outbox')->name('messaging.emailblast.outbox');
             Route::get('tracking', 'EmailblastController@tracking')->name('messaging.emailblast.tracking');

@@ -260,7 +260,7 @@ class AdmissionController extends Controller
             } 
 
             $exist_classcode = SectionInfo::where('classcode', $classcode)->get();
-            if (($exist_classcode->count() <= 0) )
+            if (($exist_classcode->count() > 0) )
             {
 
                 $sectioninfo = SectionInfo::find($id);

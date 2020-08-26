@@ -1,7 +1,7 @@
-{{ Form::open(array('url' => 'notifications/messaging/emailblast/store', 'name' => 'emailblast_form', 'method' => 'POST')) }}
+{{ Form::open(array('url' => 'notifications/messaging/emailblast/send', 'name' => 'emailblast_form', 'method' => 'GET')) }}
     <div class="row">
+        
         <div class="col-md-8">
-            <!-- MESSAGES START -->
             <div class="m-portlet m-portlet--tab">
                 <div class="m-portlet__body">
                     <div class="row">
@@ -39,83 +39,11 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group m-form__group">
-                                {{ Form::label('attachment', 'Attachment', ['class' => '']) }}
-                                <div class="col-md-12">
-                                    <input type="file" name="attachments" id="attachments" multiple>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group m-form__group ">
-                                <input type="checkbox" name="checkbox-autoattachment">
-                                {{ Form::label('autoattachment', 'Auto Attachment', ['class' => '']) }}
-                                <div class="col-md-12 radio-autoattachment">
-                                    <label class="m-radio col-md-3">
-                                        <input type="radio" name="radio_autoattachment" value="is_payslip" checked="checked">
-                                        Payslip
-                                        <span></span>
-                                    </label>
-                                    <label class="m-radio col-md-3">
-                                        <input type="radio" name="radio_autoattachment" value="is_soa">
-                                        SOA
-                                        <span></span>
-                                    </label>
-                                    <label class="m-radio col-md-3">
-                                        <input type="radio" name="radio_autoattachment" value="is_grade">
-                                        Gradingsheet
-                                        <span></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group m-form__group">
-                                {{ Form::label('message', 'Message', ['class' => '']) }}
-                                <textarea class="ckeditor form-control" name="message_editor" id="message_editor"></textarea>
-                                {{-- 
-                                    Form::textarea($name = 'messages', $value = '', 
-                                    $attributes = array(
-                                        'id' => 'messages',
-                                        'class' => 'form-control form-control-lg m-input m-input--solid',
-                                        'rows' => 3
-                                    )) 
-                                --}}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <button type="button" class="btn btn-secondary btn-sm">
-                                Messaging Template
-                            </button>
-                            <button type="button" class="btn btn-secondary btn-sm">
-                                SOA Template
-                            </button>
-                            <button type="button" class="btn btn-secondary btn-sm">
-                                Gradingsheet Template
-							</button>
-                        </div>
-                        <div class="col-md-5">
-                            <div class="m-radio-inline text-right">
-
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
-            <!-- MESSAGES END -->
         </div>
+
         <div class="col-md-4">
-            <!-- SIDEBAR -->
             <div class="m-portlet m-portlet--tab">
                 <div class="m-portlet__body">
                     <div class="row">
@@ -193,7 +121,92 @@
                     </div>
                 </div>
             </div>
-            <!-- SIDEBAR END -->
         </div>
+
+
+        <div class="col-md-8">
+            <div class="m-portlet m-portlet--tab">
+                <div class="m-portlet__body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group m-form__group">
+                                {{ Form::label('attachment', 'Attachment', ['class' => '']) }}
+                                <div class="col-md-12">
+                                    <input type="file" name="attachments" id="attachments" multiple>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-8">
+            <div class="m-portlet m-portlet--tab">
+                <div class="m-portlet__body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group m-form__group ">
+                                <input type="checkbox" name="checkbox-autoattachment">
+                                {{ Form::label('autoattachment', 'Auto Attachment', ['class' => '']) }}
+                                <div class="col-md-12 radio-autoattachment" hidden>
+                                    <label class="m-radio col-md-3">
+                                        <input type="radio" name="radio_autoattachment" value="is_payslip" checked="checked">
+                                        Payslip
+                                        <span></span>
+                                    </label>
+                                    <label class="m-radio col-md-3">
+                                        <input type="radio" name="radio_autoattachment" value="is_soa">
+                                        SOA
+                                        <span></span>
+                                    </label>
+                                    <label class="m-radio col-md-3">
+                                        <input type="radio" name="radio_autoattachment" value="is_grade">
+                                        Gradingsheet
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="m-portlet m-portlet--tab">
+                <div class="m-portlet__body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group m-form__group">
+                                {{ Form::label('message', 'Message', ['class' => '']) }}
+                                <textarea class="ckeditor form-control" name="message_editor" id="message_editor"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="button" class="btn btn-secondary btn-sm">
+                                Messaging Template
+                            </button>
+                            <button type="button" class="btn btn-secondary btn-sm">
+                                SOA Template
+                            </button>
+                            <button type="button" class="btn btn-secondary btn-sm">
+                                Gradingsheet Template
+							</button>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="m-radio-inline text-right">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 {{ Form::close() }}
