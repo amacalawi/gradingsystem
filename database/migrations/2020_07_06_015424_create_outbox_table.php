@@ -18,7 +18,7 @@ class CreateOutboxTable extends Migration
             $table->integer('message_id')->unsigned();
             $table->integer('batch_id')->unsigned();
             $table->integer('folder_id')->nullable();
-            $table->integer('user_id')->nullable();
+            // $table->integer('user_id')->nullable();
             $table->string('msisdn', 20);
             $table->string('smsc', 10);
             $table->string('status', 10);

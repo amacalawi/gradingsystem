@@ -1,4 +1,4 @@
-{{ Form::open(array('url' => 'notifictions/messaging/infoblast/store', 'name' => 'infoblast_form', 'method' => 'POST')) }}
+{{ Form::open(array('url' => 'notifications/messaging/infoblast/send', 'name' => 'infoblast_form', 'method' => 'POST')) }}
     <div class="row">
         <div class="col-md-8">
             <!-- MESSAGES START -->
@@ -17,7 +17,8 @@
                                     $attributes = array(
                                         'id' => 'messages',
                                         'class' => 'form-control form-control-lg m-input m-input--solid',
-                                        'rows' => 3
+                                        'rows' => 3,
+                                        'maxlength' => 500
                                     )) 
                                 }}
                                 <span class="m-form__help m--font-metal">
@@ -27,31 +28,25 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-7">
+                        <div class="col-md-4">
                             <button type="button" class="btn btn-secondary btn-sm">
-                                Messaging Template
+                                Insert Template
                             </button>
-                            <button type="button" class="btn btn-secondary btn-sm">
-                                SOA Template
-                            </button>
-                            <button type="button" class="btn btn-secondary btn-sm">
-                                Gradingsheet Template
-							</button>
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-8">
                             <div class="m-radio-inline text-right">
                                 <label class="m-radio">
-                                    <input type="radio" name="type" value="1" checked="checked">
+                                    <input type="radio" name="message_type_id" value="1" checked="checked">
                                     Messaging
                                     <span></span>
                                 </label>
                                 <label class="m-radio">
-                                    <input type="radio" name="type" value="2">
+                                    <input type="radio" name="message_type_id" value="2">
                                     SOA
                                     <span></span>
                                 </label>
                                 <label class="m-radio">
-                                    <input type="radio" name="type" value="3">
+                                    <input type="radio" name="message_type_id" value="3">
                                     Gradingsheet
                                     <span></span>
                                 </label>
@@ -92,48 +87,59 @@
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane active show" id="m_tabs_6_1" role="tabpanel">
-                                    <div class="m-checkbox-list">
-                                        @foreach ($groups as $group)
-                                            <label class="m-checkbox m-checkbox--air">
-                                                {{ Form::checkbox('group[]', $group->id, false, array()) }}
-                                                {{ $group->name }}
-                                                <span></span>
-                                            </label>
-                                        @endforeach
+                                    <div class="form-group m-form__group">
+                                        <div class="input-group">
+                                            <input type="text" name="search-group" class="form-control" placeholder="search group here...">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" type="button">
+                                                    <i class="fa fa-search"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-checkbox-list group-list">
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="m_tabs_6_2" role="tabpanel">
-                                    <div class="m-checkbox-list">
-                                        @foreach ($sections as $section)
-                                            <label class="m-checkbox m-checkbox--air">
-                                                {{ Form::checkbox('section[]', $section->id, false, array()) }}
-                                                {{ $section->name }}
-                                                <span></span>
-                                            </label>
-                                        @endforeach
+                                    <div class="form-group m-form__group">
+                                        <div class="input-group">
+                                            <input type="text" name="search-section" class="form-control" placeholder="search section here...">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" type="button">
+                                                    <i class="fa fa-search"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-checkbox-list section-list">
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="m_tabs_6_3" role="tabpanel">
-                                    <div class="m-checkbox-list">
-                                        @foreach ($users as $user)
-                                            <label class="m-checkbox m-checkbox--air">
-                                                {{ Form::checkbox('user[]', $user->id, false, array()) }}
-                                                {{ $user->name }}
-                                                <span></span>
-                                            </label>
-                                        @endforeach
+                                    <div class="form-group m-form__group">
+                                        <div class="input-group">
+                                            <input type="text" name="search-user" class="form-control" placeholder="search user here...">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" type="button">
+                                                    <i class="fa fa-search"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-checkbox-list user-list">
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="m_tabs_6_4" role="tabpanel">
                                     <div class="form-group m-form__group">
                                         <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Add mobile number here...">
+                                            <input type="text" name="anonymous" class="form-control" placeholder="add mobile number here...">
                                             <div class="input-group-append">
                                                 <button class="btn btn-primary" type="button">
-                                                    Add
+                                                    <i class="fa fa-plus"></i>
                                                 </button>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="m-checkbox-list">
                                     </div>
                                 </div>
                             </div>

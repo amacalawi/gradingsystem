@@ -469,8 +469,25 @@ Route::prefix('notifications')->group(function () {
             Route::get('new', 'InfoblastController@new')->name('messaging.infoblast.new');
             Route::get('inbox', 'InfoblastController@inbox')->name('messaging.infoblast.inbox');
             Route::get('outbox', 'InfoblastController@outbox')->name('messaging.infoblast.outbox');
+            Route::get('active-outbox', 'InfoblastController@active_outbox')->name('messaging.infoblast.active_outbox');
             Route::get('tracking', 'InfoblastController@tracking')->name('messaging.infoblast.tracking');
+            Route::get('active-tracking', 'InfoblastController@active_tracking')->name('messaging.infoblast.active_tracking');
+            Route::post('resend-item/{id}', 'InfoblastController@resend_item')->name('messaging.infoblast.resend');
+            Route::post('send', 'InfoblastController@send')->name('messaging.infoblast.send');
+
+            Route::get('search-group', 'InfoblastController@search_group')->name('messaging.infoblast.search_group');
+            Route::get('search-section', 'InfoblastController@search_section')->name('messaging.infoblast.search_section');
+            Route::get('search-user', 'InfoblastController@search_user')->name('messaging.infoblast.search_user');
+
             Route::get('templates', 'InfoblastController@templates')->name('messaging.infoblast.templates');
+            Route::get('templates/inactive', 'InfoblastController@inactive_templates')->name('messaging.infoblast.inactive_templates');
+            Route::get('templates/all-active', 'InfoblastController@all_active_templates')->name('messaging.infoblast.all_active_templates');
+            Route::get('templates/all-inactive', 'InfoblastController@all_inactive_templates')->name('messaging.infoblast.all_inactive_templates');
+            Route::get('templates/add', 'InfoblastController@messaging_template')->name('messaging.infoblast.add_template');
+            Route::get('templates/edit/{id?}', 'InfoblastController@messaging_template')->name('student.settings.edit_template');
+            Route::post('templates/store', 'InfoblastController@store_template')->name('messaging.infoblast.store_template');
+            Route::put('templates/update/{id}', 'InfoblastController@update_template')->name('messaging.infoblast.update_template');
+            Route::put('templates/update-status/{id}', 'InfoblastController@update_template_status')->name('messaging.infoblast.update_template_status');
         });
         /* End Infoblast Routes */
 

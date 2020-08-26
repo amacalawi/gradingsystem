@@ -13,6 +13,8 @@ php artisan db:seed --class=UserSeeder
 php artisan migrate:fresh --seed
 php artisan db:seed --force
 
+php artisan serve --host=some.other.domain --port=8001
+
 Overtime
 Failure to Swipe
 Official Undertime

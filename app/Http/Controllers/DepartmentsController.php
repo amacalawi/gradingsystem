@@ -38,13 +38,15 @@ class DepartmentsController extends Controller
     public function manage(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/components/schools/departments/manage')->with(compact('menus'));
+        $types = (new EducationType)->manage_education_types();
+        return view('modules/components/schools/departments/manage')->with(compact('menus', 'types'));
     }
 
     public function inactive(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/components/schools/departments/inactive')->with(compact('menus'));
+        $types = (new EducationType)->manage_education_types();
+        return view('modules/components/schools/departments/inactive')->with(compact('menus', 'types'));
     }
 
     public function all_active(Request $request)
