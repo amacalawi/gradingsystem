@@ -15,7 +15,8 @@ class CreateEmailsOutboxesTable extends Migration
     {
         Schema::create('emails_outboxes', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('email_id')->nullable()->unsigned();
+            $table->integer('email_id')->unsigned();
+            $table->string('email_recipient');
             $table->string('subject');
             $table->string('message');
             $table->boolean('is_soa')->default(0);

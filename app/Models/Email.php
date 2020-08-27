@@ -12,6 +12,27 @@ class Email extends Model
     
     public $timestamps = false;
 
+    public function fetch($id)
+    {
+        $email = self::find($id);
+        if ($email) {
+            $results = array(
+                'id' => ($email->id) ? $email->id : '',
+                'username' => ($email->username) ? $email->username : '',
+                'email' => ($email->email) ? $email->email : '',
+                'password' => ($email->password) ? $email->password : '',
+            );
+        } else {
+            $results = array(
+                'id' => '',
+                'username' => '',
+                'email' => '',
+                'password' => '',
+            );
+        }
+        return (object) $results;
+    }
+
     public function all_email()
     {	
     	$emails = self::where('is_active', 1)->orderBy('id', 'asc')->get();

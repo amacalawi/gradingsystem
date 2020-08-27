@@ -443,7 +443,13 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
+                    @if(\Request::is('*/*/emailblast/outbox') )
+                        {{ ucwords(str_replace('-',' ', Request::segment(3))).' '.ucwords(Request::segment(4)) }}
+                    @elseif(\Request::is('*/*/emailblast/settings') )
+                        {{ ucwords(str_replace('-',' ', Request::segment(3))).' '.ucwords(Request::segment(4)) }}
+                    @elseif(\Request::is('*/*/emailblast/*'))
+                        {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
+                    @endif
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -464,6 +470,8 @@
                     <li class="m-nav__separator">
                         -
                     </li>
+
+                    
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
@@ -472,7 +480,7 @@
                                     $exemptions = ['modules', 'sub-modules'];
                                 @endphp
                                 @if (\Request::is('*/*/edit/*'))
-                                    @if (Request::segment(3) == 'all-gradingsheets')
+                                    @if (Request::segment(3) == 'all-emailblast')
                                         Edit Grading Sheet
                                     @else
                                         @if (substr($string, -1) == 'e' && !in_array(Request::segment(3), $exemptions))
@@ -483,15 +491,15 @@
                                     @endif
                                 @else
                                     @php 
-                                        $exempted = ['emailblast'];
+                                        $exempted = ['emailblast', 'settings'];
                                     @endphp
-                                    @if (Request::segment(3) == 'all-gradingsheets')
-                                        New Grading Sheet
+                                    @if (Request::segment(4) == 'all-emailblast')
+                                        New Emailblast
                                     @else
                                         @if (substr($string, -1) == 'e' && !in_array(Request::segment(3), $exemptions))
                                             New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2) }}
                                         @else
-                                            @if (!in_array(Request::segment(1), $exempted))
+                                            @if (!in_array(Request::segment(4), $exempted))
                                                 New {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
                                             @else
                                                 New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1) }}
@@ -507,9 +515,17 @@
             <div>
                 @if (\Request::is('*/*/view/*'))
 
+                @elseif(\Request::is('*/*/*/outbox'))
+                
+                @elseif(\Request::is('*/*/*/settings'))
+                    <a href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/'.Request::segment(3).'/'.Request::segment(4).'/add') }}" class="btn m-btn--pill btn-brand add-btn m-btn--custom">
+                        <span class="m-nav__link-text">
+                            Add New Account
+                        </span>
+                    </a>
                 @else
                     <button type="button" class="submit-btn btn m-btn--pill btn-brand m-btn--custom">
-                        @if (\Request::is('*/*/edit/*'))
+                        @if (\Request::is('*/*/edit/*') || \Request::is('*/*/*/*/add'))
                             <i class="la la-save"></i> Save Changes
                         @else
                             <i class="la la-send"></i> Send Message
