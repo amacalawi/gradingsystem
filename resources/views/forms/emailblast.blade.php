@@ -43,7 +43,7 @@
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4 overflow-auto d-inline-block">
             <div class="m-portlet m-portlet--tab">
                 <div class="m-portlet__body">
                     <div class="row">
@@ -123,7 +123,6 @@
             </div>
         </div>
 
-
         <div class="col-md-8">
             <div class="m-portlet m-portlet--tab">
                 <div class="m-portlet__body">
@@ -140,7 +139,6 @@
                 </div>
             </div>
         </div>
-
 
         <div class="col-md-8">
             <div class="m-portlet m-portlet--tab">

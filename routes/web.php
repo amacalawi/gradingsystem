@@ -496,12 +496,21 @@ Route::prefix('notifications')->group(function () {
             Route::get('new', 'EmailblastController@new')->name('messaging.emailblast.new');
             Route::post('store', 'EmailblastController@store')->name('messaging.emailblast.store');
             Route::get('send', 'EmailblastController@send')->name('messaging.emailblast.send');
-            Route::get('inbox', 'EmailblastController@inbox')->name('messaging.emailblast.inbox');
-            Route::get('outbox', 'EmailblastController@outbox')->name('messaging.emailblast.outbox');
-            Route::get('tracking', 'EmailblastController@tracking')->name('messaging.emailblast.tracking');
-            Route::get('templates', 'EmailblastController@templates')->name('messaging.emailblast.templates');
+            //Route::get('inbox', 'EmailblastController@inbox')->name('messaging.emailblast.inbox');
+            Route::get('outbox', 'EmailblastController@manage_outbox')->name('messaging.emailblast.manage.outbox');
+            Route::get('outbox/all-active', 'EmailblastController@all_active_outbox')->name('messaging.emailblast.all.active.outbox');
+            
+            //Settings
+            Route::get('settings', 'EmailblastController@settings')->name('messaging.emailblast.settings');
+            Route::get('settings/all-active', 'EmailblastController@all_active_settings')->name('messaging.emailblast.all.active.settings');
+            Route::get('settings/add', 'EmailblastController@add_settings')->name('messaging.emailblast.add.settings');
+            Route::post('settings/store', 'EmailblastController@store_settings')->name('messaging.emailblast.settings.store');
+            Route::get('settings/edit/{id?}', 'EmailblastController@edit_settings')->name('messaging.emailblast.edit.settings');
+            Route::put('settings/update/{id}', 'EmailblastController@update_settings')->name('messaging.emailblast.settings.update');
+            Route::put('settings/update-status/{id}', 'EmailblastController@update_status')->name('messaging.emailblast.settings.update.status');
         });
         /* End Emailblast Routes */
+
     });
     /* End Messaging Routes */
 });
