@@ -17,7 +17,7 @@
                                     $attributes = array(
                                         'id' => 'messages',
                                         'class' => 'form-control form-control-lg m-input m-input--solid',
-                                        'rows' => 3,
+                                        'rows' => 5,
                                         'maxlength' => 500
                                     )) 
                                 }}
@@ -29,7 +29,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <button type="button" class="btn btn-secondary btn-sm">
+                            <button type="button" class="insert-template-btn btn btn-secondary btn-sm">
                                 Insert Template
                             </button>
                         </div>
@@ -97,6 +97,9 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="m-b-10">
+                                    [ <a href="javascript:;" value="group" class="select-all">SELECT ALL</a> ] [ <a href="javascript:;" value="group" class="deselect-all">DESELECT ALL</a> ]
+                                    </div>
                                     <div class="m-checkbox-list group-list">
                                     </div>
                                 </div>
@@ -111,6 +114,9 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="m-b-10">
+                                    [ <a href="javascript:;" value="section" class="select-all">SELECT ALL</a> ] [ <a href="javascript:;" value="section" class="deselect-all">DESELECT ALL</a> ]
+                                    </div>
                                     <div class="m-checkbox-list section-list">
                                     </div>
                                 </div>
@@ -124,6 +130,9 @@
                                                 </button>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="m-b-10">
+                                    [ <a href="javascript:;" value="user" class="select-all">SELECT ALL</a> ] [ <a href="javascript:;" value="user" class="deselect-all">DESELECT ALL</a> ]
                                     </div>
                                     <div class="m-checkbox-list user-list">
                                     </div>

@@ -608,3 +608,15 @@ a[data-dismiss="modal"] {
 .m-n-t-10 {
     margin-top: -10px !important;
 }
+
+.infoblast-template-layer .m-widget4__item .m-widget4__info {
+    padding-left: 0 !important;
+}
+
+.select-all, .deselect-all {
+    color: #7b7e8a;
+}
+
+.select-all:hover, .deselect-all:hover {
+    color: #00a3ee;
+}

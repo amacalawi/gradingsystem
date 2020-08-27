@@ -488,6 +488,7 @@ Route::prefix('notifications')->group(function () {
             Route::post('templates/store', 'InfoblastController@store_template')->name('messaging.infoblast.store_template');
             Route::put('templates/update/{id}', 'InfoblastController@update_template')->name('messaging.infoblast.update_template');
             Route::put('templates/update-status/{id}', 'InfoblastController@update_template_status')->name('messaging.infoblast.update_template_status');
+            Route::get('templates/fetch', 'InfoblastController@fetch_all_template')->name('messaging.infoblast.fetch_all_template');
         });
         /* End Infoblast Routes */
 

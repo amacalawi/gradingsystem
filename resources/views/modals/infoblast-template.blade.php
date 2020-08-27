@@ -1,4 +1,4 @@
-<div class="modal fade" id="infoblast-template" tabindex="-1" role="dialog" aria-labelledby="infoblastTemplate">
+<div class="modal fade" id="infoblast-template-modal" tabindex="-1" role="dialog" aria-labelledby="infoblastTemplate">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-accent">
@@ -10,7 +10,7 @@
                 </h5>
             </div>
             <div class="modal-body">
-                <div class="infoblast-template-layer">
+                <div class="m-widget4 infoblast-template-layer">
                 </div>
             </div>
         </div>
