@@ -503,4 +503,18 @@ class InfoblastController extends Controller
             ];
         });
     }
+
+    public function fetch_all_template(Request $request)
+    {   
+        $templates = MessageTemplate::where(['is_active' => 1, 'message_type_id' => $request->get('type')])->get();
+        $arr = array();
+        foreach ($templates as $template) {
+            $arr[] = array(
+                'id' => $template->id,
+                'code' => $template->code,
+                'messages' => htmlentities($template->messages),
+            );
+        }
+        echo json_encode( $arr ); exit();
+    }
 }

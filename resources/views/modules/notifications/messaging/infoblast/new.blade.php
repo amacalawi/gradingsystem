@@ -2,6 +2,7 @@
 
 @section('content')
     @include('forms.infoblast')
+    @include('modals.infoblast-template')
 @endsection
 
 @push('scripts')

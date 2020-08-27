@@ -202,6 +202,14 @@
         });
     },
     
+    infoblast.prototype.refresh = function() {
+        $groups = []; $sections = []; $users = []; $anonymousMsisdn = [];
+        $('textarea[name="messages"]').val(''); $('textarea[name="messages"]').next().text('500');
+        $('.tab-content input[type="checkbox"]').each(function () { $(this).prop('checked', false); });
+        $('#m_tabs_6_4 .m-checkbox-list').empty();
+        $('input[name="message_type_id"][value="1"]').prop("checked", true);
+    },
+
     infoblast.prototype.validate_user_checklist = function() {
         $.each($users, function (ix) {
             $('.user-list').find('input[type="checkbox"][value="' + $users[ix] + '"]').prop('checked', true);
@@ -485,6 +493,7 @@
                         console.log(data);
                         if (data.type == 'success') {
                             setTimeout(function () {
+                                $.infoblast.refresh();
                                 $self.html('<i class="la la-send"></i> Send Message').removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
                                 swal({
                                     title: data.title,
@@ -515,6 +524,131 @@
                         window.onfocus = null;
                     }
                 });
+            }
+        });
+
+        this.$body.on('click', '.insert-template-btn', function (e){
+            e.preventDefault();
+            var self = $(this);
+            var modal = $('#infoblast-template-modal');
+            var type = $('input[name="message_type_id"]:checked').val();
+            var itemList = $('.infoblast-template-layer');
+            
+            console.log(base_url + 'notifications/messaging/infoblast/templates/fetch?type=' + type);
+            $.ajax({
+                type: 'GET',
+                url: base_url + 'notifications/messaging/infoblast/templates/fetch?type=' + type,
+                success: function(response) {
+                    if (type == 1) {
+                        modal.find('.infoblast-template-title').text('Insert Messaging Template');
+                    } else if (type == 2) {
+                        modal.find('.infoblast-template-title').text('Insert SOA Template');
+                    } else {
+                        modal.find('.infoblast-template-title').text('Insert Gradingsheet Template');
+                    }
+                    itemList.empty();
+                    modal.modal({
+                        backdrop: 'static',
+                        keyboard: false,
+                        show: true
+                    })
+                    var data = $.parseJSON(response); 
+                    $.each(data, function(i, item) {
+                        var items = '<div class="m-widget4__item">' +
+                                    '<div class="m-widget4__img m-widget4__img--logo">' +
+                                    '</div>' +
+                                    '<div class="m-widget4__info">' +
+                                    '<span class="m-widget4__title">' +
+                                    item.code +
+                                    '</span>' +
+                                    '<br>' +
+                                    '<span class="m-widget4__sub">' +
+                                    item.messages + 
+                                    '</span>' +
+                                    '</div>' +
+                                    '<span class="m-widget4__ext">' +
+                                    '<a text="' + item.messages + '" title="select to insert" class="copy-template" href="javascript:;">' +
+                                    '<span class="m-widget4__number m--font-danger">' +
+                                    '<i class="fa fa-copy"></i>' +
+                                    '</span>' +
+                                    '</a>' +
+                                    '</span>' +
+                                    '</div>';
+                        itemList.append(items);
+                    }); 
+                },
+                async: false
+            });
+        });
+
+        this.$body.on('click', '.copy-template', function (e){
+            e.preventDefault();
+            var self = $(this);
+            var modal = $('#infoblast-template-modal');
+            var text = $('textarea[name="messages"]');
+            var limitholder = text.next();
+            setTimeout(function () {
+                limitholder.text( parseFloat(500) - text.val().length);
+            }, 50);
+            text.val(self.attr('text'));
+            modal.modal('hide');
+        });
+        
+        this.$body.on('click', '.select-all', function (e){
+            var self = $(this);
+            if (self.attr('value') == 'group') {
+                $('#m_tabs_6_1 input[type="checkbox"]').each(function () { 
+                    var checkbox = $(this);
+                    var existed = jQuery.inArray( checkbox.val(), $groups );
+                    checkbox.prop('checked', true); 
+                    if (existed == -1) {
+                        $groups.push(checkbox.val());
+                    }
+                });
+                console.log($groups);
+            } else if (self.attr('value') == 'section') {
+                $('#m_tabs_6_2 input[type="checkbox"]').each(function () { 
+                    var checkbox = $(this);
+                    var existed = jQuery.inArray( checkbox.val(), $sections );
+                    checkbox.prop('checked', true); 
+                    if (existed == -1) {
+                        $sections.push(checkbox.val());
+                    }
+                });
+                console.log($sections);
+            } else {
+                $('#m_tabs_6_3 input[type="checkbox"]').each(function () { 
+                    var checkbox = $(this);
+                    var existed = jQuery.inArray( checkbox.val(), $users );
+                    checkbox.prop('checked', true); 
+                    if (existed == -1) {
+                        $users.push(checkbox.val());
+                    }
+                });
+                console.log($users);
+            }
+        });
+        
+        this.$body.on('click', '.deselect-all', function (e){
+            var self = $(this);
+            if (self.attr('value') == 'group') {
+                $('#m_tabs_6_1 input[type="checkbox"]').each(function () { 
+                    $(this).prop('checked', false); 
+                });
+                $groups = [];
+                console.log($groups);
+            } else if (self.attr('value') == 'section') {
+                $('#m_tabs_6_2 input[type="checkbox"]').each(function () { 
+                    $(this).prop('checked', false); 
+                });
+                $sections = [];
+                console.log($sections);
+            } else {
+                $('#m_tabs_6_3 input[type="checkbox"]').each(function () { 
+                    $(this).prop('checked', false); 
+                });
+                $users = [];
+                console.log($users);
             }
         });
     }
