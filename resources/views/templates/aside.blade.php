@@ -115,6 +115,22 @@
                                                                         </span>
                                                                     </a>
                                                                 </li>
+
+                                                                @if ($submodule['name'] == 'Emailblast') 
+                                                                    <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
+                                                                        <a href="{{ url($menu['slug'].'/'.$module['slug'].'/'.$submodule['slug'].'/settings') }}" class="m-menu__link ">
+                                                                            <i class="m-menu__link-icon flaticon-settings"></i>
+                                                                            <span class="m-menu__link-title">
+                                                                                <span class="m-menu__link-wrap">
+                                                                                    <span class="m-menu__link-text">
+                                                                                        Settings
+                                                                                    </span>
+                                                                                </span>
+                                                                            </span>
+                                                                        </a>
+                                                                    </li>
+                                                                @endif
+
                                                                 <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
                                                                     <a href="{{ url($menu['slug'].'/'.$module['slug'].'/'.$submodule['slug'].'/tracking') }}" class="m-menu__link ">
                                                                         <i class="m-menu__link-icon flaticon-graph"></i>
