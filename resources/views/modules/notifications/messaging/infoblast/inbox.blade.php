@@ -121,7 +121,3 @@
         </div>
     </div>
 @endsection
-
-@push('scripts')
-    <!-- <script src="{{ asset('js/datatables/outbox.js') }}" type="text/javascript"></script> -->
-@endpush

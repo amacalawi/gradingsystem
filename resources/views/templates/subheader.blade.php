@@ -340,7 +340,7 @@
             </div>
         </div>
     </div>
-@elseif (\Request::is('*/*/infoblast/*') && Request::segment(5) != '')  
+@elseif (\Request::is('*/*/infoblast/*') && Request::segment(4) != '')  
     <div class="m-subheader ">
         <div class="d-flex align-items-center">
             <div class="mr-auto">
@@ -369,43 +369,10 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                @php 
-                                    $string = substr(ucwords(Request::segment(3)), 0, -1);
-                                    $exemptions = ['modules', 'sub-modules'];
-                                @endphp
-                                @if (\Request::is('*/*/edit/*'))
-                                    @if (Request::segment(4) == 'all-gradingsheets')
-                                        Edit Grading Sheet
-                                    @else
-                                        @if (substr($string, -1) == 'e' && !in_array(Request::segment(4), $exemptions))
-                                            Edit {{ substr(ucwords(str_replace('-',' ', Request::segment(4))), 0, -2) }}
-                                        @else
-                                            Edit {{ substr(ucwords(Request::segment(4)), 0, -1) }}
-                                        @endif
-                                    @endif
-                                @elseif (\Request::is('*/*/infoblast/*'))
-                                    @if (Request::segment(4) == 'new')
-                                        New Infoblast
-                                    @else
-                                        @php echo ucwords(Request::segment(4)); @endphp
-                                    @endif
+                                @if (Request::segment(4) == 'new')
+                                    New Infoblast
                                 @else
-                                    @php 
-                                        $exempted = ['infoblast'];
-                                    @endphp
-                                    @if (Request::segment(3) == 'all-gradingsheets')
-                                        New Grading Sheet
-                                    @else
-                                        @if (substr($string, -1) == 'e' && !in_array(Request::segment(3), $exemptions))
-                                            New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2) }}
-                                        @else
-                                            @if (!in_array(Request::segment(1), $exempted))
-                                                New {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
-                                            @else
-                                                New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1) }}
-                                            @endif
-                                        @endif
-                                    @endif
+                                    @php echo ucwords(Request::segment(4)); @endphp
                                 @endif
                             </span>
                         </a>
@@ -416,7 +383,7 @@
                 @php 
                     $exemptions = ['outbox', 'tracking', 'inbox'];
                 @endphp
-                @if (\Request::is('*/*/view/*') || in_array(Request::segment(5), $exemptions))
+                @if (\Request::is('*/*/view/*') || in_array(Request::segment(4), $exemptions))
 
                 @else
                     @if(Request::segment(4) == 'templates' && Request::segment(5) == '') 
