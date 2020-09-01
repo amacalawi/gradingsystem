@@ -44,7 +44,7 @@
                 <div class="m-grid__item m-grid__item--fluid m-wrapper">
 
                     <!-- BEGIN: Subheader -->
-                    @include('templates.subheader')
+                    <!-- @include('templates.subheader') -->
                     <!-- END: Subheader -->
 
                     <div class="m-content">  

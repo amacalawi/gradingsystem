@@ -12,6 +12,7 @@ use App\Models\GroupUser;
 use App\Models\Admission;
 use App\Models\Prefix;
 use App\Models\Outbox;
+use App\Models\Inbox;
 use App\Models\MessageType;
 use App\Models\MessageTemplate;
 use App\User;
@@ -68,6 +69,13 @@ class InfoblastController extends Controller
                 'outboxDate' => date('d-M-Y h:i A', strtotime($outbox->created_at))
             ];
         });
+    }
+
+    public function inbox(Request $request)
+    {   
+        $menus = $this->load_menus();
+        $inboxes = Inbox::where(['is_active' => 1, 'batch_id' => (new Batch)->get_current_batch()])->get();
+        return view('modules/notifications/messaging/infoblast/inbox')->with(compact('menus', 'inboxes'));
     }
 
     public function new()

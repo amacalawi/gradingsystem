@@ -340,7 +340,7 @@
             </div>
         </div>
     </div>
-@elseif (\Request::is('*/*/infoblast/*') && Request::segment(4) != '')  
+@elseif (\Request::is('*/*/infoblast/*') && Request::segment(5) != '')  
     <div class="m-subheader ">
         <div class="d-flex align-items-center">
             <div class="mr-auto">
@@ -414,9 +414,9 @@
             </div>
             <div>
                 @php 
-                    $exemptions = ['outbox', 'tracking'];
+                    $exemptions = ['outbox', 'tracking', 'inbox'];
                 @endphp
-                @if (\Request::is('*/*/view/*') || in_array(Request::segment(4), $exemptions))
+                @if (\Request::is('*/*/view/*') || in_array(Request::segment(5), $exemptions))
 
                 @else
                     @if(Request::segment(4) == 'templates' && Request::segment(5) == '') 
@@ -437,8 +437,7 @@
             </div>
         </div>
     </div>
-
-    @elseif (\Request::is('*/*/emailblast/*')  && Request::segment(4) != '')  
+@elseif (\Request::is('*/*/emailblast/*')  && Request::segment(5) != '')  
     <div class="m-subheader ">
         <div class="d-flex align-items-center">
             <div class="mr-auto">
@@ -535,8 +534,6 @@
             </div>
         </div>
     </div>
-
-
 @elseif (\Request::is('*/*/*/*')  && Request::segment(5) == '' || (\Request::is('*/*/*/*/add') && Request::segment(6) == '') || (\Request::is('*/*/*/*/edit/*') )) 
     <div class="m-subheader ">
         <div class="d-flex align-items-center">
