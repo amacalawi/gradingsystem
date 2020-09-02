@@ -12,9 +12,9 @@ class Inbox extends Model
     
     public $timestamps = false;
 
-    public function message()
+    public function user()
     {
-        return $this->belongsTo('App\Models\Message', 'message_id', 'id');
+        return $this->belongsTo('App\User', 'user_id', 'id');
     }
 }
 

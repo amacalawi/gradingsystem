@@ -16,6 +16,7 @@ use App\Models\Inbox;
 use App\Models\MessageType;
 use App\Models\MessageTemplate;
 use App\User;
+use DB;
 
 class InfoblastController extends Controller
 {
@@ -74,8 +75,59 @@ class InfoblastController extends Controller
     public function inbox(Request $request)
     {   
         $menus = $this->load_menus();
-        $inboxes = Inbox::where(['is_active' => 1, 'batch_id' => (new Batch)->get_current_batch()])->get();
+        $inboxes = Inbox::
+        with([
+            'user' =>  function($q) { 
+                $q->select(['id', 'name']); 
+            }
+        ])
+        ->where(['is_active' => 1, 'batch_id' => (new Batch)->get_current_batch()])
+        ->get();
         return view('modules/notifications/messaging/infoblast/inbox')->with(compact('menus', 'inboxes'));
+    }
+
+    public function get_inboxes_via_msisdn(Request $request)
+    {   
+        $msisdn = $request->get('msisdn');
+        $first = \DB::table('inbox')
+        ->select(['messages', 'created_at', DB::raw("DATE_FORMAT(created_at, '%Y-%m-%d %h:%i') as timestamp"), DB::raw("CONCAT('inbox') AS type")])
+        ->where([
+            'msisdn' => $msisdn, 
+            'is_active' => 1, 
+            'batch_id' => (new Batch)->get_current_batch()
+        ]);
+        
+        $res = \DB::table('outbox')
+        ->select(['messages.messages', 'outbox.created_at', DB::raw("DATE_FORMAT(outbox.created_at, '%Y-%m-%d %h:%i') as timestamp"), DB::raw("CONCAT('outbox') AS type")])
+        ->join('messages', 'outbox.message_id', '=', 'messages.id')
+        ->where([
+            'outbox.status' => 'success', 
+            'outbox.msisdn' => $msisdn, 
+            'outbox.is_active' => 1, 
+            'outbox.batch_id' => (new Batch)->get_current_batch()
+        ])
+        ->union($first)
+        ->orderBy('created_at', 'DESC')
+        ->groupBy('timestamp')
+        ->get();
+
+        $res = $res->map(function($msg) {
+            $timestampHour = (date('Y-m-d') == date('Y-m-d', strtotime($msg->created_at))) ? date('h:i', strtotime($msg->created_at)) : date('d-M-Y h:i', strtotime($msg->created_at));
+            $timestampTime = date('A', strtotime($msg->created_at));
+            return [
+                'msg' => $msg->messages,
+                'msgDate' => $timestampHour,
+                'msgTime' => $timestampTime,
+                'msgTimestamp' => $msg->timestamp,
+                'type' => $msg->type
+            ];
+        });   
+        
+        return response()
+        ->json([
+            'status' => 'ok',
+            'data' => $res
+        ]);
     }
 
     public function new()

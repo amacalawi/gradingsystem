@@ -468,6 +468,7 @@ Route::prefix('notifications')->group(function () {
         Route::prefix('infoblast')->group(function () {
             Route::get('new', 'InfoblastController@new')->name('messaging.infoblast.new');
             Route::get('inbox', 'InfoblastController@inbox')->name('messaging.infoblast.inbox');
+            Route::get('get-inboxes-via-msisdn', 'InfoblastController@get_inboxes_via_msisdn')->name('messaging.infoblast.get_inboxes');
             Route::get('outbox', 'InfoblastController@outbox')->name('messaging.infoblast.outbox');
             Route::get('active-outbox', 'InfoblastController@active_outbox')->name('messaging.infoblast.active_outbox');
             Route::get('tracking', 'InfoblastController@tracking')->name('messaging.infoblast.tracking');
