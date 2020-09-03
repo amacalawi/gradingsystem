@@ -98,33 +98,19 @@
                 var data = JSON.parse(JSON.stringify(response));
                 if (data.status == 'ok') {
                     if (data.data.length > 0) {
-                        var $message = '<div class="m-timeline-1 m-timeline-1--fixed">' +
-                            '<div class="m-timeline-1__items">' +
-                            '<div class="m-timeline-1__marker"></div>';
+                        var $message = '<div class="content-layer">';
                         $.each(data.data, function(i, item) {
-                            if ($increment == 0) { $first = 'm-timeline-1__item--first'; } else { $first = ''; }
-                            if(item.type == 'inbox') { $left = 'm-timeline-1__item--left'; } else { $left = 'm-timeline-1__item--right'; }
-                            $message += '<div class="m-timeline-1__item ' + $left + ' ' + $first + '" title="' + item.msg + '">' +
-                            '<div class="m-timeline-1__item-circle">' +
-                            '<div class="m--bg-danger"></div>' +
-                            '</div>' +
-                            '<div class="m-timeline-1__item-arrow"></div>' +
-                            '<span class="m-timeline-1__item-time m--font-brand">' +
-                            '<span>' +
-                            '</span>' +
-                            '</span>' +
-                            '<div class="m-timeline-1__item-content">' +
-                            '<div class="m-timeline-1__item-body">' +
-                            '<div class="m-timeline-1__item-body">' +
-                            '<b class="c-primary">' + item.msgDate + '' + item.msgTime + '</b><br/>'+
-                            item.msg +
-                            '</div>' +
-                            '</div>' +
+                            if(item.type == 'inbox') { $left = 'left'; } else { $left = 'right'; }
+                            $message += '<div class="content-items ' + $left + '">' +
+                            '<div class="avatar"><i class="flaticon-profile-1"></i></div>' +
+                            '<div class="content-arrow"></div>' +
+                            '<div class="content-text">' +
+                            '<b class="c-primary">' + item.msgDate + '' + item.msgTime + '</b>' +
+                            '<p>' + item.msg + '</p>' +
                             '</div>' +
                             '</div>';
-                            $increment++;
                         }); 
-                        $message += '</div></div>';
+                        $message += '</div>';
                     }
                     $('.infoblast-inbox .m-content .mCSB_container').css("height", "auto !important");
                     var $pd = $portlet.find('.panel-disabled');
@@ -163,7 +149,7 @@
 
     inbox.prototype.init = function()
     {   
-        $.inbox.get_inboxes_via_msisdn('');
+        // $.inbox.get_inboxes_via_msisdn('');
 
         this.$body.on('click', '.m-nav__link.m-tabs__item', function (e) {
             e.preventDefault();

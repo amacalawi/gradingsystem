@@ -107,7 +107,7 @@ class InfoblastController extends Controller
             'outbox.batch_id' => (new Batch)->get_current_batch()
         ])
         ->union($first)
-        ->orderBy('created_at', 'DESC')
+        ->orderBy('created_at', 'ASC')
         ->groupBy('timestamp')
         ->get();
 
