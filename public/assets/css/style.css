@@ -680,3 +680,109 @@ a[data-dismiss="modal"] {
 .c-primary {
     color: #22b9ff;
 }
+
+#panel-result .content-layer {
+    width: 80%;
+    margin: 0 auto 0 auto;
+}
+
+#panel-result .content-items {
+    position: relative;
+    border-radius: 1.07rem;
+    padding: 1.5rem 2.14rem;
+    width: 49%;
+}
+
+#panel-result .content-items p {
+    margin-bottom: 0;
+}
+
+#panel-result .content-items.left {
+    background: #F7F8FC !important;
+}
+
+#panel-result .content-items.right {
+    background: #F4DA70 !important;
+    margin-left: 51%;
+}
+
+#panel-result .content-arrow {
+    position: absolute;
+    line-height: 0;
+    display: inline-block;
+    overflow: hidden;
+    width: 10px;
+    height: 40px;
+    position: relative;
+    top: 0.86rem;
+    position: absolute;
+}
+
+#panel-result .content-items.left .content-arrow {
+    left: 0;
+    margin-left: -9px;
+    color: #F7F8FC;
+    transform: translate(10%, 0);
+}
+
+#panel-result .content-items.right .content-arrow {
+    right: 0;
+    margin-right: -9px;
+    color: #F4DA70;
+}
+
+#panel-result .content-arrow:before {
+    position: relative;
+    top: 0;
+    margin-top: 20px;
+    font-size: 40px;
+}
+
+#panel-result .content-items.right .content-arrow:before {
+    display: inline-block;
+    font-family: "Metronic";
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    line-height: 0px;
+    text-decoration: inherit;
+    text-rendering: optimizeLegibility;
+    text-transform: none;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    font-smoothing: antialiased;
+    content: "";
+}
+
+#panel-result .content-items.left .content-arrow:before {
+     display: inline-block;
+    font-family: "Metronic";
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    line-height: 0px;
+    text-decoration: inherit;
+    text-rendering: optimizeLegibility;
+    text-transform: none;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    font-smoothing: antialiased;
+    content: "";
+}
+
+#panel-result .content-items.left .avatar {
+    position: absolute;
+    top: 14px;
+    left: -45px;
+}
+
+#panel-result .content-items.right .avatar {
+    position: absolute;
+    top: 14px;
+    right: -45px;
+}
+
+#panel-result .content-items .avatar i {
+    font-size: 2rem;
+    color: #898b96;
+}
