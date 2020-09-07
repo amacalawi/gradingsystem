@@ -65,20 +65,24 @@
     },
 
     emailblast.prototype.do_uploads = function($id) {
-        var data = new FormData();
+        //var data = new FormData();
+        //var data = $('form[name="emailblast_form"]');
+        var data = ($('input[name="attachments[]"]').val() != '') ? $('input[name="attachments[]"]').get(0).files[0] : '';
         $.each(files, function(key, value)
         {   
             data.append(key, value);
-        }); 
-        
+        });
+
         console.log(data);
+        
         $.ajax({
             type: "POST",
-            url: base_url + 'applications/uploads?files=copyrights&id=' + $id,
+            url: base_url + 'notifications/messaging/emailblast/uploads?files=staffs&id=' + $id+'&attachments='+data,
             data: data,
             cache: false,
             processData: false,
             contentType: false,
+            async: false,
             success: function (data) {
                 console.log(data);                       
             }
@@ -159,7 +163,8 @@
             var $form = $('form[name="emailblast_form"]');
             var $error = $.emailblast.validate($form, 0);
             var messagedata = CKEDITOR.instances.message_editor.getData();
-
+            var attachments = ($('input[name="attachments[]"]').val() != '') ? $('input[name="attachments[]"]').get(0).files[0] : '';
+          
             if ($error != 0) {
                 swal({
                     title: "Oops...",
@@ -170,50 +175,65 @@
                     confirmButtonClass: "btn btn-warning btn-focus m-btn m-btn--pill m-btn--air m-btn--custom"
                 });
                 window.onkeydown = null;
-                window.onfocus = null;   
+                window.onfocus = null;
                 $.emailblast.required_fields();
             } else {
-
+                
+                swal({
+                    title: "Sending...",
+                    text: "Please do not close.",
+                    allowOutsideClick: false,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                });
+                
                 $self.prop('disabled', true).html('wait.....').addClass('m-btn--custom m-loader m-loader--light m-loader--right');
-                $.ajax({
-                    type: $form.attr('method'),
-                    url: $form.attr('action'),
-                    data: $form.serialize()+'&message_editor='+messagedata,
-                    success: function(response) {
-                        var data = $.parseJSON(response);   
-                        console.log(data);
-                        if (data.type == 'success') {
-                            setTimeout(function () {
-                                $self.html('<i class="la la-save"></i> Save Changes').removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
-                                swal({
-                                    title: data.title,
-                                    text: data.text,
-                                    type: data.type,
-                                    confirmButtonClass: "btn " + data.class + " btn-focus m-btn m-btn--pill m-btn--air m-btn--custom",
-                                    onClose: () => {
-                                        if ($form.find("input[name='method']").val() == 'add') {
-                                            window.location.replace(base_url + 'components/schools/batches');
-                                        }
-                                    }
-                                });
-                            }, 500 + 300 * (Math.random() * 5));
-                        } else {
-                            $self.html('<i class="la la-save"></i> Save Changes').removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
-                            swal({
-                                title: data.title,
-                                text: data.text,
-                                type: data.type,
-                                showCancelButton: false,
-                                closeOnConfirm: true,
-                                confirmButtonClass: "btn " + data.class + " btn-focus m-btn m-btn--pill m-btn--air m-btn--custom",
-                            });
-                        }
-                    }, 
-                    complete: function() {
-                        window.onkeydown = null;
-                        window.onfocus = null;
+                var d1 = $.emailblast.do_uploads(1);
+                $.when( d1 ).done(function ( v1 )
+                {
+                    if (v1 > 0) {
+                        $.ajax({
+                            type: $form.attr('method'),
+                            url: $form.attr('action')+'?attachments='+attachments,
+                            data: $form.serialize()+'&message_editor='+encodeURIComponent(messagedata),
+                            success: function(response) {
+                                var data = $.parseJSON(response);   
+                                console.log(data);
+                                if (data.type == 'success') {
+                                    setTimeout(function () {
+                                        $self.html('<i class="la la-save"></i> Save Changes').removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
+                                        swal({
+                                            title: data.title,
+                                            text: data.text,
+                                            type: data.type,
+                                            confirmButtonClass: "btn " + data.class + " btn-focus m-btn m-btn--pill m-btn--air m-btn--custom",
+                                            onClose: () => {
+                                                if ($form.find("input[name='method']").val() == 'add') {
+                                                    window.location.replace(base_url + 'notifications/messaging/emailblast/new');
+                                                }
+                                            }
+                                        });
+                                    }, 500 + 300 * (Math.random() * 5));
+                                } else {
+                                    $self.html('<i class="la la-save"></i> Save Changes').removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
+                                    swal({
+                                        title: data.title,
+                                        text: data.text,
+                                        type: data.type,
+                                        showCancelButton: false,
+                                        closeOnConfirm: true,
+                                        confirmButtonClass: "btn " + data.class + " btn-focus m-btn m-btn--pill m-btn--air m-btn--custom",
+                                    });
+                                }
+                            }, 
+                            complete: function() {
+                                window.onkeydown = null;
+                                window.onfocus = null;
+                            }
+                        });
                     }
                 });
+                
             }
         });
         
@@ -229,4 +249,13 @@ function($) {
     "use strict";
     $.emailblast.required_fields();
     $.emailblast.init();
+
+    $('[name="checkbox_autoattachment"]').change(function(){
+        if ($(this).is(':checked')) {
+            $('.radio-autoattachment').show();
+        } else {
+            $('.radio-autoattachment').hide();
+        }
+    });
+
 }(window.jQuery);

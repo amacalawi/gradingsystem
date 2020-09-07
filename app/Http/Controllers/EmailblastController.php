@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use Hash;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Mail\Mailable;
 use App\Models\Batch;
 use App\Models\Admission;
+use App\Models\Staff;
+use App\Models\Student;
 use App\Models\Group;
 use App\Models\GroupUser;
 use App\Models\Section;
@@ -84,8 +89,9 @@ class EmailblastController extends Controller
         */
     }
 
-    public function send()
+    public function send(Request $request)
     {
+        
         $registered = $this->register(Input::get('sender'));
 
         if($registered)
@@ -94,33 +100,73 @@ class EmailblastController extends Controller
             $sections = Input::get('section');
             $users = Input::get('user');
             $emails = [];
+            $users_ids = [];
 
             if($groups){
                 foreach($groups as $group){
-                    $users_emails = GroupUser::select('email', 'users.id')->where('groups_users.group_id', $group)->join('users', 'users.id', '=', 'groups_users.users_id')->where('users.is_active', 1)->get();
+                    $users_emails = GroupUser::select('email', 'type', 'users.id as users_id')->where('groups_users.group_id', $group)->join('users', 'users.id', '=', 'groups_users.users_id')->where('users.is_active', 1)->get();
                     foreach($users_emails as $user_email){
                         if (!in_array($user_email->email, $emails)){
-                            array_push($emails, $user_email->email);
+                            if($user_email->type == 'staff'){
+                                $staff = Staff::select('identification_no')->where('user_id', $user_email->users_id)->first();
+                                if($staff){
+                                    array_push($emails, $user_email->email);
+                                    array_push($users_ids, $student->identification_no);
+                                }
+                            }
+                            if($user_email->type == 'student'){
+                                $student = Student::select('identification_no')->where('user_id', $user_email->users_id)->first();
+                                if($student){
+                                    array_push($emails, $user_email->email);
+                                    array_push($users_ids, $student->identification_no);
+                                }
+                            }
                         }
                     }
                 }
             }
             if($sections){
                 foreach($sections as $section){
-                    $users_emails = Admission::select('email', 'users.id')->where('admissions.section_id', $section)->join('users', 'users.id', '=', 'admissions.student_id')->where('users.is_active', 1)->get();
+                    $users_emails = Admission::select('email', 'type', 'users.id as users_id')->where('admissions.section_id', $section)->join('users', 'users.id', '=', 'admissions.student_id')->where('users.is_active', 1)->get();
                     foreach($users_emails as $user_email){
                         if (!in_array($user_email->email, $emails)){
-                            array_push($emails, $user_email->email);
+                            if($user_email->type == 'staff'){
+                                $staff = Staff::select('identification_no')->where('user_id', $user_email->users_id)->first();
+                                if($staff){
+                                    array_push($emails, $user_email->email);
+                                    array_push($users_ids, $student->identification_no);
+                                }
+                            }
+                            if($user_email->type == 'student'){
+                                $student = Student::select('identification_no')->where('user_id', $user_email->users_id)->first();
+                                if($student){
+                                    array_push($emails, $user_email->email);
+                                    array_push($users_ids, $student->identification_no);
+                                }
+                            }
                         }
                     }
                 }
             }
             if($users){
                 foreach($users as $user){
-                    $users_emails = User::select('email', 'users.id')->where('id', $user)->where('users.is_active', 1)->get();
+                    $users_emails = User::select('email', 'type', 'users.id as users_id')->where('id', $user)->where('users.is_active', 1)->get();
                     foreach($users_emails as $user_email){
                         if (!in_array($user_email->email, $emails)){
-                            array_push($emails, $user_email->email);
+                            if($user_email->type == 'staff'){
+                                $staff = Staff::select('identification_no')->where('user_id', $user_email->users_id)->first();
+                                if($staff){
+                                    array_push($emails, $user_email->email);
+                                    array_push($users_ids, $staff->identification_no);
+                                }
+                            }
+                            if($user_email->type == 'student'){
+                                $student = Student::select('identification_no')->where('user_id', $user_email->users_id)->first();
+                                if($student){
+                                    array_push($emails, $user_email->email);
+                                    array_push($users_ids, $student->identification_no);
+                                }
+                            }
                         }
                     }
                 }
@@ -131,20 +177,38 @@ class EmailblastController extends Controller
                 $email_id = Input::get('sender');
                 $message_subject = Input::get('subject');
                 $message_editor = Input::get('message_editor');
-                $radio_autoattachment = Input::get('radio_autoattachment');
+                if(Input::get('checkbox_autoattachment')){
+                    $radio_autoattachment = Input::get('radio_autoattachment');
+                    $attach = null;
+                } else {
+                    $radio_autoattachment = 0;
+                    $attach = null;
+                }
 
-                foreach($emails as $email){
-
+                foreach($emails as $key => $email ){
                     $details = [
                         "to" => $email,
                         "from" => $registered,
                         "subject" => $message_subject,
-                        "body"  => $message_editor
+                        "body"  => $message_editor,
+                        "radio_attach" => $radio_autoattachment,
+                        "user_id" => $users_ids[$key],
+                        "attach" => $attach,
                     ];
-    
-                    Mail::to($email)->send(new Mailer($details));
-                    $this->outbox($email_id, $email, $message_subject, $message_editor, $radio_autoattachment);
-
+                    
+                    if($radio_autoattachment){
+                        if(file_exists( public_path('email/'.$details['radio_attach'].'/'.$details['user_id'].'.pdf') )) {
+                            Mail::to($email)->send(new Mailer($details));
+                            $outbox = $this->outbox($email_id, $email, $message_subject, $message_editor, $radio_autoattachment);
+                        }
+                    }else {
+                        Mail::to($email)->send(new Mailer($details));
+                        $outbox = $this->outbox($email_id, $email, $message_subject, $message_editor, $radio_autoattachment);
+                    }
+                    // check for failures
+                    //if (Mail::failures()) {
+                        // return response showing failed emails
+                    //}
                 }
 
                 $data = array(
@@ -174,12 +238,31 @@ class EmailblastController extends Controller
             );
             echo json_encode( $data ); exit();
         }
+        
+    }
 
+    public function uploads(Request $request)
+    { 
+        /*  
+        $files = array();
+
+        //die(var_dump( 'awan'.$request->get('attachments') ));
+        Storage::disk('uploads')->put('test', file_get_contents( $request->get('attachments') ));
+        foreach($_FILES as $file)
+        {   
+            //die(var_dump('wala'));
+            $files[] = Storage::put($request->get('attachments').'/'.$folderID.'/'.$filename, (string) file_get_contents($file['tmp_name']));
+            Storage::disk('uploads')->put('test', file_get_contents($file));
+        }
+        
+        $data = array('files' => $files);
+        echo json_encode( $data ); exit();
+        */
     }
 
     public function register($sender_id)
     {
-        $mail = Email::where('id', $sender_id)->first();
+        $mail = Email::where('id', $sender_id)->where('is_active', 1)->first();
 
         if ($mail)
         {
@@ -190,7 +273,7 @@ class EmailblastController extends Controller
                 'from'       => array('address' => config('mail.from.address'), 'name' => config('mail.from.name') ),
                 'encryption' => 'tls',
                 'username'   => $mail->email,
-                'password'   => $mail->password,
+                'password'   => decrypt($mail->password),
                 'sendmail'   => '/usr/sbin/sendmail -bs',
             );
             Config::set('mail', $config);
@@ -254,7 +337,8 @@ class EmailblastController extends Controller
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
-
+        
+        return 1;
     }
 
     public function settings()
@@ -302,7 +386,7 @@ class EmailblastController extends Controller
         $emailsettings = Email::create([
             'username' => $request->username,
             'email' => $request->email,
-            'password' => $request->password,
+            'password' => encrypt($request->password),
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
@@ -332,7 +416,7 @@ class EmailblastController extends Controller
 
         $emailsettings->username = $request->username;
         $emailsettings->email = $request->email;
-        $emailsettings->password = $request->password;
+        $emailsettings->password = encrypt($request->password);
         $emailsettings->updated_at = $timestamp;
         $emailsettings->updated_by = Auth::user()->id;
 

@@ -1,6 +1,7 @@
-{{ Form::open(array('url' => 'notifications/messaging/emailblast/send', 'name' => 'emailblast_form', 'method' => 'GET')) }}
+{{ Form::open(array('url' => 'notifications/messaging/emailblast/send', 'name' => 'emailblast_form', 'method' => 'GET', 'enctype' => 'multipart/form-data')) }}
+    {{csrf_field()}}
     <div class="row">
-        
+
         <div class="col-md-8">
             <div class="m-portlet m-portlet--tab">
                 <div class="m-portlet__body">
@@ -129,9 +130,10 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group m-form__group">
-                                {{ Form::label('attachment', 'Attachment', ['class' => '']) }}
+                                {{ Form::label('attachments', 'Attachment', ['class' => '']) }}
                                 <div class="col-md-12">
-                                    <input type="file" name="attachments" id="attachments" multiple>
+                                    {{-- Form::file('attachments[]') --}}
+                                    <input type="file" class="form-control" name="attachments[]" multiple>
                                 </div>
                             </div>
                         </div>
@@ -146,9 +148,9 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group m-form__group ">
-                                <input type="checkbox" name="checkbox-autoattachment">
+                                <input type="checkbox" name="checkbox_autoattachment" value="1">
                                 {{ Form::label('autoattachment', 'Auto Attachment', ['class' => '']) }}
-                                <div class="col-md-12 radio-autoattachment" hidden>
+                                <div class="col-md-12 radio-autoattachment" style="display:none">
                                     <label class="m-radio col-md-3">
                                         <input type="radio" name="radio_autoattachment" value="is_payslip" checked="checked">
                                         Payslip
@@ -179,7 +181,7 @@
                         <div class="col-md-12">
                             <div class="form-group m-form__group">
                                 {{ Form::label('message', 'Message', ['class' => '']) }}
-                                <textarea class="ckeditor form-control" name="message_editor" id="message_editor"></textarea>
+                                <textarea class="ckeditor form-control" id="message_editor"></textarea>
                             </div>
                         </div>
                     </div>
