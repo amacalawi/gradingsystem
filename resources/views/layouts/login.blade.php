@@ -3,14 +3,11 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>
-			SmartSchool App | Guest Page
+			SmartSchool App | Login Page
 		</title>
 		<meta name="description" content="Latest updates and statistic charts">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-        <meta name="_token" content="{{ csrf_token() }}">
-        <meta name="base-url" content="{{ url('/') }}">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <!--begin::Base Styles -->  
 		<link href="{{ asset('assets/vendors/base/vendors.bundle.css') }}" rel="stylesheet" type="text/css" />
 		<link href="{{ asset('assets/demo/demo7/base/style.bundle.css') }}" rel="stylesheet" type="text/css" />
@@ -35,13 +32,9 @@
 		<script src="{{ asset('assets/vendors/base/vendors.bundle.js') }}" type="text/javascript"></script>
 		<script src="{{ asset('assets/demo/demo/default/base/scripts.bundle.js') }}" type="text/javascript"></script>
 		<!--end::Base Scripts -->   
-		<script type="text/javascript">
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-        </script>
+        <!--begin::Page Snippets -->
+		<script src="{{ asset('assets/demo/demo/snippets/pages/user/login.js') }}" type="text/javascript"></script>
+		<!--end::Page Snippets -->
 
 		@stack('scripts')
 	</body>

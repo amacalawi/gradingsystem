@@ -1,4 +1,4 @@
-@extends('layouts.guest')
+@extends('layouts.login')
 
 @section('content')
 <div class="m-grid m-grid--hor m-grid--root m-page">
