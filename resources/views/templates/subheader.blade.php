@@ -404,7 +404,7 @@
             </div>
         </div>
     </div>
-@elseif (\Request::is('*/*/emailblast/*')  && Request::segment(5) != '')  
+@elseif (\Request::is('*/*/emailblast/*')  || Request::segment(5) != '')  
     <div class="m-subheader ">
         <div class="d-flex align-items-center">
             <div class="mr-auto">
