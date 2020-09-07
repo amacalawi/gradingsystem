@@ -786,3 +786,24 @@ a[data-dismiss="modal"] {
     font-size: 2rem;
     color: #898b96;
 }
+
+.guest-upload-page input[type="text"] {
+    text-align: center;
+}
+
+.guest-upload-page .m-login.m-login--2 .m-login__wrapper .m-login__container .m-login__logo {
+    margin-bottom: 0 !important;
+}
+
+.guest-upload-page .m-form__help {
+    text-align: center !important;
+    width: 100%;
+    float: left;
+    display: block;
+}
+
+@media (min-width: 768px) {
+    .guest-upload-page .m-login.m-login--2.m-login--signin .m-login__signin {
+        margin-top: -30px;
+    }
+}

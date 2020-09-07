@@ -524,6 +524,12 @@ Route::prefix('dashboard')->group(function () {
     Route::get('update-current/{id}', 'DashboardController@update_current')->name('dashboard.update');
 });
 
+/* Guest Routes */
+Route::get('upload-id', 'GuestController@index')->name('guest.upload');
+Route::post('upload-data', 'GuestController@upload_data')->name('guest.uploads');
+Route::post('upload-photo', 'GuestController@upload_photo')->name('guest.uploads');
+/* End Guest Routes */
+
 Route::get('/send-mail', function () {
     Mail::to('aranfure@gmail.com')->send(new UserNotification()); 
     return 'A message has been sent to Mailtrap!';
