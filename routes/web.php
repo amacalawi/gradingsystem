@@ -516,6 +516,15 @@ Route::prefix('notifications')->group(function () {
 
     });
     /* End Messaging Routes */
+
+    /* ID Print Routes */
+    Route::prefix('id-print')->group(function () {
+        Route::get('print-id', 'PrintIDController@view')->name('print.id.view');
+        Route::get('print-id/search/{id?}', 'PrintIDController@search')->name('print.id.search');
+        Route::get('print-id/{id}/profile_photo', 'PrintIDController@showProfilePhoto')->name('print.id.showProfilePhoto');
+    });
+    /* End ID Print Routes */
+
 });
 /* End Notifcations Routes */
 

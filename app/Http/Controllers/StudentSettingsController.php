@@ -29,19 +29,19 @@ class StudentSettingsController extends Controller
     public function index()
     {   
         $menus = $this->load_menus();
-        return view('modules/attendancesheets/students/settings/manage')->with(compact('menus'));
+        return view('modules/academics/attendancesheets/students/settings/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/attendancesheets/students/settings/manage')->with(compact('menus'));
+        return view('modules/academics/attendancesheets/students/settings/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/attendancesheets/students/settings/inactive')->with(compact('menus'));
+        return view('modules/academics/attendancesheets/students/settings/inactive')->with(compact('menus'));
     }
 
     public function all_active(Request $request)
@@ -107,7 +107,7 @@ class StudentSettingsController extends Controller
         } else {
             $attendancesheetssettings = (new AttendanceSheetsSettings)->fetch_student($id);
         }
-        return view('modules/attendancesheets/students/settings/add')->with(compact('menus', 'schedule', 'student', 'attendancesheetssettings', 'segment', 'flashMessage'));
+        return view('modules/academics/attendancesheets/students/settings/add')->with(compact('menus', 'schedule', 'student', 'attendancesheetssettings', 'segment', 'flashMessage'));
     }
 
     public function edit(Request $request, $id)
@@ -118,7 +118,7 @@ class StudentSettingsController extends Controller
         $attendancesheetssettings = (new AttendanceSheetsSettings)->find($id);
         $schedule = (new Schedule)->all_schedule($attendancesheetssettings->schedule_id);
         $student = (new Student)->fetch($attendancesheetssettings->user_id);
-        return view('modules/attendancesheets/students/settings/edit')->with(compact('menus', 'student', 'schedule', 'attendancesheetssettings', 'segment', 'flashMessage'));
+        return view('modules/academics/attendancesheets/students/settings/edit')->with(compact('menus', 'student', 'schedule', 'attendancesheetssettings', 'segment', 'flashMessage'));
     }
     
 
