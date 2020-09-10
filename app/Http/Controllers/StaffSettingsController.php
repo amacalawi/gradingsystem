@@ -29,19 +29,19 @@ class StaffSettingsController extends Controller
     public function index()
     {   
         $menus = $this->load_menus();
-        return view('modules/attendancesheets/staffs/settings/manage')->with(compact('menus'));
+        return view('modules/academics/attendancesheets/staffs/settings/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/attendancesheets/staffs/settings/manage')->with(compact('menus'));
+        return view('modules/academics/attendancesheets/staffs/settings/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/attendancesheets/staffs/settings/inactive')->with(compact('menus'));
+        return view('modules/academics/attendancesheets/staffs/settings/inactive')->with(compact('menus'));
     }
 
     public function all_active(Request $request)
@@ -108,7 +108,7 @@ class StaffSettingsController extends Controller
         } else {
             $attendancesheetssettings = (new AttendanceSheetsSettings)->fetch_staff($id);
         }
-        return view('modules/attendancesheets/staffs/settings/add')->with(compact('menus', 'schedule', 'staff', 'attendancesheetssettings', 'segment', 'flashMessage'));
+        return view('modules/academics/attendancesheets/staffs/settings/add')->with(compact('menus', 'schedule', 'staff', 'attendancesheetssettings', 'segment', 'flashMessage'));
     }
 
     public function edit(Request $request, $id)
@@ -119,7 +119,7 @@ class StaffSettingsController extends Controller
         $attendancesheetssettings = (new AttendanceSheetsSettings)->find($id);
         $schedule = (new Schedule)->all_schedule($attendancesheetssettings->schedule_id);
         $staff = (new Staff)->fetch($attendancesheetssettings->user_id);
-        return view('modules/attendancesheets/staffs/settings/edit')->with(compact('menus', 'staff', 'schedule', 'attendancesheetssettings', 'segment', 'flashMessage'));
+        return view('modules/academics/attendancesheets/staffs/settings/edit')->with(compact('menus', 'staff', 'schedule', 'attendancesheetssettings', 'segment', 'flashMessage'));
     }
     
 

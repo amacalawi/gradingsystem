@@ -186,6 +186,27 @@ class Student extends Model
             
         return $student;
     }
+   
+    public function all_student($batch)
+    {	
+        $students = self::select('students.id as student_id', 'students.identification_no', 'students.lastname', 'students.firstname', 'students.middlename')->join('admissions', 'admissions.student_id', 'students.id')->where('admissions.batch_id', $batch)->where('students.avatar', '!=', NULL)->where('admissions.is_active', 1)->orderBy('students.id', 'asc')->get();
+
+        $studentx = array();
+        $studentx[] = array('' => 'select a student');
+        foreach ($students as $student) {
+            $studentx[] = array(
+                $student->student_id => '('.$student->identification_no.') '.$student->lastname.', '.$student->firstname.' '.$student->middlename
+            );
+        }
+
+        $students = array();
+        foreach($studentx as $std) {
+            foreach($std as $key => $val) {
+                $students[$key] = $val;
+            }
+        }
+
+        return $students;
+    }
 
 }
-

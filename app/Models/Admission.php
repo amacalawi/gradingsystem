@@ -116,4 +116,15 @@ class Admission extends Model
 
         return $students;
     }
+
+    public function get_student_level_section($id, $batch)
+    {
+        $admitted = Admission::select('sections.name as section_name', 'levels.name as level_name')->where('admissions.student_id', $id)->where('admissions.batch_id', $batch)
+        ->join('sections', 'sections.id', '=', 'admissions.section_id')
+        ->join('sections_info', 'sections_info.section_id', '=', 'sections.id')
+        ->join('levels', 'levels.id', '=', 'sections_info.level_id')
+        ->get();
+        
+        return $admitted;
+    }
 }
