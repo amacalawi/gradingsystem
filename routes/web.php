@@ -130,22 +130,21 @@ Route::prefix('components')->group(function () {
     Route::get('schedules/all-inactive', 'SchedulesController@all_inactive')->name('schedules.all.inactive');
     Route::get('schedules/all-member', 'SchedulesController@all_member')->name('schedules.all.member');
     Route::get('schedules/get-this-schedule/{id?}', 'SchedulesController@get_this_schedule');
-
-        /*Start Preset Message */
-        Route::get('schedules/preset-message', 'PresetMessageController@manage')->name('presetmsg.manage.active');
-        Route::get('schedules/preset-message/add', 'PresetMessageController@add')->name('presetmsg.add');
-        Route::get('schedules/preset-message/edit/{id?}', 'PresetMessageController@edit')->name('presetmsg.edit');
-        Route::post('schedules/preset-message/store', 'PresetMessageController@store')->name('presetmsg.store');
-        Route::put('schedules/preset-message/update/{id}', 'PresetMessageController@update')->name('presetmsg.update');
-        Route::put('schedules/preset-message/update-status/{id}', 'PresetMessageController@update_status')->name('presetmsg.update.status');
-        Route::post('schedules/preset-message/remove', 'PresetMessageController@remove')->name('presetmsg.remove');
-        Route::post('schedules/preset-message/restore', 'PresetMessageController@restore')->name('presetmsg.restore');
-        Route::get('schedules/preset-message/all-active', 'PresetMessageController@all_active')->name('presetmsg.all.active');
-        Route::get('schedules/preset-message/inactive', 'PresetMessageController@inactive')->name('presetmsg.manage.inactive');
-        Route::get('schedules/preset-message/all-inactive', 'PresetMessageController@all_inactive')->name('presetmsg.all.inactive');
-        /*End Preset Message */
-
     /* End Schedules Routes */
+
+    /*Start Preset Message */
+    Route::get('schedules/preset-message', 'PresetMessageController@manage')->name('presetmsg.manage.active');
+    Route::get('schedules/preset-message/add', 'PresetMessageController@add')->name('presetmsg.add');
+    Route::get('schedules/preset-message/edit/{id?}', 'PresetMessageController@edit')->name('presetmsg.edit');
+    Route::post('schedules/preset-message/store', 'PresetMessageController@store')->name('presetmsg.store');
+    Route::put('schedules/preset-message/update/{id}', 'PresetMessageController@update')->name('presetmsg.update');
+    Route::put('schedules/preset-message/update-status/{id}', 'PresetMessageController@update_status')->name('presetmsg.update.status');
+    Route::post('schedules/preset-message/remove', 'PresetMessageController@remove')->name('presetmsg.remove');
+    Route::post('schedules/preset-message/restore', 'PresetMessageController@restore')->name('presetmsg.restore');
+    Route::get('schedules/preset-message/all-active', 'PresetMessageController@all_active')->name('presetmsg.all.active');
+    Route::get('schedules/preset-message/inactive', 'PresetMessageController@inactive')->name('presetmsg.manage.inactive');
+    Route::get('schedules/preset-message/all-inactive', 'PresetMessageController@all_inactive')->name('presetmsg.all.inactive');
+    /*End Preset Message */
 
     /* Menus Routes */
     Route::prefix('menus')->group(function () {
@@ -192,6 +191,36 @@ Route::prefix('components')->group(function () {
         /* End Sub Modules Routes */
     });
     /* End Menus Routes */
+
+    /* CSV Management Routes */
+    Route::prefix('csv-management')->group(function () {
+        /* SOA Template 01 Routes */
+        Route::post('soa-template-01/import', 'CsvTemplateSoaController@import')->name('csv_management.soa_template_01.import');
+        Route::get('soa-template-01', 'CsvTemplateSoaController@index')->name('csv_management.soa_template_01.manage_active');
+        Route::get('soa-template-01/inactive', 'CsvTemplateSoaController@inactive')->name('csv_management.soa_template_01.manage_inactive');
+        Route::get('soa-template-01/all-active', 'CsvTemplateSoaController@all_active')->name('csv_management.soa_template_01.all_active');
+        Route::get('soa-template-01/all-inactive', 'CsvTemplateSoaController@all_inactive')->name('csv_management.soa_template_01.all_inactive');
+        Route::put('soa-template-01/update-status/{id}', 'CsvTemplateSoaController@update_status')->name('csv_management.soa_template_01.update.status');
+        Route::get('soa-template-01/add', 'CsvTemplateSoaController@add')->name('csv_management.soa_template_01.add');
+        Route::get('soa-template-01/edit/{id?}', 'CsvTemplateSoaController@edit')->name('csv_management.soa_template_01.edit');
+        Route::post('soa-template-01/store', 'CsvTemplateSoaController@store')->name('csv_management.soa_template_01.store');
+        Route::put('soa-template-01/update/{id}', 'CsvTemplateSoaController@update')->name('csv_management.soa_template_01.update');
+        /* End SOA Template 01 Routes */
+
+        /* Gradingsheet Template 01 Routes */
+        Route::post('gradingsheet-template-01/import', 'CsvTemplateGradingsheetController@import')->name('csv_management.gradingsheet_template_01.import');
+        Route::get('gradingsheet-template-01', 'CsvTemplateGradingsheetController@index')->name('csv_management.gradingsheet_template_01.manage_active');
+        Route::get('gradingsheet-template-01/inactive', 'CsvTemplateGradingsheetController@inactive')->name('csv_management.gradingsheet_template_01.manage_inactive');
+        Route::get('gradingsheet-template-01/all-active', 'CsvTemplateGradingsheetController@all_active')->name('csv_management.gradingsheet_template_01.all_active');
+        Route::get('gradingsheet-template-01/all-inactive', 'CsvTemplateGradingsheetController@all_inactive')->name('csv_management.gradingsheet_template_01.all_inactive');
+        Route::put('gradingsheet-template-01/update-status/{id}', 'CsvTemplateGradingsheetController@update_status')->name('csv_management.gradingsheet_template_01.update.status');
+        Route::get('gradingsheet-template-01/add', 'CsvTemplateGradingsheetController@add')->name('csv_management.gradingsheet_template_01.add');
+        Route::get('gradingsheet-template-01/edit/{id?}', 'CsvTemplateGradingsheetController@edit')->name('csv_management.gradingsheet_template_01.edit');
+        Route::post('gradingsheet-template-01/store', 'CsvTemplateGradingsheetController@store')->name('csv_management.gradingsheet_template_01.store');
+        Route::put('gradingsheet-template-01/update/{id}', 'CsvTemplateGradingsheetController@update')->name('csv_management.gradingsheet_template_01.update');
+        /* End Gradingsheet Template 01 Routes */
+    });
+    /* End CSV Management Routes */
     
 });
 

@@ -57,6 +57,34 @@ class Level extends Model
 
         return $levels;
     }
+    
+    public function get_all_levels_type() //all_levels original name
+    {	
+        $levels = self::with([
+            'edtype' => function($q) { 
+                $q->select(['id', 'code', 'name']); 
+            }
+        ])
+        ->where('is_active', 1)->orderBy('id', 'asc')->get();
+
+        $lvls = array();
+        $lvls[] = array('0' => 'select a level');
+        
+        foreach ($levels as $level) {
+            $lvls[] = array(
+                $level->id => $level->name.'('.$level->edtype->code.')'
+            );
+        }
+
+        $levels = array();
+        foreach($lvls as $lvl) {
+            foreach($lvl as $key => $val) {
+                $levels[$key] = $val;
+            }
+        }
+
+        return $levels;
+    }
 
     public function get_all_levels_with_type( $sectioninfo_id )
     {

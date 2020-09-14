@@ -146,7 +146,6 @@
                     @else
                         {{ ucwords(str_replace('-', ' ', Request::segment(3))) }}
                     @endif
-
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -171,14 +170,11 @@
                     $invisibles = ['transmutations', 'class-record'];
                 @endphp
                 @if (Request::segment(3) == 'components' && Auth::user()->type  != 'administrator')
-
                 @elseif (!in_array(Request::segment(3), $invisibles))
-
                     @php 
-                        $imports_academics = ['levels', 'sections', 'subjects', 'classes'];
+                        $imports = ['levels', 'sections', 'subjects', 'classes', 'soa-template-01', 'gradingsheet-template-01'];
                     @endphp
-                    @if (in_array(Request::segment(3), $imports_academics))
-                    
+                    @if (in_array(Request::segment(3), $imports))
                         @php 
                             $string = substr(ucwords(Request::segment(3)), 0, -1);
                         @endphp
@@ -187,9 +183,18 @@
                                 <i class="la la-upload"></i> Import {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2) }}
                             </a>
                         @else
-                            <a href="javascript:;" class="btn m-btn--pill btn-accent add-btn m-btn--custom" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#import-{{ substr(strtolower(str_replace('-',' ', Request::segment(3))), 0, -1) }}">
-                                <i class="la la-upload"></i> Import {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1) }}
-                            </a>
+                            @php 
+                                $exemption = ['soa-template-01', 'gradingsheet-template-01'];
+                            @endphp
+                            @if (!in_array(Request::segment(3), $exemption))
+                                <a href="javascript:;" class="btn m-btn--pill btn-accent add-btn m-btn--custom" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#import-{{ substr(strtolower(Request::segment(3)), 0, -1) }}">
+                                    <i class="la la-upload"></i> Import {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1) }}
+                                </a>
+                            @else
+                                <a href="javascript:;" class="btn m-btn--pill btn-accent add-btn m-btn--custom" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#import-{{ strtolower(Request::segment(3)) }}">
+                                    <i class="la la-upload"></i> Import {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
+                                </a>
+                            @endif
                         @endif
                     @endif
 
@@ -206,7 +211,7 @@
                                 Add New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2) }}
                             @else
                                 @php 
-                                    $exemption = [];
+                                    $exemption = ['soa-template-01', 'gradingsheet-template-01'];
                                 @endphp
                                 @if (!in_array(Request::segment(3), $exemption))
                                     Add New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1) }}
@@ -265,7 +270,12 @@
                                     @if (Request::segment(3) == 'all-gradingsheets')
                                         Edit Grading Sheet
                                     @else
-                                        @if (substr($string, -1) == 'e' && !in_array(Request::segment(3), $exemptions))
+                                        @php 
+                                            $exempted = ['soa-template-01', 'gradingsheet-template-01'];
+                                        @endphp
+                                        @if (in_array(Request::segment(3), $exempted))
+                                            Edit {{ ucwords(Request::segment(3)) }}
+                                        @elseif (substr($string, -1) == 'e' && !in_array(Request::segment(3), $exemptions))
                                             Edit {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2) }}
                                         @else
                                             Edit {{ substr(ucwords(Request::segment(3)), 0, -1) }}
@@ -278,7 +288,12 @@
                                         @if (Request::segment(3) == 'all-gradingsheets')
                                             New Grading Sheet
                                         @else
-                                            @if (substr($string, -1) == 'e' && !in_array(Request::segment(3), $exemptions))
+                                            @php 
+                                                $exempted = ['soa-template-01', 'gradingsheet-template-01'];
+                                            @endphp
+                                            @if (in_array(Request::segment(3), $exempted))
+                                                New {{ ucwords(Request::segment(3)) }}
+                                            @elseif (substr($string, -1) == 'e' && !in_array(Request::segment(3), $exemptions))
                                                 New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2) }}
                                             @else
                                                 New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1) }}
@@ -315,7 +330,7 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    {{ ucwords(Request::segment(3)) }}
+                    {{ ucwords(str_replace('-', ' ', Request::segment(3))) }}
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">

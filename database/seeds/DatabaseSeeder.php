@@ -263,6 +263,26 @@ class DatabaseSeeder extends Seeder
                 'icon' => 'la la-comments',
                 'order' => '12',
                 'created_by' => 1
+            ],
+            [   
+                'header_id' => '2',
+                'code' => 'csv-management',
+                'name' => 'CSV Management',
+                'description' => 'CSV Management Description',
+                'slug' => 'csv-management',
+                'icon' => 'la la-file-excel-o',
+                'order' => '13',
+                'created_by' => 1
+            ],
+            [   
+                'header_id' => '2',
+                'code' => 'csv-template',
+                'name' => 'File Management',
+                'description' => 'File Management Description',
+                'slug' => 'file-management',
+                'icon' => 'la la-file-pdf-o',
+                'order' => '14',
+                'created_by' => 1
             ]
         ];
         foreach ($modules as $module) {
@@ -619,6 +639,46 @@ class DatabaseSeeder extends Seeder
                 'icon' => '',
                 'order' => '35',
                 'created_by' => 1
+            ],
+            [   
+                'module_id' => '13',
+                'code' => 'soa-template-01',
+                'name' => 'SOA Template 01',
+                'description' => 'SOA Template 01 Description',
+                'slug' => 'soa-template-01',
+                'icon' => '',
+                'order' => '36',
+                'created_by' => 1
+            ],
+            [   
+                'module_id' => '13',
+                'code' => 'gradingsheet-template-01',
+                'name' => 'Gradingsheet Template 01',
+                'description' => 'Gradingsheet Template 01 Description',
+                'slug' => 'gradingsheet-template-01',
+                'icon' => '',
+                'order' => '37',
+                'created_by' => 1
+            ],
+            [   
+                'module_id' => '14',
+                'code' => 'soa-upload-01',
+                'name' => 'SOA Upload 01',
+                'description' => 'SOA Upload 01 Description',
+                'slug' => 'soa-upload-01',
+                'icon' => '',
+                'order' => '38',
+                'created_by' => 1
+            ],
+            [   
+                'module_id' => '14',
+                'code' => 'gradingsheet-upload-01',
+                'name' => 'Gradingsheet Upload 01',
+                'description' => 'Gradingsheet Upload 01 Description',
+                'slug' => 'gradingsheet-upload-01',
+                'icon' => '',
+                'order' => '39',
+                'created_by' => 1
             ]
         ];
         foreach ($sub_modules as $sub_module) {
@@ -711,6 +771,16 @@ class DatabaseSeeder extends Seeder
             [   
                 'role_id' => '1',
                 'module_id' => '12',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'module_id' => '13',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'module_id' => '14',
                 'created_by' => 1
             ]
         ];
@@ -921,6 +991,36 @@ class DatabaseSeeder extends Seeder
             [   
                 'role_id' => '1',
                 'sub_module_id' => '34',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '35',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '36',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '37',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '38',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '39',
                 'permissions' => '1,1,1,1',
                 'created_by' => 1
             ]
