@@ -32,19 +32,19 @@ class StaffFileAttendanceController extends Controller
     public function index()
     {
         $menus = $this->load_menus();
-        return view('modules/attendancesheets/staffs/manage')->with(compact('menus'));
+        return view('modules/academics/attendancesheets/staffs/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/attendancesheets/staffs/manage')->with(compact('menus'));
+        return view('modules/academics/attendancesheets/staffs/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/attendancesheets/staffs/inactive')->with(compact('menus'));
+        return view('modules/academics/attendancesheets/staffs/inactive')->with(compact('menus'));
     }
 
     public function all_active(Request $request)
@@ -110,7 +110,7 @@ class StaffFileAttendanceController extends Controller
         } else {
             $attendancesheets = (new AttendanceSheets)->fetch($id);
         }
-        return view('modules/attendancesheets/staffs/add')->with(compact('menus', 'attendancesheets', 'student', 'types', 'segment', 'flashMessage'));
+        return view('modules/academics/attendancesheets/staffs/add')->with(compact('menus', 'attendancesheets', 'student', 'types', 'segment', 'flashMessage'));
     }
 
     public function edit(Request $request, $id)
@@ -128,7 +128,7 @@ class StaffFileAttendanceController extends Controller
             $attendancesheets = (new AttendanceSheets)->fetch($id);
         }
 
-        return view('modules/attendancesheets/staffs/edit')->with(compact('menus', 'attendancesheets', 'staff', 'types', 'segment', 'flashMessage'));
+        return view('modules/academics/attendancesheets/staffs/edit')->with(compact('menus', 'attendancesheets', 'staff', 'types', 'segment', 'flashMessage'));
     }
 
     public function store(Request $request)

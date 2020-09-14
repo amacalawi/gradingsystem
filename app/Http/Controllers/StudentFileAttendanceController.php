@@ -33,19 +33,19 @@ class StudentFileAttendanceController extends Controller
     public function index()
     {
         $menus = $this->load_menus();
-        return view('modules/attendancesheets/students/manage')->with(compact('menus'));
+        return view('modules/academics/attendancesheets/students/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/attendancesheets/students/manage')->with(compact('menus'));
+        return view('modules/academics/attendancesheets/students/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/attendancesheets/students/inactive')->with(compact('menus'));
+        return view('modules/academics/attendancesheets/students/inactive')->with(compact('menus'));
     }
 
     public function all_active(Request $request)
@@ -111,7 +111,7 @@ class StudentFileAttendanceController extends Controller
         } else {
             $attendancesheets = (new AttendanceSheets)->fetch($id);
         }
-        return view('modules/attendancesheets/students/add')->with(compact('menus', 'attendancesheets', 'student', 'types', 'segment', 'flashMessage'));
+        return view('modules/academics/attendancesheets/students/add')->with(compact('menus', 'attendancesheets', 'student', 'types', 'segment', 'flashMessage'));
     }
 
     public function edit(Request $request, $id)
@@ -130,7 +130,7 @@ class StudentFileAttendanceController extends Controller
             $attendancesheets->user_id_id = $student_id->id;
         }
 
-        return view('modules/attendancesheets/students/edit')->with(compact('menus', 'attendancesheets', 'student', 'types', 'segment', 'flashMessage'));
+        return view('modules/academics/attendancesheets/students/edit')->with(compact('menus', 'attendancesheets', 'student', 'types', 'segment', 'flashMessage'));
     }
 
     public function store(Request $request)
