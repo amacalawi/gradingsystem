@@ -797,14 +797,11 @@ class DatabaseSeeder extends Seeder
                 'role_id' => '1',
                 'module_id' => '13',
                 'created_by' => 1
-<<<<<<< HEAD
             ],
             [   
                 'role_id' => '1',
                 'module_id' => '14',
                 'created_by' => 1
-=======
->>>>>>> master
             ]
         ];
 
@@ -1034,7 +1031,6 @@ class DatabaseSeeder extends Seeder
                 'sub_module_id' => '37',
                 'permissions' => '1,1,1,1',
                 'created_by' => 1
-<<<<<<< HEAD
             ],
             [   
                 'role_id' => '1',
@@ -1047,8 +1043,6 @@ class DatabaseSeeder extends Seeder
                 'sub_module_id' => '39',
                 'permissions' => '1,1,1,1',
                 'created_by' => 1
-=======
->>>>>>> master
             ]
         ];
 
