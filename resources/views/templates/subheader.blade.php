@@ -172,33 +172,43 @@
                 @if (Request::segment(3) == 'components' && Auth::user()->type  != 'administrator')
                 @elseif (!in_array(Request::segment(3), $invisibles))
                     @php 
-                        $imports = ['levels', 'sections', 'subjects', 'classes', 'soa-template-01', 'gradingsheet-template-01'];
+                        $imports = ['levels', 'sections', 'subjects', 'classes', 'soa-template-01', 'gradingsheet-template-01', 'soa', 'gradingsheet', 'payslip'];
+                        $inFile = ['soa', 'gradingsheet', 'payslip'];
+                        $privileges = explode(',', strtolower(\Helper::get_privileges()));
                     @endphp
                     @if (in_array(Request::segment(3), $imports))
                         @php 
                             $string = substr(ucwords(Request::segment(3)), 0, -1);
                         @endphp
-                        @if (substr($string, -1) == 'e')
-                            <a href="javascript:;" class="btn m-btn--pill btn-accent add-btn m-btn--custom" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#import-{{ substr(strtolower(str_replace('-',' ', Request::segment(3))), 0, -2) }}">
+                        @if (substr($string, -1) == 'e' && !in_array(Request::segment(3), $inFile))
+                            <a href="javascript:;" class="{{ ($privileges[0] == 1) ? '' : 'hidden' }} btn m-btn--pill btn-accent add-btn m-btn--custom" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#import-{{ substr(strtolower(str_replace('-',' ', Request::segment(3))), 0, -2) }}">
                                 <i class="la la-upload"></i> Import {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2) }}
                             </a>
                         @else
                             @php 
-                                $exemption = ['soa-template-01', 'gradingsheet-template-01'];
+                                $exemption = ['soa-template-01', 'gradingsheet-template-01', 'soa', 'gradingsheet', 'payslip'];
                             @endphp
                             @if (!in_array(Request::segment(3), $exemption))
-                                <a href="javascript:;" class="btn m-btn--pill btn-accent add-btn m-btn--custom" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#import-{{ substr(strtolower(Request::segment(3)), 0, -1) }}">
+                                <a href="javascript:;" class="{{ ($privileges[0] == 1) ? '' : 'hidden' }} btn m-btn--pill btn-accent add-btn m-btn--custom" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#import-{{ substr(strtolower(Request::segment(3)), 0, -1) }}">
                                     <i class="la la-upload"></i> Import {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1) }}
                                 </a>
                             @else
-                                <a href="javascript:;" class="btn m-btn--pill btn-accent add-btn m-btn--custom" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#import-{{ strtolower(Request::segment(3)) }}">
-                                    <i class="la la-upload"></i> Import {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
+                                <a href="javascript:;" class="{{ ($privileges[0] == 1) ? '' : 'hidden' }} btn m-btn--pill btn-accent add-btn m-btn--custom" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#import-{{ strtolower(Request::segment(3)) }}">
+                                    @if (!in_array(Request::segment(3), $inFile))
+                                        <i class="la la-upload"></i> Import {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
+                                    @else
+                                        <i class="la la-upload"></i> Import {{ ucwords(str_replace('-',' ', Request::segment(3))) }} File
+                                    @endif
                                 </a>
                             @endif
                         @endif
                     @endif
 
-                    <a href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/'.Request::segment(3).'/add') }}" class="btn m-btn--pill btn-brand add-btn m-btn--custom">
+                    @php 
+                        $invisibleAddNew = ['soa', 'gradingsheet', 'payslip'];
+                    @endphp
+                    @if (!in_array(Request::segment(3), $invisibleAddNew))
+                    <a href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/'.Request::segment(3).'/add') }}" class="{{ ($privileges[0] == 1) ? '' : 'hidden' }} btn m-btn--pill btn-brand add-btn m-btn--custom">
                         <i class="la la-commenting"></i> 
                         @php 
                             $string = substr(ucwords(Request::segment(3)), 0, -1);
@@ -221,6 +231,7 @@
                             @endif
                         @endif
                     </a>
+                    @endif
                 @endif
             </div>
         </div>

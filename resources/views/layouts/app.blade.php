@@ -21,6 +21,7 @@
         <script>
             var base_url = "{{ url('/') }}/";
             var _token = "{{ csrf_token() }}";
+            var _privileges = "{{  \Helper::get_privileges() }}";
             var user_role = "{{ Auth::user()->type }}";
             var stepStart = 1;
         </script>
