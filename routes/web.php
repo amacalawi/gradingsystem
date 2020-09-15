@@ -224,17 +224,23 @@ Route::prefix('components')->group(function () {
 
     /* CSV Management Routes */
     Route::prefix('file-management')->group(function () {
-        /* SOA Upload 01 Routes */
-        Route::post('soa-upload-01/import', 'FileUploadSoaController@import')->name('file_management.soa_upload_01.import');
-        Route::get('soa-upload-01', 'FileUploadSoaController@index')->name('file_management.soa_upload_01.manage_active');
-        Route::get('soa-upload-01/all-active', 'FileUploadSoaController@all_active')->name('file_management.soa_upload_01.all_active');
-        /* End SOA Upload 01 Routes */
+        /* SOA Routes */
+        Route::post('soa/import', 'FileUploadController@import')->name('file_management.soa.import');
+        Route::get('soa', 'FileUploadController@index')->name('file_management.soa.manage_active');
+        Route::get('soa/all-active', 'FileUploadController@all_active')->name('file_management.soa.all_active');
+        /* End SOA Routes */
 
-        /* Gradingsheet Upload 01 Routes */
-        Route::post('gradingsheet-upload-01/import', 'FileUploadGradingsheetController@import')->name('file_management.gradingsheet_upload_01.import');
-        Route::get('gradingsheet-upload-01', 'FileUploadGradingsheetController@index')->name('file_management.gradingsheet_upload_01.manage_active');
-        Route::get('gradingsheet-upload-01/all-active', 'FileUploadGradingsheetController@all_active')->name('file_management.gradingsheet_upload_01.all_active');
-        /* End Gradingsheet Upload 01 Routes */
+        /* Gradingsheet Routes */
+        Route::post('gradingsheet/import', 'FileUploadController@import')->name('file_management.gradingsheet.import');
+        Route::get('gradingsheet', 'FileUploadController@index')->name('file_management.gradingsheet.manage_active');
+        Route::get('gradingsheet/all-active', 'FileUploadController@all_active')->name('file_management.gradingsheet.all_active');
+        /* End Gradingsheet Routes */
+
+        /* Payslip Routes */
+        Route::post('payslip/import', 'FileUploadController@import')->name('file_management.payslip.import');
+        Route::get('payslip', 'FileUploadController@index')->name('file_management.payslip.manage_active');
+        Route::get('payslip/all-active', 'FileUploadController@all_active')->name('file_management.payslip.all_active');
+        /* End Payslip Routes */
     });
     /* End CSV Management Routes */
     

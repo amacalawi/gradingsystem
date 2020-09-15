@@ -31,8 +31,7 @@ class GuestController extends Controller
      */
     public function index()
     {
-        $menus = $this->load_menus();
-        return view('modules/printing/upload')->with(compact('menus'));
+        return view('modules/printing/upload');
     }
 
     public function upload_data(Request $request)
