@@ -276,12 +276,22 @@ class DatabaseSeeder extends Seeder
             ],
             [   
                 'header_id' => '2',
-                'code' => 'csv-template',
+                'code' => 'file-management',
                 'name' => 'File Management',
                 'description' => 'File Management Description',
                 'slug' => 'file-management',
                 'icon' => 'la la-file-pdf-o',
                 'order' => '14',
+                'created_by' => 1
+            ],
+            [   
+                'header_id' => '2',
+                'code' => 'id-management',
+                'name' => 'ID Management',
+                'description' => 'ID Management Description',
+                'slug' => 'id-management',
+                'icon' => 'la la-file-photo-o',
+                'order' => '15',
                 'created_by' => 1
             ]
         ];
@@ -631,26 +641,6 @@ class DatabaseSeeder extends Seeder
                 'created_by' => 1
             ],
             [   
-                'module_id' => '13',
-                'code' => 'print-id',
-                'name' => 'Print',
-                'description' => 'Print',
-                'slug' => 'print-id',
-                'icon' => '',
-                'order' => '36',
-                'created_by' => 1
-            ],
-            [   
-                'module_id' => '13',
-                'code' => 'settings-id',
-                'name' => 'Settings',
-                'description' => 'Settings',
-                'slug' => 'settings-id',
-                'icon' => '',
-                'order' => '37',
-                'created_by' => 1
-            ],
-            [   
                 'module_id' => '5',
                 'code' => 'education-types',
                 'name' => 'Education Types',
@@ -661,13 +651,33 @@ class DatabaseSeeder extends Seeder
                 'created_by' => 1
             ],
             [   
+                'module_id' => '15',
+                'code' => 'print-id',
+                'name' => 'Print',
+                'description' => 'Print',
+                'slug' => 'print-id',
+                'icon' => '',
+                'order' => '36',
+                'created_by' => 1
+            ],
+            [   
+                'module_id' => '15',
+                'code' => 'settings-id',
+                'name' => 'Settings',
+                'description' => 'Settings',
+                'slug' => 'settings-id',
+                'icon' => '',
+                'order' => '37',
+                'created_by' => 1
+            ],
+            [   
                 'module_id' => '13',
                 'code' => 'soa-template-01',
                 'name' => 'SOA Template 01',
                 'description' => 'SOA Template 01 Description',
                 'slug' => 'soa-template-01',
                 'icon' => '',
-                'order' => '36',
+                'order' => '38',
                 'created_by' => 1
             ],
             [   
@@ -677,27 +687,37 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Gradingsheet Template 01 Description',
                 'slug' => 'gradingsheet-template-01',
                 'icon' => '',
-                'order' => '37',
-                'created_by' => 1
-            ],
-            [   
-                'module_id' => '14',
-                'code' => 'soa-upload-01',
-                'name' => 'SOA Upload 01',
-                'description' => 'SOA Upload 01 Description',
-                'slug' => 'soa-upload-01',
-                'icon' => '',
-                'order' => '38',
-                'created_by' => 1
-            ],
-            [   
-                'module_id' => '14',
-                'code' => 'gradingsheet-upload-01',
-                'name' => 'Gradingsheet Upload 01',
-                'description' => 'Gradingsheet Upload 01 Description',
-                'slug' => 'gradingsheet-upload-01',
-                'icon' => '',
                 'order' => '39',
+                'created_by' => 1
+            ],
+            [   
+                'module_id' => '14',
+                'code' => 'soa',
+                'name' => 'SOA',
+                'description' => 'SOA Description',
+                'slug' => 'soa',
+                'icon' => '',
+                'order' => '40',
+                'created_by' => 1
+            ],
+            [   
+                'module_id' => '14',
+                'code' => 'gradingsheet',
+                'name' => 'Gradingsheet',
+                'description' => 'Gradingsheet Description',
+                'slug' => 'gradingsheet',
+                'icon' => '',
+                'order' => '41',
+                'created_by' => 1
+            ],
+            [   
+                'module_id' => '14',
+                'code' => 'payslip',
+                'name' => 'Payslip',
+                'description' => 'Payslip Description',
+                'slug' => 'payslip',
+                'icon' => '',
+                'order' => '42',
                 'created_by' => 1
             ]
         ];
@@ -801,6 +821,11 @@ class DatabaseSeeder extends Seeder
             [   
                 'role_id' => '1',
                 'module_id' => '14',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'module_id' => '15',
                 'created_by' => 1
             ]
         ];
@@ -1041,6 +1066,24 @@ class DatabaseSeeder extends Seeder
             [   
                 'role_id' => '1',
                 'sub_module_id' => '39',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '40',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '41',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '42',
                 'permissions' => '1,1,1,1',
                 'created_by' => 1
             ]

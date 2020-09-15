@@ -221,6 +221,22 @@ Route::prefix('components')->group(function () {
         /* End Gradingsheet Template 01 Routes */
     });
     /* End CSV Management Routes */
+
+    /* CSV Management Routes */
+    Route::prefix('file-management')->group(function () {
+        /* SOA Upload 01 Routes */
+        Route::post('soa-upload-01/import', 'FileUploadSoaController@import')->name('file_management.soa_upload_01.import');
+        Route::get('soa-upload-01', 'FileUploadSoaController@index')->name('file_management.soa_upload_01.manage_active');
+        Route::get('soa-upload-01/all-active', 'FileUploadSoaController@all_active')->name('file_management.soa_upload_01.all_active');
+        /* End SOA Upload 01 Routes */
+
+        /* Gradingsheet Upload 01 Routes */
+        Route::post('gradingsheet-upload-01/import', 'FileUploadGradingsheetController@import')->name('file_management.gradingsheet_upload_01.import');
+        Route::get('gradingsheet-upload-01', 'FileUploadGradingsheetController@index')->name('file_management.gradingsheet_upload_01.manage_active');
+        Route::get('gradingsheet-upload-01/all-active', 'FileUploadGradingsheetController@all_active')->name('file_management.gradingsheet_upload_01.all_active');
+        /* End Gradingsheet Upload 01 Routes */
+    });
+    /* End CSV Management Routes */
     
 });
 
