@@ -17,6 +17,7 @@ use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
 use App\Components\FlashMessages;
+use App\Helper\Helper;
 
 class StaffsController extends Controller
 {   
@@ -29,25 +30,31 @@ class StaffsController extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
+    public function is_permitted($permission)
+    {
+        $privileges = explode(',', strtolower(Helper::get_privileges()));
+        if (!$privileges[$permission] == 1) {
+            return abort(404);
+        }
+    }
+
     public function index()
     {   
+        $this->is_permitted(1);
         $menus = $this->load_menus();
         return view('modules/memberships/staffs/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
+        $this->is_permitted(1);
         $menus = $this->load_menus();
         return view('modules/memberships/staffs/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
+        $this->is_permitted(1);
         $menus = $this->load_menus();
         return view('modules/memberships/staffs/inactive')->with(compact('menus'));
     }
@@ -92,6 +99,7 @@ class StaffsController extends Controller
 
     public function add(Request $request, $id = '')
     {   
+        $this->is_permitted(0);
         $menus = $this->load_menus();
         $segment = request()->segment(3);
         $staff = (new Staff)->fetch($id);
@@ -106,6 +114,7 @@ class StaffsController extends Controller
     
     public function edit(Request $request, $id)
     {   
+        $this->is_permitted(2);
         $menus = $this->load_menus();
         $segment = request()->segment(3);
         $staff = (new Staff)->fetch($id);
@@ -147,6 +156,7 @@ class StaffsController extends Controller
 
     public function store(Request $request)
     {    
+        $this->is_permitted(0); 
         $timestamp = date('Y-m-d H:i:s');
 
         $rows = User::where([
@@ -276,6 +286,7 @@ class StaffsController extends Controller
 
     public function update(Request $request, $id)
     {    
+        $this->is_permitted(2);
         $timestamp = date('Y-m-d H:i:s');
         
         $staff = Staff::find($id);
@@ -424,6 +435,7 @@ class StaffsController extends Controller
 
     public function update_status(Request $request, $id)
     {   
+        $this->is_permitted(3);
         $timestamp = date('Y-m-d H:i:s');
         $action = $request->input('items')[0]['action'];
 
@@ -469,6 +481,7 @@ class StaffsController extends Controller
 
     public function import(Request $request)
     {   
+        $this->is_permitted(0);
         foreach($_FILES as $file)
         {   
             $row = 0; $timestamp = date('Y-m-d H:i:s');

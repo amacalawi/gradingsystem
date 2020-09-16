@@ -81,12 +81,14 @@ var DatatableDataLocalDemo = function () {
 			overflow: 'visible',
 			template: function (row, index, datatable) {
 				var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
-
-				return '\
-                    <a data-row-id="' + row.userID + '" action="Active" href="javascript:;" class="toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="activate this">\
-                        <i class="la la-undo"></i>\
-                    </a>\
-				';
+				var $privileges = _privileges.split(',');
+				if ($privileges[3] == 1) {
+					return '\
+						<a data-row-id="' + row.userID + '" action="Active" href="javascript:;" class="toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="activate this">\
+							<i class="la la-undo"></i>\
+						</a>\
+					';
+				}
 			}
 		}]
 	});
