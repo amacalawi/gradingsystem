@@ -32,17 +32,16 @@ class Mailer extends Mailable
 
         if( $this->details['radio_attach'] ){
             $mail = $this->subject($this->details['subject'])
-                ->attach( public_path('email/'.$this->details['radio_attach'].'/'.$this->details['user_id'].'.pdf') )
+                ->attach( storage_path('app/public/uploads/uploads/file-management/'.str_replace("is_","",$this->details['radio_attach']).'/'.$this->details['user_id'].'.pdf') )
                 ->view(['html' => 'mails.email'])->with(compact('dtl'))
                 ->from($this->details['from'], $this->details['from']);
-            
         } else {
             $mail = $this->subject($this->details['subject'])
                 ->view(['html' => 'mails.email'])->with(compact('dtl'))
                 ->from($this->details['from'], $this->details['from']);
 
             if($this->details['attach']){
-                $mail = $mail->attach( public_path( $this->details['attach'] ) );
+                $mail = $mail->attach( storage_path( $this->details['attach'] ) );
             }
         }
 
