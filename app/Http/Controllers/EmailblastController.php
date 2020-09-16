@@ -91,7 +91,8 @@ class EmailblastController extends Controller
 
     public function send(Request $request)
     {
-        
+        //die( var_dump( storage_path('app/public/uploads/uploads/file-management/'.str_replace("is_","",Input::get('radio_autoattachment')).'/pdf') ));
+
         $registered = $this->register(Input::get('sender'));
 
         if($registered)
@@ -197,7 +198,7 @@ class EmailblastController extends Controller
                     ];
                     
                     if($radio_autoattachment){
-                        if(file_exists( public_path('email/'.$details['radio_attach'].'/'.$details['user_id'].'.pdf') )) {
+                        if(file_exists( storage_path('app/public/uploads/uploads/file-management/'.str_replace("is_","",$details['radio_attach']).'/'.$details['user_id'].'.pdf') )) {
                             Mail::to($email)->send(new Mailer($details));
                             $outbox = $this->outbox($email_id, $email, $message_subject, $message_editor, $radio_autoattachment);
                         }
