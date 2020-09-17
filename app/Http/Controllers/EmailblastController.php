@@ -91,8 +91,6 @@ class EmailblastController extends Controller
 
     public function send(Request $request)
     {
-        //die( var_dump( storage_path('app/public/uploads/uploads/file-management/'.str_replace("is_","",Input::get('radio_autoattachment')).'/pdf') ));
-
         $registered = $this->register(Input::get('sender'));
 
         if($registered)
@@ -183,7 +181,7 @@ class EmailblastController extends Controller
                     $attach = null;
                 } else {
                     $radio_autoattachment = 0;
-                    $attach = null;
+                    $attach = explode(",",$request->filename);
                 }
 
                 foreach($emails as $key => $email ){
@@ -196,7 +194,7 @@ class EmailblastController extends Controller
                         "user_id" => $users_ids[$key],
                         "attach" => $attach,
                     ];
-                    
+
                     if($radio_autoattachment){
                         if(file_exists( storage_path('app/public/uploads/uploads/file-management/'.str_replace("is_","",$details['radio_attach']).'/'.$details['user_id'].'.pdf') )) {
                             Mail::to($email)->send(new Mailer($details));
@@ -244,21 +242,20 @@ class EmailblastController extends Controller
 
     public function uploads(Request $request)
     { 
-        /*  
-        $files = array();
+        $files = $request->file('file');
+        Storage::disk('uploads')->makeDirectory('emails');
 
-        //die(var_dump( 'awan'.$request->get('attachments') ));
-        Storage::disk('uploads')->put('test', file_get_contents( $request->get('attachments') ));
-        foreach($_FILES as $file)
-        {   
-            //die(var_dump('wala'));
-            $files[] = Storage::put($request->get('attachments').'/'.$folderID.'/'.$filename, (string) file_get_contents($file['tmp_name']));
-            Storage::disk('uploads')->put('test', file_get_contents($file));
+        if($request->hasFile('file')) {
+            foreach($files as $file){
+                $name = $file->getClientOriginalName().'.'.$file->getClientOriginalExtension();
+                $image['filePath'] = $name;
+                //$file->move( public_path().'/uploads/', $name);
+                $file->storeAs('emails', $name);
+            }
         }
-        
+
         $data = array('files' => $files);
         echo json_encode( $data ); exit();
-        */
     }
 
     public function register($sender_id)

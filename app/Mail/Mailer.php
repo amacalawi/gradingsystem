@@ -40,8 +40,10 @@ class Mailer extends Mailable
                 ->view(['html' => 'mails.email'])->with(compact('dtl'))
                 ->from($this->details['from'], $this->details['from']);
 
-            if($this->details['attach']){
-                $mail = $mail->attach( storage_path( $this->details['attach'] ) );
+            if( count($this->details['attach']) > 0 ){
+                for($x=0; $x < count( $this->details['attach'] ); $x++){
+                    $mail->attach( storage_path('app/public/uploads/emails/'.$this->details['attach'][$x] ));
+                }
             }
         }
 

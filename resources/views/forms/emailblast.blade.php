@@ -133,7 +133,7 @@
                                 {{ Form::label('attachments', 'Attachment', ['class' => '']) }}
                                 <div class="col-md-12">
                                     {{-- Form::file('attachments[]') --}}
-                                    <input type="file" class="form-control" name="attachments[]" multiple>
+                                    <input type="file" class="form-control" name="attachments[]" id="attachments" enctype="multipart/form-data" multiple>
                                 </div>
                             </div>
                         </div>
@@ -162,7 +162,7 @@
                                         <span></span>
                                     </label>
                                     <label class="m-radio col-md-3">
-                                        <input type="radio" name="radio_autoattachment" value="is_grade">
+                                        <input type="radio" name="radio_autoattachment" value="is_gradingsheet">
                                         Gradingsheet
                                         <span></span>
                                     </label>
