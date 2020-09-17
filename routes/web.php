@@ -244,6 +244,15 @@ Route::prefix('components')->group(function () {
     });
     /* End CSV Management Routes */
     
+    
+    /* ID Print Routes */
+    Route::prefix('id-management')->group(function () {
+        Route::get('{slug}', 'PrintIDController@view')->name('print.id.view');
+        //Route::get('print-id', 'PrintIDController@view')->name('print.id.view');
+        //Route::get('print-id/search/{id?}', 'PrintIDController@search')->name('print.id.search');
+        //Route::get('print-id/{id}/profile_photo', 'PrintIDController@showProfilePhoto')->name('print.id.showProfilePhoto');
+    });
+    /* End ID Print Routes */
 });
 
 Route::prefix('memberships')->group(function () {
@@ -549,10 +558,11 @@ Route::prefix('notifications')->group(function () {
             Route::get('new', 'EmailblastController@new')->name('messaging.emailblast.new');
             Route::post('store', 'EmailblastController@store')->name('messaging.emailblast.store');
             Route::get('send', 'EmailblastController@send')->name('messaging.emailblast.send');
-            Route::post('uploads', 'EmailblastController@uploads')->name('messaging.emailblast.uploads');
+            //Route::post('uploads', 'EmailblastController@uploads')->name('messaging.emailblast.uploads');
             Route::get('inbox', 'EmailblastController@inbox')->name('messaging.emailblast.inbox');
             Route::get('outbox', 'EmailblastController@manage_outbox')->name('messaging.emailblast.manage.outbox');
             Route::get('outbox/all-active', 'EmailblastController@all_active_outbox')->name('messaging.emailblast.all.active.outbox');
+            Route::post('uploads', 'EmailblastController@uploads')->name('messaging.emailblast.uploads');
             
             //Settings
             Route::get('settings', 'EmailblastController@settings')->name('messaging.emailblast.settings');
@@ -567,15 +577,6 @@ Route::prefix('notifications')->group(function () {
 
     });
     /* End Messaging Routes */
-
-    /* ID Print Routes */
-    Route::prefix('id-print')->group(function () {
-        Route::get('print-id', 'PrintIDController@view')->name('print.id.view');
-        Route::get('print-id/search/{id?}', 'PrintIDController@search')->name('print.id.search');
-        Route::get('print-id/{id}/profile_photo', 'PrintIDController@showProfilePhoto')->name('print.id.showProfilePhoto');
-    });
-    /* End ID Print Routes */
-
 });
 /* End Notifcations Routes */
 

@@ -65,19 +65,14 @@
     },
 
     emailblast.prototype.do_uploads = function($id) {
-        //var data = new FormData();
-        //var data = $('form[name="emailblast_form"]');
-        var data = ($('input[name="attachments[]"]').val() != '') ? $('input[name="attachments[]"]').get(0).files[0] : '';
-        $.each(files, function(key, value)
-        {   
-            data.append(key, value);
-        });
+        var data = new FormData();
+        for (var i = 0; i < $('input[name="attachments[]"]').get(0).files.length; ++i) {
+            data.append('file[]', $('input[name="attachments[]"]').get(0).files[i]);
+        }
 
-        console.log(data);
-        
         $.ajax({
             type: "POST",
-            url: base_url + 'notifications/messaging/emailblast/uploads?files=staffs&id=' + $id+'&attachments='+data,
+            url: base_url + 'notifications/messaging/emailblast/uploads?files=staffs&id='+$id,
             data: data,
             cache: false,
             processData: false,
@@ -159,12 +154,16 @@
 
         this.$body.on('click', '.submit-btn', function (e){
             e.preventDefault();
+            var filename_arr = [];
             var $self = $(this);
             var $form = $('form[name="emailblast_form"]');
             var $error = $.emailblast.validate($form, 0);
             var messagedata = CKEDITOR.instances.message_editor.getData();
-            var attachments = ($('input[name="attachments[]"]').val() != '') ? $('input[name="attachments[]"]').get(0).files[0] : '';
-          
+
+            for (var i = 0; i < $('input[name="attachments[]"]').get(0).files.length; ++i) {
+                filename_arr[i] = $('input[name="attachments[]"]').get(0).files[i].name;
+            }
+
             if ($error != 0) {
                 swal({
                     title: "Oops...",
@@ -192,10 +191,11 @@
                 $.when( d1 ).done(function ( v1 )
                 {
                     if (v1 > 0) {
+
                         $.ajax({
                             type: $form.attr('method'),
-                            url: $form.attr('action')+'?attachments='+attachments,
-                            data: $form.serialize()+'&message_editor='+encodeURIComponent(messagedata),
+                            url: $form.attr('action'),
+                            data: $form.serialize()+'&message_editor='+encodeURIComponent(messagedata)+'&filename='+filename_arr,
                             success: function(response) {
                                 var data = $.parseJSON(response);   
                                 console.log(data);

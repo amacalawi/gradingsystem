@@ -18,7 +18,7 @@ class CreateEmailsOutboxesTable extends Migration
             $table->integer('email_id')->unsigned();
             $table->string('email_recipient');
             $table->string('subject');
-            $table->string('message');
+            $table->string('message')->nullable();
             $table->boolean('is_soa')->default(0);
             $table->boolean('is_payslip')->default(0);
             $table->boolean('is_grade')->default(0);
