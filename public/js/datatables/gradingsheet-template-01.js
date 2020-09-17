@@ -93,11 +93,24 @@ var DatatableDataLocalDemo = function () {
 			overflow: 'visible',
 			template: function (row, index, datatable) {
 				var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
-
-                return '\
-                    <a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'components/csv-management/gradingsheet-template-01/edit/' + row.gradingsheet_templateID + '"><i class="la la-edit"></i></a>\
-                    <a title="remove this" data-row-id="' + row.gradingsheet_templateID + '" action="Remove" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-remove"></i></a>\
-				';
+				var $privileges = _privileges.split(',');
+				if ($privileges[2] == 1 && $privileges[3] == 1) {
+					return '\
+						<a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill m-btn--hover-warning" href="' + base_url + 'components/csv-management/gradingsheet-template-01/edit/' + row.gradingsheet_templateID + '"><i class="la la-edit"></i></a>\
+						<a title="remove this" data-row-id="' + row.gradingsheet_templateID + '" action="Remove" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill m-btn--hover-danger" href="javascript:;"><i class="la la-remove"></i></a>\
+					';
+				} else {
+					if ($privileges[2] == 1) {
+						return '\
+							<a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill m-btn--hover-warning" href="' + base_url + 'components/csv-management/gradingsheet-template-01/edit/' + row.gradingsheet_templateID + '"><i class="la la-edit"></i></a>\
+						';
+					}
+					if ($privileges[3] == 1) {
+						return '\
+							<a title="remove this" data-row-id="' + row.gradingsheet_templateID + '" action="Remove" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill m-btn--hover-danger" href="javascript:;"><i class="la la-remove"></i></a>\
+						';
+					}
+				}
 			}
 		}]
 	});

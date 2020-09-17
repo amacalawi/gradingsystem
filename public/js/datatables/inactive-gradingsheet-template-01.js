@@ -2,7 +2,7 @@
 
 var DatatableDataLocalDemo = function () {
 	//== Private functions
- 	console.log(base_url + 'components/menus/sub-modules/all-inactive');
+ 	console.log(base_url + 'components/csv-management/gradingsheet-template-01/all-inactive');
 	
 	var datatable = $('.m_datatable').mDatatable({
 		// datasource definition
@@ -12,7 +12,7 @@ var DatatableDataLocalDemo = function () {
 			  read: {
 				// sample GET method
 				method: 'GET',
-				url: base_url + 'components/menus/sub-modules/all-inactive',
+				url: base_url + 'components/csv-management/gradingsheet-template-01/all-inactive',
 				map: function(raw) {
 				  // sample data mapping
 				  var dataSet = raw;
@@ -51,29 +51,38 @@ var DatatableDataLocalDemo = function () {
 
 		// columns definition
 		columns: [{
-			field: "submoduleID",
+			field: "gradingsheet_templateID",
 			title: "#",
 			width: 50,
 			sortable: false,
 			textAlign: 'center',
 			selector: {class: 'm-checkbox--solid m-checkbox--brand'}
 		}, {
-			field: "submoduleOrder",
-			title: "Order"
+			field: "gradingsheet_templateStudentNo",
+            title: "Student Number",
+		}, {
+			field: "gradingsheet_templateFullname",
+            title: "Fullname",
+		}, {
+			field: "gradingsheet_templateGradeLevel",
+            title: "Grade Level",
         }, {
-			field: "submoduleModuleName",
-			title: "Module"
+			field: "gradingsheet_templateSection",
+            title: "Section",
 		}, {
-			field: "submoduleCode",
-			title: "Code"
-		}, {
-			field: "submoduleName",
-			title: "Name",
-		}, {
-			field: "submoduleDescription",
-			title: "Description"
+			field: "gradingsheet_templateAdviser",
+            title: "Adviser",
         }, {
-			field: "submoduleModified",
+			field: "gradingsheet_templateAcademicStatus",
+            title: "Academic Status"
+        }, {
+			field: "gradingsheet_templateEligibility",
+            title: "Eligibility",
+        }, {
+			field: "gradingsheet_templateRemarks",
+			title: "Remarks",
+		}, {
+			field: "gradingsheet_templateModified",
 			title: "Last Modified",
 		}, {
 			field: "Actions",
@@ -87,7 +96,7 @@ var DatatableDataLocalDemo = function () {
 				var $privileges = _privileges.split(',');
 				if ($privileges[3] == 1) {
 					return '\
-						<a data-row-id="' + row.submoduleID + '" action="Active" href="javascript:;" class="toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="activate this">\
+						<a data-row-id="' + row.gradingsheet_templateID  + '" action="Active" href="javascript:;" class="toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="activate this">\
 							<i class="la la-undo"></i>\
 						</a>\
 					';
@@ -103,8 +112,8 @@ var DatatableDataLocalDemo = function () {
 		var query = datatable.getDataSourceQuery();
 
 		$('#m_form_type').on('change', function () {
-			datatable.search($(this).val(), 'moduleType');
-		}).val(typeof query.moduleType !== 'undefined' ? query.moduleType : '');
+			datatable.search($(this).val(), 'departmentType');
+		}).val(typeof query.departmentType !== 'undefined' ? query.departmentType : '');
 
 		// $('#m_form_type').on('change', function () {
 		// 	datatable.search($(this).val(), 'Type');
@@ -140,7 +149,7 @@ jQuery(document).ready(function () {
 		var $rowID = $(this).attr('data-row-id');
 		console.log($rowID);
 		var $action = $(this).attr('action');
-		var $url = base_url + 'components/menus/sub-modules/update-status/' + $rowID;
+		var $url = base_url + 'components/csv-management/gradingsheet-template-01/update-status/' + $rowID;
 		var items = []; items.push({ action: $action });
 
 		console.log($url);

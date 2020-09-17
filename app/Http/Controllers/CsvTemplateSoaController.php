@@ -11,6 +11,7 @@ use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
 use App\Components\FlashMessages;
+use App\Helper\Helper;
 
 class CsvTemplateSoaController extends Controller
 {   
@@ -23,19 +24,24 @@ class CsvTemplateSoaController extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function index()
+    public function is_permitted($permission)
     {
+        $privileges = explode(',', strtolower(Helper::get_privileges()));
+        if (!$privileges[$permission] == 1) {
+            return abort(404);
+        }
+    }
+
+    public function index()
+    {   
+        $this->is_permitted(1);
         $menus = $this->load_menus();
         return view('modules/components/csv-management/soa-template-01/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
+        $this->is_permitted(1);
         $menus = $this->load_menus();
         return view('modules/components/csv-management/soa-template-01/inactive')->with(compact('menus'));
     }
@@ -76,6 +82,7 @@ class CsvTemplateSoaController extends Controller
 
     public function add(Request $request, $id = '')
     {   
+        $this->is_permitted(0);
         $menus = $this->load_menus();
         $segment = request()->segment(4);
         $template = (new SoaTemplate01)->fetch($id);
@@ -84,6 +91,7 @@ class CsvTemplateSoaController extends Controller
     
     public function edit(Request $request, $id)
     {   
+        $this->is_permitted(2);
         $menus = $this->load_menus();
         $segment = request()->segment(4);
         $template = (new SoaTemplate01)->fetch($id);
@@ -91,7 +99,8 @@ class CsvTemplateSoaController extends Controller
     }
     
     public function store(Request $request)
-    {    
+    {   
+        $this->is_permitted(0);   
         $timestamp = date('Y-m-d H:i:s');
 
         $rows = SoaTemplate01::where([
@@ -137,6 +146,7 @@ class CsvTemplateSoaController extends Controller
 
     public function update(Request $request, $id)
     {    
+        $this->is_permitted(2);
         $timestamp = date('Y-m-d H:i:s');
         $soaTemplate01 = SoaTemplate01::find($id);
 
@@ -168,6 +178,7 @@ class CsvTemplateSoaController extends Controller
 
     public function update_status(Request $request, $id)
     {   
+        $this->is_permitted(3);
         $timestamp = date('Y-m-d H:i:s');
         $action = $request->input('items')[0]['action'];
 
@@ -213,6 +224,7 @@ class CsvTemplateSoaController extends Controller
 
     public function import(Request $request)
     {   
+        $this->is_permitted(0); 
         foreach($_FILES as $file)
         {   
             $row = 0; $timestamp = date('Y-m-d H:i:s'); $datas = '';

@@ -11,6 +11,7 @@ use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
 use App\Components\FlashMessages;
+use App\Helper\Helper;
 
 class FileUploadController extends Controller
 {   
@@ -23,13 +24,17 @@ class FileUploadController extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function index()
+    public function is_permitted($permission)
     {
+        $privileges = explode(',', strtolower(Helper::get_privileges()));
+        if (!$privileges[$permission] == 1) {
+            return abort(404);
+        }
+    }
+
+    public function index()
+    {   
+        $this->is_permitted(1);
         $menus = $this->load_menus();
         return view('modules/components/file-management/'.request()->segment(count(request()->segments())).'/manage')->with(compact('menus'));
     }
@@ -51,6 +56,7 @@ class FileUploadController extends Controller
 
     public function import(Request $request)
     {   
+        $this->is_permitted(0);
         $timestamp = date('Y-m-d H:i:s');
         $uploaddir = 'uploads/file-management/'.$request->get('category');
         Storage::disk('uploads')->makeDirectory('file-management/'.$request->get('category'));
