@@ -21,54 +21,68 @@ class UserRole extends Model
         $menus = array(); $increment = 0;
         $userRole = self::where('user_id', $user)->first();
 
-        $userHeaders = RoleHeader::with([
-            'header' => function($q) {
-                $q->select(['id', 'name', 'slug'])->where('is_active', 1)->orderBy('order', 'asc'); 
-            },
-        ])->where('role_id', $userRole->role_id)->get();
+        $userHeaders = RoleHeader::select(['headers.id', 'headers.name', 'headers.slug'])
+        ->join('headers', function($join2)
+        {
+            $join2->on('headers.id', '=', 'roles_headers.header_id');
+        })
+        ->where([
+            'roles_headers.role_id' => $userRole->role_id,
+            'headers.is_active' => 1,
+            'roles_headers.is_active' => 1,
+        ])
+        ->orderBy('headers.order', 'asc')->get();
 
         foreach($userHeaders as $userHeader) {
             $menus[$increment] = array(
-                'id' => $userHeader->header->id,
-                'name' => $userHeader->header->name,
-                'slug' => $userHeader->header->slug,
+                'id' => $userHeader->id,
+                'name' => $userHeader->name,
+                'slug' => $userHeader->slug,
             );
 
-            $headerID = $userHeader->header->id;
-            $userModules = RoleModule::with([
-                'module' => function($q) {
-                    $q->select(['header_id', 'id', 'name', 'slug', 'icon'])->orderBy('order', 'asc');
-                },
+            $headerID = $userHeader->id;
+            $userModules = RoleModule::select(['modules.header_id', 'modules.id', 'modules.name', 'modules.slug', 'modules.icon'])
+            ->join('modules', function($join2)
+            {
+                $join2->on('modules.id', '=', 'roles_modules.module_id');
+            })
+            ->where([
+                'roles_modules.role_id' => $userRole->role_id,
+                'roles_modules.is_active' => 1,
+                'modules.is_active' => 1
             ])
-            ->where('role_id', $userRole->role_id)
-            ->whereIn('module_id', Module::select('id')->where(['header_id' => $headerID, 'is_active' => 1])->orderBy('order', 'asc'))
-            ->get();
+            ->whereIn('roles_modules.module_id', Module::select('id')->where(['header_id' => $headerID, 'is_active' => 1])->orderBy('order', 'asc'))
+            ->orderBy('modules.order', 'asc')->get();
                 
             $modulars = array();
             foreach ($userModules as $userModule) {
-                $menus[$increment]['modules'][$userModule->module->id] = array(
-                    'id' => $userModule->module->id,
-                    'name' => $userModule->module->name,
-                    'slug' => $userModule->module->slug,
-                    'icon' => $userModule->module->icon
+                $menus[$increment]['modules'][$userModule->id] = array(
+                    'id' => $userModule->id,
+                    'name' => $userModule->name,
+                    'slug' => $userModule->slug,
+                    'icon' => $userModule->icon
                 );
 
-                $moduleID = $userModule->module->id;
-                $userSubModules = RoleSubModule::with([
-                    'sub_module' => function($q) use ($moduleID) {
-                        $q->select(['module_id', 'id', 'name', 'slug', 'icon'])->orderBy('order', 'asc'); 
-                    },
+                $moduleID = $userModule->id;
+                $userSubModules = RoleSubModule::select(['sub_modules.module_id', 'sub_modules.id', 'sub_modules.name', 'sub_modules.slug', 'sub_modules.icon'])
+                ->join('sub_modules', function($join2)
+                {
+                    $join2->on('sub_modules.id', '=', 'roles_sub_modules.sub_module_id');
+                })
+                ->where([
+                    'roles_sub_modules.role_id' => $userRole->role_id,
+                    'roles_sub_modules.is_active' => 1,
+                    'sub_modules.is_active' => 1
                 ])
-                ->where('role_id', $userRole->role_id)
-                ->whereIn('sub_module_id', SubModule::select('id')->where(['module_id' => $moduleID, 'is_active' => 1])->orderBy('order', 'asc'))
-                ->get();
+                ->whereIn('roles_sub_modules.sub_module_id', SubModule::select('id')->where(['module_id' => $moduleID, 'is_active' => 1])->orderBy('order', 'asc'))
+                ->orderBy('sub_modules.order', 'asc')->get();
 
                 foreach ($userSubModules as $userSubModule) {
-                    $menus[$increment]['sub_modules'][$moduleID][$userSubModule->sub_module->id] = array(
-                        'id' => $userSubModule->sub_module->id,
-                        'name' => $userSubModule->sub_module->name,
-                        'slug' => $userSubModule->sub_module->slug,
-                        'icon' => $userSubModule->sub_module->icon
+                    $menus[$increment]['sub_modules'][$moduleID][$userSubModule->id] = array(
+                        'id' => $userSubModule->id,
+                        'name' => $userSubModule->name,
+                        'slug' => $userSubModule->slug,
+                        'icon' => $userSubModule->icon
                     );
                 }
             }

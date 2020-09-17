@@ -81,13 +81,28 @@ var DatatableDataLocalDemo = function () {
 			overflow: 'visible',
 			template: function (row, index, datatable) {
 				var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
-
-                return '\
-                    <a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'components/menus/headers/edit/' + row.headerID + '"><i class="la la-edit"></i></a>\
-					<a title="remove this" data-row-id="' + row.headerID + '" action="Remove" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-remove"></i></a>\
-					<a title="move up this" data-row-id="' + row.headerID + '" action="Up" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-arrow-up"></i></a>\
-					<a title="move down this" data-row-id="' + row.headerID + '" action="Down" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-arrow-down"></i></a>\
-				';
+				var $privileges = _privileges.split(',');
+				if ($privileges[2] == 1 && $privileges[3] == 1) {
+					return '\
+						<a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'components/menus/headers/edit/' + row.headerID + '"><i class="la la-edit"></i></a>\
+						<a title="remove this" data-row-id="' + row.headerID + '" action="Remove" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-remove"></i></a>\
+						<a title="move up this" data-row-id="' + row.headerID + '" action="Up" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-arrow-up"></i></a>\
+						<a title="move down this" data-row-id="' + row.headerID + '" action="Down" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-arrow-down"></i></a>\
+					';
+				} else {
+					if ($privileges[2] == 1) {
+						return '\
+							<a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'components/menus/headers/edit/' + row.headerID + '"><i class="la la-edit"></i></a>\
+							<a title="move up this" data-row-id="' + row.headerID + '" action="Up" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-arrow-up"></i></a>\
+							<a title="move down this" data-row-id="' + row.headerID + '" action="Down" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-arrow-down"></i></a>\
+						';
+					}
+					if ($privileges[3] == 1) {
+						return '\
+							<a title="remove this" data-row-id="' + row.headerID + '" action="Remove" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-remove"></i></a>\
+						';
+					}
+				}
 			}
 		}]
 	});
