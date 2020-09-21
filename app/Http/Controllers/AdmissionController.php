@@ -19,6 +19,7 @@ use App\Models\Level;
 use App\Models\Staff; 
 use App\Models\Subject; 
 use App\Models\EducationType;
+use App\Helper\Helper;
 
 class AdmissionController extends Controller
 {
@@ -30,9 +31,18 @@ class AdmissionController extends Controller
         date_default_timezone_set('Asia/Manila');
         $this->middleware('auth');
     }
+    
+    public function is_permitted($permission)
+    {
+        $privileges = explode(',', strtolower(Helper::get_privileges()));
+        if (!$privileges[$permission] == 1) {
+            return abort(404);
+        }
+    }
 
     public function index()
     {   
+        $this->is_permitted(1);
         $menus = $this->load_menus();
         $admission = $this->admission_check();
         return view('modules/academics/admissions/sectionsstudents/manage')->with(compact('menus'));
@@ -40,6 +50,7 @@ class AdmissionController extends Controller
 
     public function manage(Request $request)
     {   
+        $this->is_permitted(1);
         $menus = $this->load_menus();
         $admission = $this->admission_check();
         return view('modules/academics/admissions/sectionsstudents/manage')->with(compact('menus'));
@@ -47,6 +58,7 @@ class AdmissionController extends Controller
 
     public function inactive(Request $request)
     {   
+        $this->is_permitted(1);
         $menus = $this->load_menus();
         return view('modules/academics/admissions/sectionsstudents/inactive')->with(compact('menus'));
     }
@@ -113,7 +125,8 @@ class AdmissionController extends Controller
     }
 
     public function add(Request $request, $id = '')
-    {      
+    {     
+        $this->is_permitted(0); 
         $menus = $this->load_menus();
         $admission = $this->admission_check();
         $flashMessage = self::messages();
@@ -130,7 +143,8 @@ class AdmissionController extends Controller
     }
     
     public function store(Request $request)
-    {           
+    {    
+        $this->is_permitted(0);       
         $timestamp = date('Y-m-d H:i:s');
         $batch_id = Batch::where('is_active','1')->where('status','Current')->pluck('id');
 
@@ -224,6 +238,7 @@ class AdmissionController extends Controller
 
     public function edit(Request $request, $id)
     {   
+        $this->is_permitted(2);
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
@@ -249,6 +264,7 @@ class AdmissionController extends Controller
     
     public function update(Request $request, $id)
     {    
+        $this->is_permitted(2);
         $timestamp = date('Y-m-d H:i:s');
         $batch_id = Batch::where('is_active','1')->where('status','Current')->pluck('id');
         
@@ -383,6 +399,7 @@ class AdmissionController extends Controller
 
     public function update_status(Request $request, $id)
     {   
+        $this->is_permitted(3);
         $timestamp = date('Y-m-d H:i:s');
         $action = $request->input('items')[0]['action'];
 

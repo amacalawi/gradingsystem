@@ -8,6 +8,7 @@ use App\Models\Schedule;
 use App\Models\DtrTimeSetting;
 use App\Models\DtrTimeDay;
 use App\Models\PresetMessage;
+use App\Helper\Helper;
 
 class SchedulesController extends Controller
 {
@@ -19,20 +20,31 @@ class SchedulesController extends Controller
         $this->middleware('auth');
     }
 
+    public function is_permitted($permission)
+    {
+        $privileges = explode(',', strtolower(Helper::get_privileges()));
+        if (!$privileges[$permission] == 1) {
+            return abort(404);
+        }
+    }
+
     public function index()
     {   
+        $this->is_permitted(1);
         $menus = $this->load_menus();
         return view('modules/components/schedules/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
+        $this->is_permitted(1);
         $menus = $this->load_menus();
         return view('modules/components/schedules/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
+        $this->is_permitted(1);
         $menus = $this->load_menus();
         return view('modules/components/schedules/inactive')->with(compact('menus'));
     }
@@ -69,6 +81,7 @@ class SchedulesController extends Controller
 
     public function add(Request $request, $id = '')
     {   
+        $this->is_permitted(0);
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
@@ -86,6 +99,7 @@ class SchedulesController extends Controller
 
     public function edit(Request $request, $id)
     {   
+        $this->is_permitted(2);
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(3);
@@ -104,6 +118,7 @@ class SchedulesController extends Controller
 
     public function store(Request $request)
     {   
+        $this->is_permitted(0);
         $timestamp = date('Y-m-d H:i:s');        
        
         //Schedule
@@ -199,6 +214,7 @@ class SchedulesController extends Controller
 
     public function update(Request $request, $id)
     {    
+        $this->is_permitted(2);
         $timestamp = date('Y-m-d H:i:s');
 
         $schedule = Schedule::find($id);
@@ -307,6 +323,7 @@ class SchedulesController extends Controller
 
     public function update_status(Request $request, $id)
     {   
+        $this->is_permitted(3);
         $timestamp = date('Y-m-d H:i:s');
         $action = $request->input('items')[0]['action'];
 

@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Imports\SubjectImport;
 use Maatwebsite\Excel\Facades\Excel;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Subject;
 use App\Models\Staff;
 use App\Models\Quarter;
 use App\Models\EducationType;
+use App\Helper\Helper;
 
 class SubjectsController extends Controller
 {
@@ -21,21 +21,32 @@ class SubjectsController extends Controller
         date_default_timezone_set('Asia/Manila');
         $this->middleware('auth');
     }
+    
+    public function is_permitted($permission)
+    {
+        $privileges = explode(',', strtolower(Helper::get_privileges()));
+        if (!$privileges[$permission] == 1) {
+            return abort(404);
+        }
+    }
 
     public function index()
     {   
+        $this->is_permitted(1);
         $menus = $this->load_menus();
         return view('modules/academics/subjects/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
+        $this->is_permitted(1);
         $menus = $this->load_menus();
         return view('modules/academics/subjects/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
+        $this->is_permitted(1);
         $menus = $this->load_menus();
         return view('modules/academics/subjects/inactive')->with(compact('menus'));
     }
@@ -88,6 +99,7 @@ class SubjectsController extends Controller
 
     public function add(Request $request, $id = '')
     {   
+        $this->is_permitted(0);
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
@@ -102,6 +114,7 @@ class SubjectsController extends Controller
     
     public function edit(Request $request, $id)
     {   
+        $this->is_permitted(2);
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
@@ -112,6 +125,7 @@ class SubjectsController extends Controller
     
     public function store(Request $request)
     {   
+        $this->is_permitted(0);
         $exist_code = Subject::where('code', $request->code)->first();
 
         if(!$exist_code)
@@ -180,7 +194,8 @@ class SubjectsController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
+    {   
+        $this->is_permitted(2);
         $exist_code = Subject::where('code', $request->code)->where('id', '!=', $id)->first();
 
         if(!$exist_code)
@@ -257,6 +272,7 @@ class SubjectsController extends Controller
 
     public function update_status(Request $request, $id)
     {   
+        $this->is_permitted(3);
         $timestamp = date('Y-m-d H:i:s');
         $action = $request->input('items')[0]['action'];
 
@@ -452,7 +468,9 @@ class SubjectsController extends Controller
     }
 
     public function import(Request $request)
-    {
+    {   
+        $this->is_permitted(0);
+
         foreach($_FILES as $file)
         {  
             $row = 0; $timestamp = date('Y-m-d H:i:s');

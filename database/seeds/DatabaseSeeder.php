@@ -463,8 +463,8 @@ class DatabaseSeeder extends Seeder
             [   
                 'module_id' => '6',
                 'code' => 'manage-all-groups',
-                'name' => 'Manage All Groups',
-                'description' => 'Manage All Groups Description',
+                'name' => 'All Active Groups',
+                'description' => 'All Active Groups Description',
                 'slug' => '',
                 'icon' => '',
                 'order' => '17',
@@ -473,8 +473,8 @@ class DatabaseSeeder extends Seeder
             [   
                 'module_id' => '6',
                 'code' => 'manage-all-inactive-groups',
-                'name' => 'Manage All Inactive Groups',
-                'description' => 'Manage All Inactive Groups Description',
+                'name' => 'All Inactive Groups',
+                'description' => 'All Inactive Groups Description',
                 'slug' => 'inactive',
                 'icon' => '',
                 'order' => '18',
