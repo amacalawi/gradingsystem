@@ -1,318 +1,476 @@
 !function($) {
-    "use strict";
 
-    var module = function() {
-        this.$body = $("body");
-    };
+    'use strict';
 
-    var $required = 0; var files = []; var filesName = [];
+    var supportingFileAPI = !!(window.File && window.FileList && window.FileReader);
+    var rImageType = /data:(image\/.+);base64,/;
+    var mask;
 
-    module.prototype.validate = function($form, $required)
-    {   
-        $required = 0;
+    // Functions
+    // HEX to RGBA
+    function hexToRGBa(hex, alpha) {
+        var r = parseInt(hex.slice(1, 3), 16);
+        var g = parseInt(hex.slice(3, 5), 16);
+        var b = parseInt(hex.slice(5, 7), 16);
+        var a = alpha || 1;
 
-        $.each(this.$body.find("input[type='date'], input[type='text'], select, textarea"), function(){
-               
-            if (!($(this).attr("name") === undefined || $(this).attr("name") === null)) {
-                if($(this).hasClass("required")){
-                    if($(this).is("[multiple]")){
-                        if( !$(this).val() || $(this).find('option:selected').length <= 0 ){
-                            $(this).closest(".form-group").find(".m-form__help").text("this field is required.");
-                            $required++;
-                        }
-                    } else if($(this).val()=="" || $(this).val()=="0"){
-                        if(!$(this).is("select")) {
-                            $(this).closest(".form-group").find(".m-form__help").text("this field is required.");
-                            $required++;
-                        } else {
-                            $(this).closest(".form-group").find(".m-form__help").text("this field is required.");
-                            $required++;                                          
-                        }
-                    } 
-                }
-            }
+        return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
+    }
+    function base64ToBlob(data) {
+        var mimeString = '';
+        var raw, uInt8Array, i, rawLength;
+
+        raw = data.replace(rImageType, function(header, imageType) {
+            mimeString = imageType;
+
+            return '';
         });
 
-        return $required;
-    },
+        raw = atob(raw);
+        rawLength = raw.length;
+        uInt8Array = new Uint8Array(rawLength); // eslint-disable-line
 
-    module.prototype.required_fields = function() {
-        
-        $.each(this.$body.find(".form-group"), function(){
-            if ($(this).hasClass('required')) {       
-                var $input = $(this).find("input[type='date'], input[type='text'], select, textarea");
-                if ($input.val() == '') {
-                    $(this).find('.m-form__help').text('this field is required.');       
-                }
-                $input.addClass('required');
-            } else {
-                $(this).find("input[type='text'], select, textarea").removeClass('required');
-            } 
-        });
-
-    },
-
-    module.prototype.price_separator = function (input) {
-        var output = input
-        if (parseFloat(input)) {
-            input = new String(input); // so you can perform string operations
-            var parts = input.split("."); // remove the decimal part
-            parts[0] = parts[0].split("").reverse().join("").replace(/(\d{3})(?!$)/g, "$1,").split("").reverse().join("");
-            output = parts.join(".");
+        for (i = 0; i < rawLength; i += 1) {
+            uInt8Array[i] = raw.charCodeAt(i);
         }
 
-        return output;
-    },
+        return new Blob([uInt8Array], {type: mimeString});
+    }
+    function getBrushSettings() {
+        var brushWidth = $inputBrushWidthRange.val();
+        var brushColor = brushColorpicker.getColor();
 
-    module.prototype.do_uploads = function($id) {
-        var data = new FormData();
-        $.each(files, function(key, value)
-        {   
-            data.append(key, value);
-        }); 
-        
-        console.log(data);
-        $.ajax({
-            type: "POST",
-            url: base_url + 'applications/uploads?files=copyrights&id=' + $id,
-            data: data,
-            cache: false,
-            processData: false,
-            contentType: false,
-            success: function (data) {
-                console.log(data);                       
-            }
-        });
-
-        return true;
-    },
-
-    module.prototype.init = function()
-    {   
-        /*
-        | ---------------------------------
-        | # select, input, and textarea on change or keyup remove error
-        | ---------------------------------
-        */
-        this.$body.on('keypress', '.numeric-double', function (event) {
-            var $this = $(this);
-            if ((event.which != 46 || $this.val().indexOf('.') != -1) &&
-                ((event.which < 48 || event.which > 57) &&
-                    (event.which != 0 && event.which != 8))) {
-                event.preventDefault();
-            }
-    
-            var text = $(this).val();
-            if ((event.which == 46) && (text.indexOf('.') == -1)) {
-                setTimeout(function () {
-                    if ($this.val().substring($this.val().indexOf('.')).length > 3) {
-                        $this.val($this.val().substring(0, $this.val().indexOf('.') + 3));
-                    }
-                }, 1);
-            }
-    
-            if ((text.indexOf('.') != -1) &&
-                (text.substring(text.indexOf('.')).length > 2) &&
-                (event.which != 0 && event.which != 8) &&
-                ($(this)[0].selectionStart >= text.length - 2)) {
-                event.preventDefault();
-            }
-        });
-
-        $('.select2').select2({
-            placeholder: "select a header"
-        });
-
-        this.$body.on('change', 'select, input', function (e) {
-            e.preventDefault();
-            var self = $(this);
-            self.closest(".form-group").find(".m-form__help").text("");
-        });
-        this.$body.on('dp.change', '.date-picker, .time-picker', function (e){
-            e.preventDefault();
-            var self = $(this);
-            $(this).closest(".form-group").find(".m-form__help").text("");
-        });
-        this.$body.on('keyup', 'input, textarea', function (e) {
-            e.preventDefault();
-            var self = $(this);
-            $(this).closest(".form-group").find(".m-form__help").text("");
-        });
-        this.$body.on('blur', 'input, textarea, select', function (e) {
-            e.preventDefault();
-            var self = $(this);
-            self.closest(".form-group").find(".m-form__help").text("");
-        });
-
-        this.$body.on('changeDate', 'input[type="date"]', function (e){
-            e.preventDefault();
-            var self = $(this);
-            self.closest(".form-group").find(".m-form__help").text("");
-        });
-
-        this.$body.on('keyup', '#name', function (e){
-            e.preventDefault();
-            var self = $(this).val();
-            $('#slug').val(self.replace(/\s+/g, '-').toLowerCase());
-        });
-
-        this.$body.on('change', '#user_id', function (e) {
-            e.preventDefault();
-            //alert($(this).val());
-            $.ajax({
-                type: 'GET',
-                url: 'print-id/search/'+$(this).val(),
-                data: { 'id':$(this).val() },
-                success: function(response) {
-                    var data = $.parseJSON(response);
-                    var idno = data.identification_no;
-                        idno = idno.replace('-', '');
-                    var avatar = base_url+'storage/app/public/uploads/students/'+idno+'/'+data.avatar;
-                        //avatar = "{{ asset('img/idphoto/default.png') }}";
-                    //console.log( base_url+'storage/app/public/uploads/students/'+idno+'/'+data.avatar);
-
-                    $('#idno').val(data.identification_no);
-                    $('#barcode').val(data.identification_no);
-                    $('#firstname').val(data.firstname);
-                    $('#middlename').val(data.middlename);
-                    $('#lastname').val(data.lastname);
-                    $('#gender').val(data.gender);
-                    $('#level').val(data.level);
-                    $('#section').val(data.section);
-                    $('#avatar').val(data.avatar);
-                    var path = "{{ asset('img/idphoto/default.png') }}"; 
-                    //var path2 = "{{ asset('app/public/uploads/students/"+idno+"/"+data.avatar+"') }}"; 
-                    console.log(path);
-                    //$("#avatar_image").attr('src',path);
-                    $('#photoid').css('background-image', 'url('+path+')');
-                    //$('#photoid').html('<img type="image" src="' + path + '" id="avatar_image" name="avatar_image" class="w-100 h-80" >');
-                    //$("#avatar_image").attr("src", avatar);
-
-                    if(data.father_selected){
-                        var guardianname = data.father_firstname;
-                            if(data.father_middlename){
-                                guardianname += ' '+data.father_middlename;
-                            }
-                            guardianname += ' '+data.father_lastname;
-
-                        $('#guardian').val(guardianname);
-                        $('#contact_number').val(data.father_contact_no); 
-                        $('#address').val(data.father_address);
-                    }
-                    else if(data.mother_selected){
-                        var guardianname = data.mother_firstname;
-                            if(data.mother_middlename){
-                                guardianname += ' '+data.mother_middlename;
-                            }
-                            guardianname += ' '+data.mother_lastname;
-
-                        $('#guardian').val(guardianname);
-                        $('#contact_number').val(data.mother_contact_no); 
-                        $('#address').val(data.mother_address);
-                    }
-                }, 
-                complete: function() {
-                    window.onkeydown = null;
-                    window.onfocus = null;
-                }
-            });
-
-        });        
-
-        this.$body.on('click', '#print-btn', function (e){
-            e.preventDefault();
-            var printWindow = window.open('', 'PRINT', 'height=700,width=600');
-            var Contractor= $('span[id*="lblCont"]').html();
-            //printWindow = window.open("", "PRINT", "location=1,status=1,scrollbars=1,width=650,height=600");
-            printWindow.document.write('<html><head>');
-            printWindow.document.write('<style type="text/css">@media print{.no-print, .no-print *{display: none !important;}</style>');
-            printWindow.document.write('</head><body>');
-            printWindow.document.write('<div style="width:100%;text-align:right">');
-           
-            printWindow.document.write('<input type="button" id="btnPrint" value="Print" class="no-print" style="width:100px" onclick="window.print()" />');
-            printWindow.document.write('<input type="button" id="btnCancel" value="Cancel" class="no-print"  style="width:100px" onclick="window.close()" />');
-           
-            printWindow.document.write('</div>');
-           
-            printWindow.document.write(document.getElementById('basic_info_prt').innerHTML);
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-            printWindow.focus();
-        });
-
-        this.$body.on('click', '.submit-btn', function (e){
-            e.preventDefault();
-            var $self = $(this);
-            var $form = $('form[name="module_form"]');
-            var $error = $.module.validate($form, 0);
-
-            if ($error != 0) {
-                swal({
-                    title: "Oops...",
-                    text: "Something went wrong! \nPlease fill in the required fields first.",
-                    type: "warning",
-                    showCancelButton: false,
-                    closeOnConfirm: true,
-                    confirmButtonClass: "btn btn-warning btn-focus m-btn m-btn--pill m-btn--air m-btn--custom"
-                });
-                window.onkeydown = null;
-                window.onfocus = null;   
-                $.module.required_fields();
-            } else {
-                $self.prop('disabled', true).html('wait.....').addClass('m-btn--custom m-loader m-loader--light m-loader--right');
-                $.ajax({
-                    type: $form.attr('method'),
-                    url: $form.attr('action'),
-                    data: $form.serialize(),
-                    success: function(response) {
-                        var data = $.parseJSON(response);   
-                        console.log(data);
-                        if (data.type == 'success') {
-                            setTimeout(function () {
-                                $self.html('<i class="la la-save"></i> Save Changes').removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
-                                swal({
-                                    title: data.title,
-                                    text: data.text,
-                                    type: data.type,
-                                    confirmButtonClass: "btn " + data.class + " btn-focus m-btn m-btn--pill m-btn--air m-btn--custom",
-                                    onClose: () => {
-                                        if ($form.find("input[name='method']").val() == 'add') {
-                                            window.location.replace(base_url + 'components/menus/modules');
-                                        }
-                                    }
-                                });
-                            }, 500 + 300 * (Math.random() * 5));
-                        } else {
-                            $self.html('<i class="la la-save"></i> Save Changes').removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
-                            $form.find('input[name="code"]').next().text('This is an existing code.');
-                            swal({
-                                title: data.title,
-                                text: data.text,
-                                type: data.type,
-                                showCancelButton: false,
-                                closeOnConfirm: true,
-                                confirmButtonClass: "btn " + data.class + " btn-focus m-btn m-btn--pill m-btn--air m-btn--custom",
-                            });
-                        }
-                    }, 
-                    complete: function() {
-                        window.onkeydown = null;
-                        window.onfocus = null;
-                    }
-                });
-            }
-        });
-        
+        return {
+            width: brushWidth,
+            color: hexToRGBa(brushColor, 0.5)
+        };
     }
 
-    //init module
-    $.module = new module, $.module.Constructor = module
+    // Buttons
+    var $btns = $('.menu-item');
+    var $btnsActivatable = $btns.filter('.activatable');
+    var $inputImage = $('#input-image-file');
+    var $btnDownload = $('#btn-download');
 
-}(window.jQuery),
+    var $btnUndo = $('#btn-undo');
+    var $btnRedo = $('#btn-redo');
+    var $btnClearObjects = $('#btn-clear-objects');
+    var $btnRemoveActiveObject = $('#btn-remove-active-object');
+    var $btnCrop = $('#btn-crop');
+    var $btnFlip = $('#btn-flip');
+    var $btnRotation = $('#btn-rotation');
+    var $btnDrawLine = $('#btn-draw-line');
+    var $btnApplyCrop = $('#btn-apply-crop');
+    var $btnCancelCrop = $('#btn-cancel-crop');
+    var $btnFlipX = $('#btn-flip-x');
+    var $btnFlipY = $('#btn-flip-y');
+    var $btnResetFlip = $('#btn-reset-flip');
+    var $btnRotateClockwise = $('#btn-rotate-clockwise');
+    var $btnRotateCounterClockWise = $('#btn-rotate-counter-clockwise');
+    var $btnText = $('#btn-text');
+    var $btnClosePalette = $('#btn-close-palette');
+    var $btnTextStyle = $('.btn-text-style');
+    var $btnAddIcon = $('#btn-add-icon');
+    var $btnRegisterIcon = $('#btn-register-icon');
+    var $btnMaskFilter = $('#btn-mask-filter');
+    var $btnLoadMaskImage = $('#input-mask-image-file');
+    var $btnApplyMask = $('#btn-apply-mask');
+    var $btnClose = $('.close');
 
-//initializing module
-function($) {
-    "use strict";
-    $.module.required_fields();
-    $.module.init();
+    // Range Input
+    var $inputRotationRange = $('#input-rotation-range');
+    var $inputBrushWidthRange = $('#input-brush-width-range');
+    var $inputFontSizeRange = $('#input-font-size-range');
+
+    // Sub menus
+    var $displayingSubMenu = $();
+    var $cropSubMenu = $('#crop-sub-menu');
+    var $flipSubMenu = $('#flip-sub-menu');
+    var $rotationSubMenu = $('#rotation-sub-menu');
+    var $freeDrawingSubMenu = $('#free-drawing-sub-menu');
+    var $drawLineSubMenu = $('#draw-line-sub-menu');
+    var $textSubMenu = $('#text-sub-menu');
+    var $iconSubMenu = $('#icon-sub-menu');
+    var $filterSubMenu = $('#filter-sub-menu');
+
+    // Select line type
+    var $selectMode = $('[name="select-line-type"]');
+
+    // Text palette
+    var $textPalette = $('#tui-text-palette');
+
+    // Image editor
+    var imageEditor = new tui.component.ImageEditor('.tui-image-editor canvas', {
+        cssMaxWidth: 700,
+        cssMaxHeight: 500
+    });
+
+    // Color picker for free drawing
+    var brushColorpicker = tui.component.colorpicker.create({
+        container: $('#tui-brush-color-picker')[0],
+        color: '#000000'
+    });
+
+    // Color picker for text palette
+    var textPaletteColorpicker = tui.component.colorpicker.create({
+        container: $('#tui-text-color-picker')[0],
+        color: '#000000'
+    });
+
+    // Color picker for icon
+    var iconColorpicker = tui.component.colorpicker.create({
+        container: $('#tui-icon-color-picker')[0],
+        color: '#000000'
+    });
+
+    brushColorpicker.on('selectColor', function(event) {
+        imageEditor.setBrush({
+            color: hexToRGBa(event.color, 0.5)
+        });
+    });
+
+    // Attach image editor custom events
+    imageEditor.once('loadImage', function() {
+        imageEditor.clearUndoStack();
+    });
+
+    var resizeEditor = function() {
+        var $editor = $('.tui-image-editor');
+        var $container = $('.tui-image-editor-canvas-container');
+        var height = parseFloat($container.css('max-height'));
+
+        $editor.height(height);
+    };
+
+    imageEditor.on({
+        endCropping: function() {
+            $cropSubMenu.hide();
+            resizeEditor();
+        },
+        endFreeDrawing: function() {
+            $freeDrawingSubMenu.hide();
+        },
+        emptyUndoStack: function() {
+            $btnUndo.addClass('disabled');
+            resizeEditor();
+        },
+        emptyRedoStack: function() {
+            $btnRedo.addClass('disabled');
+            resizeEditor();
+        },
+        pushUndoStack: function() {
+            $btnUndo.removeClass('disabled');
+            resizeEditor();
+        },
+        pushRedoStack: function() {
+            $btnRedo.removeClass('disabled');
+            resizeEditor();
+        },
+        activateText: function(obj) {
+            $displayingSubMenu.hide();
+            $displayingSubMenu = $textSubMenu.show();
+
+            if (obj.type === 'new') { // add new text on cavas
+                imageEditor.addText('Double Click', {
+                    position: obj.originPosition
+                });
+            }
+        },
+        adjustObject: function(obj, type) {
+            if (obj.type === 'text' && type === 'scale') {
+                $inputFontSizeRange.val(obj.getFontSize());
+            }
+        },
+        removeObject: function(obj) {
+            console.log(obj);
+        }
+    });
+
+    // Attach button click event listeners
+    $btns.on('click', function() {
+        $btnsActivatable.removeClass('active');
+    });
+
+    $btnsActivatable.on('click', function() {
+        $(this).addClass('active');
+    });
+
+    $btnUndo.on('click', function() {
+        $displayingSubMenu.hide();
+        imageEditor.undo();
+    });
+
+    $btnRedo.on('click', function() {
+        $displayingSubMenu.hide();
+        imageEditor.redo();
+    });
+
+    $btnClearObjects.on('click', function() {
+        $displayingSubMenu.hide();
+        imageEditor.clearObjects();
+    });
+
+    $btnRemoveActiveObject.on('click', function() {
+        $displayingSubMenu.hide();
+        imageEditor.removeActiveObject();
+    });
+
+    $btnCrop.on('click', function() {
+        imageEditor.startCropping();
+        $displayingSubMenu.hide();
+        $displayingSubMenu = $cropSubMenu.show();
+    });
+
+    $btnFlip.on('click', function() {
+        imageEditor.endAll();
+        $displayingSubMenu.hide();
+        $displayingSubMenu = $flipSubMenu.show();
+    });
+
+    $btnRotation.on('click', function() {
+        imageEditor.endAll();
+        $displayingSubMenu.hide();
+        $displayingSubMenu = $rotationSubMenu.show();
+    });
+
+    $btnClose.on('click', function() {
+        imageEditor.endAll();
+        $displayingSubMenu.hide();
+    });
+
+    $btnApplyCrop.on('click', function() {
+        imageEditor.endCropping(true);
+    });
+
+    $btnCancelCrop.on('click', function() {
+        imageEditor.endCropping();
+        $displayingSubMenu.hide();
+    });
+
+    $btnFlipX.on('click', function() {
+        imageEditor.flipX();
+    });
+
+    $btnFlipY.on('click', function() {
+        imageEditor.flipY();
+    });
+
+    $btnResetFlip.on('click', function() {
+        imageEditor.resetFlip();
+    });
+
+    $btnRotateClockwise.on('click', function() {
+        imageEditor.rotate(30);
+    });
+
+    $btnRotateCounterClockWise.on('click', function() {
+        imageEditor.rotate(-30);
+    });
+
+    $inputRotationRange.on('mousedown', function() {
+        var changeAngle = function() {
+            imageEditor.setAngle(parseInt($inputRotationRange.val(), 10));
+        };
+        $(document).on('mousemove', changeAngle);
+        $(document).on('mouseup', function stopChangingAngle() {
+            $(document).off('mousemove', changeAngle);
+            $(document).off('mouseup', stopChangingAngle);
+        });
+    });
+
+    $inputBrushWidthRange.on('change', function() {
+        imageEditor.setBrush({width: parseInt(this.value, 10)});
+    });
+
+    $inputImage.on('change', function(event) {
+        var file;
+
+        if (!supportingFileAPI) {
+            alert('This browser does not support file-api');
+        }
+
+        file = event.target.files[0];
+        imageEditor.loadImageFromFile(file);
+    });
+
+    $btnDownload.on('click', function() {
+        var imageName = imageEditor.getImageName();
+        var dataURL = imageEditor.toDataURL();
+        var blob, type, w;
+
+        if (supportingFileAPI) {
+            blob = base64ToBlob(dataURL);
+            type = blob.type.split('/')[1];
+            if (imageName.split('.').pop() !== type) {
+                imageName += '.' + type;
+            }
+
+            // Library: FileSaver - saveAs
+            saveAs(blob, imageName); // eslint-disable-line
+        } else {
+            alert('This browser needs a file-server');
+            w = window.open();
+            w.document.body.innerHTML = '<img src=' + dataURL + '>';
+        }
+    });
+
+    // control draw mode
+    $btnDrawLine.on('click', function() {
+        imageEditor.endAll();
+        $displayingSubMenu.hide();
+        $displayingSubMenu = $drawLineSubMenu.show();
+        $selectMode.removeAttr('checked');
+    });
+
+    $selectMode.on('change', function() {
+        var mode = $(this).val();
+        var settings = getBrushSettings();
+        var state = imageEditor.getCurrentState();
+
+        if (mode === 'freeDrawing') {
+            if (state === 'FREE_DRAWING') {
+                imageEditor.endFreeDrawing();
+            }
+            imageEditor.startFreeDrawing(settings);
+        } else {
+            if (state === 'LINE') {
+                imageEditor.endLineDrawing();
+            }
+            imageEditor.startLineDrawing(settings);
+        }
+    });
+
+    // control text mode
+    $btnText.on('click', function() {
+        if (imageEditor.getCurrentState() === 'TEXT') {
+            $(this).removeClass('active');
+            imageEditor.endTextMode();
+        } else {
+            $displayingSubMenu.hide();
+            $displayingSubMenu = $textSubMenu.show();
+            imageEditor.startTextMode();
+            $textPalette.hide();
+        }
+    });
+
+    $inputFontSizeRange.on('change', function() {
+        imageEditor.changeTextStyle({
+            fontSize: parseInt(this.value, 10)
+        });
+    });
+
+    $btnTextStyle.on('click', function(e) { // eslint-disable-line
+        var styleType = $(this).attr('data-style-type');
+        var styleObj;
+
+        e.stopPropagation();
+
+        switch (styleType) {
+            case 'b':
+                styleObj = {fontWeight: 'bold'};
+                break;
+            case 'i':
+                styleObj = {fontStyle: 'italic'};
+                break;
+            case 'u':
+                styleObj = {textDecoration: 'underline'};
+                break;
+            case 'l':
+                styleObj = {textAlign: 'left'};
+                break;
+            case 'c':
+                styleObj = {textAlign: 'center'};
+                break;
+            case 'r':
+                styleObj = {textAlign: 'right'};
+                break;
+            default:
+                styleObj = {};
+        }
+
+        imageEditor.changeTextStyle(styleObj);
+    });
+
+    textPaletteColorpicker.on('selectColor', function(event) {
+        imageEditor.changeTextStyle({
+            'fill': event.color
+        });
+    });
+
+    $btnClosePalette.on('click', function() {
+        imageEditor.deactivateAll();
+        $textPalette.hide();
+    });
+
+    // control icon
+    $btnAddIcon.on('click', function() {
+        imageEditor.endAll();
+        $displayingSubMenu.hide();
+        $displayingSubMenu = $iconSubMenu.show();
+    });
+
+    $btnRegisterIcon.on('click', function() {
+        $iconSubMenu.find('.menu').append(
+                '<li class="menu-item icon-text" data-icon-type="customArrow">↑</li>'
+        );
+
+        imageEditor.registerIcons({
+            customArrow: 'M 60 0 L 120 60 H 90 L 75 45 V 180 H 45 V 45 L 30 60 H 0 Z'
+        });
+
+        $btnRegisterIcon.off('click');
+    });
+
+    $iconSubMenu.on('click', '.menu-item', function() {
+        var iconType = $(this).attr('data-icon-type');
+
+        imageEditor.addIcon(iconType);
+    });
+
+    iconColorpicker.on('selectColor', function(event) {
+        imageEditor.changeIconColor(event.color);
+    });
+
+    // control mask filter
+    $btnMaskFilter.on('click', function() {
+        imageEditor.endAll();
+        $displayingSubMenu.hide();
+
+
+        $displayingSubMenu = $filterSubMenu.show();
+    });
+
+    $btnLoadMaskImage.on('change', function() {
+        var file;
+        var imgUrl;
+
+        if (!supportingFileAPI) {
+            alert('This browser does not support file-api');
+        }
+
+        file = event.target.files[0];
+
+        if (file) {
+            imgUrl = URL.createObjectURL(file);
+
+            imageEditor.loadImageFromURL(imageEditor.toDataURL(), 'FilterImage');
+
+            imageEditor.addImageObject(imgUrl);
+        }
+    });
+
+    $btnApplyMask.on('click', function() {
+        imageEditor.applyFilter('mask');
+    });
+
+    // Etc..
+
+    // Load sample image
+    imageEditor.loadImageFromURL('https://cdn.rawgit.com/nhnent/tui.component.image-editor/1.3.0/samples/img/sampleImage.jpg', 'SampleImage');
+
+    // IE9 Unselectable
+    $('.menu').on('selectstart', function() {
+        return false;
+    });
+
 }(window.jQuery);
