@@ -20,9 +20,9 @@ use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
 use App\Components\FlashMessages;
-
 use App\Exports\ClassRecordExport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Helper\Helper;
 
 class ClassRecordController extends Controller
 {   
@@ -35,19 +35,24 @@ class ClassRecordController extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function index()
+    public function is_permitted($permission)
     {
+        $privileges = explode(',', strtolower(Helper::get_privileges()));
+        if (!$privileges[$permission] == 1) {
+            return abort(404);
+        }
+    }
+
+    public function index()
+    {   
+        $this->is_permitted(1);
         $menus = $this->load_menus();
         return view('modules/schools/classrecords/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
+        $this->is_permitted(1);
         $menus = $this->load_menus();
         $types = (new EducationType)->manage_education_types();
         return view('modules/academics/gradingsheets/classrecord/manage')->with(compact('menus', 'types'));
@@ -55,6 +60,7 @@ class ClassRecordController extends Controller
 
     public function inactive(Request $request)
     {   
+        $this->is_permitted(1);
         $menus = $this->load_menus();
         $types = (new EducationType)->manage_education_types();
         return view('modules/academics/gradingsheets/classrecord/inactive')->with(compact('menus', 'types'));
@@ -191,6 +197,7 @@ class ClassRecordController extends Controller
 
     public function view(Request $request, $id)
     {   
+        $this->is_permitted(1);
         $this->validated($id);
         $menus = $this->load_menus();
         $class_records = (new SectionInfo)->fetch($id);

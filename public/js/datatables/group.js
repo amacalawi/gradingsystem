@@ -83,19 +83,24 @@ var DatatableDataLocalDemo = function () {
 			overflow: 'visible',
 			template: function (row, index, datatable) {
 				var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
-
-				return '\
-					<div class="dropdown ' + dropup + '">\
-						<a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">\
-							<i class="la la-ellipsis-h"></i>\
-						</a>\
-						  <div class="dropdown-menu dropdown-menu-right">\
-							<a title="edit this" class="dropdown-item" href="' + base_url + 'components/groups/edit/' + row.groupID + '"><i class="la la-edit"></i> Edit Details</a>\
-							<a title="remove this" data-row-id="' + row.groupID + '" action="Remove" class="dropdown-item toggle-status" href="javascript:;"><i class="la la-remove"></i> Remove Details</a>\
-							\
-						  </div>\
-					</div>\
-				';
+				var $privileges = _privileges.split(',');
+				if ($privileges[2] == 1 && $privileges[3] == 1) {
+					return '\
+						<a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'components/groups/edit/' + row.groupID + '"><i class="la la-edit"></i></a>\
+						<a title="remove this" data-row-id="' + row.groupID + '" action="Remove" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-remove"></i></a>\
+					';
+				} else {
+					if ($privileges[2] == 1) {
+						return '\
+							<a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'components/groups/edit/' + row.groupID + '"><i class="la la-edit"></i></a>\
+						';
+					}
+					if ($privileges[3] == 1) {
+						return '\
+							<a title="remove this" data-row-id="' + row.groupID + '" action="Remove" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-remove"></i></a>\
+						';
+					}
+				}
 			}
 		}]
 	});

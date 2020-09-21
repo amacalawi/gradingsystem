@@ -91,10 +91,12 @@ var DatatableDataLocalDemo = function () {
 			overflow: 'visible',
 			template: function (row, index, datatable) {
 				var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
-
-                return '\
-                    <a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/admissions/classes/edit/' + row.admissionId +'"><i class="la la-edit"></i></a>\
-				';
+				var $privileges = _privileges.split(',');
+				if ($privileges[2] == 1) {
+					return '\
+						<a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/admissions/classes/edit/' + row.admissionId +'"><i class="la la-edit"></i></a>\
+					';
+				}
 
 				/*return '\
                     <a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/admissions/classes/edit/' + row.admissionId +'"><i class="la la-edit"></i></a>\

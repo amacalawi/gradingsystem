@@ -4,15 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
 use App\Imports\LevelImport;
 use Maatwebsite\Excel\Facades\Excel;
-
 use App\Models\Level;
 use App\Models\Quarter;
 use App\Models\EducationType;
-
 use Illuminate\Http\File;
+use App\Helper\Helper;
 
 class LevelsController extends Controller
 {
@@ -25,20 +23,31 @@ class LevelsController extends Controller
         $this->middleware('auth');
     }
 
+    public function is_permitted($permission)
+    {
+        $privileges = explode(',', strtolower(Helper::get_privileges()));
+        if (!$privileges[$permission] == 1) {
+            return abort(404);
+        }
+    }
+
     public function index()
     {   
+        $this->is_permitted(1);
         $menus = $this->load_menus();
         return view('modules/academics/levels/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
+        $this->is_permitted(1);
         $menus = $this->load_menus();
         return view('modules/academics/levels/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
+        $this->is_permitted(1);
         $menus = $this->load_menus();
         return view('modules/academics/levels/inactive')->with(compact('menus'));
     }
@@ -91,6 +100,7 @@ class LevelsController extends Controller
 
     public function add(Request $request, $id = '')
     {   
+        $this->is_permitted(0);
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
@@ -105,6 +115,7 @@ class LevelsController extends Controller
     
     public function edit(Request $request, $id)
     {   
+        $this->is_permitted(2);
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
@@ -115,7 +126,7 @@ class LevelsController extends Controller
     
     public function store(Request $request)
     {   
-        
+        $this->is_permitted(0);
         $timestamp = date('Y-m-d H:i:s');
 
         $level = Level::create([
@@ -126,11 +137,11 @@ class LevelsController extends Controller
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
-        /* 
+        
         if (!$level) {
             throw new NotFoundHttpException();
         }
-        */
+
         $data = array(
             'title' => 'Well done!',
             'text' => 'The level has been successfully saved.',
@@ -144,6 +155,7 @@ class LevelsController extends Controller
 
     public function update(Request $request, $id)
     {    
+        $this->is_permitted(2);
         $timestamp = date('Y-m-d H:i:s');
         $level = Level::find($id);
 
@@ -174,6 +186,7 @@ class LevelsController extends Controller
 
     public function update_status(Request $request, $id)
     {   
+        $this->is_permitted(3);
         $timestamp = date('Y-m-d H:i:s');
         $action = $request->input('items')[0]['action'];
 
@@ -326,7 +339,9 @@ class LevelsController extends Controller
     }
 
     public function import(Request $request)
-    {
+    {   
+        $this->is_permitted(0);
+
         foreach($_FILES as $file)
         {  
             $row = 0; $timestamp = date('Y-m-d H:i:s');
