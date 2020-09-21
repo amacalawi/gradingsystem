@@ -244,13 +244,9 @@ Route::prefix('components')->group(function () {
     });
     /* End CSV Management Routes */
     
-    
     /* ID Print Routes */
     Route::prefix('id-management')->group(function () {
-        Route::get('{slug}', 'PrintIDController@view')->name('print.id.view');
-        //Route::get('print-id', 'PrintIDController@view')->name('print.id.view');
-        //Route::get('print-id/search/{id?}', 'PrintIDController@search')->name('print.id.search');
-        //Route::get('print-id/{id}/profile_photo', 'PrintIDController@showProfilePhoto')->name('print.id.showProfilePhoto');
+        Route::get('print-id', 'PrintIDController@view')->name('print.id.view');
     });
     /* End ID Print Routes */
 });
