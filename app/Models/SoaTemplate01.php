@@ -40,5 +40,23 @@ class SoaTemplate01 extends Model
         }
         return (object) $results;
     }
+
+    public function lookup($identification_no, $column)
+    {   
+        $message = '';
+
+        $query = self::where('identification_no', $identification_no)->get();
+        if ($query->count() > 0) {
+            $message = $query->first()->$column;
+        } 
+
+        if ($message == '' && $column == 'outstanding_balance') {
+            return 'PHP 0.00';
+        } else if ($message != '' && $column == 'outstanding_balance') {
+            return 'PHP '. number_format($message, 2);
+        }
+
+        return $message;
+    }
 }
 

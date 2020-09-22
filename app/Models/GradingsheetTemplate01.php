@@ -64,5 +64,17 @@ class GradingsheetTemplate01 extends Model
     {
         return $this->belongsTo('App\Models\Section', 'section', 'name');
     }
+
+    public function lookup($identification_no, $column)
+    {   
+        $message = '';
+        
+        $query = self::where('identification_no', $identification_no)->get();
+        if ($query->count() > 0) {
+            $message = $query->first()->$column;
+        } 
+
+        return $message;
+    }
 }
 

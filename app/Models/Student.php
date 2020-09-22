@@ -209,4 +209,41 @@ class Student extends Model
         return $students;
     }
 
+    public function lookup($identification_no, $column)
+    {   
+        $message = '';
+        
+        $query = self::with([
+            'user' => function($q) {
+                $q->select(['id', 'email']); 
+            },
+        ])
+        ->where('identification_no', $identification_no)->get();
+
+        if ($query->count() > 0) {
+            if ($column == 'email') {
+                $message = $query->first()->user->$column;
+            } else {
+                $message = $query->first()->$column;
+            }
+        } 
+
+        return $message;
+    }
+
+    public function get_id_number_via_recipient($recipient)
+    {
+        $idNumbers = array();
+
+        $students = self::where('mobile_no', $recipient)->get();
+        if ($students->count() > 0) {
+            foreach ($students as $student) {
+                if (!in_array($identification_no, $idNumbers)) {
+                    $idNumbers[] = $student->identification_no;
+                }
+            }
+        }
+
+        return $idNumbers;
+    }
 }

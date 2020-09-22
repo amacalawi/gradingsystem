@@ -15,6 +15,9 @@ use App\Models\Outbox;
 use App\Models\Inbox;
 use App\Models\MessageType;
 use App\Models\MessageTemplate;
+use App\Models\SoaTemplate01;
+use App\Models\GradingsheetTemplate01;
+use App\Models\Student;
 use App\User;
 use DB;
 
@@ -184,7 +187,7 @@ class InfoblastController extends Controller
 
         $message = Message::create([
             'message_type_id' => $request->message_type_id,
-            'messages' => $request->messages,
+            'messages' => $messages,
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
@@ -276,9 +279,87 @@ class InfoblastController extends Controller
         
                 if (!$outbox) {
                     throw new NotFoundHttpException();
-                }
+                }   
 
-                $messages = (new Message)->sendItem($outbox->id, $recipient, $network, $message->messages);
+                $idNos = (new Student)->get_id_number_via_recipient($recipient);
+
+                if (!empty($idNos)) {
+                    foreach ($idNos as $idNo) {
+                        if ($message->message_type_id == 2) {
+                            $variables = array(
+                                "STUD_NO"=> (new SoaTemplate01)->lookup($idNo, "identification_no"),
+                                "FULLNAME"=> (new SoaTemplate01)->lookup($idNo, "fullname"),
+                                "FIRSTNAME"=> (new SoaTemplate01)->lookup($idNo, "firstname"),
+                                "MIDDLENAME"=> (new SoaTemplate01)->lookup($idNo, "middlename"),
+                                "LASTNAME"=> (new SoaTemplate01)->lookup($idNo, "lastname"),
+                                "BIRTHDATE"=> (new Student)->lookup($idNo, "birthdate"),
+                                "EMAIL"=> (new Student)->lookup($idNo, "email"),
+                                "OUTSTANDING_BALANCE" => (new SoaTemplate01)->lookup($idNo, "outstanding_balance"),
+                                "BILLING_PERIOD" => (new SoaTemplate01)->lookup($idNo, "billing_period"),
+                                "BILLING_DUEDATE" => (new SoaTemplate01)->lookup($idNo, "billing_due_date")
+                            );
+
+                            $string = $message->messages;
+
+                            foreach($variables as $key => $value){
+                                $string = str_replace('<'.strtoupper($key).'>', $value, $string);
+                            }
+
+                            $MessageBody = $string;
+
+                            if ((new SoaTemplate01)->lookup($idNo, "identification_no") !== '') {
+                                $messages = (new Message)->sendItem($outbox->id, $recipient, $network, $MessageBody);
+                            }
+                        } else if ($message->message_type_id == 3) {
+                            $variables = array(
+                                "STUD_NO"=> (new GradingsheetTemplate01)->lookup($idNo, "identification_no"),
+                                "FIRSTNAME"=> (new GradingsheetTemplate01)->lookup($idNo, "firstname"),
+                                "MIDDLENAME"=> (new GradingsheetTemplate01)->lookup($idNo, "middlename"),
+                                "LASTNAME"=> (new GradingsheetTemplate01)->lookup($idNo, "lastname"),
+                                "BIRTHDATE"=> (new Student)->lookup($idNo, "birthdate"),
+                                "EMAIL"=> (new Student)->lookup($idNo, "email"),
+                                "GRADE_LEVEL" => (new GradingsheetTemplate01)->lookup($idNo, "grade_level"),
+                                "SECTION" => (new GradingsheetTemplate01)->lookup($idNo, "section"),
+                                "ADVISER" => (new GradingsheetTemplate01)->lookup($idNo, "adviser"),
+                                "ACADEMICS_STATUS" => (new GradingsheetTemplate01)->lookup($idNo, "academics_status"),
+                                "REMARKS" => (new GradingsheetTemplate01)->lookup($idNo, "remarks"),
+                                "ELIGIBILITY" => (new GradingsheetTemplate01)->lookup($idNo, "eligibility")
+                            );
+
+                            $string = $message->messages;
+
+                            foreach($variables as $key => $value){
+                                $string = str_replace('<'.strtoupper($key).'>', $value, $string);
+                            }
+
+                            $MessageBody = $string;
+
+                            if ((new GradingsheetTemplate01)->lookup($idNo, "identification_no") !== '') {
+                                $messages = (new Message)->sendItem($outbox->id, $recipient, $network, $MessageBody);
+                            }
+                        } else {
+                            $variables = array(
+                                "STUD_NO"=> (new Student)->lookup($idNo, "identification_no"),
+                                "FULLNAME"=> (new Student)->lookup($idNo, "fullname"),
+                                "FIRSTNAME"=> (new Student)->lookup($idNo, "firstname"),
+                                "MIDDLENAME"=> (new Student)->lookup($idNo, "middlename"),
+                                "LASTNAME"=> (new Student)->lookup($idNo, "lastname"),
+                                "BIRTHDATE"=> (new Student)->lookup($idNo, "birthdate"),
+                                "EMAIL"=> (new Student)->lookup($idNo, "email")
+                            );
+
+                            $string = $message->messages;
+
+                            foreach($variables as $key => $value){
+                                $string = str_replace('<'.strtoupper($key).'>', $value, $string);
+                            }
+
+                            $MessageBody = $string;
+
+                            $messages = (new Message)->sendItem($outbox->id, $recipient, $network, $MessageBody);
+                        }
+                    }
+                }
             }
         } else {
             $iteration = 0;
