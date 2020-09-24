@@ -51,6 +51,7 @@
     var $btnsActivatable = $btns.filter('.activatable');
     var $inputImage = $('#input-image-file');
     var $btnDownload = $('#btn-download');
+    var $btnPrint = $('#btn-print');
 
     var $btnUndo = $('#btn-undo');
     var $btnRedo = $('#btn-redo');
@@ -81,6 +82,9 @@
     var $inputRotationRange = $('#input-rotation-range');
     var $inputBrushWidthRange = $('#input-brush-width-range');
     var $inputFontSizeRange = $('#input-font-size-range');
+
+    // Font Style
+    var $btnFontStyle = $('.btn-font-style');
 
     // Sub menus
     var $displayingSubMenu = $();
@@ -314,6 +318,27 @@
         }
     });
 
+    $btnPrint.on('click', function() {
+        var dataURL = imageEditor.toDataURL(); //attempt to save base64 string to server using this var  
+        console.log(dataURL);
+        
+        var blob = base64ToBlob(dataURL);
+        var windowContent = '<!DOCTYPE html>';
+            windowContent += '<html>'
+            windowContent += '<head><title>Print canvas</title></head>';
+            windowContent += '<body>'
+            windowContent += '<img src="' + dataURL + '">';
+            windowContent += '</body>';
+            windowContent += '</html>';
+        var printWin = window.open('','','width=500,height=500');
+            printWin.document.open();
+            printWin.document.write(windowContent);
+            printWin.document.close();
+            printWin.focus();
+            printWin.print();
+            printWin.close();
+    });
+
     // control draw mode
     $btnDrawLine.on('click', function() {
         imageEditor.endAll();
@@ -355,7 +380,7 @@
 
     $inputFontSizeRange.on('change', function() {
         imageEditor.changeTextStyle({
-            fontSize: parseInt(this.value, 10)
+            fontSize: parseInt(this.value, 10),
         });
     });
 
@@ -391,6 +416,30 @@
         imageEditor.changeTextStyle(styleObj);
     });
 
+    $btnFontStyle.on('click', function(e) { // eslint-disable-line
+        var styleType = $(this).attr('data-style-type');
+        var styleObj;
+
+        e.stopPropagation();
+
+        switch (styleType) {
+            case 'A':
+                styleObj = {fontFamily: 'arial'};
+                break;
+            case 'T':
+                styleObj = {fontFamily: 'times new roman'};
+                break;
+            case 'H':
+                styleObj = {fontFamily: 'helvetica'};
+                break;
+            default:
+                styleObj = {};
+        }
+
+        imageEditor.changeTextStyle(styleObj);
+    });
+
+
     textPaletteColorpicker.on('selectColor', function(event) {
         imageEditor.changeTextStyle({
             'fill': event.color
@@ -411,11 +460,37 @@
 
     $btnRegisterIcon.on('click', function() {
         $iconSubMenu.find('.menu').append(
-                '<li class="menu-item icon-text" data-icon-type="customArrow">↑</li>'
+                '<li class="menu-item icon-text" data-icon-type="customArrow">↑</li>',
+                //'<li class="menu-item icon-text" data-icon-type="customarrow"><h6>Arrow 2</h6></li>',
+                //'<li class="menu-item icon-text" data-icon-type="customStar">Star 1</li>',
+                '<li class="menu-item icon-text" data-icon-type="customstar">★</li>',
+                //'<li class="menu-item icon-text" data-icon-type="customarrow2"></li>',
+                //'<li class="menu-item icon-text" data-icon-type="customarrow3"></li>',
+                //'<li class="menu-item icon-text" data-icon-type="customstar2"></li>',
+                '<li class="menu-item icon-text" data-icon-type="custompolygon">⬣</li>',
+                //'<li class="menu-item icon-text" data-icon-type="customlocation"><h6>Location</h6></li>',
+                '<li class="menu-item icon-text" data-icon-type="customheart">♥</li>',
         );
 
         imageEditor.registerIcons({
-            customArrow: 'M 60 0 L 120 60 H 90 L 75 45 V 180 H 45 V 45 L 30 60 H 0 Z'
+            customArrow: 'M 60 0 L 120 60 H 90 L 75 45 V 180 H 45 V 45 L 30 60 H 0 Z',
+            customStar: 'M 272.70141,238.71731 \
+            C 206.46141,238.71731 152.70146,292.4773 152.70146,358.71731  \
+            C 152.70146,493.47282 288.63461,528.80461 381.26391,662.02535 \
+            C 468.83815,529.62199 609.82641,489.17075 609.82641,358.71731 \
+            C 609.82641,292.47731 556.06651,238.7173 489.82641,238.71731  \
+            C 441.77851,238.71731 400.42481,267.08774 381.26391,307.90481 \
+            C 362.10311,267.08773 320.74941,238.7173 272.70141,238.71731  \
+            z ',
+            customarrow: 'M40 12 V 0 l 24 24-24 24 V 36 H0V12h40z',
+	        customarrow2: 'M49,32 H3 V22 h46 l-18,-18 h12 l23,23 L43,50 h-12 l18,-18  z ',
+	        customarrow3: 'M43.349998,27 L17.354,53 H1.949999 l25.996,-26 L1.949999,1 h15.404 L43.349998,27  z ',
+	        customstar: 'M35,54.557999 l-19.912001,10.468 l3.804,-22.172001 l-16.108,-15.7 l22.26,-3.236 L35,3.746 l9.956,20.172001 l22.26,3.236 l-16.108,15.7 l3.804,22.172001  z ',
+	        customstar2: 'M17,31.212 l-7.194,4.08 l-4.728,-6.83 l-8.234,0.524 l-1.328,-8.226 l-7.644,-3.14 l2.338,-7.992 l-5.54,-6.18 l5.54,-6.176 l-2.338,-7.994 l7.644,-3.138 l1.328,-8.226 l8.234,0.522 l4.728,-6.83 L17,-24.312 l7.194,-4.08 l4.728,6.83 l8.234,-0.522 l1.328,8.226 l7.644,3.14 l-2.338,7.992 l5.54,6.178 l-5.54,6.178 l2.338,7.992 l-7.644,3.14 l-1.328,8.226 l-8.234,-0.524 l-4.728,6.83  z ',
+	        custompolygon: 'M3,31 L19,3 h32 l16,28 l-16,28 H19  z ',
+	        customlocation: 'M24 62C8 45.503 0 32.837 0 24 0 10.745 10.745 0 24 0s24 10.745 24 24c0 8.837-8 21.503-24 38zm0-28c5.523 0 10-4.477 10-10s-4.477-10-10-10-10 4.477-10 10 4.477 10 10 10z',
+	        customheart: 'M49.994999,91.349998 l-6.96,-6.333 C18.324001,62.606995 2.01,47.829002 2.01,29.690998 C2.01,14.912998 13.619999,3.299999 28.401001,3.299999 c8.349,0 16.362,5.859 21.594,12 c5.229,-6.141 13.242001,-12 21.591,-12 c14.778,0 26.390999,11.61 26.390999,26.390999 c0,18.138 -16.314001,32.916 -41.025002,55.374001 l-6.96,6.285  z ',
+	        custombubble: 'M44 48L34 58V48H12C5.373 48 0 42.627 0 36V12C0 5.373 5.373 0 12 0h40c6.627 0 12 5.373 12 12v24c0 6.627-5.373 12-12 12h-8z'
         });
 
         $btnRegisterIcon.off('click');
@@ -464,10 +539,18 @@
     });
 
     // Etc..
-
+    /*
+    var c = document.getElementById("canvas-tui");
+    var ctx = c.getContext("2d");
+    var img = document.getElementById("default-image");
+        ctx.width = '500';
+        ctx.height = '500';
+        ctx.drawImage(img, 10, 10);
+    */
     // Load sample image
-    imageEditor.loadImageFromURL('https://cdn.rawgit.com/nhnent/tui.component.image-editor/1.3.0/samples/img/sampleImage.jpg', 'SampleImage');
-
+    imageEditor.loadImageFromURL('https://easybadges-easybadges.netdna-ssl.com/wp-content/uploads/2016/05/ID-card-template-corporate-11-sample.png', 'SampleImage');
+    // /imageEDitor.addText('tae');
+   
     // IE9 Unselectable
     $('.menu').on('selectstart', function() {
         return false;
