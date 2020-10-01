@@ -247,6 +247,7 @@ Route::prefix('components')->group(function () {
     /* ID Print Routes */
     Route::prefix('id-management')->group(function () {
         Route::get('print-id', 'PrintIDController@view')->name('print.id.view');
+        Route::get('print-id/search/{id?}', 'PrintIDController@search')->name('print.id.view');
     });
     /* End ID Print Routes */
 });

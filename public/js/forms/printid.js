@@ -86,6 +86,9 @@
     // Font Style
     var $btnFontStyle = $('.btn-font-style');
 
+    // Member
+    var $userID = $('#user_id');
+
     // Sub menus
     var $displayingSubMenu = $();
     var $cropSubMenu = $('#crop-sub-menu');
@@ -187,6 +190,69 @@
         },
         removeObject: function(obj) {
             console.log(obj);
+        }
+    });
+
+    // Member
+    $userID.on('change', function() {
+
+        if($(this).val())
+        {
+
+            $.ajax({
+                type: 'GET',
+                url: base_url + 'components/id-management/print-id/search/'+$(this).val(),
+                success: function(response) {
+                    
+                    var data = $.parseJSON(response);
+                    var id_objects = ['identification_no', 'firstname', 'lastname', 'avatar'];
+                    var id_objects_properties = '';
+
+                    for (var x in data) {
+                        if(id_objects.includes( x )){
+                            if( x == 'avatar'){
+                                imageEditor.addImageObject('{{asset("storage/uploads/students/'+data.identification_no+'/default.jpg")}}');
+                           
+                            } if(x == 'identification_no'){
+
+                                imageEditor.addText( data[x], {
+                                    id: 1,
+                                    styles: {
+                                        fill: '#000',
+                                        fontSize: 100,
+                                        fontWeight: 'bold'
+                                    },
+                                    position: {
+                                        x: 100,
+                                        y: 100
+                                    }
+                                });
+                                imageEditor.changeText( 1, 'change text');
+                                
+                            }else{
+                                imageEditor.addText( data[x], {
+                                    styles: {
+                                        fill: '#000',
+                                        fontSize: 100,
+                                        fontWeight: 'bold'
+                                    },
+                                    position: {
+                                        x: 100,
+                                        y: 100
+                                    }
+                                });
+                            }
+                        }else {
+                            console.log(data[x]);
+                        }
+                    }
+                        
+                }, 
+                complete: function() {
+                    window.onkeydown = null;
+                    window.onfocus = null;
+                }
+            });
         }
     });
 
@@ -319,24 +385,7 @@
     });
 
     $btnPrint.on('click', function() {
-        var dataURL = imageEditor.toDataURL(); //attempt to save base64 string to server using this var  
-        console.log(dataURL);
-        
-        var blob = base64ToBlob(dataURL);
-        var windowContent = '<!DOCTYPE html>';
-            windowContent += '<html>'
-            windowContent += '<head><title>Print canvas</title></head>';
-            windowContent += '<body>'
-            windowContent += '<img src="' + dataURL + '">';
-            windowContent += '</body>';
-            windowContent += '</html>';
-        var printWin = window.open('','','width=500,height=500');
-            printWin.document.open();
-            printWin.document.write(windowContent);
-            printWin.document.close();
-            printWin.focus();
-            printWin.print();
-            printWin.close();
+        printJS({printable: document.querySelector("#canvas-tui").toDataURL(), type: 'image', imageStyle: 'width:20px, height:20px'});
     });
 
     // control draw mode
@@ -539,17 +588,8 @@
     });
 
     // Etc..
-    /*
-    var c = document.getElementById("canvas-tui");
-    var ctx = c.getContext("2d");
-    var img = document.getElementById("default-image");
-        ctx.width = '500';
-        ctx.height = '500';
-        ctx.drawImage(img, 10, 10);
-    */
     // Load sample image
     imageEditor.loadImageFromURL('https://easybadges-easybadges.netdna-ssl.com/wp-content/uploads/2016/05/ID-card-template-corporate-11-sample.png', 'SampleImage');
-    // /imageEDitor.addText('tae');
    
     // IE9 Unselectable
     $('.menu').on('selectstart', function() {

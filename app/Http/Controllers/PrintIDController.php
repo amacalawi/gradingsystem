@@ -26,13 +26,14 @@ class PrintIDController extends Controller
     }
 
     public function search(Request $request, $id)
-    {   
+    {  
         $user = (new Student)->fetch($id);
+       
         //check if profile picture exist
         if (!file_exists( storage_path('app/public/uploads/students').'/'.str_replace("-", "", $user->identification_no).'/'.$user->avatar )) {
             $user->avatar = 'default.png';
         }
-
+        
         // level and section;
         $batch = (new Batch)->get_current_batch();
         $level_sections = (new Admission)->get_student_level_section( $user->id, $batch);
