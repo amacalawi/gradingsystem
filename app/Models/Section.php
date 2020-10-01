@@ -24,6 +24,7 @@ class Section extends Model
                 'name' => ($section->name) ? $section->name : '',
                 'description' => ($section->description) ? $section->description : '',
                 'education_type_id' => ($section->education_type_id) ? $section->education_type_id : '',
+                'level_id' => ($section->level_id) ? $section->level_id : '',
             );
         } else {
             $results = array(
@@ -32,6 +33,7 @@ class Section extends Model
                 'name' => '',
                 'description' => '',
                 'education_type_id' => '',
+                'level_id' => '',
             );
         }
         return (object) $results;

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Section;
+use App\Models\Level;
 use App\Models\Subject;
 use App\Models\Staff;
 use App\Models\Admission;
@@ -109,6 +110,7 @@ class SectionsController extends Controller
         $subjects = (new Subject)->all_subjects();
         $admitted = (new Admission)->all_admitted_student();
         $types = (new EducationType)->all_education_types();
+        $levels = (new Level)->get_all_levels();
         $staffs = Staff::select('id', 'lastname', 'firstname', 'middlename', 'identification_no')->where('type','Teacher')->orderBy('lastname', 'asc')->get();
         
         $sections_subjects = 0;
@@ -128,7 +130,7 @@ class SectionsController extends Controller
         }
 
         $section = (new Section)->fetch($id);
-        return view('modules/academics/sections/add')->with(compact('menus', 'types', 'section', 'sections_subjects', 'admitted', 'staffs', 'subjects', 'segment', 'flashMessage'));
+        return view('modules/academics/sections/add')->with(compact('menus', 'types', 'section', 'levels', 'sections_subjects', 'admitted', 'staffs', 'subjects', 'segment', 'flashMessage'));
     }
     
     public function edit(Request $request, $id)
@@ -141,6 +143,7 @@ class SectionsController extends Controller
         $allSubjects = Subject::all();
         $allTeachers = Staff::where('is_active', 1)->where('type','Teacher')->orderBy('lastname', 'asc')->get();
         $types = (new EducationType)->all_education_types();
+        $levels = (new Level)->get_all_levels();
         $subjects = (new Subject)->all_subjects();
 
         $staffs = Staff::select('id', 'lastname', 'firstname', 'middlename', 'identification_no')->where('is_active', 1)->where('type','Teacher')->orderBy('lastname', 'asc')->get();
@@ -161,7 +164,7 @@ class SectionsController extends Controller
 
         $section = (new Section)->find($id);
 
-        return view('modules/academics/sections/edit')->with(compact('menus', 'types', 'section', 'allTeachers', 'allSubjects', 'staffs', 'subjects', 'segment', 'flashMessage'));
+        return view('modules/academics/sections/edit')->with(compact('menus', 'types', 'section', 'levels', 'allTeachers', 'allSubjects', 'staffs', 'subjects', 'segment', 'flashMessage'));
 
     }
     
@@ -175,6 +178,7 @@ class SectionsController extends Controller
             'name' => $request->name,
             'description' => $request->description,
             'education_type_id' => $request->type,
+            'level_id' => $request->level,
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
@@ -204,6 +208,7 @@ class SectionsController extends Controller
         $section->name = $request->name;
         $section->description = $request->description;
         $section->education_type_id = $request->type;
+        $section->level_id = $request->level;
         $section->updated_at = $timestamp;
         $section->updated_by = Auth::user()->id;
 
@@ -407,6 +412,7 @@ class SectionsController extends Controller
                                         'name' => $data[1],
                                         'description' => $data[2],
                                         'education_type_id' => EducationType::where('code', $data[3])->first()->id,
+                                        'level_id' => Level::where('code', $data[4])->first()->id,
                                         'created_at' => $timestamp,
                                         'created_by' => Auth::user()->id
                                     ]);

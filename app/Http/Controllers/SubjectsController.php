@@ -127,61 +127,82 @@ class SubjectsController extends Controller
     {   
         $this->is_permitted(0);
         $exist_code = Subject::where('code', $request->code)->first();
+        $success = 0;
+        $warning = 0;
 
         if(!$exist_code)
         {
-            if($request->material > 1){
-                $exist_material = Subject::where('material_id', $request->material)->first();
-            } else {
-                $exist_material = 0;
-            }
+            foreach ($request->type as $type) {
 
+                if($type > 0){
 
-            if(!$exist_material){
+                    if($request->material > 1){
+                        $exist_material = Subject::where('material_id', $request->material)->where('education_type_id', $type)->first();
+                    } else {
+                        $exist_material = 0;
+                    }
 
-                $timestamp = date('Y-m-d H:i:s');
-                $tle_count = Subject::where('is_tle', $request->is_tle)->count();
-                $mapeh_count = Subject::where('is_mapeh', $request->is_mapeh)->count();
+                    if(!$exist_material){
 
-                if(($tle_count) < 2 && ($mapeh_count < 4))
-                {
-                    $subject = Subject::create([
-                        'code' => $request->code,
-                        'name' => $request->name,
-                        'description' => $request->description,
-                        'education_type_id' => $request->type,
-                        'is_mapeh' => ($request->is_mapeh !== NULL) ? 1 : 0,
-                        'is_tle' => ($request->is_tle !== NULL) ? 1 : 0,
-                        'material_id' => ($request->material !== NULL) ? $request->material : 1,
-                        'created_at' => $timestamp,
-                        'created_by' => Auth::user()->id
-                    ]);
-                    /*if (!$subject) {
-                        throw new NotFoundHttpException();
-                    } */
-                    $data = array(
-                        'title' => 'Well done!',
-                        'text' => 'The subject has been successfully saved.',
-                        'type' => 'success',
-                        'class' => 'btn-brand'
-                    );
-                } else {
+                        $timestamp = date('Y-m-d H:i:s');
+                        $tle_count = Subject::where('is_tle', $request->is_tle)->where('education_type_id', $type)->count();
+                        $mapeh_count = Subject::where('is_mapeh', $request->is_mapeh)->where('education_type_id', $type)->count();
 
-                    $data = array(
-                        'title' => 'Warning',
-                        'text' => 'TLE or MAPEH exceeded limit',
-                        'type' => 'warning',
-                        'class' => 'btn-brand'
-                    );
+                        if(($tle_count) <= 2 && ($mapeh_count <= 4))
+                        {
+                            $subject = Subject::create([
+                                'code' => $request->code,
+                                'name' => $request->name,
+                                'description' => $request->description,
+                                'education_type_id' => $type,
+                                'is_mapeh' => ($request->is_mapeh !== NULL) ? 1 : 0,
+                                'is_tle' => ($request->is_tle !== NULL) ? 1 : 0,
+                                'material_id' => ($request->material !== NULL) ? $request->material : 1,
+                                'created_at' => $timestamp,
+                                'created_by' => Auth::user()->id
+                            ]);
+                                /*if (!$subject) {
+                                    throw new NotFoundHttpException();
+                                } */
+
+                            $success++;
+                            /*
+                            $data = array(
+                                'title' => 'Well done!',
+                                'text' => 'The subject has been successfully saved.',
+                                'type' => 'success',
+                                'class' => 'btn-brand'
+                            );
+                            */
+
+                        } else {
+
+                            $warning++;
+                            /*
+                            $data = array(
+                                'title' => 'Warning',
+                                'text' => 'TLE or MAPEH exceeded limit',
+                                'type' => 'warning',
+                                'class' => 'btn-brand'
+                            );
+                            */
+                        }
+
+                    } else {
+                        
+                        $warning++;
+                        /*
+                        $data = array( 
+                            'title' => 'Warning', 
+                            'text' => 'The material already exist in subject.', 
+                            'type' => 'warning', 
+                            'class' => 'btn-brand' 
+                        );
+                        */
+                    }
                 }
-            } else {
-                $data = array(
-                    'title' => 'Warning',
-                    'text' => 'The material already exist in subject.',
-                    'type' => 'warning',
-                    'class' => 'btn-brand'
-                );
             }
+
         } else {
             $data = array(
                 'title' => 'Warning',
@@ -190,74 +211,144 @@ class SubjectsController extends Controller
                 'class' => 'btn-brand'
             );
         }
+
+        if( ($warning > 0) && ($success > 0) ){
+            $data = array(
+                'title' => 'Well done!',
+                'text' => 'Some data did not saved please review.',
+                'type' => 'success',
+                'class' => 'btn-brand'
+            );
+        } elseif( ($warning > 0) && ($success == 0) ) {
+            $data = array(
+                'title' => 'Warning',
+                'text' => 'No data has been saved.',
+                'type' => 'warning',
+                'class' => 'btn-brand'
+            );
+        }  elseif( ($warning == 0) && ($success > 0) ) {
+            $data = array(
+                'title' => 'Well done!',
+                'text' => 'The subject has been successfully saved.',
+                'type' => 'success',
+                'class' => 'btn-brand'
+            );
+        }
+
         echo json_encode( $data ); exit();
     }
 
     public function update(Request $request, $id)
     {   
         $this->is_permitted(2);
-        $exist_code = Subject::where('code', $request->code)->where('id', '!=', $id)->first();
+        $origl_data = Subject::select('code','name','description')->where('id', '=', $id)->first();
+        $ids_with_codes = Subject::select('id')->where('code', $origl_data->code)->get();
+        $arr_ids = $this->subject_code_ids($ids_with_codes);
+        $exist_code = 0;
+        $success = 0;
+        $warning = 0;
+
+        foreach($ids_with_codes as $ids_with_code){
+            $exist = Subject::where('code', $request->code)->where('id', '!=', $ids_with_code)->first();
+            if( !in_array($exist->id, $arr_ids) ){
+                $exist_code++;
+            }
+        }
 
         if(!$exist_code)
         {
-            $exist_material = Subject::where('material_id', $request->material)->where('material_id', '!=', 1)->where('id', '!=', $id)->count();
-            
-            //if($exist_material > 1){
-                
-            //} else {
-            //    $exist_material = 0;
-            //}   
-
-            if(!$exist_material)
-            {
-                $timestamp = date('Y-m-d H:i:s');
-                $subject = Subject::find($id);
-                if(!$subject) {
-                    throw new NotFoundHttpException();
-                }
-
-                $tle_count = Subject::where('is_tle', $request->is_tle)->where('id', '!=', $id)->count();
-                $mapeh_count = Subject::where('is_mapeh', $request->is_mapeh)->where('id', '!=', $id)->count();
-
-                if(($tle_count) < 2 && ($mapeh_count < 4))
-                {
-
-                    $subject->code = $request->code;
-                    $subject->name = $request->name;
-                    $subject->description = $request->description;
-                    $subject->education_type_id = $request->type;
-                    $subject->is_mapeh = ($request->is_mapeh !== NULL) ? 1 : 0; 
-                    $subject->is_tle = ($request->is_tle !== NULL) ? 1 : 0;
-                    $subject->material_id = ($request->material !== NULL) ? $request->material : 1;
-                    $subject->updated_at = $timestamp;
-                    $subject->updated_by = Auth::user()->id;
-
-                    if ($subject->update()) {
-                        $data = array(
-                            'title' => 'Well done!',
-                            'text' => 'The subject has been successfully updated.',
-                            'type' => 'success',
-                            'class' => 'btn-brand'
-                        );
+            $exist_type_ = 0;
+            foreach($ids_with_codes as $ids_with_code){
+                if($ids_with_code->id != $id){
+                    $exist_educational_type_id = Subject::where('education_type_id', $request->type)->where('id', $ids_with_code->id)->first();
+                    if($exist_educational_type_id){
+                        $exist_type_++;
                     }
-
-                } else {
-                    $data = array(
-                        'title' => 'Warning',
-                        'text' => 'TLE or MAPEH exceeded limit',
-                        'type' => 'warning',
-                        'class' => 'btn-brand'
-                    );
                 }
+            }
+            
+            if(!$exist_type_)
+            {
+                foreach ($request->type as $type) {
 
-            } else {
+                    if($type > 0){
+
+                        $exist_material = Subject::where('material_id', $request->material)->where('education_type_id', $type)->where('code', '!=', $origl_data->code)->where('material_id', '!=', 1)->where('id', '!=', $id)->count();
+                        
+                        if(!$exist_material)
+                        {
+                            $timestamp = date('Y-m-d H:i:s');
+                            $tle_count = Subject::where('is_tle', $request->is_tle)->where('education_type_id', $type)->where('code', '!=', $origl_data->code)->where('id', '!=', $id)->count();
+                            $mapeh_count = Subject::where('is_mapeh', $request->is_mapeh)->where('education_type_id', $type)->where('code', '!=', $origl_data->code)->where('id', '!=', $id)->count();
+
+                            if(($tle_count) <= 2 && ($mapeh_count <= 4))
+                            {
+                                foreach($ids_with_codes as $ids_with_code){
+                                    
+                                    $subject = Subject::find($ids_with_code->id);
+
+                                    if(!$subject) {
+                                        throw new NotFoundHttpException();
+                                    }
+
+                                    if($id != $ids_with_code->id){
+                                        $educational_type_id = Subject::select('education_type_id')->where('id', $ids_with_code->id)->first()->education_type_id;
+                                    } else{
+                                        $educational_type_id = $type;
+                                    }
+
+                                    $subject->code = $request->code;
+                                    $subject->name = $request->name;
+                                    $subject->description = $request->description;
+                                    $subject->education_type_id = $educational_type_id;
+                                    $subject->is_mapeh = ($request->is_mapeh !== NULL) ? 1 : 0; 
+                                    $subject->is_tle = ($request->is_tle !== NULL) ? 1 : 0;
+                                    $subject->material_id = ($request->material !== NULL) ? $request->material : 1;
+                                    $subject->updated_at = $timestamp;
+                                    $subject->updated_by = Auth::user()->id;
+                                    
+                                    if ( $subject->update() ) {
+                                        $success++;
+                                        $data = array(
+                                            'title' => 'Well done!',
+                                            'text' => 'The subject has been successfully updated.',
+                                            'type' => 'success',
+                                            'class' => 'btn-brand'
+                                        );
+                                    }
+                                }
+
+                            } else {
+                                $warning++;
+                                $data = array(
+                                    'title' => 'Warning',
+                                    'text' => 'TLE or MAPEH exceeded limit',
+                                    'type' => 'warning',
+                                    'class' => 'btn-brand'
+                                );
+                            }
+
+                        } else {
+                            $warning++;
+                            $data = array(
+                                'title' => 'Warning',
+                                'text' => 'The material already exist in subject',
+                                'type' => 'warning',
+                                'class' => 'btn-brand'
+                            );
+                        }
+                    }
+                }
+            }  else {
+                $warning++;
                 $data = array(
                     'title' => 'Warning',
-                    'text' => 'The material already exist in subject',
+                    'text' => 'The Type is already present.',
                     'type' => 'warning',
                     'class' => 'btn-brand'
                 );
             }
+
         } else {
             $data = array(
                 'title' => 'Warning',
@@ -268,6 +359,14 @@ class SubjectsController extends Controller
         }
 
         echo json_encode( $data ); exit();
+    }
+
+    public function subject_code_ids($ids_with_codes){
+        $arr_ids = [];
+        foreach($ids_with_codes as $ids_with_code){
+            array_push($arr_ids, $ids_with_code->id);
+        }
+        return $arr_ids;
     }
 
     public function update_status(Request $request, $id)

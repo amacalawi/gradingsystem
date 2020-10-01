@@ -3,6 +3,21 @@
         <div class="m-portlet m-portlet--tab">
             <div class="m-portlet__body">
                 <div class="row">
+                    <div class="form-group m-form__group required col-md-12">
+                        {{ Form::label('user_id', 'User', ['class' => '']) }}
+                        {{
+                            Form::select('user_id', $users, $value = '', ['class' => 'select2 form-control form-control-lg m-input m-input--solid'])
+                        }}
+                        <span class="m-form__help m--font-danger">
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="m-portlet m-portlet--tab">
+            <div class="m-portlet__body">
+                <div class="row">
                     <div class="header">
                         <ul class="menu">
                             <li class="menu-item border input-wrapper">
