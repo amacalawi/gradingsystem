@@ -15,18 +15,36 @@ class Subject extends Model
 
     public function fetch($id)
     {
-        $subject = self::find($id);
-        if ($subject) {
-            $results = array(
-                'id' => ($subject->id) ? $subject->id : '',
-                'code' => ($subject->code) ? $subject->code : '',
-                'name' => ($subject->name) ? $subject->name : '',
-                'description' => ($subject->description) ? $subject->description : '',
-                'education_type_id' => ($subject->education_type_id) ? $subject->education_type_id : '',
-                'is_mapeh' => ($subject->is_mapeh) ? $subject->is_mapeh : '',
-                'is_tle' => ($subject->is_tle) ? $subject->is_tle : '',
-                'material_id' => ($subject->material_id) ? $subject->material_id : '',
-            );
+        if($id){
+            $subjects = self::select('subjects.id', 'subjects.code', 'subjects.name', 'subjects.description', 'subjects.coordinator_id', 'subjects.is_mapeh', 'subjects.is_tle', 'subjects.material_id','subjects_education_types.education_type_id', 'subjects.is_active')
+                ->join('subjects_education_types', 'subjects.id', 'subjects_education_types.subject_id')
+                ->where('subjects.id', $id)
+                ->where('subjects.is_active', 1)
+                ->get();
+        }else{
+            $subjects = self::find($id);
+        }
+
+        if ($subjects) {
+
+            $subject_ids = array();
+
+            foreach($subjects as $subject){
+
+                array_push( $subject_ids , $subject->education_type_id);
+
+                $results = array(
+                    'id' => ($subject->id) ? $subject->id : '',
+                    'code' => ($subject->code) ? $subject->code : '',
+                    'name' => ($subject->name) ? $subject->name : '',
+                    'description' => ($subject->description) ? $subject->description : '',
+                    'coordinator_id' => ($subject->coordinator_id) ? $subject->coordinator_id : '',
+                    'education_type_id' => ($subject_ids) ? $subject_ids : '',
+                    'is_mapeh' => ($subject->is_mapeh) ? $subject->is_mapeh : '',
+                    'is_tle' => ($subject->is_tle) ? $subject->is_tle : '',
+                    'material_id' => ($subject->material_id) ? $subject->material_id : '',
+                );
+            }
         } else {
             $results = array(
                 'id' => '',
@@ -34,6 +52,7 @@ class Subject extends Model
                 'name' => '',
                 'description' => '',
                 'schoolyear_id' => '',
+                'coordinator_id' => '',
                 'education_type_id' => '',
                 'is_mapeh' => '0',
                 'is_tle' => '0',
@@ -193,4 +212,15 @@ class Subject extends Model
     {
         return $this->belongsTo('App\Models\EducationType', 'education_type_id', 'id');
     }
+
+    public function subject_education_id()
+    {
+        return $this->belongsTo('App\Models\SubjectEducationTypes');
+    }
+
+    public function siblings()
+    {
+        return $this->hasMany('App\Models\Sibling', 'student_id', 'id');    
+    }
+
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSubjectsTable extends Migration
+class CreateSubjectsEducationTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,12 @@ class CreateSubjectsTable extends Migration
      */
     public function up()
     {
-        Schema::create('subjects', function (Blueprint $table) {
+        Schema::create('subjects_education_types', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('code', 40);
-            $table->string('name', 100);
-            $table->text('description')->nullable();
-            $table->integer('coordinator_id')->unsigned();
-            $table->boolean('is_mapeh')->default(0);
-            $table->boolean('is_tle')->default(0);
-            $table->integer('material_id')->default(1);
+            $table->integer('subject_id')->unsigned();
+            $table->integer('education_type_id')->unsigned();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->integer('created_by');
+            $table->integer('created_by')->unsigned();
             $table->timestamp('updated_at')->nullable();
             $table->integer('updated_by')->unsigned()->nullable();
             $table->boolean('is_active')->default(1);
@@ -37,6 +32,6 @@ class CreateSubjectsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('subjects');
+        Schema::dropIfExists('subjects_education_types');
     }
 }
