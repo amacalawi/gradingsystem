@@ -218,5 +218,27 @@ class Staff extends Model
 
         return $staffs;
     }
+
+    public function all_coordinators()
+    {	
+    	$user_types = self::where('type', 'Coordinator')->where('is_active', 1)->orderBy('id', 'asc')->get();
+
+        $users = array();
+        $users[] = array('' => 'select a coordinator');
+        foreach ($user_types as $user_type) {
+            $users[] = array(
+                $user_type->id => $user_type->lastname.', '.$user_type->firstname.' '.$user_type->middlename
+            );
+        }
+
+        $user_types = array();
+        foreach($users as $user) {
+            foreach($user as $key => $val) {
+                $user_types[$key] = $val;
+            }
+        }
+
+        return $user_types;
+    }
 }
 

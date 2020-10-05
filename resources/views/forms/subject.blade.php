@@ -27,7 +27,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="form-group m-form__group required">
                 {{ Form::label('code', 'Code', ['class' => '']) }}
                 {{ 
@@ -41,7 +41,7 @@
                 </span>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="form-group m-form__group required">
                 {{ Form::label('name', 'Name', ['class' => '']) }}
                 {{ 
@@ -55,9 +55,11 @@
                 </span>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="form-group m-form__group required">
+    </div>
 
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group m-form__group required">
                 {{ Form::label('type', 'Type', ['class' => '']) }}
                 @if ( $segment == 'add' )
                     {{
@@ -65,10 +67,21 @@
                     }} 
                 @else
                     {{
-                        Form::select('type[]', $types, !empty($subject) ? $subject->education_type_id : '', ['id' => 'education_type_id', 'class' => 'form-control form-control-lg m-input m-input--solid'])
+                        Form::select('type[]', $types, !empty($subject) ? $subject->education_type_id : '', ['id' => 'education_type_id', 'class' => 'form-control form-control-lg m-input m-input--solid m-bootstrap-select m_selectpicker', 'multiple'])
                     }}
                 @endif
 
+                <span class="m-form__help m--font-danger">
+                </span>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group m-form__group required">
+                {{ Form::label('coordinator', 'Coordinator', ['class' => '']) }}
+                    {{
+                        Form::select('coordinator', $coordinators, !empty($subject) ? $subject->coordinator_id : '', ['id' => 'coordinator_id', 'class' => 'form-control btn-block form-control-lg m-input m-input--solid'])
+                    }} 
                 <span class="m-form__help m--font-danger">
                 </span>
             </div>
