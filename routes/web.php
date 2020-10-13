@@ -587,6 +587,7 @@ Route::prefix('dashboard')->group(function () {
 Route::get('upload-id', 'GuestController@index')->name('guest.upload');
 Route::post('upload-data', 'GuestController@upload_data')->name('guest.uploads');
 Route::post('upload-photo', 'GuestController@upload_photo')->name('guest.uploads');
+Route::get('enrollment', 'EnrollmentController@index')->name('enrollment');
 /* End Guest Routes */
 
 Route::get('/send-mail', function () {

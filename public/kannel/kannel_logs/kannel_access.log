@@ -149,3 +149,5 @@
 2020-08-26 16:24:30 Receive DLR [SMSC:smart01] [SVC:foo] [ACT:] [BINF:] [FID:] [META:] [from:09182536378] [to:09283164164] [flags:-1:-1:-1:-1:8] [msg:4:ACK/] [udh:0:]
 2020-08-26 16:25:02 Sent SMS [SMSC:smart01] [SVC:foo] [ACT:] [BINF:] [FID:] [META:] [from:09182536378] [to:09283164164] [flags:-1:0:-1:-1:24] [msg:11:hello world] [udh:0:]
 2020-08-26 16:25:02 Receive DLR [SMSC:smart01] [SVC:foo] [ACT:] [BINF:] [FID:] [META:] [from:09182536378] [to:09283164164] [flags:-1:-1:-1:-1:8] [msg:4:ACK/] [udh:0:]
+2020-10-01 13:17:54 Log begins
+2020-10-01 13:28:17 Log ends
