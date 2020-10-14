@@ -150,6 +150,31 @@
             self.closest(".form-group").find(".m-form__help").text("");
         });
         
+        this.$body.on('change', '#level', function (e) {
+            e.preventDefault();
+
+            var type = $('#type').val();
+            
+            $.ajax({
+                type: "GET",
+                url: base_url + 'academics/academics/sections/get-all-section-bylevel/'+$(this).val()+'/'+type,
+                success: function (data) {
+                    var data = $.parseJSON( data );
+                    var section = $("<select></select>").attr("id", "section").attr("name", "section").attr("class", "form-control form-control-lg m-input m-input--solid");
+                    $.each(data,function(index, data){
+                        section.append($("<option></option>").attr("value", index).text(data));
+                    });
+                    $('#section-div').empty();
+                    $("#section-div").append('<label> Section: </label>');
+                    $('#section-div').append(section);
+
+                    $('#section').prop('disabled', false);
+                },
+                async: false
+            });
+            
+        });
+
         this.$body.on('change', '#type', function (e) {
             e.preventDefault();
          
@@ -395,8 +420,6 @@ function getTeacherList_type( type )
 //Subject
 function getSubjectList_type( type )
 {
-    //console.log(type);
-
     $.ajax({
         type: "GET",
         url: base_url + 'academics/academics/subjects/get-all-subjects-bytype/'+type,
@@ -469,7 +492,7 @@ function getSectionList_type( type )
         url: base_url + 'academics/academics/sections/get-all-sections-bytype/'+type,
         success: function (data) {
             var data = $.parseJSON( data );
-            var section = $("<select></select>").attr("id", "section").attr("name", "section").attr("class", "form-control form-control-lg m-input m-input--solid");
+            var section = $("<select disabled></select>").attr("id", "section").attr("name", "section").attr("class", "form-control form-control-lg m-input m-input--solid");
             $.each(data,function(index, data){
                 section.append($("<option></option>").attr("value", index).text(data));
             });
@@ -484,9 +507,7 @@ function getSectionList_type( type )
 $(document).ready(function(){
 
     if( $('#type').val() ){
-
         $('#subject-teacher-main-div').css("display","block");
-        
     }
     
     if ( ( $('.no-subject').css('display') == 'block' ) || ( $('.no-teacher').css('display') == 'block' ) ){

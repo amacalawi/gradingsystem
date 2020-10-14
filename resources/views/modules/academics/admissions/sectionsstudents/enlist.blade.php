@@ -31,7 +31,7 @@
         </div>
         
         <div class="modal-footer">
-          <button type="button" class="btn btn-success" id="enlist-student-selected" data-dismiss="modal"> Save </button>
+          <button type="button" class="btn btn-success" id="enlist-student-selected" data-dismiss="modal"> Enlist </button>
         </div>
 
       </div>

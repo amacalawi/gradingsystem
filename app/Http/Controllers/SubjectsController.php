@@ -509,6 +509,7 @@ class SubjectsController extends Controller
     public function import(Request $request)
     {   
         $this->is_permitted(0);
+        $error = '';
 
         foreach($_FILES as $file)
         {  
@@ -520,43 +521,108 @@ class SubjectsController extends Controller
                     $row++;
                     if ($row > 1) { 
                         if ($data[0] !== '') {
+
                             $exist = Subject::where('code', $data[0])->get();
 
-                            $type_arrs = explode(',', $data[3]);
+                            if ($exist->count() > 0) {
 
-                            foreach($type_arrs as $type_arr){
-                               
-                                $exist_type = EducationType::where('code', $type_arr)->get();
+                                if( $data[6] > 1){
+                                    $exist_material = Subject::where('material_id', $data[6])->where('code', '!=', $data[0])->count();
+                                    $data[4] = 0;
+                                    $data[5] = 0;
+                                } else {
+                                    $exist_material = 0;
+                                }
 
-                                if($exist_type->count() > 0) {
-                                    if ($exist->count() > 0) {
+                                if(!$exist_material){
 
+                                    $tle_count = Subject::where('is_tle', 1)->where('code', '!=', $data[0])->count();
+                                    $mapeh_count = Subject::where('is_mapeh', 1)->where('code', '!=', $data[0])->count();
+                        
+                                    if(($tle_count) <= 2 && ($mapeh_count <= 4))
+                                    {
                                         $subject = Subject::find($exist->first()->id);
                                         $subject->code = $data[0];
                                         $subject->name = $data[1];
                                         $subject->description = $data[2];
-                                        $subject->education_type_id = EducationType::where('code', $type_arr )->first()->id;
+                                        $subject->coordinator_id = $data[7];
                                         $subject->is_mapeh = $data[4];
                                         $subject->is_tle = $data[5];
+                                        $subject->material_id = $data[6];
                                         $subject->updated_at = $timestamp;
                                         $subject->updated_by = Auth::user()->id;
                                         $subject->update();
 
-                                    } else {
+                                        $subjecteducationtypes = SubjectEducationTypes::where('subject_id', $exist->first()->id);
+                                        $subjecteducationtypes->delete();
+
+                                        $type_arrs = explode(',', $data[3]);
+                                        foreach($type_arrs as $type_arr){
+                                            $type = EducationType::where('code', $type_arr )->first()->id;
+                                            if($type){
+                                                $subjecteducationtypes = SubjectEducationTypes::create([
+                                                    'subject_id' => $exist->first()->id,
+                                                    'education_type_id' => $type,
+                                                    'created_at' => $timestamp,
+                                                    'created_by' => Auth::user()->id
+                                                ]);
+                                            }
+                                        }
+                                    }else{
+                                        $error .= ','.$data[0]; 
+                                    }
+                                }else{
+                                    $error .= ','.$data[0];
+                                }
+
+                            } else {
+
+                                if( $data[6] > 1){
+                                    $exist_material = Subject::where('material_id', $data[6])->where('code', '!=', $data[0])->count();
+                                    $data[4] = 0;
+                                    $data[5] = 0;
+                                } else {
+                                    $exist_material = 0;
+                                }
+                                        
+                                if(!$exist_material)
+                                {
+                                    $tle_count = Subject::where('is_tle', 1)->where('code', '!=', $data[0])->count();
+                                    $mapeh_count = Subject::where('is_mapeh', 1)->where('code', '!=', $data[0])->count();
+
+                                    if(($tle_count) <= 2 && ($mapeh_count <= 4))
+                                    {
                                         $subject = Subject::create([
                                             'code' => $data[0],
                                             'name' => $data[1],
                                             'description' => $data[2],
-                                            'education_type_id' => EducationType::where('code', $type_arr )->first()->id,
-                                            'is_mapeh' =>$data[4],
-                                            'is_tle' =>$data[5],
+                                            'coordinator_id' => $data[7],
+                                            'is_mapeh' => $data[4],
+                                            'is_tle' => $data[5],
+                                            'material_id' => $data[6],
                                             'created_at' => $timestamp,
                                             'created_by' => Auth::user()->id
                                         ]);
-                                    }
-                                }
 
-                            }//end for
+                                        $type_arrs = explode(',', $data[3]);
+                                        foreach($type_arrs as $type_arr){
+                                            $type = EducationType::where('code', $type_arr )->first()->id;
+                                            if($type){
+                                                $subjecteducationtypes = SubjectEducationTypes::create([
+                                                    'subject_id' => $subject->id,
+                                                    'education_type_id' => $type,
+                                                    'created_at' => $timestamp,
+                                                    'created_by' => Auth::user()->id
+                                                ]);
+                                            }
+                                        }
+                                    }else{
+                                        $error .= ','.$data[0];
+                                    }
+                                }else{
+                                    $error .= ','.$data[0];
+                                }
+                            }            
                         }
                     }
                 }
@@ -564,9 +630,23 @@ class SubjectsController extends Controller
             }
         }
 
-        $data = array(
-            'message' => 'success'
-        );
+        if($error){
+            $data = array(
+                'title' => 'Warning.',
+                'text' => 'Some data did not saved or updated. Please review excel file in subject code: '.$error,
+                'type' => 'warning',
+                'class' => 'btn-brand',
+                'message' => 'warning'
+            );
+        }elseif($error == ''){
+            $data = array(
+                'title' => 'Well done!',
+                'text' => 'Subject imported.',
+                'type' => 'success',
+                'class' => 'btn-brand',
+                'message' => 'success'
+            );
+        }
 
         echo json_encode( $data );
         exit();

@@ -380,6 +380,12 @@ class SectionsController extends Controller
         echo json_encode( $sections ); exit();
     }
 
+    public function get_all_sections_bylevel(Request $request, $level, $type)
+    {
+        $sections = (new Section)->get_all_sections_bylevel($level, $type);
+        echo json_encode( $sections ); exit();
+    }
+
     public function import(Request $request)
     {   
         $this->is_permitted(0);
