@@ -168,6 +168,33 @@ class Section extends Model
         return $sections;  
     }
     
+    public function get_all_sections_bylevel($level, $type)
+    {
+        $sections = self::where('is_active', 1)->where('level_id', $level)->where('education_type_id', $type)
+        ->whereNotIn('id',function($query) {
+            $query->select('section_id')->from('admissions');
+        })->orderBy('id', 'asc')->get();
+        
+
+        $secs = array();
+        $secs[] = array('0' => 'select a section');
+
+        foreach ($sections as $section) {
+            $secs[] = array(
+                $section->id  => $section->name,
+            );
+        }
+
+        $sections = array();
+        foreach($secs as $sec) {
+            foreach($sec as $key => $val) {
+                $sections[$key] = $val;
+            }
+        }
+
+        return $sections;  
+    }
+
     public function edtype()
     {
         return $this->belongsTo('App\Models\EducationType', 'education_type_id', 'id');

@@ -138,7 +138,7 @@ class Subject extends Model
     
     public function get_all_subjects_bytype($type)
     {
-        $subjects = self::where('is_active', 1)->where('education_type_id', $type)->orderBy('id', 'asc')->get();
+        $subjects = self::join('subjects_education_types','subjects.id','subjects_education_types.subject_id')->where('subjects.is_active', 1)->where('subjects_education_types.education_type_id', $type)->orderBy('subjects.id', 'asc')->get();
 
         $subs = array();
         $subs[] = array('0' => 'select a subject');

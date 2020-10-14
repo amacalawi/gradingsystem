@@ -205,6 +205,13 @@ jQuery(document).ready(function () {
 		}).on("success", function (file, response) {
 			console.log(response);
 			var data = $.parseJSON(response);
+			swal({
+				"title": data.title, 
+				"text": data.text, 
+				"type": data.type,
+				"confirmButtonClass": "btn " + data.class + " m-btn m-btn--wide"
+			});
+			
 			if (data.message == 'success') {
 				if ( $('.m_datatable').length ) {
 					$('.m_datatable').mDatatable().reload();

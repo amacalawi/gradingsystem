@@ -71,13 +71,6 @@ var DatatableDataLocalDemo = function () {
 			field: "studentGender",
             title: "Gender",
             width: 60,
-		}, {
-			field: "studentContactNo",
-            title: "Contact No",
-            width: 190
-        }, {
-			field: "studentModified",
-			title: "Last Modified",
 		}]
 	
 	});
@@ -112,6 +105,8 @@ var DatatableDataLocalDemo = function () {
 	};
 }();
 
+var enlisted_student = [];
+
 //$('#semi-enlist-student').on('click', function(e) {
 $('body').on('click', '.semi-enlist-student', function() {
 	
@@ -127,6 +122,8 @@ $('body').on('click', '.semi-enlist-student', function() {
 		{
 			var id = $(this).val();
 			$("#enlist-div-"+id).remove();
+			enlisted_student.splice(enlisted_student.indexOf(id), 1);
+			console.log(enlisted_student);
 		}
     });
 	
@@ -158,7 +155,7 @@ jQuery(document).ready(function (e) {
 		
 		if( (section_id) && section_id != '0')
 		{
-			$("#admitted_student" ).html("");
+			//$("#admitted_student" ).html("");
 
 			var items = [];
 			$.ajax({
@@ -168,7 +165,8 @@ jQuery(document).ready(function (e) {
 				success: function(response) {
 					var data = $.parseJSON(response);
 					$.each(data, function(index, value) {
-						$("#admitted_student" ).append("<div class='btn-group mr-2' id='enlist-div-"+data[index].stud_id+"' > <input type='text' name='list_admitted_student[]' value='"+data[index].stud_id+"' readonly='true' hidden><button type='button' class='btn bg-secondary' >"+data[index].lastname+", "+data[index].firstname+" "+data[index].middlename+"</button><button type='button' id='semi-enlist-student' class='btn bg-danger semi-enlist-student' value='"+data[index].stud_id+"' >x</button></div>");
+						//$("#admitted_student" ).append("<div class='btn-group mr-2' id='enlist-div-"+data[index].stud_id+"' > <input type='text' name='list_admitted_student[]' value='"+data[index].stud_id+"' readonly='true' hidden><button type='button' class='btn bg-secondary' >"+data[index].lastname+", "+data[index].firstname+" "+data[index].middlename+"</button><button type='button' id='semi-enlist-student' class='btn bg-danger semi-enlist-student' value='"+data[index].stud_id+"' >x</button></div>");
+						//$(".tbody-enlisted-student" ).append("<tr><td>"+data[index].stud_id+"</td><td>"+data[index].lastname+", "+data[index].firstname+" "+data[index].middlename+"</td><td></td><td>x</td></tr>");
 					});
 				}, 
 				complete: function() {
@@ -190,7 +188,10 @@ jQuery(document).ready(function (e) {
 						data: { items },
 						success: function(response) {
 							var data = $.parseJSON(response);
-							$("#admitted_student" ).append("<div class='btn-group mr-2' id='enlist-div-"+data[0].id+"' > <input type='text' name='list_admitted_student[]' value='"+data[0].id+"' readonly='true' hidden><button type='button' class='btn bg-secondary' >"+data[0].lastname+", "+data[0].firstname+" "+data[0].middlename+"</button><button type='button' id='semi-enlist-student' class='btn bg-danger semi-enlist-student' value='"+data[0].id+"' >x</button></div>");
+							if( (enlisted_student.indexOf(data[0].id)) < 0){
+								$(".tbody-enlisted-student" ).append("<tr id='enlist-div-"+data[0].id+"'><td>"+data[0].identification_no+"</td><td>"+data[0].lastname+", "+data[0].firstname+" "+data[0].middlename+"</td><td>"+data[0].gender+"</td><td><button type='button' id='semi-enlist-student' class='semi-enlist-student btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill' value='"+data[0].id+"' ><span class='la la-close'></span></button></td></tr>");
+								enlisted_student.push(data[0].id);
+							}
 						}, 
 						complete: function() {
 							window.onkeydown = null;

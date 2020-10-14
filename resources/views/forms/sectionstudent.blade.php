@@ -37,24 +37,6 @@
 
         <div class="row">
 
-            {{--Section--}}
-            <div class="col-md-4" id="section-main-div">
-                <div class="form-group m-form__group required">
-                    @if ( $segment == 'edit' )
-                        <div id="section-div">
-                            {{ Form::label('section', 'Section', ['class' => '']) }}
-                            {{
-                                Form::select('section', $sections, $value = $sectioninfos->section_id, ['class' => 'form-control form-control-lg m-input m-input--solid'])
-                            }}
-                            <span class="m-form__help m--font-danger">
-                            </span>
-                        </div>
-                    @else
-                        <div id="section-div"></div>
-                    @endif
-                </div>
-            </div>
-
             {{--Level--}}
             <div class="col-md-4" id="level-main-div">
                 <div class="form-group m-form__group required">
@@ -69,6 +51,24 @@
                         </div>
                     @else
                         <div id="level-div"></div>
+                    @endif
+                </div>
+            </div>
+
+            {{--Section--}}
+            <div class="col-md-4" id="section-main-div">
+                <div class="form-group m-form__group required">
+                    @if ( $segment == 'edit' )
+                        <div id="section-div">
+                            {{ Form::label('section', 'Section', ['class' => '']) }}
+                            {{
+                                Form::select('section', $sections, $value = $sectioninfos->section_id, ['class' => 'form-control form-control-lg m-input m-input--solid'])
+                            }}
+                            <span class="m-form__help m--font-danger">
+                            </span>
+                        </div>
+                    @else
+                        <div id="section-div"></div>
                     @endif
                 </div>
             </div>
@@ -231,7 +231,21 @@
                 </div>
 
                 <div class="col-md-12">
-                    <div id="admitted_student" class="btn-group">
+                    <div id="admitted_student">
+                        <table class="table">
+                            <thead> 
+                                <tr>
+                                    <th>ID No.</th>
+                                    <th>Name</th>
+                                    <th>Gender</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead> 
+                            <tbody class="tbody-enlisted-student">
+                                
+                            </tbody>
+                        </table>
+
                         @if ( $segment == 'edit' )
                             @foreach ( $sections_students as $sections_student)
                                 <div id="enlist-div-{{$sections_student->id}}" class="btn-group  mr-2">
