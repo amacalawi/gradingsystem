@@ -138,7 +138,7 @@
                     </div>
                 </div>
                 <div class="m-wizard__form">
-                    <form class="m-form m-form--label-align-left- m-form--state-" id="m_form">
+                    <form action="{{ url('enrollment/store') }}" method="POST" name="enrollment_form" class="m-form m-form--label-align-left- m-form--state-" id="m_form">
                         <div class="m-portlet__body">
                             <div class="m-wizard__form-step m-wizard__form-step--current" id="m_wizard_form_step_1">
                                 <div class="row">
@@ -211,77 +211,72 @@
                                                 <div class="col-xl-9 col-lg-9">
                                                     <div class="m-radio-list">
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="nursery">
+                                                            <input type="radio" name="grade_level" value="1">
                                                             Nursery (4 years old by October 31)
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="kinder">
+                                                            <input type="radio" name="grade_level" value="2">
                                                             Kinder (5 years old by October 31)
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="grade 1">
+                                                            <input type="radio" name="grade_level" value="3">
                                                             Grade 1 (6 years old by October 31)
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="grade 2">
+                                                            <input type="radio" name="grade_level" value="4">
                                                             Grade 2
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="grade 3">
+                                                            <input type="radio" name="grade_level" value="5">
                                                             Grade 3
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="grade 4">
+                                                            <input type="radio" name="grade_level" value="6">
                                                             Grade 4
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="grade 5">
+                                                            <input type="radio" name="grade_level" value="7">
                                                             Grade 5
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="grade 5">
-                                                            Grade 5
-                                                            <span></span>
-                                                        </label>
-                                                        <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="grade 6">
+                                                            <input type="radio" name="grade_level" value="8">
                                                             Grade 6
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="grade 7">
+                                                            <input type="radio" name="grade_level" value="9">
                                                             Grade 7
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="grade 8">
+                                                            <input type="radio" name="grade_level" value="10">
                                                             Grade 8
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="grade 9">
+                                                            <input type="radio" name="grade_level" value="11">
                                                             Grade 9
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="grade 10">
+                                                            <input type="radio" name="grade_level" value="12">
                                                             Grade 10
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="junior high">
+                                                            <input type="radio" name="grade_level" value="13">
                                                             Junior High 
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="senior high">
+                                                            <input type="radio" name="grade_level" value="14">
                                                             Senior High
                                                             <span></span>
                                                         </label>
@@ -1147,22 +1142,22 @@
                                                     </label>
                                                     <div class="m-checkbox-list">
                                                         <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
-                                                            <input type="checkbox" name="student_transpo" value="Walking">
+                                                            <input type="checkbox" name="student_transpo[]" value="Walking">
                                                             Walking
                                                             <span></span>
                                                         </label>
                                                         <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
-                                                            <input type="checkbox" name="student_transpo" value="Public Commute">
+                                                            <input type="checkbox" name="student_transpo[]" value="Public Commute">
                                                             Public Commute
                                                             <span></span>
                                                         </label>
                                                         <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
-                                                            <input type="checkbox" name="student_transpo" value="Family-owned Vehicle">
+                                                            <input type="checkbox" name="student_transpo[]" value="Family-owned Vehicle">
                                                             Family-owned Vehicle
                                                             <span></span>
                                                         </label>
                                                         <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
-                                                            <input type="checkbox" name="student_transpo" value="School Service">
+                                                            <input type="checkbox" name="student_transpo[]" value="School Service">
                                                             School Service
                                                             <span></span>
                                                         </label>
@@ -1344,27 +1339,27 @@
                                                     </label>
                                                     <div class="m-checkbox-list">
                                                         <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
-                                                            <input type="checkbox" name="student_internet_connection" value="Own mobile data">
+                                                            <input type="checkbox" name="student_internet_connection[]" value="Own mobile data">
                                                             Own mobile data
                                                             <span></span>
                                                         </label>
                                                         <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
-                                                            <input type="checkbox" name="student_internet_connection" value="Own broadband internet (DSL, wireless fiber, satellite)">
+                                                            <input type="checkbox" name="student_internet_connection[]" value="Own broadband internet (DSL, wireless fiber, satellite)">
                                                             Own broadband internet (DSL, wireless fiber, satellite)
                                                             <span></span>
                                                         </label>
                                                         <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
-                                                            <input type="checkbox" name="student_internet_connection" value="Computer Shop">
+                                                            <input type="checkbox" name="student_internet_connection[]" value="Computer Shop">
                                                             Computer Shop
                                                             <span></span>
                                                         </label>
                                                         <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
-                                                            <input type="checkbox" name="student_internet_connection" value="Other places outside the home (e.g. library, neighbor, relatives, barangay)">
+                                                            <input type="checkbox" name="student_internet_connection[]" value="Other places outside the home (e.g. library, neighbor, relatives, barangay)">
                                                             Other places outside the home (e.g. library, neighbor, relatives, barangay)
                                                             <span></span>
                                                         </label>
                                                         <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
-                                                            <input type="checkbox" name="student_internet_connection" value="None">
+                                                            <input type="checkbox" name="student_internet_connection[]" value="None">
                                                             None
                                                             <span></span>
                                                         </label>
@@ -1636,22 +1631,22 @@
                                                     </label>
                                                     <div class="m-radio-list">
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="student_payment_terms" value="Whole Year / Annual or Cash Basis">
+                                                            <input type="radio" name="student_payment_terms" value="1">
                                                             Whole Year / Annual or Cash Basis
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="student_payment_terms" value="Semestral">
+                                                            <input type="radio" name="student_payment_terms" value="2">
                                                             Semestral
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="student_payment_terms" value="Monthly Option 1">
+                                                            <input type="radio" name="student_payment_terms" value="3">
                                                             Monthly Option 1
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="student_payment_terms" value="Monthly Option 2">
+                                                            <input type="radio" name="student_payment_terms" value="4">
                                                             Monthly Option 2
                                                             <span></span>
                                                         </label>
@@ -1712,12 +1707,12 @@
                                                     </label>
                                                     <div class="m-radio-list">
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="student_payment_option" value="Online (I will pay thru online banking or deposit payment to bank)">
+                                                            <input type="radio" name="student_payment_option" value="1">
                                                             Online (I will pay thru online banking or deposit payment to bank)
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="student_payment_option" value="Onsite (I will pay in the school Cashier's Office)">
+                                                            <input type="radio" name="student_payment_option" value="2">
                                                             Onsite (I will pay in the school Cashier's Office)
                                                             <span></span>
                                                         </label>

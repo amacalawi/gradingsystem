@@ -337,7 +337,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Classes Description',
                 'slug' => 'classes',
                 'icon' => '',
-                'order' => '4',
+                'order' => '43',
                 'created_by' => 1
             ],
             [   
@@ -719,7 +719,17 @@ class DatabaseSeeder extends Seeder
                 'icon' => '',
                 'order' => '42',
                 'created_by' => 1
-            ]
+            ],
+            [   
+                'module_id' => '2',
+                'code' => 'enrollments',
+                'name' => 'Enrollments',
+                'description' => 'Enrollments Description',
+                'slug' => 'enrollments',
+                'icon' => '',
+                'order' => '4',
+                'created_by' => 1
+            ],
         ];
         foreach ($sub_modules as $sub_module) {
             DB::table('sub_modules')->insert($sub_module);
@@ -1084,6 +1094,12 @@ class DatabaseSeeder extends Seeder
             [   
                 'role_id' => '1',
                 'sub_module_id' => '42',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '43',
                 'permissions' => '1,1,1,1',
                 'created_by' => 1
             ]
@@ -2204,6 +2220,157 @@ class DatabaseSeeder extends Seeder
             DB::table('prefixes')->insert($prefix);
         }
 
+        $payment_terms = [
+            [
+                'code' => "Whole Year / Annual or Cash Basis",
+                'name' => "Whole Year / Annual or Cash Basis",
+                'description' => "Whole Year / Annual or Cash Basis",
+                'created_by' => 1
+            ], 
+            [
+                'code' => "Semestral",
+                'name' => "Semestral",
+                'description' => "Semestral",
+                'created_by' => 1
+            ], 
+            [
+                'code' => "Monthly Option 1",
+                'name' => "Monthly Option 1",
+                'description' => "Monthly Option 1",
+                'created_by' => 1
+            ], 
+            [
+                'code' => "Monthly Option 2",
+                'name' => "Monthly Option 2",
+                'description' => "Monthly Option 2",
+                'created_by' => 1
+            ]
+        ];
+        foreach ($payment_terms as $payment_term) {
+            DB::table('payment_terms')->insert($payment_term);
+        }
+
+        $payment_options = [
+            [
+                'code' => "Online (I will pay thru online banking or deposit payment to bank)",
+                'name' => "Online (I will pay thru online banking or deposit payment to bank)",
+                'description' => "Online (I will pay thru online banking or deposit payment to bank)",
+                'created_by' => 1
+            ], 
+            [
+                'code' => "Onsite (I will pay in the school Cashier's Office)",
+                'name' => "Onsite (I will pay in the school Cashier's Office)",
+                'description' => "Onsite (I will pay in the school Cashier's Office)",
+                'created_by' => 1
+            ]
+        ];
+        foreach ($payment_options as $payment_option) {
+            DB::table('payment_options')->insert($payment_option);
+        }
+
+        $levels = [
+            [
+                'code' => "Nursery (4 years old by October 31)",
+                'name' => "Nursery (4 years old by October 31)",
+                'description' => "Nursery (4 years old by October 31)",
+                'education_type_id' => 1,
+                'created_by' => 1
+            ], 
+            [
+                'code' => "Kinder (5 years old by October 31)",
+                'name' => "Kinder (5 years old by October 31)",
+                'description' => "Kinder (5 years old by October 31)",
+                'education_type_id' => 1,
+                'created_by' => 1
+            ],
+            [
+                'code' => "Grade 1 (6 years old by October 31)",
+                'name' => "Grade 1 (6 years old by October 31)",
+                'description' => "Grade 1 (6 years old by October 31)",
+                'education_type_id' => 2,
+                'created_by' => 1
+            ],
+            [
+                'code' => "Grade 2",
+                'name' => "Grade 2",
+                'description' => "Grade 2",
+                'education_type_id' => 2,
+                'created_by' => 1
+            ],
+            [
+                'code' => "Grade 3",
+                'name' => "Grade 3",
+                'description' => "Grade 3",
+                'education_type_id' => 2,
+                'created_by' => 1
+            ],
+            [
+                'code' => "Grade 4",
+                'name' => "Grade 4",
+                'description' => "Grade 4",
+                'education_type_id' => 2,
+                'created_by' => 1
+            ],
+            [
+                'code' => "Grade 5",
+                'name' => "Grade 5",
+                'description' => "Grade 5",
+                'education_type_id' => 2,
+                'created_by' => 1
+            ],
+            [
+                'code' => "Grade 6",
+                'name' => "Grade 6",
+                'description' => "Grade 6",
+                'education_type_id' => 2,
+                'created_by' => 1
+            ],
+            [
+                'code' => "Grade 7",
+                'name' => "Grade 7",
+                'description' => "Grade 7",
+                'education_type_id' => 2,
+                'created_by' => 1
+            ],
+            [
+                'code' => "Grade 8",
+                'name' => "Grade 8",
+                'description' => "Grade 8",
+                'education_type_id' => 2,
+                'created_by' => 1
+            ],
+            [
+                'code' => "Grade 9",
+                'name' => "Grade 9",
+                'description' => "Grade 9",
+                'education_type_id' => 2,
+                'created_by' => 1
+            ],
+            [
+                'code' => "Grade 10",
+                'name' => "Grade 10",
+                'description' => "Grade 10",
+                'education_type_id' => 2,
+                'created_by' => 1
+            ],
+            [
+                'code' => "Junior High",
+                'name' => "Junior High",
+                'description' => "Junior High",
+                'education_type_id' => 3,
+                'created_by' => 1
+            ],
+            [
+                'code' => "Senior High",
+                'name' => "Senior High",
+                'description' => "Senior High",
+                'education_type_id' => 4,
+                'created_by' => 1
+            ]
+        ];
+        foreach ($levels as $level) {
+            DB::table('levels')->insert($level);
+        }
         
     }
 }

@@ -23,7 +23,7 @@
             var _token = "{{ csrf_token() }}";
         </script>
 	</head>
-	<body class="m--skin- m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--offcanvas m-footer--push m-aside--offcanvas-default"  >
+	<body class="m--skin- m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--offcanvas m-footer--push m-aside--offcanvas-default" style="background: #f2f3f8;">
 
 		<!-- begin:: Page -->
 		<main>
