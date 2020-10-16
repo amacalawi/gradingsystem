@@ -10,7 +10,7 @@ var WizardDemo = function () {
     var initWizard = function () {
         //== Initialize form wizard
         wizard = wizardEl.mWizard({
-            startStep: 1
+            startStep: 1 
         });
 
         //== Validation before going to next page
@@ -341,7 +341,41 @@ var WizardDemo = function () {
 
         btn.on('click', function(e) {
             e.preventDefault();
-            var wizardEl = $('#m_wizard');
+            var $form = $('form[name="enrollment_form"]');
+            var $options = { 
+                type: $form.attr('method'),
+                url: $form.attr('action'),
+                data: $form.serialize(),
+                clearForm: true,
+                resetForm: true,
+                timeout: 5000, 
+                success: function(response) {
+                    mApp.unprogress(btn);
+                    var data = $.parseJSON(response);   
+                    console.log(data);
+                    if (data.type == 'success') {
+                        swal({
+                            title: data.title,
+                            text: data.text,
+                            type: data.type,
+                            confirmButtonClass: "btn " + data.class + " btn-focus m-btn m-btn--pill m-btn--air m-btn--custom",
+                        }).then((result) => {
+                            $('#forms').addClass('hidden');
+                            $('#acknowledgement').removeClass('hidden');
+                        })
+                    } else {
+                        swal({
+                            title: data.title,
+                            text: data.text,
+                            type: data.type,
+                            showCancelButton: false,
+                            closeOnConfirm: true,
+                            confirmButtonClass: "btn " + data.class + " btn-focus m-btn m-btn--pill m-btn--air m-btn--custom",
+                        });
+                    }
+                }
+            }; 
+         
 
             if (validator.form()) {
                 //== See: src\js\framework\base\app.js
@@ -349,22 +383,7 @@ var WizardDemo = function () {
                 //mApp.block(formEl); 
 
                 //== See: http://malsup.com/jquery/form/#ajaxSubmit
-                formEl.ajaxSubmit({
-                    success: function() {
-                        mApp.unprogress(btn);
-                        //mApp.unblock(formEl);
-
-                        swal({
-                            "title": "", 
-                            "text": "The application has been successfully submitted!", 
-                            "type": "success",
-                            "confirmButtonClass": "btn btn-secondary m-btn m-btn--wide"
-                        }).then((result) => {
-                            $('#forms').addClass('hidden');
-                            $('#acknowledgement').removeClass('hidden');
-                        })
-                    }
-                });
+                formEl.ajaxSubmit($options);
             }
         });
     }

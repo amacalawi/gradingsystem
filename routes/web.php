@@ -398,6 +398,12 @@ Route::prefix('academics')->group(function () {
         //Route::post('classes/import-classes', 'AdmissionController@import_class')->name('sectionstudent.fetch.import.class');
         Route::post('classes/import', 'AdmissionController@import')->name('sectionstudent.import');
         /* End Admissions Routes */
+
+        /* Admissions */
+        Route::get('enrollments', 'EnrollmentController@manage')->name('enrollments.manage');
+        Route::get('enrollments/all-active', 'EnrollmentController@all_active')->name('enrollments.all.active');
+        Route::get('enrollments/all-inactive', 'EnrollmentController@all_inactive')->name('enrollments.all.inactive');
+        /* End Admissions Routes */
     });
 
     /* Grading Sheets Routes */
@@ -589,6 +595,7 @@ Route::get('upload-id', 'GuestController@index')->name('guest.upload');
 Route::post('upload-data', 'GuestController@upload_data')->name('guest.uploads');
 Route::post('upload-photo', 'GuestController@upload_photo')->name('guest.uploads');
 Route::get('enrollment', 'EnrollmentController@index')->name('enrollment');
+Route::post('enrollment/store', 'EnrollmentController@store')->name('enrollment.save');
 /* End Guest Routes */
 
 Route::get('/send-mail', function () {
