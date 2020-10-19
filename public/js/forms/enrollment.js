@@ -10,7 +10,7 @@ var WizardDemo = function () {
     var initWizard = function () {
         //== Initialize form wizard
         wizard = wizardEl.mWizard({
-            startStep: 1 
+            startStep: 1
         });
 
         //== Validation before going to next page
@@ -45,6 +45,9 @@ var WizardDemo = function () {
                 is_new: {
                     required: true
                 }, 
+                student_number: {
+                    required: true
+                },  
                 lrn_no: {
                     required: true,
                     minlength: 12,
@@ -60,7 +63,7 @@ var WizardDemo = function () {
                     required: true
                 },
                 student_middlename: {
-                    required: true
+                    required: false
                 },
                 student_lastname: {
                     required: true
@@ -99,14 +102,16 @@ var WizardDemo = function () {
                     required: true
                 },
                 father_middlename: {
-                    required: true
+                    required: false
                 },
                 father_lastname: {
                     required: true
                 },
                 father_contact: {
                     required: true,
-                    mobile: true
+                    mobile: true,
+                    minlength: 11,
+                    maxlength: 11
                 },
                 father_birthdate: {
                     required: true
@@ -125,7 +130,7 @@ var WizardDemo = function () {
                     required: true
                 },
                 father_occupation: {
-                    required: true
+                    required: false
                 },
                 father_education: {
                     required: true
@@ -145,7 +150,7 @@ var WizardDemo = function () {
                     required: true
                 },
                 mother_middlename: {
-                    required: true
+                    required: false
                 },
                 mother_lastname: {
                     required: true
@@ -155,7 +160,9 @@ var WizardDemo = function () {
                 },
                 mother_contact: {
                     required: true,
-                    mobile: true
+                    mobile: true,
+                    minlength: 11,
+                    maxlength: 11
                 },
                 mother_birthdate: {
                     required: true
@@ -174,7 +181,7 @@ var WizardDemo = function () {
                     required: true
                 },
                 mother_occupation: {
-                    required: true
+                    required: false
                 },
                 mother_education: {
                     required: true
@@ -197,7 +204,7 @@ var WizardDemo = function () {
                     required: true
                 },
                 guardian_middlename: {
-                    required: true
+                    required: false
                 },
                 guardian_lastname: {
                     required: true
@@ -207,7 +214,9 @@ var WizardDemo = function () {
                 },
                 guardian_contact: {
                     required: true,
-                    mobile: true
+                    mobile: true,
+                    minlength: 11,
+                    maxlength: 11
                 },
                 guardian_employment_status: {
                     required: true
@@ -234,7 +243,8 @@ var WizardDemo = function () {
                     others: true
                 },
                 specific_student_studying: {
-                    required: true
+                    required: true,
+                    number: true
                 },
                 student_supplies: {
                     required: true
@@ -402,6 +412,7 @@ var WizardDemo = function () {
 }();
 
 jQuery.validator.addMethod("others", function(value, element, params) {
+    console.log(value);
     if (value == 'Other') {
         $(element).parents('.m-radio-list, .m-checkbox-list').next().removeClass('hidden').prop('disabled', false);
     } else {
@@ -447,9 +458,75 @@ jQuery.validator.addMethod("mobile", function(value, element, params) {
 }, jQuery.validator.format("Please enter a valid mobile number."));
 
 
-
 jQuery(document).ready(function() {    
     WizardDemo.init();
+
+    $('.m_selectpicker').selectpicker();
+
+    $('body').on('change', 'input[name="student_birthdate"]', function (e){
+        e.preventDefault();
+        dob = new Date($(this).val());
+        var today = new Date();
+        var age = Math.floor((today-dob) / (365.25 * 24 * 60 * 60 * 1000));
+        $('input[name="student_age"]').val(age);
+    });
+
+    $('body').on('click', 'input[name="is_new"]', function (e){
+        var self = $(this);
+        var value = $(this).val();
+        if (value == 0) {
+            $('#student-row').removeClass('hidden').find('input[name="student_number"]').removeClass('hidden');
+        } else {
+            $('#student-row').addClass('hidden').find('input[name="student_number"]').addClass('hidden');
+        }
+    });
+
+    $('body').on('click', 'input[name="student_studying"], input[name="father_religion"], input[name="mother_religion"]', function (e){
+        var self = $(this);
+        var value = $(this).val();
+        if (value == 'Other') {
+            self.parents('.m-radio-list').next().removeClass('hidden').prop('disabled', false);
+        } else {
+            self.parents('.m-radio-list').next().addClass('hidden').prop('disabled', true);
+        }
+    });
+
+    $('body').on('click', 'input[name="student_challenges_education[]"], input[name="student_devices[]"]', function (e){
+        var self = $(this);
+        var zero = 0;
+        var inputname = self.attr('name');
+        $.each($('input[name="' +inputname + '"]:checked'), function(){
+            if ($(this).val() == 'Other') {
+                zero++;
+            }
+        });
+        if (zero > 0) {
+            self.parents('.m-radio-list, .m-checkbox-list').next().removeClass('hidden').prop('disabled', false);
+        } else {
+            self.parents('.m-radio-list, .m-checkbox-list').next().addClass('hidden').prop('disabled', true);
+        }
+    });
+
+    $('body').on('click', '#search-student-btn', function (e){
+        e.preventDefault();
+        var self = $(this);
+        $.ajax({
+            type: "GET",
+            url: base_url + 'enrollment/search?id_number='+ $('input[name="student_number"]').val(),
+            success: function(response) {
+                var data = JSON.parse(response);
+                console.log(data);
+                $.each(data.data, function(i, item) {
+                    if (i == 'student_gender') {
+                        $('input:radio[name="' + i + '"][value="'+ item +'"]').prop('checked', true);
+                    } else {
+                        $('body').find('input[name="' + i + '"]').val(item);
+                    }
+                }); 
+            },
+            async: false
+        });
+    });
 
     Dropzone.autoDiscover = false;
 	// var accept = ".csv";

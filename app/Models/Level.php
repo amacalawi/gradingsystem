@@ -35,6 +35,29 @@ class Level extends Model
         return (object) $results;
     }
 
+    public function get_all_levels_with_empty() // all levels with empty value
+    {	
+    	$levels = self::where('is_active', 1)->orderBy('id', 'asc')->get();
+
+        $lvls = array();
+        $lvls[] = array('' => 'please select a grade level');
+        
+        foreach ($levels as $level) {
+            $lvls[] = array(
+                $level->id => $level->name
+            );
+        }
+
+        $levels = array();
+        foreach($lvls as $lvl) {
+            foreach($lvl as $key => $val) {
+                $levels[$key] = $val;
+            }
+        }
+
+        return $levels;
+    }
+
     public function get_all_levels() //all_levels original name
     {	
     	$levels = self::where('is_active', 1)->orderBy('id', 'asc')->get();

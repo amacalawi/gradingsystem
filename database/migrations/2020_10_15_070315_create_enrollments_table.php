@@ -15,8 +15,10 @@ class CreateEnrollmentsTable extends Migration
     {
         Schema::create('enrollments', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('batch_id')->unsigned();
             $table->string('student_email', 40);
             $table->boolean('is_new')->default(1);
+            $table->string('student_no', 40)->nullable();
             $table->string('student_lrn', 12);
             $table->string('student_psa_no', 100);
             $table->integer('level_id')->unsigned();
