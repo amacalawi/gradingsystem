@@ -596,6 +596,7 @@ Route::post('upload-data', 'GuestController@upload_data')->name('guest.uploads')
 Route::post('upload-photo', 'GuestController@upload_photo')->name('guest.uploads');
 Route::get('enrollment', 'EnrollmentController@index')->name('enrollment');
 Route::post('enrollment/store', 'EnrollmentController@store')->name('enrollment.save');
+Route::get('enrollment/search', 'EnrollmentController@search')->name('enrollment.search');
 /* End Guest Routes */
 
 Route::get('/send-mail', function () {

@@ -18,6 +18,7 @@ class CreateStudentsTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->integer('role_id')->unsigned();
             $table->string('identification_no', 11)->unique();
+            $table->string('learners_reference_no', 12)->nullable();
             $table->string('firstname', 40);
             $table->string('middlename', 40)->nullable();
             $table->string('lastname', 40);

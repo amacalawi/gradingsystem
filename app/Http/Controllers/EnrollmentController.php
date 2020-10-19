@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\EnrollmentForm;
 use App\Models\Enrollment;
+use App\Models\Level;
+use App\Models\Batch;
+use App\Models\Student;
+use App\User;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -35,7 +39,8 @@ class EnrollmentController extends Controller
 
     public function index()
     {
-        return view('modules/enrollments/index');
+        $levels = (new Level)->get_all_levels_with_empty();
+        return view('modules/enrollments/index')->with(compact('levels'));
     }
 
     public function all_active(Request $request)
@@ -77,6 +82,51 @@ class EnrollmentController extends Controller
         return view('modules/academics/admissions/enrollments/inactive')->with(compact('menus'));
     }
 
+    public function search(Request $request)
+    {
+        $student = Student::with([
+            'user' =>  function($q) { 
+                $q->select(['id', 'email']); 
+            }
+        ])
+        ->where('identification_no', $request->get('id_number'))
+        ->get();
+
+        if ($student->count() > 0) {
+            $student = $student->first();
+            $arr = array(
+                'student_number' => $student->identification_no,
+                'student_email' => $student->user->email,
+                'lrn_no' => $student->learners_reference_no,
+                'student_firstname' => $student->firstname,
+                'student_middlename' => $student->middlename,
+                'student_lastname' => $student->lastname,
+                'student_gender' => $student->gender,
+                'student_birthdate' => $student->birthdate,
+            );
+
+            $data = array(
+                'data' => $arr,
+                'title' => 'Well done!',
+                'text' => 'The student number is exist',
+                'type' => 'success',
+                'class' => 'btn-brand'
+            );
+    
+            echo json_encode( $data ); exit();
+        } else {
+            $data = array(
+                'data' => $request->get('id_number'),
+                'title' => 'Oops!',
+                'text' => 'The student number is not exist.',
+                'type' => 'error',
+                'class' => 'btn-brand'
+            );
+    
+            echo json_encode( $data ); exit();
+        }
+    }
+
     public function store(Request $request)
     {    
         $timestamp = date('Y-m-d H:i:s');
@@ -97,6 +147,7 @@ class EnrollmentController extends Controller
         }
 
         $enrollment = Enrollment::create([
+            'batch_id' => (new Batch)->get_current_batch(),
             'student_email' => $request->student_email,
             'is_new' => $request->is_new,
             'student_lrn' => $request->lrn_no,

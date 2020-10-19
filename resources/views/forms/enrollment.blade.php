@@ -182,6 +182,26 @@
                                                     </span>
                                                 </div>
                                             </div>
+                                            <div id="student-row" class="hidden form-group m-form__group row">
+                                                <label class="col-xl-3 col-lg-3 col-form-label">
+                                                    * Student No:
+                                                </label>
+                                                <div class="col-xl-9 col-lg-9">
+                                                    <div class="row">
+                                                        <div class="col-xl-8">
+                                                            <input id="student_number" class="hidden bold form-control form-control-lg m-input m-input--solid " name="student_number" type="text" value="">
+                                                            <span class="m-form__help">
+                                                                Please enter student number
+                                                            </span>
+                                                        </div>
+                                                        <div class="col-xl-4">
+                                                        <button id="search-student-btn" type="button" class="full-width btn-lg btn btn-secondary">
+                                                            <i class="la la-search"></i>&nbsp;Search
+                                                        </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="form-group m-form__group row">
                                                 <label class="col-xl-3 col-lg-3 col-form-label">
                                                     * Learner's Reference Number (LRN must be 12 digits)
@@ -195,7 +215,7 @@
                                             </div>
                                             <div class="form-group m-form__group row">
                                                 <label class="col-xl-3 col-lg-3 col-form-label">
-                                                    * PSA Birth Certificate No. (if available upon enrolment)
+                                                    PSA Birth Certificate No. (if available upon enrolment)
                                                 </label>
                                                 <div class="col-xl-9 col-lg-9">
                                                     <input id="psa_no" class="form-control form-control-lg m-input m-input--solid " name="psa_no" type="text" value="">
@@ -209,78 +229,9 @@
                                                     * Grade Level
                                                 </label>
                                                 <div class="col-xl-9 col-lg-9">
-                                                    <div class="m-radio-list">
-                                                        <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="1">
-                                                            Nursery (4 years old by October 31)
-                                                            <span></span>
-                                                        </label>
-                                                        <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="2">
-                                                            Kinder (5 years old by October 31)
-                                                            <span></span>
-                                                        </label>
-                                                        <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="3">
-                                                            Grade 1 (6 years old by October 31)
-                                                            <span></span>
-                                                        </label>
-                                                        <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="4">
-                                                            Grade 2
-                                                            <span></span>
-                                                        </label>
-                                                        <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="5">
-                                                            Grade 3
-                                                            <span></span>
-                                                        </label>
-                                                        <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="6">
-                                                            Grade 4
-                                                            <span></span>
-                                                        </label>
-                                                        <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="7">
-                                                            Grade 5
-                                                            <span></span>
-                                                        </label>
-                                                        <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="8">
-                                                            Grade 6
-                                                            <span></span>
-                                                        </label>
-                                                        <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="9">
-                                                            Grade 7
-                                                            <span></span>
-                                                        </label>
-                                                        <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="10">
-                                                            Grade 8
-                                                            <span></span>
-                                                        </label>
-                                                        <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="11">
-                                                            Grade 9
-                                                            <span></span>
-                                                        </label>
-                                                        <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="12">
-                                                            Grade 10
-                                                            <span></span>
-                                                        </label>
-                                                        <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="13">
-                                                            Junior High 
-                                                            <span></span>
-                                                        </label>
-                                                        <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="grade_level" value="14">
-                                                            Senior High
-                                                            <span></span>
-                                                        </label>
-                                                    </div>
+                                                    {{
+                                                        Form::select('grade_level', $levels, !empty($enroll) ? $enroll->level_id : '', ['id' => 'grade_level', 'data-live-search' => 'true', 'class' => 'form-control form-control-lg m-input m-input--solid m-bootstrap-select m_selectpicker'])
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please select the grade level to enroll
                                                     </span>
@@ -312,7 +263,7 @@
                                                 </div>
                                                 <div class="col-lg-4 m-form__group-sub">
                                                     <label class="form-control-label">
-                                                        * Student's Middlename:
+                                                        Student's Middlename:
                                                     </label>
                                                     <input id="student_middlename" class="form-control form-control-lg m-input m-input--solid " name="student_middlename" type="text" value="">
                                                     <span class="m-form__help">
@@ -330,6 +281,15 @@
                                                 </div>
                                             </div>
                                             <div class="form-group m-form__group row">
+                                                <div class="col-lg-4 m-form__group-sub">
+                                                    <label class="form-control-label">
+                                                        * Student's Birthdate:
+                                                    </label>
+                                                    <input id="student_birthdate" class="form-control form-control-lg m-input m-input--solid " name="student_birthdate" type="date" value="">
+                                                    <span class="m-form__help">
+                                                        Please enter student's birthdate
+                                                    </span>
+                                                </div>
                                                 <div class="col-lg-4 m-form__group-sub">
                                                     <label class="form-control-label">
                                                         * Student's Age:
@@ -357,15 +317,6 @@
                                                     </div>
                                                     <span class="m-form__help">
                                                         Please select the student's gender
-                                                    </span>
-                                                </div>
-                                                <div class="col-lg-4 m-form__group-sub">
-                                                    <label class="form-control-label">
-                                                        * Student's Birthdate:
-                                                    </label>
-                                                    <input id="student_birthdate" class="form-control form-control-lg m-input m-input--solid " name="student_birthdate" type="date" value="">
-                                                    <span class="m-form__help">
-                                                        Please enter student's birthdate
                                                     </span>
                                                 </div>
                                             </div>
@@ -495,7 +446,7 @@
                                                 </div>
                                                 <div class="col-lg-4 m-form__group-sub">
                                                     <label class="form-control-label">
-                                                        * Father's Middlename:
+                                                        Father's Middlename:
                                                     </label>
                                                     <input id="father_middlename" class="form-control form-control-lg m-input m-input--solid " name="father_middlename" type="text" value="">
                                                     <span class="m-form__help">
@@ -576,7 +527,7 @@
                                                 </div>
                                                 <div class="col-lg-6 m-form__group-sub"> 
                                                     <label class="form-control-label">
-                                                        * Father's Occupation:
+                                                        Father's Occupation:
                                                     </label>
                                                     <input id="father_occupation" class="form-control form-control-lg m-input m-input--solid " name="father_occupation" type="text" value="">
                                                     <span class="m-form__help">
@@ -718,7 +669,7 @@
                                                 </div>
                                                 <div class="col-lg-4 m-form__group-sub">
                                                     <label class="form-control-label">
-                                                        * Mother's Middlename:
+                                                        Mother's Middlename:
                                                     </label>
                                                     <input id="mother_middlename" class="form-control form-control-lg m-input m-input--solid " name="mother_middlename" type="text" value="">
                                                     <span class="m-form__help">
@@ -810,7 +761,7 @@
                                                 </div>
                                                 <div class="col-lg-6 m-form__group-sub"> 
                                                     <label class="form-control-label">
-                                                        * Mother's Occupation:
+                                                        Mother's Occupation:
                                                     </label>
                                                     <input id="mother_occupation" class="form-control form-control-lg m-input m-input--solid " name="mother_occupation" type="text" value="">
                                                     <span class="m-form__help">
@@ -984,7 +935,7 @@
                                                 </div>
                                                 <div class="col-lg-4 m-form__group-sub">
                                                     <label class="form-control-label">
-                                                        * Guardian's Middlename:
+                                                        Guardian's Middlename:
                                                     </label>
                                                     <input id="guardian_middlename" class="form-control form-control-lg m-input m-input--solid " name="guardian_middlename" type="text" value="">
                                                     <span class="m-form__help">
@@ -1189,7 +1140,7 @@
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="checkbox" name="student_studying" value="Other">
+                                                            <input type="radio" name="student_studying" value="Other">
                                                             Other
                                                             <span></span>
                                                         </label>
