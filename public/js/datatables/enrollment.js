@@ -73,6 +73,19 @@ var DatatableDataLocalDemo = function () {
 			field: "enrollModified",
 			title: "Last Modified",
 		}, {
+			field: "enrollStatus",
+			title: "Status",
+			// callback function support for column rendering
+			template: function (row) {
+				var status = {
+					'enlisted' : {'class': 'childhood-bg'},
+					'assessed' : {'class': 'primary-bg'}, 
+					'enrolled' : {'class': 'secondary-bg'},
+					'admitted' : {'class': 'secondary-bg'},
+				};
+				return '<span class="m-badge ' + status[row.enrollStatus].class + ' m-badge--wide">' + row.enrollStatus + '</span>';
+			}
+		}, {
 			field: "Actions",
 			width: 90,
 			title: "Actions",

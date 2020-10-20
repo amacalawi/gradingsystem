@@ -314,7 +314,6 @@ Route::prefix('memberships')->group(function () {
     Route::put('users/roles/update-status/{id}', 'UserRoleController@update_status')->name('users.roles.update.status');
 });
 
-
 Route::prefix('academics')->group(function () {
 
     Route::prefix('academics')->group(function () {
@@ -376,7 +375,7 @@ Route::prefix('academics')->group(function () {
 
     });
 
-    /* Grading Sheets Routes */
+    /* Admission Sheets Routes */
     Route::prefix('admissions')->group(function () {  
         /* Admissions */
         Route::get('classes/add', 'AdmissionController@add')->name('sectionstudent.add');
@@ -400,11 +399,12 @@ Route::prefix('academics')->group(function () {
         Route::get('classes/remove-admitted-student/{id?}', 'AdmissionController@remove_admitted_student')->name('sectionstudent.remove.admitted');
         /* End Admissions Routes */
 
-        /* Admissions */
+        /* Enrollment */
         Route::get('enrollments', 'EnrollmentController@manage')->name('enrollments.manage');
         Route::get('enrollments/all-active', 'EnrollmentController@all_active')->name('enrollments.all.active');
         Route::get('enrollments/all-inactive', 'EnrollmentController@all_inactive')->name('enrollments.all.inactive');
-        /* End Admissions Routes */
+        Route::get('enrollments/edit/{id?}', 'EnrollmentController@edit')->name('enrollments.edit');
+        /* End Enrollment Routes */
     });
 
     /* Grading Sheets Routes */
@@ -522,7 +522,6 @@ Route::prefix('academics')->group(function () {
 
     });
     /* End Attendance Sheets */
-    
 });
 
 /* Notifications Routes */
@@ -595,7 +594,7 @@ Route::prefix('dashboard')->group(function () {
 Route::get('upload-id', 'GuestController@index')->name('guest.upload');
 Route::post('upload-data', 'GuestController@upload_data')->name('guest.uploads');
 Route::post('upload-photo', 'GuestController@upload_photo')->name('guest.uploads');
-Route::get('enrollment', 'EnrollmentController@index')->name('enrollment');
+Route::get('enrollment', 'EnrollmentController@index')->name('enrollment.new');
 Route::post('enrollment/store', 'EnrollmentController@store')->name('enrollment.save');
 Route::get('enrollment/search', 'EnrollmentController@search')->name('enrollment.search');
 /* End Guest Routes */
