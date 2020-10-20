@@ -110,7 +110,7 @@ class Subject extends Model
     public function get_all_subjects_with_type( $sectioninfo_id )
     {
         $sectioninfos = (new SectionInfo)->fetch($sectioninfo_id);
-        $subjects = self::where('education_type_id', $sectioninfos->education_type_id)->where('is_active', 1)->orderBy('id', 'asc')->get();
+        $subjects = self::select('subjects.id', 'subjects.name')->join('subjects_education_types', 'subjects_education_types.subject_id', 'subjects.id')->where('subjects_education_types.education_type_id', $sectioninfos->education_type_id)->where('subjects.is_active', 1)->orderBy('subjects.id', 'asc')->get();
 
         $subs = array();
         $subs[] = array('0' => 'select a subject');
@@ -138,14 +138,14 @@ class Subject extends Model
     
     public function get_all_subjects_bytype($type)
     {
-        $subjects = self::join('subjects_education_types','subjects.id','subjects_education_types.subject_id')->where('subjects.is_active', 1)->where('subjects_education_types.education_type_id', $type)->orderBy('subjects.id', 'asc')->get();
+        $subjects = self::select('subjects.id as sub_id', 'subjects.name')->join('subjects_education_types','subjects.id','subjects_education_types.subject_id')->where('subjects.is_active', 1)->where('subjects_education_types.education_type_id', $type)->orderBy('subjects.id', 'asc')->get();
 
         $subs = array();
         $subs[] = array('0' => 'select a subject');
 
         foreach ($subjects as $subject) {
             $subs[] = array(
-                $subject->id  => $subject->name,
+                $subject->sub_id  => $subject->name,
             );
         }
 

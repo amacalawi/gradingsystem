@@ -797,7 +797,7 @@ class GradingSheetsController extends Controller
 
             //--> subjects
             $arr['subjects'] = (new Subject)
-            ->whereIn('id', 
+            ->whereIn('subjects.id', 
                 SectionsSubjects::select('subject_id')
                 ->whereIn('section_info_id', 
                     SectionInfo::select('id')->where([
@@ -805,8 +805,9 @@ class GradingSheetsController extends Controller
                     ])
                 )
             )
-            ->where(['is_active' => 1, 'education_type_id' => $type])
-            ->orderBy('id', 'ASC')->get();
+            ->join('subjects_education_types', 'subjects_education_types.subject_id', 'subjects.id')
+            ->where(['subjects.is_active' => 1, 'education_type_id' => $type])
+            ->orderBy('subjects.id', 'ASC')->get();
 
             //--> quarters
             $arr['quarters'] = (new Quarter)
@@ -930,7 +931,7 @@ class GradingSheetsController extends Controller
     }
 
     public function import_gradingsheet(Request $request, $id)
-    {   
+    {
         $this->validate( $request, [
             'import_file' => 'required|mimes:xls,xlsx'
         ]);
@@ -944,6 +945,6 @@ class GradingSheetsController extends Controller
             Excel::import(new GradingSheetImport($id), $path);
             return back();
         }
-        
+
     }
 }

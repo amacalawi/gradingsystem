@@ -397,6 +397,7 @@ Route::prefix('academics')->group(function () {
         Route::get('classes/delete-this-admitted/{id?}/{secid?}', 'AdmissionController@delete_this_admitted');
         //Route::post('classes/import-classes', 'AdmissionController@import_class')->name('sectionstudent.fetch.import.class');
         Route::post('classes/import', 'AdmissionController@import')->name('sectionstudent.import');
+        Route::get('classes/remove-admitted-student/{id?}', 'AdmissionController@remove_admitted_student')->name('sectionstudent.remove.admitted');
         /* End Admissions Routes */
     });
 

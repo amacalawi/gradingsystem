@@ -67,7 +67,7 @@ class Admission extends Model
     
     public function getthisAdmitted($id)
     {
-        $admitted = Admission::where('section_id', $id)
+        $admitted = Admission::select('*', 'admissions.id as admission_id')->where('section_id', $id)
         ->join('students', 'students.id', '=', 'admissions.student_id')
         ->orderBy('admissions.id', 'desc')
         ->get();

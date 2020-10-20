@@ -242,19 +242,23 @@
                                 </tr>
                             </thead> 
                             <tbody class="tbody-enlisted-student">
-                                
+                                @if ( $segment == 'edit' )
+                                    @foreach ( $sections_students as $sections_student)
+                                        <tr id="enlist-div-{{$sections_student->id}}">
+                                            <td>{{$sections_student->identification_no}}</td>
+                                            <td>{{$sections_student->lastname.', '.$sections_student->firstname.' '.$sections_student->middlename}}</td>
+                                            <td>{{$sections_student->gender}}</td>
+                                            <td>
+                                                <input type='text' name='list_admitted_student[]' value='{{$sections_student->id}}' readonly='true' hidden> 
+                                                <button type='button' id='semi-enlist-student' class='semi-enlist-student btn m-btn m-btn--hover-accent m-btn--pill' value='{{$sections_student->id}}' >
+                                                    <span class='la la-close'></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
                             </tbody>
                         </table>
-
-                        @if ( $segment == 'edit' )
-                            @foreach ( $sections_students as $sections_student)
-                                <div id="enlist-div-{{$sections_student->id}}" class="btn-group  mr-2">
-                                    <input type='text' id="list_admitted_student" name='list_admitted_student[]' value='{{$sections_student->id}}' readonly='true' hidden>
-                                    <button type='button' class='btn bg-secondary' >{{$sections_student->lastname}}, {{$sections_student->firstname}} {{$sections_student->middlename}}</button>
-                                    <button type='button' id='semi-enlist-student' class='btn bg-danger semi-enlist-student' value='{{$sections_student->id}}' >x</button>
-                                </div>
-                            @endforeach
-                        @endif
                     </div>
                     <span class="m-form__help m--font-danger">
                     </span>

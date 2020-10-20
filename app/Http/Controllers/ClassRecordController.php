@@ -338,7 +338,7 @@ class ClassRecordController extends Controller
 
     public function export_record(Request $request, $id)
     {
-        $quarters = (new Quarter)->all_quarters_via_type((new SectionInfo)->fetch($id)->type);
+        $quarters = (new Quarter)->all_quarters_via_type((new SectionInfo)->fetch($id)->education_type_id);
         return Excel::download(new ClassRecordExport($id), 'ClassRecord_'.$id.'.xlsx');
     }
 

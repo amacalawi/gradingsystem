@@ -33,7 +33,7 @@ class ClassRecordFinalTableExport implements WithTitle, FromView
             'finalgrade' => $this->finalgrade,
             'quarterid' => $this->quarterid,
             'class_records' => (new SectionInfo)->fetch($this->query),
-            'quarters' => (new Quarter)->all_quarters_via_type((new SectionInfo)->fetch($this->query)->type),
+            'quarters' => (new Quarter)->all_quarters_via_type((new SectionInfo)->fetch($this->query)->education_type_id),
         ]);
     }
 
