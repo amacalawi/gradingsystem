@@ -121,9 +121,32 @@ $('body').on('click', '.semi-enlist-student', function() {
 		if(confirmed.value)
 		{
 			var id = $(this).val();
-			$("#enlist-div-"+id).remove();
-			enlisted_student.splice(enlisted_student.indexOf(id), 1);
-			console.log(enlisted_student);
+
+			if($('#method').val() == 'edit'){
+				//alert('ano na?');
+				$.ajax({
+					type: 'GET',
+					url: base_url + 'academics/admissions/classes/remove-admitted-student/'+id, //member_id
+					success: function(response) {
+						var data = $.parseJSON(response);
+						console.log(data);
+						$("#enlist-div-"+id).remove();
+						enlisted_student.splice(enlisted_student.indexOf(id), 1);
+					},
+					complete: function() {
+						window.onkeydown = null;
+						window.onfocus = null;
+					},
+					error: function(){
+						$("#enlist-div-"+id).remove();
+						enlisted_student.splice(enlisted_student.indexOf(id), 1);
+						//alert('error');
+					}
+				});
+			} else {
+				$("#enlist-div-"+id).remove();
+				enlisted_student.splice(enlisted_student.indexOf(id), 1);
+			}
 		}
     });
 	
@@ -165,8 +188,8 @@ jQuery(document).ready(function (e) {
 				success: function(response) {
 					var data = $.parseJSON(response);
 					$.each(data, function(index, value) {
+						//$(".tbody-enlisted-student" ).append("<tr id='enlist-div-"+data[0].id+"'><td>"+data[0].identification_no+"</td><td>"+data[0].lastname+", "+data[0].firstname+" "+data[0].middlename+"</td><td>"+data[0].gender+"</td><td><input type='text' name='list_admitted_student[]' value='"+data[0].id+"' readonly='true' hidden> <button type='button' id='semi-enlist-student' class='semi-enlist-student btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill' value='"+data[0].id+"' ><span class='la la-close'></span></button></td></tr>");
 						//$("#admitted_student" ).append("<div class='btn-group mr-2' id='enlist-div-"+data[index].stud_id+"' > <input type='text' name='list_admitted_student[]' value='"+data[index].stud_id+"' readonly='true' hidden><button type='button' class='btn bg-secondary' >"+data[index].lastname+", "+data[index].firstname+" "+data[index].middlename+"</button><button type='button' id='semi-enlist-student' class='btn bg-danger semi-enlist-student' value='"+data[index].stud_id+"' >x</button></div>");
-						//$(".tbody-enlisted-student" ).append("<tr><td>"+data[index].stud_id+"</td><td>"+data[index].lastname+", "+data[index].firstname+" "+data[index].middlename+"</td><td></td><td>x</td></tr>");
 					});
 				}, 
 				complete: function() {
@@ -189,8 +212,9 @@ jQuery(document).ready(function (e) {
 						success: function(response) {
 							var data = $.parseJSON(response);
 							if( (enlisted_student.indexOf(data[0].id)) < 0){
-								$(".tbody-enlisted-student" ).append("<tr id='enlist-div-"+data[0].id+"'><td>"+data[0].identification_no+"</td><td>"+data[0].lastname+", "+data[0].firstname+" "+data[0].middlename+"</td><td>"+data[0].gender+"</td><td><button type='button' id='semi-enlist-student' class='semi-enlist-student btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill' value='"+data[0].id+"' ><span class='la la-close'></span></button></td></tr>");
+								$(".tbody-enlisted-student" ).append("<tr id='enlist-div-"+data[0].id+"'><td>"+data[0].identification_no+"</td><td>"+data[0].lastname+", "+data[0].firstname+" "+data[0].middlename+"</td><td>"+data[0].gender+"</td><td><input type='text' name='list_admitted_student[]' value='"+data[0].id+"' readonly='true' hidden> <button type='button' id='semi-enlist-student' class='semi-enlist-student btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill' value='"+data[0].id+"' ><span class='la la-close'></span></button></td></tr>");
 								enlisted_student.push(data[0].id);
+								console.log('enlisted_student'+enlisted_student);
 							}
 						}, 
 						complete: function() {
@@ -207,7 +231,14 @@ jQuery(document).ready(function (e) {
 		}
 		else 
 		{
-			alert('No section selected');
+			swal({
+				title: "Oops...",
+				text: "No section selected.",
+				type: "warning",
+				showCancelButton: false,
+				closeOnConfirm: true,
+				confirmButtonClass: "btn btn-warning btn-focus m-btn m-btn--pill m-btn--air m-btn--custom"
+			});
 		}
 		//$("#enlist-div").load(location.href+" #enlist-div>*","");
 	});

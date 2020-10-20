@@ -28,7 +28,7 @@ class ClassRecordExport implements FromView, WithMultipleSheets
     {   
         return view('modules.academics.gradingsheets.classrecord.export', [
             'class_records' => (new SectionInfo)->fetch($this->query),
-            'quarters' => (new Quarter)->all_quarters_via_type((new SectionInfo)->fetch($this->query)->type),
+            'quarters' => (new Quarter)->all_quarters_via_type((new SectionInfo)->fetch($this->query)->education_type_id),
         ]);
     }
  
@@ -36,7 +36,7 @@ class ClassRecordExport implements FromView, WithMultipleSheets
     {
         $sheets = [];
 
-        $quarters = (new Quarter)->all_quarters_via_type((new SectionInfo)->fetch($this->query)->type);
+        $quarters = (new Quarter)->all_quarters_via_type((new SectionInfo)->fetch($this->query)->education_type_id);
         foreach($quarters as $quarter)
         {
             $sheets[] = new ClassRecordTableExport($this->query, $quarter->name, $quarter->id);
