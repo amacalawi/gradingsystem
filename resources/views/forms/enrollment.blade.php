@@ -154,7 +154,13 @@
                                                     * Email:
                                                 </label>
                                                 <div class="col-xl-9 col-lg-9">
-                                                    <input id="student_email" class="bold form-control form-control-lg m-input m-input--solid " name="student_email" type="email" value="">
+                                                    {{ 
+                                                        Form::email($name = 'student_email', $value = !empty($enroll) ? $enroll->student_email : '', 
+                                                        $attributes = array(
+                                                            'id' => 'student_email',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter student email
                                                     </span>
@@ -167,29 +173,53 @@
                                                 <div class="col-xl-9 col-lg-9">
                                                     <div class="m-radio-inline">
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="is_new" value="1">
+                                                            @if ($enroll->is_new > 0) 
+                                                                {{ Form::radio('is_new', '1', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('is_new', '1', false, array('')) }}
+                                                            @endif
                                                             Yes
                                                             <span></span>
-                                                        </label>
+                                                        </label>   
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="is_new" value="0">
+                                                            @if ($enroll->is_new > 0) 
+                                                                {{ Form::radio('is_new', '0', false, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('is_new', '0', true, array('')) }}
+                                                            @endif
                                                             No
                                                             <span></span>
-                                                        </label>
+                                                        </label>  
                                                     </div>
                                                     <span class="m-form__help">
                                                         Please select yes if new student otherwise no if return student
                                                     </span>
                                                 </div>
                                             </div>
-                                            <div id="student-row" class="hidden form-group m-form__group row">
+                                            <div id="student-row" class="{{ ($enroll->is_new > 0) ? 'hidden' : ''  }} form-group m-form__group row">
                                                 <label class="col-xl-3 col-lg-3 col-form-label">
                                                     * Student No:
                                                 </label>
                                                 <div class="col-xl-9 col-lg-9">
                                                     <div class="row">
                                                         <div class="col-xl-8">
-                                                            <input id="student_number" class="hidden bold form-control form-control-lg m-input m-input--solid " name="student_number" type="text" value="">
+                                                            @if ($enroll->is_new > 0) 
+                                                                {{ 
+                                                                    Form::text($name = 'student_number', $value = !empty($enroll) ? $enroll->student_no : '', 
+                                                                    $attributes = array(
+                                                                        'id' => 'student_number',
+                                                                        'class' => 'hidden form-control form-control-lg m-input m-input--solid'
+                                                                    )) 
+                                                                }}
+                                                            @else
+                                                                {{ 
+                                                                    Form::text($name = 'student_number', $value = !empty($enroll) ? $enroll->student_no : '', 
+                                                                    $attributes = array(
+                                                                        'id' => 'student_number',
+                                                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                                    )) 
+                                                                }}
+                                                            @endif
                                                             <span class="m-form__help">
                                                                 Please enter student number
                                                             </span>
@@ -207,7 +237,13 @@
                                                     * Learner's Reference Number (LRN must be 12 digits)
                                                 </label>
                                                 <div class="col-xl-9 col-lg-9">
-                                                    <input id="lrn_no" class="bold form-control form-control-lg m-input m-input--solid " name="lrn_no" type="text" value="">
+                                                    {{ 
+                                                        Form::text($name = 'lrn_no', $value = !empty($enroll) ? $enroll->student_lrn : '', 
+                                                        $attributes = array(
+                                                            'id' => 'lrn_no',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter LRN format. E.g: 123456789010
                                                     </span>
@@ -218,7 +254,13 @@
                                                     PSA Birth Certificate No. (if available upon enrolment)
                                                 </label>
                                                 <div class="col-xl-9 col-lg-9">
-                                                    <input id="psa_no" class="form-control form-control-lg m-input m-input--solid " name="psa_no" type="text" value="">
+                                                    {{ 
+                                                        Form::text($name = 'psa_no', $value = !empty($enroll) ? $enroll->student_psa_no : '', 
+                                                        $attributes = array(
+                                                            'id' => 'psa_no',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter PSA Birth Certificate No
                                                     </span>
@@ -256,7 +298,13 @@
                                                     <label class="form-control-label">
                                                         * Student's Firstname:
                                                     </label>
-                                                    <input id="student_firstname" class="form-control form-control-lg m-input m-input--solid " name="student_firstname" type="text" value="">
+                                                    {{ 
+                                                        Form::text($name = 'student_firstname', $value = !empty($enroll) ? $enroll->student_firstname : '', 
+                                                        $attributes = array(
+                                                            'id' => 'student_firstname',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter student's firstname
                                                     </span>
@@ -265,7 +313,13 @@
                                                     <label class="form-control-label">
                                                         Student's Middlename:
                                                     </label>
-                                                    <input id="student_middlename" class="form-control form-control-lg m-input m-input--solid " name="student_middlename" type="text" value="">
+                                                    {{ 
+                                                        Form::text($name = 'student_middlename', $value = !empty($enroll) ? $enroll->student_middlename : '', 
+                                                        $attributes = array(
+                                                            'id' => 'student_middlename',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter student's middlename
                                                     </span>
@@ -274,7 +328,13 @@
                                                     <label class="form-control-label">
                                                         * Student's Lastname:
                                                     </label>
-                                                    <input id="student_lastname" class="form-control form-control-lg m-input m-input--solid " name="student_lastname" type="text" value="">
+                                                    {{ 
+                                                        Form::text($name = 'student_lastname', $value = !empty($enroll) ? $enroll->student_lastname : '', 
+                                                        $attributes = array(
+                                                            'id' => 'student_lastname',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter student's lastname
                                                     </span>
@@ -285,7 +345,13 @@
                                                     <label class="form-control-label">
                                                         * Student's Birthdate:
                                                     </label>
-                                                    <input id="student_birthdate" class="form-control form-control-lg m-input m-input--solid " name="student_birthdate" type="date" value="">
+                                                    {{ 
+                                                        Form::date($name = 'student_birthdate', $value = !empty($enroll) ? $enroll->student_birthdate : '', 
+                                                        $attributes = array(
+                                                            'id' => 'student_birthdate',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter student's birthdate
                                                     </span>
@@ -305,15 +371,23 @@
                                                     </label>
                                                     <div class="m-radio-inline m--margin-top-15 m--margin-bottom-13">
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="student_gender" value="Male">
+                                                            @if ($enroll->student_gender == 'Male') 
+                                                                {{ Form::radio('student_gender', 'Male', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('student_gender', 'Male', false, array('')) }}
+                                                            @endif
                                                             Male
                                                             <span></span>
-                                                        </label>
+                                                        </label>   
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="student_gender" value="Female">
+                                                            @if ($enroll->student_gender == 'Female') 
+                                                                {{ Form::radio('student_gender', 'Female', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('student_gender', 'Female', false, array('')) }}
+                                                            @endif
                                                             Female
                                                             <span></span>
-                                                        </label>
+                                                        </label>  
                                                     </div>
                                                     <span class="m-form__help">
                                                         Please select the student's gender
@@ -327,22 +401,38 @@
                                                     </label>
                                                     <div class="m-radio-list">
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="student_birthorder" value="Only Child">
+                                                            @if ($enroll->student_birthorder == 'Only Child') 
+                                                                {{ Form::radio('student_birthorder', 'Only Child', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('student_birthorder', 'Only Child', false, array('')) }}
+                                                            @endif
                                                             Only Child
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="student_birthorder" value="Eldest">
+                                                            @if ($enroll->student_birthorder == 'Eldest') 
+                                                                {{ Form::radio('student_birthorder', 'Eldest', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('student_birthorder', 'Eldest', false, array('')) }}
+                                                            @endif
                                                             Eldest
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="student_birthorder" value="Youngest">
+                                                            @if ($enroll->student_birthorder == 'Youngest') 
+                                                                {{ Form::radio('student_birthorder', 'Youngest', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('student_birthorder', 'Youngest', false, array('')) }}
+                                                            @endif
                                                             Youngest
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="student_birthorder" value="Middle">
+                                                            @if ($enroll->student_birthorder == 'Middle') 
+                                                                {{ Form::radio('student_birthorder', 'Middle', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('student_birthorder', 'Middle', false, array('')) }}
+                                                            @endif
                                                             Middle
                                                             <span></span>
                                                         </label>
@@ -357,22 +447,38 @@
                                                     </label>
                                                     <div class="m-radio-list">
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="student_reside_with" value="Parents">
+                                                            @if ($enroll->student_reside_with == 'Parents') 
+                                                                {{ Form::radio('student_reside_with', 'Parents', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('student_reside_with', 'Parents', false, array('')) }}
+                                                            @endif
                                                             Parents
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="student_reside_with" value="Guardians">
+                                                            @if ($enroll->student_reside_with == 'Guardians') 
+                                                                {{ Form::radio('student_reside_with', 'Guardians', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('student_reside_with', 'Guardians', false, array('')) }}
+                                                            @endif
                                                             Guardians
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="student_reside_with" value="Relatives">
+                                                            @if ($enroll->student_reside_with == 'Relatives') 
+                                                                {{ Form::radio('student_reside_with', 'Relatives', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('student_reside_with', 'Relatives', false, array('')) }}
+                                                            @endif
                                                             Relatives
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="student_reside_with" value="Others">
+                                                            @if ($enroll->student_reside_with == 'Others') 
+                                                                {{ Form::radio('student_reside_with', 'Others', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('student_reside_with', 'Others', false, array('')) }}
+                                                            @endif
                                                             Others
                                                             <span></span>
                                                         </label>
@@ -387,7 +493,14 @@
                                                     <label class="form-control-label">
                                                         * Student's Home Address (House Number, Street, District Area, City)
                                                     </label>
-                                                    <textarea id="student_address" col="3" class="form-control form-control-lg m-input m-input--solid " name="student_address"></textarea>
+                                                    {{ 
+                                                        Form::textarea($name = 'student_address', $value = !empty($enroll) ? $enroll->student_address : '', 
+                                                        $attributes = array(
+                                                            'id' => 'student_address',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid',
+                                                            'rows' => 3
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter student's home address
                                                     </span>
@@ -398,7 +511,14 @@
                                                     <label class="form-control-label">
                                                         * Barangay Name or Number
                                                     </label>
-                                                    <textarea id="student_barangay" col="3" class="form-control form-control-lg m-input m-input--solid " name="student_barangay"></textarea>
+                                                    {{ 
+                                                        Form::textarea($name = 'student_barangay', $value = !empty($enroll) ? $enroll->student_barangay : '', 
+                                                        $attributes = array(
+                                                            'id' => 'student_barangay',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid',
+                                                            'rows' => 3
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter barangay name or number
                                                     </span>
@@ -409,7 +529,14 @@
                                                     <label class="form-control-label">
                                                         * COMPLETE Name and Address of School Last Attended (write N/A if not applicable)
                                                     </label>
-                                                    <textarea id="student_last_attended" col="3" class="form-control form-control-lg m-input m-input--solid " name="student_last_attended"></textarea>
+                                                    {{ 
+                                                        Form::textarea($name = 'student_last_attended', $value = !empty($enroll) ? $enroll->student_last_attended : '', 
+                                                        $attributes = array(
+                                                            'id' => 'student_last_attended',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid',
+                                                            'rows' => 3
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter school last attended
                                                     </span>
@@ -420,7 +547,14 @@
                                                     <label class="form-control-label">
                                                         * Reason for Enrolling/Transferring
                                                     </label>
-                                                    <textarea id="student_transfer_reason" col="3" class="form-control form-control-lg m-input m-input--solid " name="student_transfer_reason"></textarea>
+                                                    {{ 
+                                                        Form::textarea($name = 'student_transfer_reason', $value = !empty($enroll) ? $enroll->student_transfer_reason : '', 
+                                                        $attributes = array(
+                                                            'id' => 'student_transfer_reason',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid',
+                                                            'rows' => 3
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter school last attended
                                                     </span>
@@ -439,7 +573,13 @@
                                                     <label class="form-control-label">
                                                         * Father's Firstname:
                                                     </label>
-                                                    <input id="father_firstname" class="form-control form-control-lg m-input m-input--solid " name="father_firstname" type="text" value="">
+                                                    {{ 
+                                                        Form::text($name = 'father_firstname', $value = !empty($enroll) ? $enroll->father_firstname : '', 
+                                                        $attributes = array(
+                                                            'id' => 'father_firstname',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter father's firstname
                                                     </span>
@@ -448,7 +588,13 @@
                                                     <label class="form-control-label">
                                                         Father's Middlename:
                                                     </label>
-                                                    <input id="father_middlename" class="form-control form-control-lg m-input m-input--solid " name="father_middlename" type="text" value="">
+                                                    {{ 
+                                                        Form::text($name = 'father_middlename', $value = !empty($enroll) ? $enroll->father_middlename : '', 
+                                                        $attributes = array(
+                                                            'id' => 'father_middlename',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter father's middlename
                                                     </span>
@@ -457,7 +603,13 @@
                                                     <label class="form-control-label">
                                                         * Father's Lastname:
                                                     </label>
-                                                    <input id="father_lastname" class="form-control form-control-lg m-input m-input--solid " name="father_lastname" type="text" value="">
+                                                    {{ 
+                                                        Form::text($name = 'father_lastname', $value = !empty($enroll) ? $enroll->father_lastname : '', 
+                                                        $attributes = array(
+                                                            'id' => 'father_lastname',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter father's lastname
                                                     </span>
@@ -468,7 +620,13 @@
                                                     <label class="form-control-label">
                                                         * Father's Mobile Number:
                                                     </label>
-                                                    <input id="father_contact" class="form-control form-control-lg m-input m-input--solid " name="father_contact" type="text" value="">
+                                                    {{ 
+                                                        Form::text($name = 'father_contact', $value = !empty($enroll) ? $enroll->father_contact : '', 
+                                                        $attributes = array(
+                                                            'id' => 'father_contact',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter father's mobile number
                                                     </span>
@@ -477,7 +635,13 @@
                                                     <label class="form-control-label">
                                                         * Father's Birthdate:
                                                     </label>
-                                                    <input id="father_birthdate" class="form-control form-control-lg m-input m-input--solid " name="father_birthdate" type="date" value="">
+                                                    {{ 
+                                                        Form::date($name = 'father_birthdate', $value = !empty($enroll) ? $enroll->father_birthdate : '', 
+                                                        $attributes = array(
+                                                            'id' => 'father_birthdate',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter father's birthdate
                                                     </span>
@@ -486,7 +650,13 @@
                                                     <label class="form-control-label">
                                                         * Father's Birthplace:
                                                     </label>
-                                                    <input id="father_birthplace" class="form-control form-control-lg m-input m-input--solid " name="father_birthplace" type="text" value="">
+                                                    {{ 
+                                                        Form::text($name = 'father_birthplace', $value = !empty($enroll) ? $enroll->father_birthplace : '', 
+                                                        $attributes = array(
+                                                            'id' => 'father_birthplace',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter father's birthplace
                                                     </span>
@@ -497,7 +667,14 @@
                                                     <label class="form-control-label">
                                                         * Father's Address:
                                                     </label>
-                                                    <textarea id="father_address" col="3" class="form-control form-control-lg m-input m-input--solid " name="father_address"></textarea>
+                                                    {{ 
+                                                        Form::textarea($name = 'father_address', $value = !empty($enroll) ? $enroll->father_address : '', 
+                                                        $attributes = array(
+                                                            'id' => 'father_address',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid',
+                                                            'rows' => 3
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                     Please enter father's address
                                                     </span>
@@ -510,17 +687,43 @@
                                                     </label>
                                                     <div class="m-radio-list">
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="father_religion" value="Roman Catholic">
+                                                            @if ($enroll->father_religion == 'Roman Catholic') 
+                                                                {{ Form::radio('father_religion', 'Roman Catholic', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('father_religion', 'Roman Catholic', false, array('')) }}
+                                                            @endif
                                                             Roman Catholic
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
+                                                            @if ($enroll->father_religion == 'Other') 
+                                                                {{ Form::radio('father_religion', 'Other', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('father_religion', 'Other', false, array('')) }}
+                                                            @endif
                                                             <input type="radio" name="father_religion" value="Other">
                                                             Other
                                                             <span></span>
                                                         </label>
                                                     </div>
-                                                    <input id="father_specific_religion" disabled="disabled" class="hidden form-control form-control-lg m-input m-input--solid " name="father_specific_religion" type="text" value="">
+                                                    @if ($enroll->father_religion == 'Other') 
+                                                        {{ 
+                                                            Form::text($name = 'father_specific_religion', $value = !empty($enroll) ? $enroll->father_specific_religion : '', 
+                                                            $attributes = array(
+                                                                'id' => 'father_specific_religion',
+                                                                'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                            )) 
+                                                        }}
+                                                    @else
+                                                        {{ 
+                                                            Form::text($name = 'father_specific_religion', $value = !empty($enroll) ? $enroll->father_specific_religion : '', 
+                                                            $attributes = array(
+                                                                'id' => 'father_specific_religion',
+                                                                'disabled' => 'disabled',
+                                                                'class' => 'hidden form-control form-control-lg m-input m-input--solid'
+                                                            )) 
+                                                        }}
+                                                    @endif
                                                     <span class="m-form__help">
                                                         Please enter specific religion
                                                     </span>
@@ -529,7 +732,13 @@
                                                     <label class="form-control-label">
                                                         Father's Occupation:
                                                     </label>
-                                                    <input id="father_occupation" class="form-control form-control-lg m-input m-input--solid " name="father_occupation" type="text" value="">
+                                                    {{ 
+                                                        Form::text($name = 'father_occupation', $value = !empty($enroll) ? $enroll->father_occupation : '', 
+                                                        $attributes = array(
+                                                            'id' => 'father_occupation',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter father's occupation
                                                     </span>
@@ -542,27 +751,47 @@
                                                     </label>
                                                     <div class="m-radio-list">
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="father_education" value="Elementary">
+                                                            @if ($enroll->father_education == 'Elementary') 
+                                                                {{ Form::radio('father_education', 'Elementary', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('father_education', 'Elementary', false, array('')) }}
+                                                            @endif
                                                             Elementary
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="father_education" value="High School">
+                                                            @if ($enroll->father_education == 'High School') 
+                                                                {{ Form::radio('father_education', 'High School', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('father_education', 'High School', false, array('')) }}
+                                                            @endif
                                                             High School
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="father_education" value="Undergraduate">
+                                                            @if ($enroll->father_education == 'Undergraduate') 
+                                                                {{ Form::radio('father_education', 'Undergraduate', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('father_education', 'Undergraduate', false, array('')) }}
+                                                            @endif
                                                             Undergraduate
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="father_education" value="College">
+                                                            @if ($enroll->father_education == 'College') 
+                                                                {{ Form::radio('father_education', 'College', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('father_education', 'College', false, array('')) }}
+                                                            @endif
                                                             College
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="father_education" value="College">
+                                                            @if ($enroll->father_education == 'Post-Baccalaureate') 
+                                                                {{ Form::radio('father_education', 'Post-Baccalaureate', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('father_education', 'Post-Baccalaureate', false, array('')) }}
+                                                            @endif
                                                             Post-Baccalaureate
                                                             <span></span>
                                                         </label>
@@ -577,26 +806,47 @@
                                                     </label>
                                                     <div class="m-radio-list">
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="father_employment_status" value="Full Time">
+                                                            @if ($enroll->father_employment_status == 'Full Time') 
+                                                                {{ Form::radio('father_employment_status', 'Full Time', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('father_employment_status', 'Full Time', false, array('')) }}
+                                                            @endif
                                                             Full Time
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="father_employment_status" value="Part Time">
+                                                            @if ($enroll->father_employment_status == 'Part Time') 
+                                                                {{ Form::radio('father_employment_status', 'Part Time', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('father_employment_status', 'Part Time', false, array('')) }}
+                                                            @endif
                                                             Part Time
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="father_employment_status" value="Self Employed (i.e. Family Business)">
+                                                            @if ($enroll->father_employment_status == 'Self Employed (i.e. Family Business)') 
+                                                                {{ Form::radio('father_employment_status', 'Self Employed (i.e. Family Business)', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('father_employment_status', 'Self Employed (i.e. Family Business)', false, array('')) }}
+                                                            @endif
                                                             Self Employed (i.e. Family Business)
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="father_employment_status" value="Unemployed due to community quarantine">
+                                                            @if ($enroll->father_employment_status == 'Unemployed due to community quarantine') 
+                                                                {{ Form::radio('father_employment_status', 'Unemployed due to community quarantine', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('father_employment_status', 'Unemployed due to community quarantine', false, array('')) }}
+                                                            @endif
                                                             Unemployed due to community quarantine
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
+                                                            @if ($enroll->father_employment_status == 'NOT Working') 
+                                                                {{ Form::radio('father_employment_status', 'NOT Working', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('father_employment_status', 'NOT Working', false, array('')) }}
+                                                            @endif
                                                             <input type="radio" name="father_employment_status" value="NOT Working">
                                                             NOT Working
                                                             <span></span>
@@ -614,12 +864,20 @@
                                                     </label>
                                                     <div class="m-radio-list">
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="father_workplace" value="In the Philippines">
+                                                            @if ($enroll->father_workplace == 'In the Philippines') 
+                                                                {{ Form::radio('father_workplace', 'In the Philippines', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('father_workplace', 'In the Philippines', false, array('')) }}
+                                                            @endif
                                                             In the Philippines
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="father_workplace" value="Abroad">
+                                                            @if ($enroll->father_workplace == 'Abroad') 
+                                                                {{ Form::radio('father_workplace', 'Abroad', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('father_workplace', 'Abroad', false, array('')) }}
+                                                            @endif
                                                             Abroad
                                                             <span></span>
                                                         </label>
@@ -634,12 +892,21 @@
                                                     </label>
                                                     <div class="m-radio-list">
                                                         <label class="m-radio m-radio--solid m-radio--brand">
+                                                            @if ($enroll->father_work_quarantine == 'Yes') 
+                                                                {{ Form::radio('father_work_quarantine', 'Yes', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('father_work_quarantine', 'Yes', false, array('')) }}
+                                                            @endif
                                                             <input type="radio" name="father_work_quarantine" value="Yes">
                                                             Yes
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="father_work_quarantine" value="No">
+                                                            @if ($enroll->father_work_quarantine == 'No') 
+                                                                {{ Form::radio('father_work_quarantine', 'No', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('father_work_quarantine', 'No', false, array('')) }}
+                                                            @endif
                                                             No
                                                             <span></span>
                                                         </label>
@@ -662,7 +929,13 @@
                                                     <label class="form-control-label">
                                                         * Mother's Firstname:
                                                     </label>
-                                                    <input id="mother_firstname" class="form-control form-control-lg m-input m-input--solid " name="mother_firstname" type="text" value="">
+                                                    {{ 
+                                                        Form::text($name = 'mother_firstname', $value = !empty($enroll) ? $enroll->mother_firstname : '', 
+                                                        $attributes = array(
+                                                            'id' => 'mother_firstname',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter mother's firstname
                                                     </span>
@@ -671,7 +944,13 @@
                                                     <label class="form-control-label">
                                                         Mother's Middlename:
                                                     </label>
-                                                    <input id="mother_middlename" class="form-control form-control-lg m-input m-input--solid " name="mother_middlename" type="text" value="">
+                                                    {{ 
+                                                        Form::text($name = 'mother_middlename', $value = !empty($enroll) ? $enroll->mother_middlename : '', 
+                                                        $attributes = array(
+                                                            'id' => 'mother_middlename',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter mother's middlename
                                                     </span>
@@ -680,7 +959,13 @@
                                                     <label class="form-control-label">
                                                         * Mother's Lastname:
                                                     </label>
-                                                    <input id="mother_lastname" class="form-control form-control-lg m-input m-input--solid " name="mother_lastname" type="text" value="">
+                                                    {{ 
+                                                        Form::text($name = 'mother_lastname', $value = !empty($enroll) ? $enroll->mother_lastname : '', 
+                                                        $attributes = array(
+                                                            'id' => 'mother_lastname',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter mother's lastname
                                                     </span>
@@ -691,7 +976,13 @@
                                                     <label class="form-control-label">
                                                         * Mother's Maiden Name:
                                                     </label>
-                                                    <input id="mother_maidenname" class="form-control form-control-lg m-input m-input--solid " name="mother_maidenname" type="text" value="">
+                                                    {{ 
+                                                        Form::text($name = 'mother_maidenname', $value = !empty($enroll) ? $enroll->mother_maidenname : '', 
+                                                        $attributes = array(
+                                                            'id' => 'mother_maidenname',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter mother's maiden name
                                                     </span>
@@ -700,7 +991,13 @@
                                                     <label class="form-control-label">
                                                         * Mother's Mobile Number:
                                                     </label>
-                                                    <input id="mother_contact" class="form-control form-control-lg m-input m-input--solid " name="mother_contact" type="text" value="">
+                                                    {{ 
+                                                        Form::text($name = 'mother_contact', $value = !empty($enroll) ? $enroll->mother_contact : '', 
+                                                        $attributes = array(
+                                                            'id' => 'mother_contact',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter mother's mobile number
                                                     </span>
@@ -711,7 +1008,13 @@
                                                     <label class="form-control-label">
                                                         * Mother's Birthdate:
                                                     </label>
-                                                    <input id="mother_birthdate" class="form-control form-control-lg m-input m-input--solid " name="mother_birthdate" type="date" value="">
+                                                    {{ 
+                                                        Form::date($name = 'mother_birthdate', $value = !empty($enroll) ? $enroll->mother_birthdate : '', 
+                                                        $attributes = array(
+                                                            'id' => 'mother_birthdate',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter mother's birthdate
                                                     </span>
@@ -720,7 +1023,13 @@
                                                     <label class="form-control-label">
                                                         * Mother's Birthplace:
                                                     </label>
-                                                    <input id="mother_birthplace" class="form-control form-control-lg m-input m-input--solid " name="mother_birthplace" type="text" value="">
+                                                    {{ 
+                                                        Form::text($name = 'mother_birthplace', $value = !empty($enroll) ? $enroll->mother_birthplace : '', 
+                                                        $attributes = array(
+                                                            'id' => 'mother_birthplace',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter mother's birthplace
                                                     </span>
@@ -731,7 +1040,14 @@
                                                     <label class="form-control-label">
                                                         * Mother's Address:
                                                     </label>
-                                                    <textarea id="mother_address" col="3" class="form-control form-control-lg m-input m-input--solid " name="mother_address"></textarea>
+                                                    {{ 
+                                                        Form::textarea($name = 'mother_address', $value = !empty($enroll) ? $enroll->mother_address : '', 
+                                                        $attributes = array(
+                                                            'id' => 'mother_address',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid',
+                                                            'rows' => 3
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                     Please enter mother's address
                                                     </span>
@@ -744,17 +1060,42 @@
                                                     </label>
                                                     <div class="m-radio-list">
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="mother_religion" value="Roman Catholic">
+                                                            @if ($enroll->mother_religion == 'Roman Catholic') 
+                                                                {{ Form::radio('mother_religion', 'Roman Catholic', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('mother_religion', 'Roman Catholic', false, array('')) }}
+                                                            @endif
                                                             Roman Catholic
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="mother_religion" value="Other">
+                                                            @if ($enroll->mother_religion == 'Other') 
+                                                                {{ Form::radio('mother_religion', 'Other', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('mother_religion', 'Other', false, array('')) }}
+                                                            @endif
                                                             Other
                                                             <span></span>
                                                         </label>
                                                     </div>
-                                                    <input id="mother_specific_religion" disabled="disabled" class="hidden form-control form-control-lg m-input m-input--solid " name="mother_specific_religion" type="text" value="">
+                                                    @if ($enroll->mother_religion == 'Other') 
+                                                        {{ 
+                                                            Form::text($name = 'mother_specific_religion', $value = !empty($enroll) ? $enroll->mother_specific_religion : '', 
+                                                            $attributes = array(
+                                                                'id' => 'mother_specific_religion',
+                                                                'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                            )) 
+                                                        }}
+                                                    @else
+                                                        {{ 
+                                                            Form::text($name = 'mother_specific_religion', $value = !empty($enroll) ? $enroll->mother_specific_religion : '', 
+                                                            $attributes = array(
+                                                                'id' => 'mother_specific_religion',
+                                                                'disabled' => 'disabled',
+                                                                'class' => 'hidden form-control form-control-lg m-input m-input--solid'
+                                                            )) 
+                                                        }}
+                                                    @endif
                                                     <span class="m-form__help">
                                                         Please enter specific religion
                                                     </span>
@@ -763,7 +1104,13 @@
                                                     <label class="form-control-label">
                                                         Mother's Occupation:
                                                     </label>
-                                                    <input id="mother_occupation" class="form-control form-control-lg m-input m-input--solid " name="mother_occupation" type="text" value="">
+                                                    {{ 
+                                                        Form::text($name = 'mother_occupation', $value = !empty($enroll) ? $enroll->mother_occupation : '', 
+                                                        $attributes = array(
+                                                            'id' => 'mother_occupation',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter mother's occupation
                                                     </span>
@@ -776,27 +1123,47 @@
                                                     </label>
                                                     <div class="m-radio-list">
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="mother_education" value="Elementary">
+                                                            @if ($enroll->mother_education == 'Elementary') 
+                                                                {{ Form::radio('mother_education', 'Elementary', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('mother_education', 'Elementary', false, array('')) }}
+                                                            @endif
                                                             Elementary
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="mother_education" value="High School">
+                                                            @if ($enroll->mother_education == 'High School') 
+                                                                {{ Form::radio('mother_education', 'High School', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('mother_education', 'High School', false, array('')) }}
+                                                            @endif
                                                             High School
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="mother_education" value="Undergraduate">
+                                                            @if ($enroll->mother_education == 'Undergraduate') 
+                                                                {{ Form::radio('mother_education', 'Undergraduate', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('mother_education', 'Undergraduate', false, array('')) }}
+                                                            @endif
                                                             Undergraduate
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="mother_education" value="College">
+                                                            @if ($enroll->mother_education == 'College') 
+                                                                {{ Form::radio('mother_education', 'College', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('mother_education', 'College', false, array('')) }}
+                                                            @endif
                                                             College
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="mother_education" value="College">
+                                                            @if ($enroll->mother_education == 'Post-Baccalaureate') 
+                                                                {{ Form::radio('mother_education', 'Post-Baccalaureate', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('mother_education', 'Post-Baccalaureate', false, array('')) }}
+                                                            @endif
                                                             Post-Baccalaureate
                                                             <span></span>
                                                         </label>
@@ -811,27 +1178,47 @@
                                                     </label>
                                                     <div class="m-radio-list">
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="mother_employment_status" value="Full Time">
+                                                            @if ($enroll->mother_employment_status == 'Full Time') 
+                                                                {{ Form::radio('mother_employment_status', 'Full Time', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('mother_employment_status', 'Full Time', false, array('')) }}
+                                                            @endif
                                                             Full Time
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="mother_employment_status" value="Part Time">
+                                                            @if ($enroll->mother_employment_status == 'Part Time') 
+                                                                {{ Form::radio('mother_employment_status', 'Part Time', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('mother_employment_status', 'Part Time', false, array('')) }}
+                                                            @endif
                                                             Part Time
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="mother_employment_status" value="Self Employed (i.e. Family Business)">
+                                                            @if ($enroll->mother_employment_status == 'Self Employed (i.e. Family Business)') 
+                                                                {{ Form::radio('mother_employment_status', 'Self Employed (i.e. Family Business)', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('mother_employment_status', 'Self Employed (i.e. Family Business)', false, array('')) }}
+                                                            @endif
                                                             Self Employed (i.e. Family Business)
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="mother_employment_status" value="Unemployed due to community quarantine">
+                                                            @if ($enroll->mother_employment_status == 'Unemployed due to community quarantine') 
+                                                                {{ Form::radio('mother_employment_status', 'Unemployed due to community quarantine', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('mother_employment_status', 'Unemployed due to community quarantine', false, array('')) }}
+                                                            @endif
                                                             Unemployed due to community quarantine
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="mother_employment_status" value="NOT Working">
+                                                            @if ($enroll->mother_employment_status == 'NOT Working') 
+                                                                {{ Form::radio('mother_employment_status', 'NOT Working', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('mother_employment_status', 'NOT Working', false, array('')) }}
+                                                            @endif    
                                                             NOT Working
                                                             <span></span>
                                                         </label>
@@ -848,12 +1235,20 @@
                                                     </label>
                                                     <div class="m-radio-list">
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="mother_workplace" value="In the Philippines">
+                                                            @if ($enroll->mother_workplace == 'In the Philippines') 
+                                                                {{ Form::radio('mother_workplace', 'In the Philippines', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('mother_workplace', 'In the Philippines', false, array('')) }}
+                                                            @endif    
                                                             In the Philippines
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="mother_workplace" value="Abroad">
+                                                            @if ($enroll->mother_workplace == 'Abroad') 
+                                                                {{ Form::radio('mother_workplace', 'Abroad', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('mother_workplace', 'Abroad', false, array('')) }}
+                                                            @endif    
                                                             Abroad
                                                             <span></span>
                                                         </label>
@@ -868,12 +1263,20 @@
                                                     </label>
                                                     <div class="m-radio-list">
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="mother_work_quarantine" value="Yes">
+                                                            @if ($enroll->mother_work_quarantine == 'Yes') 
+                                                                {{ Form::radio('mother_work_quarantine', 'Yes', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('mother_work_quarantine', 'Yes', false, array('')) }}
+                                                            @endif    
                                                             Yes
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="mother_work_quarantine" value="No">
+                                                            @if ($enroll->mother_work_quarantine == 'No') 
+                                                                {{ Form::radio('mother_work_quarantine', 'No', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('mother_work_quarantine', 'No', false, array('')) }}
+                                                            @endif  
                                                             No
                                                             <span></span>
                                                         </label>
@@ -890,22 +1293,38 @@
                                                     </label>
                                                     <div class="m-radio-inline">
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="parent_marriage_status" value="Living Together">
+                                                            @if ($enroll->parent_marriage_status == 'Living Together') 
+                                                                {{ Form::radio('parent_marriage_status', 'Living Together', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('parent_marriage_status', 'Living Together', false, array('')) }}
+                                                            @endif 
                                                             Living Together
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="parent_marriage_status" value="Single Parent">
+                                                            @if ($enroll->parent_marriage_status == 'Single Parent') 
+                                                                {{ Form::radio('parent_marriage_status', 'Single Parent', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('parent_marriage_status', 'Single Parent', false, array('')) }}
+                                                            @endif 
                                                             Single Parent
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="parent_marriage_status" value="Separated">
+                                                            @if ($enroll->parent_marriage_status == 'Separated') 
+                                                                {{ Form::radio('parent_marriage_status', 'Separated', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('parent_marriage_status', 'Separated', false, array('')) }}
+                                                            @endif 
                                                             Separated
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="parent_marriage_status" value="Widow/Widower">
+                                                            @if ($enroll->parent_marriage_status == 'Widow/Widower') 
+                                                                {{ Form::radio('parent_marriage_status', 'Widow/Widower', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('parent_marriage_status', 'Widow/Widower', false, array('')) }}
+                                                            @endif 
                                                             Widow/Widower
                                                             <span></span>
                                                         </label>
@@ -928,7 +1347,13 @@
                                                     <label class="form-control-label">
                                                         * Guardian's Firstname:
                                                     </label>
-                                                    <input id="guardian_firstname" class="form-control form-control-lg m-input m-input--solid " name="guardian_firstname" type="text" value="">
+                                                    {{ 
+                                                        Form::text($name = 'guardian_firstname', $value = !empty($enroll) ? $enroll->guardian_firstname : '', 
+                                                        $attributes = array(
+                                                            'id' => 'guardian_firstname',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter guardian's firstname
                                                     </span>
@@ -937,7 +1362,13 @@
                                                     <label class="form-control-label">
                                                         Guardian's Middlename:
                                                     </label>
-                                                    <input id="guardian_middlename" class="form-control form-control-lg m-input m-input--solid " name="guardian_middlename" type="text" value="">
+                                                    {{ 
+                                                        Form::text($name = 'guardian_middlename', $value = !empty($enroll) ? $enroll->guardian_middlename : '', 
+                                                        $attributes = array(
+                                                            'id' => 'guardian_middlename',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter guardian's middlename
                                                     </span>
@@ -946,7 +1377,13 @@
                                                     <label class="form-control-label">
                                                         * Guardian's Lastname:
                                                     </label>
-                                                    <input id="guardian_lastname" class="form-control form-control-lg m-input m-input--solid " name="guardian_lastname" type="text" value="">
+                                                    {{ 
+                                                        Form::text($name = 'guardian_lastname', $value = !empty($enroll) ? $enroll->guardian_lastname : '', 
+                                                        $attributes = array(
+                                                            'id' => 'guardian_lastname',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter guardian's lastname
                                                     </span>
@@ -957,7 +1394,13 @@
                                                     <label class="form-control-label">
                                                         * Guardian's Relationship to student:
                                                     </label>
-                                                    <input id="guardian_relationship" class="form-control form-control-lg m-input m-input--solid " name="guardian_relationship" type="text" value="">
+                                                    {{ 
+                                                        Form::text($name = 'guardian_relationship', $value = !empty($enroll) ? $enroll->guardian_relationship : '', 
+                                                        $attributes = array(
+                                                            'id' => 'guardian_relationship',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter guardian's relationship to student
                                                     </span>
@@ -966,7 +1409,13 @@
                                                     <label class="form-control-label">
                                                         * Guardian's Mobile Number:
                                                     </label>
-                                                    <input id="guardian_contact" class="form-control form-control-lg m-input m-input--solid " name="guardian_contact" type="text" value="">
+                                                    {{ 
+                                                        Form::text($name = 'guardian_contact', $value = !empty($enroll) ? $enroll->guardian_contact : '', 
+                                                        $attributes = array(
+                                                            'id' => 'guardian_contact',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter guardian's mobile number
                                                     </span>
@@ -979,27 +1428,47 @@
                                                     </label>
                                                     <div class="m-radio-list">
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="guardian_employment_status" value="Full Time">
+                                                            @if ($enroll->guardian_employment_status == 'Full Time') 
+                                                                {{ Form::radio('guardian_employment_status', 'Full Time', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('guardian_employment_status', 'Full Time', false, array('')) }}
+                                                            @endif
                                                             Full Time
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="guardian_employment_status" value="Part Time">
+                                                            @if ($enroll->guardian_employment_status == 'Part Time') 
+                                                                {{ Form::radio('guardian_employment_status', 'Part Time', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('guardian_employment_status', 'Part Time', false, array('')) }}
+                                                            @endif
                                                             Part Time
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="guardian_employment_status" value="Self Employed (i.e. Family Business)">
+                                                            @if ($enroll->guardian_employment_status == 'Self Employed (i.e. Family Business)') 
+                                                                {{ Form::radio('guardian_employment_status', 'Self Employed (i.e. Family Business)', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('guardian_employment_status', 'Self Employed (i.e. Family Business)', false, array('')) }}
+                                                            @endif
                                                             Self Employed (i.e. Family Business)
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="guardian_employment_status" value="Unemployed due to community quarantine">
+                                                            @if ($enroll->guardian_employment_status == 'Unemployed due to community quarantine') 
+                                                                {{ Form::radio('guardian_employment_status', 'Unemployed due to community quarantine', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('guardian_employment_status', 'Unemployed due to community quarantine', false, array('')) }}
+                                                            @endif
                                                             Unemployed due to community quarantine
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="guardian_employment_status" value="NOT Working">
+                                                            @if ($enroll->guardian_employment_status == 'NOT Working') 
+                                                                {{ Form::radio('guardian_employment_status', 'NOT Working', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('guardian_employment_status', 'NOT Working', false, array('')) }}
+                                                            @endif
                                                             NOT Working
                                                             <span></span>
                                                         </label>
@@ -1014,12 +1483,20 @@
                                                     </label>
                                                     <div class="m-radio-list">
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="guardian_work_quarantine" value="Yes">
+                                                            @if ($enroll->guardian_work_quarantine == 'Yes') 
+                                                                {{ Form::radio('guardian_work_quarantine', 'Yes', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('guardian_work_quarantine', 'Yes', false, array('')) }}
+                                                            @endif
                                                             Yes
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="guardian_work_quarantine" value="No">
+                                                            @if ($enroll->guardian_work_quarantine == 'No') 
+                                                                {{ Form::radio('guardian_work_quarantine', 'No', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('guardian_work_quarantine', 'No', false, array('')) }}
+                                                            @endif
                                                             No
                                                             <span></span>
                                                         </label>
@@ -1036,12 +1513,20 @@
                                                     </label>
                                                     <div class="m-radio-list">
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="family_4ps" value="Yes">
+                                                            @if ($enroll->family_4ps == 'Yes') 
+                                                                {{ Form::radio('family_4ps', 'Yes', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('family_4ps', 'Yes', false, array('')) }}
+                                                            @endif
                                                             Yes
                                                             <span></span>
                                                         </label>
                                                         <label class="m-radio m-radio--solid m-radio--brand">
-                                                            <input type="radio" name="family_4ps" value="No">
+                                                            @if ($enroll->family_4ps == 'No') 
+                                                                {{ Form::radio('family_4ps', 'No', true, array('')) }}
+                                                            @else
+                                                                {{ Form::radio('family_4ps', 'No', false, array('')) }}
+                                                            @endif
                                                             No
                                                             <span></span>
                                                         </label>
@@ -1056,7 +1541,13 @@
                                                     <label class="form-control-label">
                                                         * Siblings (follow the format: Full Name - Age. [e.g. Juan Dela Cruz - 10]):
                                                     </label>
-                                                    <input id="student_siblings" class="form-control form-control-lg m-input m-input--solid " name="student_siblings" type="text" value="">
+                                                    {{ 
+                                                        Form::text($name = 'student_siblings', $value = !empty($enroll) ? $enroll->student_siblings : '', 
+                                                        $attributes = array(
+                                                            'id' => 'student_siblings',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter student siblings
                                                     </span>
@@ -1067,7 +1558,13 @@
                                                     <label class="form-control-label">
                                                         * Previous Schools' Academic Information (follow the format: Name of School, Year/s stayed, Honor/s received) - Type N/A if NOT APPLICABLE:
                                                     </label>
-                                                    <input id="student_previous_academic" class="form-control form-control-lg m-input m-input--solid " name="student_previous_academic" type="text" value="">
+                                                    {{ 
+                                                        Form::text($name = 'student_previous_academic', $value = !empty($enroll) ? $enroll->student_previous_academic : '', 
+                                                        $attributes = array(
+                                                            'id' => 'student_previous_academic',
+                                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                                        )) 
+                                                    }}
                                                     <span class="m-form__help">
                                                         Please enter previous school academic information
                                                     </span>

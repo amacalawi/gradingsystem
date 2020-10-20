@@ -23,7 +23,7 @@ class CreateEnrollmentsTable extends Migration
             $table->string('student_psa_no', 100);
             $table->integer('level_id')->unsigned();
             $table->string('student_firstname', 100);
-            $table->string('student_middlename', 100);
+            $table->string('student_middlename', 100)->nullable();
             $table->string('student_lastname', 100);
             $table->double('student_age');
             $table->string('student_gender', 40);
@@ -35,7 +35,7 @@ class CreateEnrollmentsTable extends Migration
             $table->text('student_last_attended')->nullable();
             $table->text('student_transfer_reason')->nullable();
             $table->string('father_firstname', 100);
-            $table->string('father_middlename', 100);
+            $table->string('father_middlename', 100)->nullable();
             $table->string('father_lastname', 100);
             $table->string('father_contact', 20);
             $table->date('father_birthdate')->nullable();
@@ -49,8 +49,9 @@ class CreateEnrollmentsTable extends Migration
             $table->string('father_workplace', 100)->nullable();
             $table->string('father_work_quarantine', 100)->nullable();
             $table->string('mother_firstname', 100);
-            $table->string('mother_middlename', 100);
+            $table->string('mother_middlename', 100)->nullable();
             $table->string('mother_lastname', 100);
+            $table->string('mother_maidenname', 100);
             $table->string('mother_contact', 20);
             $table->date('mother_birthdate')->nullable();
             $table->text('mother_birthplace')->nullable();
@@ -64,7 +65,7 @@ class CreateEnrollmentsTable extends Migration
             $table->string('mother_work_quarantine', 100)->nullable();
             $table->string('parent_marriage_status', 40);
             $table->string('guardian_firstname', 100);
-            $table->string('guardian_middlename', 100);
+            $table->string('guardian_middlename', 100)->nullable();
             $table->string('guardian_lastname', 100);
             $table->string('guardian_contact', 20);
             $table->string('guardian_relationship', 40);
@@ -81,9 +82,9 @@ class CreateEnrollmentsTable extends Migration
             $table->string('specific_student_devices', 100)->nullable();
             $table->string('student_with_internet', 100)->nullable();
             $table->text('student_internet_connection')->nullable();
-            $table->string('student_describe_internet', 100)->nullable();
-            $table->string('student_learning_modality', 100)->nullable();
-            $table->string('student_learning_delivery', 100)->nullable();
+            $table->string('student_describe_internet', 255)->nullable();
+            $table->string('student_learning_modality', 255)->nullable();
+            $table->string('student_learning_delivery', 255)->nullable();
             $table->text('student_challenges_education')->nullable();
             $table->string('specific_student_challenges_education', 100)->nullable();
             $table->text('student_documents')->nullable();

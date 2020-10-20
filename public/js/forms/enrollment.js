@@ -356,8 +356,6 @@ var WizardDemo = function () {
                 type: $form.attr('method'),
                 url: $form.attr('action'),
                 data: $form.serialize(),
-                clearForm: true,
-                resetForm: true,
                 timeout: 5000, 
                 success: function(response) {
                     mApp.unprogress(btn);
@@ -370,6 +368,7 @@ var WizardDemo = function () {
                             type: data.type,
                             confirmButtonClass: "btn " + data.class + " btn-focus m-btn m-btn--pill m-btn--air m-btn--custom",
                         }).then((result) => {
+                            $('form[name="enrollment_form"]').reset();
                             $('#forms').addClass('hidden');
                             $('#acknowledgement').removeClass('hidden');
                         })
@@ -457,6 +456,14 @@ jQuery.validator.addMethod("mobile", function(value, element, params) {
     return this.optional( element ) || /([0-9]{11})|(\([0-9]{3}\)\s+[0-9]{3}\-[0-9]{4})/.test( value );
 }, jQuery.validator.format("Please enter a valid mobile number."));
 
+(function( $ ){
+    $.fn.compute_age = function($date) {
+        var dob = new Date($date);
+        var today = new Date();
+        var age = Math.floor((today-dob) / (365.25 * 24 * 60 * 60 * 1000));
+        return age;
+    }; 
+ })( jQuery );
 
 jQuery(document).ready(function() {    
     WizardDemo.init();
@@ -465,9 +472,7 @@ jQuery(document).ready(function() {
 
     $('body').on('change', 'input[name="student_birthdate"]', function (e){
         e.preventDefault();
-        dob = new Date($(this).val());
-        var today = new Date();
-        var age = Math.floor((today-dob) / (365.25 * 24 * 60 * 60 * 1000));
+        var age = $('body').compute_age($(this).val());
         $('input[name="student_age"]').val(age);
     });
 
@@ -515,12 +520,28 @@ jQuery(document).ready(function() {
             url: base_url + 'enrollment/search?id_number='+ $('input[name="student_number"]').val(),
             success: function(response) {
                 var data = JSON.parse(response);
+                var _form = $('form[name="enrollment_form"]');
                 console.log(data);
-                $.each(data.data, function(i, item) {
-                    if (i == 'student_gender') {
-                        $('input:radio[name="' + i + '"][value="'+ item +'"]').prop('checked', true);
+                $.each(data.data, function(k, v) {
+                    var _input = _form.find('[name="' + k + '"]');
+                    if (k == 'student_birthdate') {
+                        _input.val( v );
+                        _form.find('[name="student_age"]').val($('body').compute_age(v));
                     } else {
-                        $('body').find('input[name="' + i + '"]').val(item);
+                        if (_input.is(':radio')) {
+                            if (v !== '') {
+                                _form.find('[name="' + k + '"][value="' + v + '"]').prop('checked', true);
+                            }
+                        } else if (_input.is(':checkbox')) {
+                            if (v !== '') {
+                                var vArray = v.split(',');
+                                for(var i = 0; i < vArray.length; i++){
+                                    _form.find('[name="' + k + '"][value="' + vArray[i] + '"]').prop('checked', true);
+                                }
+                            }
+                        } else {
+                            _input.val( v );
+                        }
                     }
                 }); 
             },
@@ -546,7 +567,7 @@ jQuery(document).ready(function() {
 				if ( $('.m_datatable').length ) {
 					$('.m_datatable').mDatatable().reload();
 				}
-			}
+			} 
 		});  
 		this.on("error", function(file){if (!file.accepted) this.removeFile(file);});            
 		}
