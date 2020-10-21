@@ -368,9 +368,10 @@ var WizardDemo = function () {
                             type: data.type,
                             confirmButtonClass: "btn " + data.class + " btn-focus m-btn m-btn--pill m-btn--air m-btn--custom",
                         }).then((result) => {
-                            $('form[name="enrollment_form"]').reset();
-                            $('#forms').addClass('hidden');
-                            $('#acknowledgement').removeClass('hidden');
+                            if ($form.find('input[name="method"]').val() !== 'edit') {
+                                $('#forms').addClass('hidden');
+                                $('#acknowledgement').removeClass('hidden');
+                            }
                         })
                     } else {
                         swal({
@@ -470,6 +471,11 @@ jQuery(document).ready(function() {
 
     $('.m_selectpicker').selectpicker();
 
+    if ($('input[name="student_birthdate"]').val() !== '') {
+        var age = $('body').compute_age($('input[name="student_birthdate"]').val());
+        $('input[name="student_age"]').val(age);
+    }
+
     $('body').on('change', 'input[name="student_birthdate"]', function (e){
         e.preventDefault();
         var age = $('body').compute_age($(this).val());
@@ -480,7 +486,7 @@ jQuery(document).ready(function() {
         var self = $(this);
         var value = $(this).val();
         if (value == 0) {
-            $('#student-row').removeClass('hidden').find('input[name="student_number"]').removeClass('hidden');
+            $('#student-row').removeClass('hidden').find('input[name="student_number"]').val('').removeClass('hidden');
         } else {
             $('#student-row').addClass('hidden').find('input[name="student_number"]').addClass('hidden');
         }
@@ -556,7 +562,7 @@ jQuery(document).ready(function() {
 		// acceptedFiles: accept,
 		init: function () {
 		this.on("processing", function(file) {
-			this.options.url = base_url + 'enrollments/import-documents';
+			this.options.url = base_url + 'enrollment/uploads?lrn=' + $('input[name="lrn_no"]').val();
 			console.log(this.options.url);
 		}).on("queuecomplete", function (file, response) {
 			// console.log(response);

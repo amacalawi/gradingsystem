@@ -10,7 +10,7 @@
                 </h5>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{{ url('/enrollments/import-documents') }}" class="dropzone dz-clickable" id="import-student-document-dropzone">
+                <form method="POST" action="{{ url('/enrollment/uploads') }}" class="dropzone dz-clickable" id="import-student-document-dropzone">
                     @csrf
                     <div class="dz-default dz-message"><span>Drop files here to upload</span></div>
                 </form>
