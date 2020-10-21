@@ -206,6 +206,19 @@ button:not([data-dismiss="alert"]) {
     /* width: 88px !important; */
 }
 
+.accent-bg {
+    color: #fff;
+    text-shadow: 1px 1px #333;
+    background: #00c5dc !important;
+    /* width: 88px !important; */
+}
+
+.focus-bg {
+    color: #fff;
+    text-shadow: 1px 1px #333;
+    background: #9816f4 !important;
+}
+
 .secondary-bg {
     color: #fff;
     text-shadow: 1px 1px #333;

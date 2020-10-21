@@ -11,6 +11,8 @@ use App\Models\Enrollment;
 use App\Models\Level;
 use App\Models\Batch;
 use App\Models\Student;
+use App\Models\PaymentTerm;
+use App\Models\PaymentOption;
 use App\User;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -39,7 +41,10 @@ class EnrollmentController extends Controller
     public function index(Request $request)
     {
         $levels = (new Level)->get_all_levels_with_empty();
-        return view('modules/enrollments/index')->with(compact('levels'));
+        $enroll = array();
+        $payment_terms = PaymentTerm::where('is_active', 1)->get();
+        $payment_options = PaymentOption::where('is_active', 1)->get();
+        return view('modules/enrollments/index')->with(compact('levels', 'enroll', 'payment_terms', 'payment_options'));
     }
 
     public function edit(Request $request, $id)
@@ -48,7 +53,9 @@ class EnrollmentController extends Controller
         $this->is_permitted(1);    
         $levels = (new Level)->get_all_levels_with_empty();
         $enroll = Enrollment::find($id);
-        return view('modules/enrollments/edit')->with(compact('levels', 'enroll'));
+        $payment_terms = PaymentTerm::where('is_active', 1)->get();
+        $payment_options = PaymentOption::where('is_active', 1)->get();
+        return view('modules/enrollments/edit')->with(compact('levels', 'enroll', 'payment_terms', 'payment_options'));
     }
 
     public function all_active(Request $request)
@@ -223,12 +230,30 @@ class EnrollmentController extends Controller
         if ($rows > 0) {
             $data = array(
                 'title' => 'Oh snap!',
-                'text' => 'You cannot enroll with an existing lrn.',
+                'text' => 'You cannot enroll with an existing learning reference number.',
                 'type' => 'error',
                 'class' => 'btn-danger'
             );
     
             echo json_encode( $data ); exit();
+        }
+
+        if (!empty($request->student_number)) {
+            $rows2 = Enrollment::where([
+                'student_no' => $request->student_number,
+                'batch_id' => (new Batch)->get_current_batch()
+            ])->count();
+
+            if ($rows2 > 0) {
+                $data = array(
+                    'title' => 'Oh snap!',
+                    'text' => 'You cannot use an existing student number.',
+                    'type' => 'error',
+                    'class' => 'btn-danger'
+                );
+        
+                echo json_encode( $data ); exit();
+            }
         }
 
         $enrollment = Enrollment::create([
@@ -332,4 +357,162 @@ class EnrollmentController extends Controller
         echo json_encode( $data ); exit();
     }
 
+    public function update(Request $request, $id)
+    {    
+        $this->is_permitted(2);
+        $timestamp = date('Y-m-d H:i:s');
+
+        $rows = Enrollment::where('id', '!=', $id)->where([
+            'student_lrn' => $request->lrn_no,
+            'batch_id' => (new Batch)->get_current_batch()
+        ])->count();
+
+        if ($rows > 0) {
+            $data = array(
+                'title' => 'Oh snap!',
+                'text' => 'You cannot use an existing learning reference number.',
+                'type' => 'error',
+                'class' => 'btn-danger'
+            );
+    
+            echo json_encode( $data ); exit();
+        }
+
+        if (!empty($request->student_number)) {
+            $rows2 = Enrollment::where('id', '!=', $id)->where([
+                'student_no' => $request->student_number,
+                'batch_id' => (new Batch)->get_current_batch()
+            ])->count();
+
+            if ($rows2 > 0) {
+                $data = array(
+                    'title' => 'Oh snap!',
+                    'text' => 'You cannot use an existing student number.',
+                    'type' => 'error',
+                    'class' => 'btn-danger'
+                );
+        
+                echo json_encode( $data ); exit();
+            }
+        }
+
+        $enrollment = Enrollment::find($id);
+
+        if(!$enrollment) {
+            throw new NotFoundHttpException();
+        }
+
+        $enrollment->student_email = $request->student_email;
+        $enrollment->is_new = $request->is_new;
+        $enrollment->student_no = !empty($request->student_number) ? $request->student_number : NULL;
+        $enrollment->student_lrn = $request->lrn_no;
+        $enrollment->student_psa_no = $request->psa_no;
+        $enrollment->level_id = $request->grade_level;
+        $enrollment->student_firstname = $request->student_firstname;
+        $enrollment->student_middlename = $request->student_middlename;
+        $enrollment->student_lastname = $request->student_lastname;
+        $enrollment->student_age = $request->student_age;
+        $enrollment->student_gender = $request->student_gender;
+        $enrollment->student_birthdate = date('Y-m-d', strtotime($request->student_birthdate));
+        $enrollment->student_birthorder = $request->student_birthorder;
+        $enrollment->student_reside_with = $request->student_reside_with;
+        $enrollment->student_address = $request->student_address;
+        $enrollment->student_barangay = $request->student_barangay;
+        $enrollment->student_last_attended = $request->student_last_attended;
+        $enrollment->student_transfer_reason = $request->student_transfer_reason;
+        $enrollment->father_firstname = $request->father_firstname;
+        $enrollment->father_middlename = $request->father_middlename;
+        $enrollment->father_lastname = $request->father_lastname;
+        $enrollment->father_contact = $request->father_contact;
+        $enrollment->father_birthdate = date('Y-m-d', strtotime($request->father_birthdate));
+        $enrollment->father_birthplace = $request->father_birthplace;
+        $enrollment->father_address = $request->father_address;
+        $enrollment->father_religion = $request->father_religion;
+        $enrollment->father_specific_religion = $request->father_specific_religion;
+        $enrollment->father_occupation = $request->father_occupation;
+        $enrollment->father_education = $request->father_education;
+        $enrollment->father_employment_status = $request->father_employment_status;
+        $enrollment->father_workplace = $request->father_workplace;
+        $enrollment->father_work_quarantine = $request->father_work_quarantine;
+        $enrollment->mother_firstname = $request->mother_firstname;
+        $enrollment->mother_middlename = $request->mother_middlename;
+        $enrollment->mother_lastname = $request->mother_lastname;
+        $enrollment->mother_maidenname = $request->mother_maidenname;
+        $enrollment->mother_contact = $request->mother_contact;
+        $enrollment->mother_birthdate = date('Y-m-d', strtotime($request->mother_birthdate));
+        $enrollment->mother_birthplace = $request->mother_contact;
+        $enrollment->mother_address = $request->mother_address;
+        $enrollment->mother_religion = $request->mother_religion;
+        $enrollment->mother_specific_religion = $request->mother_specific_religion;
+        $enrollment->mother_occupation = $request->mother_occupation;
+        $enrollment->mother_education = $request->mother_education;
+        $enrollment->mother_employment_status = $request->mother_employment_status;
+        $enrollment->mother_workplace = $request->mother_workplace;
+        $enrollment->mother_work_quarantine = $request->mother_work_quarantine;
+        $enrollment->parent_marriage_status = $request->parent_marriage_status;
+        $enrollment->guardian_firstname = $request->guardian_firstname;
+        $enrollment->guardian_middlename = $request->guardian_middlename;
+        $enrollment->guardian_lastname = $request->guardian_lastname;
+        $enrollment->guardian_contact = $request->guardian_contact;
+        $enrollment->guardian_relationship = $request->guardian_relationship;
+        $enrollment->guardian_employment_status = $request->guardian_employment_status;
+        $enrollment->guardian_work_quarantine = $request->guardian_work_quarantine;
+        $enrollment->family_4ps = $request->family_4ps;
+        $enrollment->student_siblings = $request->student_siblings;
+        $enrollment->student_previous_academic = $request->student_previous_academic;
+        $enrollment->student_transpo = implode(',', $request->student_transpo);
+        $enrollment->student_studying = $request->student_studying;
+        $enrollment->specific_student_studying = $request->specific_student_studying;
+        $enrollment->student_supplies = $request->student_supplies;
+        $enrollment->student_devices = implode(',', $request->student_devices);
+        $enrollment->specific_student_devices = $request->specific_student_devices;
+        $enrollment->student_with_internet = $request->student_with_internet;
+        $enrollment->student_internet_connection = implode(',', $request->student_internet_connection);
+        $enrollment->student_describe_internet = $request->student_describe_internet; 
+        $enrollment->student_learning_modality = $request->student_learning_modality;
+        $enrollment->student_learning_delivery = $request->student_learning_delivery;
+        $enrollment->student_challenges_education = implode(',', $request->student_challenges_education);
+        $enrollment->specific_student_challenges_education = $request->specific_student_challenges_education;
+        $enrollment->student_documents = implode(',', $request->student_documents);
+        $enrollment->student_tuition_fee_types = $request->student_tuition_fee_types;
+        $enrollment->payment_term_id = $request->student_payment_terms;
+        $enrollment->student_sibling_discount = $request->student_sibling_discount;
+        $enrollment->student_subsidy_grantee = $request->student_subsidy_grantee;
+        $enrollment->payment_option_id = $request->student_payment_option;
+        $enrollment->student_acknowledge_1 = $request->student_acknowledge_1;
+        $enrollment->student_acknowledge_2 = $request->student_acknowledge_2;
+        $enrollment->student_acknowledge_3 = $request->student_acknowledge_3;
+        $enrollment->student_acknowledge_4 = $request->student_acknowledge_4;
+        $enrollment->status = ($request->student_status == 'assessed') ? $request->student_status : 'enlisted';
+        $enrollment->updated_at = $timestamp;
+        $enrollment->updated_by = Auth::user()->id;
+
+        if ($enrollment->update()) {
+
+            $data = array(
+                'title' => 'Well done!',
+                'text' => 'The application has been successfully updated.',
+                'type' => 'success',
+                'class' => 'btn-brand'
+            );
+    
+            echo json_encode( $data ); exit();
+        }
+    }
+
+    public function uploads(Request $request)
+    {   
+        $folderID = $request->get('lrn');
+        Storage::disk('uploads')->makeDirectory('students/'.$folderID);
+        $files = array();
+
+        foreach($_FILES as $file)
+        {   
+            $filename = basename($file['name']);
+            $files[] = Storage::put('students/'.$folderID.'/'.$filename, (string) file_get_contents($file['tmp_name']));
+        }
+
+        $data = array('files' => $files);
+        echo json_encode( $data ); exit();
+    }
 }

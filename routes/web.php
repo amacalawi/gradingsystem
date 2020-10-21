@@ -403,7 +403,8 @@ Route::prefix('academics')->group(function () {
         Route::get('enrollments', 'EnrollmentController@manage')->name('enrollments.manage');
         Route::get('enrollments/all-active', 'EnrollmentController@all_active')->name('enrollments.all.active');
         Route::get('enrollments/all-inactive', 'EnrollmentController@all_inactive')->name('enrollments.all.inactive');
-        Route::get('enrollments/edit/{id?}', 'EnrollmentController@edit')->name('enrollments.edit');
+        Route::get('enrollments/edit/{id}', 'EnrollmentController@edit')->name('enrollments.edit');
+        Route::put('enrollments/update/{id}', 'EnrollmentController@update')->name('enrollments.update');
         /* End Enrollment Routes */
     });
 
@@ -596,6 +597,7 @@ Route::post('upload-data', 'GuestController@upload_data')->name('guest.uploads')
 Route::post('upload-photo', 'GuestController@upload_photo')->name('guest.uploads');
 Route::get('enrollment', 'EnrollmentController@index')->name('enrollment.new');
 Route::post('enrollment/store', 'EnrollmentController@store')->name('enrollment.save');
+Route::post('enrollment/uploads', 'EnrollmentController@uploads')->name('enrollment.uploads');
 Route::get('enrollment/search', 'EnrollmentController@search')->name('enrollment.search');
 /* End Guest Routes */
 

@@ -79,11 +79,11 @@ var DatatableDataLocalDemo = function () {
 			template: function (row) {
 				var status = {
 					'enlisted' : {'class': 'childhood-bg'},
-					'assessed' : {'class': 'primary-bg'}, 
+					'assessed' : {'class': 'focus-bg'}, 
 					'enrolled' : {'class': 'secondary-bg'},
 					'admitted' : {'class': 'secondary-bg'},
 				};
-				return '<span class="m-badge ' + status[row.enrollStatus].class + ' m-badge--wide">' + row.enrollStatus + '</span>';
+				return '<span class="m-badge ' + status[row.enrollStatus].class + ' m-badge--wide">' + row.enrollStatus.toUpperCase() + '</span>';
 			}
 		}, {
 			field: "Actions",
@@ -95,21 +95,18 @@ var DatatableDataLocalDemo = function () {
 			template: function (row, index, datatable) {
 				var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
 				var $privileges = _privileges.split(',');
+				var url = base_url + 'academics/admissions/enrollments/edit/' + row.enrollID;
 				if ($privileges[2] == 1 && $privileges[3] == 1) {
 					return '\
-						<a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/admissions/enrollments/edit/' + row.enrollID + '"><i class="la la-edit"></i></a>\
-						<a title="remove this" data-row-id="' + row.enrollID + '" action="Remove" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-remove"></i></a>\
+						<a onclick="popupWindow('+  row.enrollID +');" href="javascript:;" title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill"><i class="la la-edit"></i></a>\
 					';
 				} else {
 					if ($privileges[2] == 1) {
 						return '\
-							<a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/admissions/enrollments/edit/' + row.enrollID + '"><i class="la la-edit"></i></a>\
+						<a onclick="popupWindow("'+url+'", "edit application", 200, 100);" href="javascript:;" title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill"><i class="la la-edit"></i></a>\
 						';
 					}
 					if ($privileges[3] == 1) {
-						return '\
-							<a title="remove this" data-row-id="' + row.enrollID + '" action="Remove" class="dropdown-item toggle-status m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-remove"></i></a>\
-						';	
 					}
 				}
 			}
@@ -150,6 +147,15 @@ var DatatableDataLocalDemo = function () {
 		}
 	};
 }();
+
+function popupWindow($id) {
+	var url =  base_url + 'academics/admissions/enrollments/edit/' + $id;
+	var w = window.innerWidth;
+	var h = window.innerHeight;
+    const y = window.top.outerHeight / 2 + window.top.screenY - ( h / 2);
+    const x = window.top.outerWidth / 2 + window.top.screenX - ( w / 2);
+    return window.open(url, 'edit application', `toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=${w}, height=${h}, top=${y}, left=${x}`);
+}
 
 jQuery(document).ready(function () {
 	DatatableDataLocalDemo.init();

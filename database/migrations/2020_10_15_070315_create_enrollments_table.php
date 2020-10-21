@@ -20,7 +20,7 @@ class CreateEnrollmentsTable extends Migration
             $table->boolean('is_new')->default(1);
             $table->string('student_no', 40)->nullable();
             $table->string('student_lrn', 12);
-            $table->string('student_psa_no', 100);
+            $table->string('student_psa_no', 100)->nullable();
             $table->integer('level_id')->unsigned();
             $table->string('student_firstname', 100);
             $table->string('student_middlename', 100)->nullable();
