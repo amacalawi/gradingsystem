@@ -30,6 +30,7 @@ class Student extends Model
             $results = array(
                 'id' => ($student->id) ? $student->id : '',
                 'members_type_id' => ($student->members_type_id) ? $student->members_type_id : '',
+                'learners_reference_no' => ($student->learners_reference_no) ? $student->learners_reference_no : '',
                 'identification_no' => ($student->identification_no) ? $student->identification_no : '',
                 'firstname' => ($student->firstname) ? $student->firstname : '',
                 'middlename' => ($student->middlename) ? $student->middlename : '',
@@ -73,6 +74,7 @@ class Student extends Model
                 'id' => '',
                 'members_type_id' => '',
                 'identification_no' => '',
+                'learners_reference_no' => '',
                 'firstname' => '',
                 'middlename' => '',
                 'lastname' => '',

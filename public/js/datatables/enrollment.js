@@ -103,7 +103,7 @@ var DatatableDataLocalDemo = function () {
 				} else {
 					if ($privileges[2] == 1) {
 						return '\
-						<a onclick="popupWindow("'+url+'", "edit application", 200, 100);" href="javascript:;" title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill"><i class="la la-edit"></i></a>\
+						<a onclick="popupWindow('+  row.enrollID +');" href="javascript:;" title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill"><i class="la la-edit"></i></a>\
 						';
 					}
 					if ($privileges[3] == 1) {
@@ -148,8 +148,12 @@ var DatatableDataLocalDemo = function () {
 	};
 }();
 
-function popupWindow($id) {
-	var url =  base_url + 'academics/admissions/enrollments/edit/' + $id;
+function popupWindow($id, $method = '') {
+	if ($method == '') {
+		var url =  base_url + 'academics/admissions/enrollments/edit/' + $id;
+	} else {
+		var url =  base_url + 'enrollment';
+	}
 	var w = window.innerWidth;
 	var h = window.innerHeight;
     const y = window.top.outerHeight / 2 + window.top.screenY - ( h / 2);

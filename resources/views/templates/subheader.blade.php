@@ -208,29 +208,39 @@
                         $invisibleAddNew = ['soa', 'gradingsheet', 'payslip'];
                     @endphp
                     @if (!in_array(Request::segment(3), $invisibleAddNew))
-                    <a href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/'.Request::segment(3).'/add') }}" class="{{ ($privileges[0] == 1) ? '' : 'hidden' }} btn m-btn--pill btn-brand add-btn m-btn--custom">
-                        <i class="la la-commenting"></i> 
-                        @php 
-                            $string = substr(ucwords(Request::segment(3)), 0, -1);
-                            $exemptions = ['modules', 'sub-modules', 'education-types'];
-                        @endphp
-                        @if (Request::segment(3) == 'all-gradingsheets')
-                            Add New Grading Sheet
+                    @php 
+                        $popupAddNew = ['enrollments'];
+                    @endphp
+                        @if (in_array(Request::segment(3), $popupAddNew))
+                            <a onclick="popupWindow(0, 'add');" href="javascript:;" class="{{ ($privileges[0] == 1) ? '' : 'hidden' }} btn m-btn--pill btn-brand add-btn m-btn--custom">
+                                <i class="la la-commenting"></i> 
+                                Add New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1) }}
+                            </a>
                         @else
-                            @if (substr($string, -1) == 'e' && !in_array(Request::segment(3), $exemptions))
-                                Add New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2) }}
-                            @else
+                            <a href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/'.Request::segment(3).'/add') }}" class="{{ ($privileges[0] == 1) ? '' : 'hidden' }} btn m-btn--pill btn-brand add-btn m-btn--custom">
+                                <i class="la la-commenting"></i> 
                                 @php 
-                                    $exemption = ['soa-template-01', 'gradingsheet-template-01'];
+                                    $string = substr(ucwords(Request::segment(3)), 0, -1);
+                                    $exemptions = ['modules', 'sub-modules', 'education-types'];
                                 @endphp
-                                @if (!in_array(Request::segment(3), $exemption))
-                                    Add New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1) }}
+                                @if (Request::segment(3) == 'all-gradingsheets')
+                                    Add New Grading Sheet
                                 @else
-                                    Add New {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
+                                    @if (substr($string, -1) == 'e' && !in_array(Request::segment(3), $exemptions))
+                                        Add New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -2) }}
+                                    @else
+                                        @php 
+                                            $exemption = ['soa-template-01', 'gradingsheet-template-01'];
+                                        @endphp
+                                        @if (!in_array(Request::segment(3), $exemption))
+                                            Add New {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1) }}
+                                        @else
+                                            Add New {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
+                                        @endif
+                                    @endif
                                 @endif
-                            @endif
+                            </a>
                         @endif
-                    </a>
                     @endif
                 @endif
             </div>
