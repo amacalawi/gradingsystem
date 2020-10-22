@@ -247,6 +247,7 @@ class StudentsController extends Controller
             'user_id' => $user->id,
             'role_id' => $request->role_id,
             'identification_no' => $request->identification_no,
+            'learners_reference_no' => $request->learners_reference_no,
             'firstname' => $request->firstname,
             'middlename' => $request->middlename,
             'lastname' => $request->lastname,
@@ -458,6 +459,7 @@ class StudentsController extends Controller
 
         $student->role_id = $request->role_id;
         $student->identification_no = $request->identification_no;
+        $student->learners_reference_no = $request->learners_reference_no;
         $student->firstname = $request->firstname;
         $student->middlename = $request->middlename;
         $student->lastname = $request->lastname;

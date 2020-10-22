@@ -26,7 +26,23 @@
                         </div>
                     </div>    
                     <div class="row">
-                        <div class="offset-md-6 col-md-6">
+                        <div class="col-md-6">
+                            <div class="form-group m-form__group required">
+                                {{ Form::label('learners_reference_no', 'Learners Reference Number', ['class' => '']) }}
+                                {{ 
+                                    Form::text($name = 'learners_reference_no', $value = !empty($student) ? $student->learners_reference_no : '', 
+                                    $attributes = array(
+                                        'id' => 'learners_reference_no',
+                                        'class' => 'bold form-control form-control-lg m-input m-input--solid',
+                                        'maxlength' => 12,
+                                        'minlength' => 12
+                                    )) 
+                                }}
+                                <span class="m-form__help m--font-danger">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
                             <div class="form-group m-form__group required">
                                 {{ Form::label('identification_no', 'Student Number', ['class' => '']) }}
                                 {{ 
