@@ -521,6 +521,14 @@ Route::prefix('academics')->group(function () {
         });
         /* End Student Attendance Settings */        
 
+        Route::get('for-approval', 'AttendanceSheetController@manage')->name('attendancesheet.manage.active');
+        Route::get('for-approval/add', 'AttendanceSheetController@add')->name('attendancesheet.add');
+        Route::get('for-approval/edit/{id?}', 'AttendanceSheetController@edit')->name('attendancesheet.edit');
+        Route::post('for-approval/store', 'AttendanceSheetController@store')->name('attendancesheet.store');
+        Route::put('for-approval/update/{id}', 'AttendanceSheetController@update')->name('attendancesheet.update');
+        Route::get('for-approval/all-active', 'AttendanceSheetController@all_active')->name('attendancesheet.all.active');
+        Route::put('for-approval/update-status/{id}', 'AttendanceSheetController@update_status')->name('attendancesheet.update.status');
+
     });
     /* End Attendance Sheets */
 });
