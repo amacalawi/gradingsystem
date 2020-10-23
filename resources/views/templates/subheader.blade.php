@@ -205,7 +205,7 @@
                     @endif
 
                     @php 
-                        $invisibleAddNew = ['soa', 'gradingsheet', 'payslip'];
+                        $invisibleAddNew = ['soa', 'gradingsheet', 'payslip', 'for-approval'];
                     @endphp
                     @if (!in_array(Request::segment(3), $invisibleAddNew))
                     @php 

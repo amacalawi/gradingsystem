@@ -63,7 +63,7 @@ class GradingSheetImport implements ToModel, WithCalculatedFormulas, WithMappedC
                 {
                     $col++;
                     $score = $col.$row;
-                    if($rows[$score]){
+                    if($rows[$score] !== NULL){
                         $gradingActivtity = GradingSheetActivity::where('activity_id', '=', $activity->id)->where('student_id', '=', $student->student_id)
                         ->update([
                             'score' => $rows[$score],

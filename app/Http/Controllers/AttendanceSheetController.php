@@ -5,17 +5,12 @@ namespace App\Http\Controllers;
 use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\AttendanceSheets;
-use App\Models\EducationType;
-use App\Models\Student;
-use App\Models\Staff;
-use App\Models\Dtr;
-use App\Models\Dtrlog;
 use App\User;
+use App\Helper\Helper;
 
-class StudentFileAttendanceController extends Controller
+class AttendanceSheetController extends Controller
 {
     private $models;
 
@@ -23,6 +18,14 @@ class StudentFileAttendanceController extends Controller
     {   
         date_default_timezone_set('Asia/Manila');
         $this->middleware('auth');
+    }
+    
+    public function is_permitted($permission)
+    {
+        $privileges = explode(',', strtolower(Helper::get_privileges()));
+        if (!$privileges[$permission] == 1) {
+            return abort(404);
+        }
     }
 
     /**
@@ -33,19 +36,19 @@ class StudentFileAttendanceController extends Controller
     public function index()
     {
         $menus = $this->load_menus();
-        return view('modules/academics/attendancesheets/students/manage')->with(compact('menus'));
+        return view('modules/academics/attendancesheets/forapproval/manage')->with(compact('menus'));
     }
 
     public function manage(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/academics/attendancesheets/students/manage')->with(compact('menus'));
+        return view('modules/academics/attendancesheets/forapproval/manage')->with(compact('menus'));
     }
 
     public function inactive(Request $request)
     {   
         $menus = $this->load_menus();
-        return view('modules/academics/attendancesheets/students/inactive')->with(compact('menus'));
+        return view('modules/academics/attendancesheets/forapproval/inactive')->with(compact('menus'));
     }
 
     public function all_active(Request $request)
@@ -56,6 +59,7 @@ class StudentFileAttendanceController extends Controller
             }
         ])
         ->where('role_id', 4)
+        ->where('status', 'pending')
         ->where([
             'is_active' => 1
         ])->orderBy('id', 'ASC')->get();
@@ -81,6 +85,8 @@ class StudentFileAttendanceController extends Controller
                 $q->select(['id', 'user_id', 'firstname', 'middlename', 'lastname']); 
             }
         ])
+        ->where('role_id', 4)
+        ->where('status', 'pending')
         ->where([
             'is_active' => 0
         ])->orderBy('id', 'ASC')->get();
@@ -101,6 +107,7 @@ class StudentFileAttendanceController extends Controller
 
     public function add(Request $request, $id = '')
     {   
+        /*
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(5);
@@ -112,10 +119,12 @@ class StudentFileAttendanceController extends Controller
             $attendancesheets = (new AttendanceSheets)->fetch($id);
         }
         return view('modules/academics/attendancesheets/students/add')->with(compact('menus', 'attendancesheets', 'student', 'types', 'segment', 'flashMessage'));
+        */
     }
 
     public function edit(Request $request, $id)
-    {   
+    {  
+        /* 
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(5);
@@ -131,10 +140,12 @@ class StudentFileAttendanceController extends Controller
         }
 
         return view('modules/academics/attendancesheets/students/edit')->with(compact('menus', 'attendancesheets', 'student', 'types', 'segment', 'flashMessage'));
+        */
     }
 
     public function store(Request $request)
-    {   
+    {
+        /*   
         $timestamp = date('Y-m-d H:i:s');
 
         $student_arr = explode(' - ', $request->member);
@@ -231,10 +242,12 @@ class StudentFileAttendanceController extends Controller
             'class' => 'btn-brand'
         );
         echo json_encode( $data ); exit();
+        */
     }
 
     public function update(Request $request, $id)
-    {   
+    {  
+        /* 
         $timestamp = date('Y-m-d H:i:s');
         $attendancesheets = AttendanceSheets::find($id);
         if(!$attendancesheets) {
@@ -360,23 +373,33 @@ class StudentFileAttendanceController extends Controller
             );
             echo json_encode( $data ); exit();
         }
+        */
     }
 
-    public function get_column_via_id($id, $column)
-    {
-        return (new Student)->where('id', $id)->first()->$column;
-    }
+    public function update_status(Request $request, $id)
+    {   
+        $this->is_permitted(3);
+        $timestamp = date('Y-m-d H:i:s');
+        $action = $request->input('items')[0]['action'];
 
-    public function get_status_via_auth_user_type($auth_id, $role_id){
-
-        $status = 'pending';
-        $user_role_id = Staff::where('user_id', $auth_id)->first(['role_id']);
-        
-        if($user_role_id){
-            if( ($role_id > 3) && ($user_role_id->role_id <= 3) ){
-                $status = 'approved';
-            }
+        if ($action == 'Approved') {
+            $attendancesheet = AttendanceSheets::where('id', $id)
+            ->update([
+                'status' => 'approved',
+                'updated_at' => $timestamp,
+                'updated_by' => Auth::user()->id,
+                'is_active' => 1
+            ]);
+            
+            $data = array(
+                'title' => 'Well done!',
+                'text' => 'The attendance status has been successfully changed.',
+                'type' => 'success',
+                'class' => 'btn-brand'
+            );
+    
+            echo json_encode( $data ); exit();
         }
-        return $status;
     }
+
 }
