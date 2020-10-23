@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\SoaTemplate01;
+use App\Models\AuditLog;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -134,6 +135,15 @@ class CsvTemplateSoaController extends Controller
             throw new NotFoundHttpException();
         }
 
+        $auditLogs = AuditLog::create([
+            'entity' => 'soa_template_01',
+            'entity_id' => $soaTemplate01->id,
+            'description' => 'has inserted a new soa template.',
+            'data' => json_encode(SoaTemplate01::find($soaTemplate01->id)),
+            'created_at' => $timestamp,
+            'created_by' => Auth::user()->id
+        ]);
+
         $data = array(
             'title' => 'Well done!',
             'text' => 'The soa_template has been successfully saved.',
@@ -165,6 +175,16 @@ class CsvTemplateSoaController extends Controller
         $soaTemplate01->updated_by = Auth::user()->id;
 
         if ($soaTemplate01->update()) {
+
+            $auditLogs = AuditLog::create([
+                'entity' => 'soa_template_01',
+                'entity_id' => $id,
+                'description' => 'has modified a soa template.',
+                'data' => json_encode(SoaTemplate01::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The soa template has been successfully updated.',
@@ -192,6 +212,15 @@ class CsvTemplateSoaController extends Controller
                 'is_active' => 0
             ]);
             
+            $auditLogs = AuditLog::create([
+                'entity' => 'soa_template_01',
+                'entity_id' => $id,
+                'description' => 'has removed a soa template.',
+                'data' => json_encode(SoaTemplate01::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The soa template has been successfully removed.',
@@ -209,6 +238,15 @@ class CsvTemplateSoaController extends Controller
                 'updated_at' => $timestamp,
                 'updated_by' => Auth::user()->id,
                 'is_active' => 1
+            ]);
+
+            $auditLogs = AuditLog::create([
+                'entity' => 'soa_template_01',
+                'entity_id' => $id,
+                'description' => 'has retrieved a soa template.',
+                'data' => json_encode(SoaTemplate01::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
             ]);
             
             $data = array(
@@ -253,6 +291,16 @@ class CsvTemplateSoaController extends Controller
                                 if (!($soaTemplate01->update())) {
                                     throw new NotFoundHttpException();
                                 }
+
+                                $auditLogs = AuditLog::create([
+                                    'entity' => 'soa_template_01',
+                                    'entity_id' => $exist->first()->id,
+                                    'description' => 'has imported and updated a soa template.',
+                                    'data' => json_encode(SoaTemplate01::find($exist->first()->id)),
+                                    'created_at' => $timestamp,
+                                    'created_by' => Auth::user()->id
+                                ]);
+
                             } else {
                                 $soaTemplate01 = SoaTemplate01::create([
                                     'identification_no' => $data[0],
@@ -265,10 +313,19 @@ class CsvTemplateSoaController extends Controller
                                     'created_at' => $timestamp,
                                     'created_by' => Auth::user()->id
                                 ]);
-                        
+
                                 if (!$soaTemplate01) {
                                     throw new NotFoundHttpException();
                                 }  
+
+                                $auditLogs = AuditLog::create([
+                                    'entity' => 'soa_template_01',
+                                    'entity_id' => $soaTemplate01->id,
+                                    'description' => 'has imported a new soa template.',
+                                    'data' => json_encode(SoaTemplate01::find($soaTemplate01->id)),
+                                    'created_at' => $timestamp,
+                                    'created_by' => Auth::user()->id
+                                ]);
                             }
                         }
                     } // close for if $row > 1 condition                    

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Designation;
 use App\Models\EducationType;
+use App\Models\AuditLog;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -157,6 +158,15 @@ class DesignationsController extends Controller
             throw new NotFoundHttpException();
         }
 
+        $auditLogs = AuditLog::create([
+            'entity' => 'designations',
+            'entity_id' => $designation->id,
+            'description' => 'has inserted a new designation.',
+            'data' => json_encode(Designation::find($designation->id)),
+            'created_at' => $timestamp,
+            'created_by' => Auth::user()->id
+        ]);
+
         $data = array(
             'title' => 'Well done!',
             'text' => 'The designation has been successfully saved.',
@@ -186,6 +196,15 @@ class DesignationsController extends Controller
 
         if ($designation->update()) {
 
+            $auditLogs = AuditLog::create([
+                'entity' => 'designations',
+                'entity_id' => $id,
+                'description' => 'has modified a designation.',
+                'data' => json_encode(Designation::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The designation has been successfully updated.',
@@ -212,7 +231,16 @@ class DesignationsController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 0
             ]);
-            
+                
+            $auditLogs = AuditLog::create([
+                'entity' => 'designations',
+                'entity_id' => $id,
+                'description' => 'has removed a designation.',
+                'data' => json_encode(Designation::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The designation has been successfully removed.',
@@ -232,6 +260,15 @@ class DesignationsController extends Controller
                 'is_active' => 1
             ]);
             
+            $auditLogs = AuditLog::create([
+                'entity' => 'designations',
+                'entity_id' => $id,
+                'description' => 'has retrieved a designation.',
+                'data' => json_encode(Designation::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The designation has been successfully activated.',

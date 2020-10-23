@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Module;
 use App\Models\SubModule;
+use App\Models\AuditLog;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -152,6 +153,15 @@ class SubModulesController extends Controller
             throw new NotFoundHttpException();
         }
 
+        $auditLogs = AuditLog::create([
+            'entity' => 'sub_modules',
+            'entity_id' => $submodule->id,
+            'description' => 'has inserted a new sub module.',
+            'data' => json_encode(SubModule::find($submodule->id)),
+            'created_at' => $timestamp,
+            'created_by' => Auth::user()->id
+        ]);
+
         $data = array(
             'title' => 'Well done!',
             'text' => 'The sub sub module has been successfully saved.',
@@ -183,6 +193,15 @@ class SubModulesController extends Controller
 
         if ($submodule->update()) {
 
+            $auditLogs = AuditLog::create([
+                'entity' => 'sub_modules',
+                'entity_id' => $id,
+                'description' => 'has modified a sub module.',
+                'data' => json_encode(SubModule::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The sub sub module has been successfully updated.',
@@ -208,6 +227,15 @@ class SubModulesController extends Controller
                 'updated_at' => $timestamp,
                 'updated_by' => Auth::user()->id,
                 'is_active' => 0
+            ]);
+
+            $auditLogs = AuditLog::create([
+                'entity' => 'sub_modules',
+                'entity_id' => $id,
+                'description' => 'has removed a sub module.',
+                'data' => json_encode(SubModule::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
             ]);
             
             $data = array(
@@ -235,6 +263,15 @@ class SubModulesController extends Controller
             $submodules->updated_at = $timestamp;
             $submodules->updated_by = Auth::user()->id;
             $submodules->update();
+
+            $auditLogs = AuditLog::create([
+                'entity' => 'sub_modules',
+                'entity_id' => $id,
+                'description' => 'has modified the sub module order up.',
+                'data' => json_encode(SubModule::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
             
             $data = array(
                 'title' => 'Well done!',
@@ -261,6 +298,15 @@ class SubModulesController extends Controller
             $submodules->updated_at = $timestamp;
             $submodules->updated_by = Auth::user()->id;
             $submodules->update();
+
+            $auditLogs = AuditLog::create([
+                'entity' => 'sub_modules',
+                'entity_id' => $id,
+                'description' => 'has modified the sub module order down.',
+                'data' => json_encode(SubModule::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
             
             $data = array(
                 'title' => 'Well done!',
@@ -279,6 +325,15 @@ class SubModulesController extends Controller
                 'updated_at' => $timestamp,
                 'updated_by' => Auth::user()->id,
                 'is_active' => 1
+            ]);
+
+            $auditLogs = AuditLog::create([
+                'entity' => 'sub_modules',
+                'entity_id' => $id,
+                'description' => 'has retrieved a sub module.',
+                'data' => json_encode(SubModule::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
             ]);
             
             $data = array(

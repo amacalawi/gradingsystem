@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Quarter;
 use App\Models\EducationType;
+use App\Models\AuditLog;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -165,6 +166,15 @@ class QuartersController extends Controller
             throw new NotFoundHttpException();
         }
 
+        $auditLogs = AuditLog::create([
+            'entity' => 'quarters',
+            'entity_id' => $quarter->id,
+            'description' => 'has inserted a new quarter.',
+            'data' => json_encode(Quarter::find($quarter->id)),
+            'created_at' => $timestamp,
+            'created_by' => Auth::user()->id
+        ]);
+
         $data = array(
             'title' => 'Well done!',
             'text' => 'The quarter has been successfully saved.',
@@ -196,6 +206,15 @@ class QuartersController extends Controller
 
         if ($quarter->update()) {
 
+            $auditLogs = AuditLog::create([
+                'entity' => 'quarters',
+                'entity_id' => $id,
+                'description' => 'has modified a quarter.',
+                'data' => json_encode(Quarter::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The quarter has been successfully updated.',
@@ -222,6 +241,15 @@ class QuartersController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 0
             ]);
+
+            $auditLogs = AuditLog::create([
+                'entity' => 'quarters',
+                'entity_id' => $id,
+                'description' => 'has removed a quarter.',
+                'data' => json_encode(Quarter::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
             
             $data = array(
                 'title' => 'Well done!',
@@ -240,6 +268,15 @@ class QuartersController extends Controller
                 'updated_at' => $timestamp,
                 'updated_by' => Auth::user()->id,
                 'is_active' => 1
+            ]);
+
+            $auditLogs = AuditLog::create([
+                'entity' => 'quarters',
+                'entity_id' => $id,
+                'description' => 'has retrieved a quarter.',
+                'data' => json_encode(Quarter::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
             ]);
             
             $data = array(

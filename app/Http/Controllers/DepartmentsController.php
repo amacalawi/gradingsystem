@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\EducationType;
+use App\Models\AuditLog;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -163,6 +164,15 @@ class DepartmentsController extends Controller
             throw new NotFoundHttpException();
         }
 
+        $auditLogs = AuditLog::create([
+            'entity' => 'departments',
+            'entity_id' => $department->id,
+            'description' => 'has inserted a new department.',
+            'data' => json_encode(Department::find($department->id)),
+            'created_at' => $timestamp,
+            'created_by' => Auth::user()->id
+        ]);
+
         $data = array(
             'title' => 'Well done!',
             'text' => 'The department has been successfully saved.',
@@ -192,6 +202,15 @@ class DepartmentsController extends Controller
 
         if ($department->update()) {
 
+            $auditLogs = AuditLog::create([
+                'entity' => 'departments',
+                'entity_id' => $id,
+                'description' => 'has modified a department.',
+                'data' => json_encode(Department::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The department has been successfully updated.',
@@ -210,13 +229,22 @@ class DepartmentsController extends Controller
         $action = $request->input('items')[0]['action'];
 
         if ($action == 'Remove') {
-            $departments = Department::where([
+            $department = Department::where([
                 'id' => $id,
             ])
             ->update([
                 'updated_at' => $timestamp,
                 'updated_by' => Auth::user()->id,
                 'is_active' => 0
+            ]);
+
+            $auditLogs = AuditLog::create([
+                'entity' => 'departments',
+                'entity_id' => $id,
+                'description' => 'has removed a department.',
+                'data' => json_encode(Department::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
             ]);
             
             $data = array(
@@ -229,13 +257,22 @@ class DepartmentsController extends Controller
             echo json_encode( $data ); exit();
         }    
         else {
-            $batches = Department::where([
+            $department = Department::where([
                 'id' => $id,
             ])
             ->update([
                 'updated_at' => $timestamp,
                 'updated_by' => Auth::user()->id,
                 'is_active' => 1
+            ]);
+
+            $auditLogs = AuditLog::create([
+                'entity' => 'departments',
+                'entity_id' => $id,
+                'description' => 'has retrieved a department.',
+                'data' => json_encode(Department::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
             ]);
             
             $data = array(

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Batch;
+use App\Models\AuditLog;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -152,6 +153,15 @@ class BatchesController extends Controller
             throw new NotFoundHttpException();
         }
 
+        $auditLogs = AuditLog::create([
+            'entity' => 'batches',
+            'entity_id' => $batch->id,
+            'description' => 'has inserted a new batch.',
+            'data' => json_encode(Batch::find($batch->id)),
+            'created_at' => $timestamp,
+            'created_by' => Auth::user()->id
+        ]);
+
         $data = array(
             'title' => 'Well done!',
             'text' => 'The batch has been successfully saved.',
@@ -185,6 +195,15 @@ class BatchesController extends Controller
         $batch->updated_by = Auth::user()->id;
 
         if ($batch->update()) {
+
+            $auditLogs = AuditLog::create([
+                'entity' => 'batches',
+                'entity_id' => $id,
+                'description' => 'has modified a batch.',
+                'data' => json_encode(Batch::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
 
             $data = array(
                 'title' => 'Well done!',
@@ -221,6 +240,15 @@ class BatchesController extends Controller
                 'is_active' => 0
             ]);
             
+            $auditLogs = AuditLog::create([
+                'entity' => 'batches',
+                'entity_id' => $id,
+                'description' => 'has removed a batch.',
+                'data' => json_encode(Batch::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The batch status has been successfully removed.',
@@ -240,6 +268,15 @@ class BatchesController extends Controller
                 'is_active' => 1
             ]);
             
+            $auditLogs = AuditLog::create([
+                'entity' => 'batches',
+                'entity_id' => $id,
+                'description' => 'has retrieved a batch.',
+                'data' => json_encode(Batch::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The batch status has been successfully activated.',
@@ -266,6 +303,15 @@ class BatchesController extends Controller
                 'updated_at' => $timestamp,
                 'updated_by' => Auth::user()->id,
                 'is_active' => 1
+            ]);
+
+            $auditLogs = AuditLog::create([
+                'entity' => 'batches',
+                'entity_id' => $id,
+                'description' => 'has modified the batch status to current.',
+                'data' => json_encode(Batch::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
             ]);
             
             $data = array(
@@ -301,6 +347,15 @@ class BatchesController extends Controller
                     'updated_at' => $timestamp,
                     'updated_by' => Auth::user()->id,
                     'is_active' => 1
+                ]);
+
+                $auditLogs = AuditLog::create([
+                    'entity' => 'batches',
+                    'entity_id' => $id,
+                    'description' => 'has modified the batch status to open.',
+                    'data' => json_encode(Batch::find($id)),
+                    'created_at' => $timestamp,
+                    'created_by' => Auth::user()->id
                 ]);
 
                 $data = array(
@@ -340,6 +395,15 @@ class BatchesController extends Controller
                 'updated_at' => $timestamp,
                 'updated_by' => Auth::user()->id,
                 'is_active' => 1
+            ]);
+
+            $auditLogs = AuditLog::create([
+                'entity' => 'batches',
+                'entity_id' => $id,
+                'description' => 'has modified the batch status to closed.',
+                'data' => json_encode(Batch::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
             ]);
 
             $data = array(

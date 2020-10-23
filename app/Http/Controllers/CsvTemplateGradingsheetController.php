@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\GradingsheetTemplate01;
 use App\Models\Level;
 use App\Models\Section;
+use App\Models\AuditLog;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -156,6 +157,15 @@ class CsvTemplateGradingsheetController extends Controller
             throw new NotFoundHttpException();
         }
 
+        $auditLogs = AuditLog::create([
+            'entity' => 'gradingsheet_template_01',
+            'entity_id' => $gradingTemplate01->id,
+            'description' => 'has inserted a new gradingsheet template.',
+            'data' => json_encode(GradingsheetTemplate01::find($gradingTemplate01->id)),
+            'created_at' => $timestamp,
+            'created_by' => Auth::user()->id
+        ]);
+
         $data = array(
             'title' => 'Well done!',
             'text' => 'The gradingsheet_template has been successfully saved.',
@@ -197,6 +207,16 @@ class CsvTemplateGradingsheetController extends Controller
         $gradingTemplate01->updated_by = Auth::user()->id;
 
         if ($gradingTemplate01->update()) {
+
+            $auditLogs = AuditLog::create([
+                'entity' => 'gradingsheet_template_01',
+                'entity_id' => $id,
+                'description' => 'has modified a gradingsheet template.',
+                'data' => json_encode(GradingsheetTemplate01::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The soa template has been successfully updated.',
@@ -223,6 +243,15 @@ class CsvTemplateGradingsheetController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 0
             ]);
+
+            $auditLogs = AuditLog::create([
+                'entity' => 'gradingsheet_template_01',
+                'entity_id' => $id,
+                'description' => 'has removed a gradingsheet template.',
+                'data' => json_encode(GradingsheetTemplate01::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
             
             $data = array(
                 'title' => 'Well done!',
@@ -241,6 +270,15 @@ class CsvTemplateGradingsheetController extends Controller
                 'updated_at' => $timestamp,
                 'updated_by' => Auth::user()->id,
                 'is_active' => 1
+            ]);
+
+            $auditLogs = AuditLog::create([
+                'entity' => 'gradingsheet_template_01',
+                'entity_id' => $id,
+                'description' => 'has retrieved a gradingsheet template.',
+                'data' => json_encode(GradingsheetTemplate01::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
             ]);
             
             $data = array(
@@ -288,6 +326,15 @@ class CsvTemplateGradingsheetController extends Controller
                                 if (!($gradingTemplate01->update())) {
                                     throw new NotFoundHttpException();
                                 }
+
+                                $auditLogs = AuditLog::create([
+                                    'entity' => 'gradingsheet_template_01',
+                                    'entity_id' => $gradingTemplate01->id,
+                                    'description' => 'has imported and updated a gradingsheet template.',
+                                    'data' => json_encode(GradingsheetTemplate01::find($gradingTemplate01->id)),
+                                    'created_at' => $timestamp,
+                                    'created_by' => Auth::user()->id
+                                ]);
                             } else {
                                 $gradingTemplate01 = GradingsheetTemplate01::create([
                                     'identification_no' => $data[0],
@@ -307,6 +354,15 @@ class CsvTemplateGradingsheetController extends Controller
                                 if (!$gradingTemplate01) {
                                     throw new NotFoundHttpException();
                                 }  
+
+                                $auditLogs = AuditLog::create([
+                                    'entity' => 'gradingsheet_template_01',
+                                    'entity_id' => $gradingTemplate01->id,
+                                    'description' => 'has imported a new gradingsheet template.',
+                                    'data' => json_encode(GradingsheetTemplate01::find($gradingTemplate01->id)),
+                                    'created_at' => $timestamp,
+                                    'created_by' => Auth::user()->id
+                                ]);
                             }
                         }
                     } // close for if $row > 1 condition                    

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Header;
+use App\Models\AuditLog;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -147,6 +148,15 @@ class HeadersController extends Controller
             throw new NotFoundHttpException();
         }
 
+        $auditLogs = AuditLog::create([
+            'entity' => 'headers',
+            'entity_id' => $header->id,
+            'description' => 'has inserted a new header.',
+            'data' => json_encode(Header::find($header->id)),
+            'created_at' => $timestamp,
+            'created_by' => Auth::user()->id
+        ]);
+
         $data = array(
             'title' => 'Well done!',
             'text' => 'The header has been successfully saved.',
@@ -176,6 +186,15 @@ class HeadersController extends Controller
 
         if ($header->update()) {
 
+            $auditLogs = AuditLog::create([
+                'entity' => 'headers',
+                'entity_id' => $id,
+                'description' => 'has modified a header.',
+                'data' => json_encode(Header::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The header has been successfully updated.',
@@ -201,6 +220,15 @@ class HeadersController extends Controller
                 'updated_at' => $timestamp,
                 'updated_by' => Auth::user()->id,
                 'is_active' => 0
+            ]);
+
+            $auditLogs = AuditLog::create([
+                'entity' => 'headers',
+                'entity_id' => $id,
+                'description' => 'has removed a header.',
+                'data' => json_encode(Header::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
             ]);
             
             $data = array(
@@ -228,6 +256,15 @@ class HeadersController extends Controller
             $headers->updated_at = $timestamp;
             $headers->updated_by = Auth::user()->id;
             $headers->update();
+
+            $auditLogs = AuditLog::create([
+                'entity' => 'headers',
+                'entity_id' => $id,
+                'description' => 'has modified the header order up.',
+                'data' => json_encode(Header::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
             
             $data = array(
                 'title' => 'Well done!',
@@ -255,6 +292,15 @@ class HeadersController extends Controller
             $headers->updated_by = Auth::user()->id;
             $headers->update();
             
+            $auditLogs = AuditLog::create([
+                'entity' => 'headers',
+                'entity_id' => $id,
+                'description' => 'has modified the header order down.',
+                'data' => json_encode(Header::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+            
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The header has been successfully removed.',
@@ -272,6 +318,15 @@ class HeadersController extends Controller
                 'updated_at' => $timestamp,
                 'updated_by' => Auth::user()->id,
                 'is_active' => 1
+            ]);
+            
+            $auditLogs = AuditLog::create([
+                'entity' => 'headers',
+                'entity_id' => $id,
+                'description' => 'has retrieved a header.',
+                'data' => json_encode(Header::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
             ]);
             
             $data = array(
