@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\EducationType;
+use App\Models\AuditLog;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -137,6 +138,15 @@ class EducationTypesController extends Controller
             throw new NotFoundHttpException();
         }
 
+        $auditLogs = AuditLog::create([
+            'entity' => 'education_types',
+            'entity_id' => $educationType->id,
+            'description' => 'has inserted a new education type.',
+            'data' => json_encode(EducationType::find($educationType->id)),
+            'created_at' => $timestamp,
+            'created_by' => Auth::user()->id
+        ]);
+
         $data = array(
             'title' => 'Well done!',
             'text' => 'The education type has been successfully saved.',
@@ -165,6 +175,15 @@ class EducationTypesController extends Controller
 
         if ($educationType->update()) {
 
+            $auditLogs = AuditLog::create([
+                'entity' => 'education_types',
+                'entity_id' => $id,
+                'description' => 'has modified an education type.',
+                'data' => json_encode(EducationType::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The education type has been successfully updated.',
@@ -192,6 +211,15 @@ class EducationTypesController extends Controller
                 'is_active' => 0
             ]);
             
+            $auditLogs = AuditLog::create([
+                'entity' => 'education_types',
+                'entity_id' => $id,
+                'description' => 'has removed an education type.',
+                'data' => json_encode(EducationType::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The education type has been successfully removed.',
@@ -211,6 +239,15 @@ class EducationTypesController extends Controller
                 'is_active' => 1
             ]);
             
+            $auditLogs = AuditLog::create([
+                'entity' => 'education_types',
+                'entity_id' => $id,
+                'description' => 'has retrieved an education type.',
+                'data' => json_encode(EducationType::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The education type has been successfully activated.',

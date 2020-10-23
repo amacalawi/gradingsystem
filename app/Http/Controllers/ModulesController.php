@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Header;
 use App\Models\Module;
+use App\Models\AuditLog;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -152,6 +153,15 @@ class ModulesController extends Controller
             throw new NotFoundHttpException();
         }
 
+        $auditLogs = AuditLog::create([
+            'entity' => 'modules',
+            'entity_id' => $module->id,
+            'description' => 'has inserted a new module.',
+            'data' => json_encode(Module::find($module->id)),
+            'created_at' => $timestamp,
+            'created_by' => Auth::user()->id
+        ]);
+
         $data = array(
             'title' => 'Well done!',
             'text' => 'The module has been successfully saved.',
@@ -183,6 +193,15 @@ class ModulesController extends Controller
 
         if ($module->update()) {
 
+            $auditLogs = AuditLog::create([
+                'entity' => 'modules',
+                'entity_id' => $id,
+                'description' => 'has modified a module.',
+                'data' => json_encode(Module::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The module has been successfully updated.',
@@ -208,6 +227,15 @@ class ModulesController extends Controller
                 'updated_at' => $timestamp,
                 'updated_by' => Auth::user()->id,
                 'is_active' => 0
+            ]);
+
+            $auditLogs = AuditLog::create([
+                'entity' => 'modules',
+                'entity_id' => $id,
+                'description' => 'has removed a module.',
+                'data' => json_encode(Module::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
             ]);
             
             $data = array(
@@ -235,6 +263,15 @@ class ModulesController extends Controller
             $modules->updated_at = $timestamp;
             $modules->updated_by = Auth::user()->id;
             $modules->update();
+
+            $auditLogs = AuditLog::create([
+                'entity' => 'modules',
+                'entity_id' => $id,
+                'description' => 'has modified the module order up.',
+                'data' => json_encode(Module::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
             
             $data = array(
                 'title' => 'Well done!',
@@ -262,6 +299,15 @@ class ModulesController extends Controller
             $modules->updated_by = Auth::user()->id;
             $modules->update();
             
+            $auditLogs = AuditLog::create([
+                'entity' => 'modules',
+                'entity_id' => $id,
+                'description' => 'has modified the module order down.',
+                'data' => json_encode(Module::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The module has been successfully removed.',
@@ -279,6 +325,15 @@ class ModulesController extends Controller
                 'updated_at' => $timestamp,
                 'updated_by' => Auth::user()->id,
                 'is_active' => 1
+            ]);
+
+            $auditLogs = AuditLog::create([
+                'entity' => 'modules',
+                'entity_id' => $id,
+                'description' => 'has retrieved a module.',
+                'data' => json_encode(Module::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
             ]);
             
             $data = array(

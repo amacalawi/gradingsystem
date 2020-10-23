@@ -8,6 +8,7 @@ use App\Models\Group;
 use App\Models\GroupUser;
 use App\Models\Student;
 use App\Models\Batch;
+use App\Models\AuditLog;
 use App\Helper\Helper;
 
 class GroupsController extends Controller
@@ -124,6 +125,15 @@ class GroupsController extends Controller
             throw new NotFoundHttpException();
         }
 
+        $auditLogs = AuditLog::create([
+            'entity' => 'groups',
+            'entity_id' => $group->id,
+            'description' => 'has inserted a new group.',
+            'data' => json_encode(Group::find($group->id)),
+            'created_at' => $timestamp,
+            'created_by' => Auth::user()->id
+        ]);
+
         $users = $request->group_member;
         if($users)
         {
@@ -132,6 +142,15 @@ class GroupsController extends Controller
                     'group_id' => $group->id,
                     'users_id' => $user,
                     'batch_id' =>  $batch_id[0],
+                    'created_at' => $timestamp,
+                    'created_by' => Auth::user()->id
+                ]);
+
+                $auditLogs = AuditLog::create([
+                    'entity' => 'groups_users',
+                    'entity_id' => $groupuser->id,
+                    'description' => 'has added a user on group.',
+                    'data' => json_encode(GroupUser::find($groupuser->id)),
                     'created_at' => $timestamp,
                     'created_by' => Auth::user()->id
                 ]);
@@ -184,10 +203,28 @@ class GroupsController extends Controller
                         'created_at' => $timestamp,
                         'created_by' => Auth::user()->id
                     ]);
+
+                    $auditLogs = AuditLog::create([
+                        'entity' => 'groups_users',
+                        'entity_id' => $groupuser->id,
+                        'description' => 'has added a user on group.',
+                        'data' => json_encode(GroupUser::find($groupuser->id)),
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
                 }
             }
 
             if ($group->update()) {
+
+                $auditLogs = AuditLog::create([
+                    'entity' => 'groups',
+                    'entity_id' => $id,
+                    'description' => 'has modified a group.',
+                    'data' => json_encode(Group::find($id)),
+                    'created_at' => $timestamp,
+                    'created_by' => Auth::user()->id
+                ]);
 
                 $data = array(
                     'title' => 'Well done!',
@@ -226,6 +263,15 @@ class GroupsController extends Controller
                 'is_active' => 0
             ]);
             
+            $auditLogs = AuditLog::create([
+                'entity' => 'groups',
+                'entity_id' => $id,
+                'description' => 'has removed a group.',
+                'data' => json_encode(Group::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The group status has been successfully removed.',
@@ -246,6 +292,15 @@ class GroupsController extends Controller
                 'is_active' => 1
             ]);
             
+            $auditLogs = AuditLog::create([
+                'entity' => 'groups',
+                'entity_id' => $id,
+                'description' => 'has retrieved a group.',
+                'data' => json_encode(Group::find($id)),
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The group status has been successfully activated.',
