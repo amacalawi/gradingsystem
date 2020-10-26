@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\FileUpload;
+use App\Models\AuditLog;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -80,6 +81,8 @@ class FileUploadController extends Controller
                     if (!$FileUpload->update()) {
                         throw new NotFoundHttpException();
                     }
+
+                    $this->audit_logs('files', $FileUpload->id, 'has modified a '.$request->get('category').' file.', FileUpload::find($FileUpload->id), $timestamp, Auth::user()->id);
                 } else {
                     $FileUpload = FileUpload::create([
                         "category" => $request->get('category'),
@@ -93,6 +96,8 @@ class FileUploadController extends Controller
                     if(!$FileUpload) {
                         throw new NotFoundHttpException();
                     }
+
+                    $this->audit_logs('files', $FileUpload->id, 'has inserted a new '.$request->get('category').' file.', FileUpload::find($FileUpload->id), $timestamp, Auth::user()->id);
                 }
             }
         }
@@ -105,5 +110,19 @@ class FileUploadController extends Controller
         echo json_encode( $data );
 
         exit();
+    }
+
+    public function audit_logs($entity, $entity_id, $description, $data, $timestamp, $user)
+    {
+        $auditLogs = AuditLog::create([
+            'entity' => $entity,
+            'entity_id' => $entity_id,
+            'description' => $description,
+            'data' => json_encode($data),
+            'created_at' => $timestamp,
+            'created_by' => $user
+        ]);
+
+        return true;
     }
 }

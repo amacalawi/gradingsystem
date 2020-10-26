@@ -11,6 +11,7 @@ use App\Models\Role;
 use App\Models\RoleHeader;
 use App\Models\RoleModule;
 use App\Models\RoleSubModule;
+use App\Models\AuditLog;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -144,6 +145,7 @@ class UserRoleController extends Controller
                     'created_at' => $timestamp,
                     'created_by' => Auth::user()->id
                 ]);
+                $this->audit_logs('roles_headers', $role_header->id, 'has inserted a new role header.', RoleHeader::find($role_header->id), $timestamp, Auth::user()->id);
             }
         }
 
@@ -156,6 +158,7 @@ class UserRoleController extends Controller
                     'created_at' => $timestamp,
                     'created_by' => Auth::user()->id
                 ]);
+                $this->audit_logs('roles_modules', $role_module->id, 'has inserted a new role module.', RoleModule::find($role_module->id), $timestamp, Auth::user()->id);
             }
         }
 
@@ -175,12 +178,15 @@ class UserRoleController extends Controller
                     'created_at' => $timestamp,
                     'created_by' => Auth::user()->id
                 ]);
+                $this->audit_logs('roles_sub_modules', $role_sub_module->id, 'has inserted a new role sub module.', RoleSubModule::find($role_sub_module->id), $timestamp, Auth::user()->id);
             }
         }
 
         if (!$role) {
             throw new NotFoundHttpException();
         }
+
+        $this->audit_logs('roles', $role->id, 'has inserted a new role.', Role::find($role->id), $timestamp, Auth::user()->id);
 
         $data = array(
             'title' => 'Well done!',
@@ -228,6 +234,7 @@ class UserRoleController extends Controller
                         'updated_by' => Auth::user()->id,
                         'is_active' => 1
                     ]);
+                    $this->audit_logs('roles_headers', $headerCount->first()->id, 'has modified a role header.', RoleHeader::find($headerCount->first()->id), $timestamp, Auth::user()->id);
                 } else {
                     $role_header = RoleHeader::create([
                         'role_id' => $role->id,
@@ -235,6 +242,7 @@ class UserRoleController extends Controller
                         'created_at' => $timestamp,
                         'created_by' => Auth::user()->id
                     ]);
+                    $this->audit_logs('roles_headers', $role_header->id, 'has inserted a new role header.', RoleHeader::find($role_header->id), $timestamp, Auth::user()->id);
                 }
             }
         }
@@ -258,6 +266,7 @@ class UserRoleController extends Controller
                         'updated_by' => Auth::user()->id,
                         'is_active' => 1
                     ]);
+                    $this->audit_logs('roles_modules', $moduleCount->first()->id, 'has modified a role module.', RoleModule::find($moduleCount->first()->id), $timestamp, Auth::user()->id);
                 } else {
                     $role_module = RoleModule::create([
                         'role_id' => $role->id,
@@ -265,6 +274,7 @@ class UserRoleController extends Controller
                         'created_at' => $timestamp,
                         'created_by' => Auth::user()->id
                     ]);
+                    $this->audit_logs('roles_modules', $role_module->id, 'has inserted a new role module.', RoleModule::find($role_module->id), $timestamp, Auth::user()->id);
                 }
             }
         }
@@ -295,6 +305,7 @@ class UserRoleController extends Controller
                         'updated_by' => Auth::user()->id,
                         'is_active' => 1
                     ]);
+                    $this->audit_logs('roles_sub_modules', $subModuleCount->first()->id, 'has modified a role sub module.', RoleSubModule::find($subModuleCount->first()->id), $timestamp, Auth::user()->id);
                 } else {
                     $role_sub_module = RoleSubModule::create([
                         'role_id' => $role->id,
@@ -303,11 +314,15 @@ class UserRoleController extends Controller
                         'created_at' => $timestamp,
                         'created_by' => Auth::user()->id
                     ]);
+                    $this->audit_logs('roles_sub_modules', $role_sub_module->id, 'has inserted a new role sub module.', RoleSubModule::find($role_sub_module->id), $timestamp, Auth::user()->id);
                 }
             }
         }
 
         if ($role->update()) {
+
+            $this->audit_logs('roles', $id, 'has modified a role.', Role::find($id), $timestamp, Auth::user()->id);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The header has been successfully updated.',
@@ -334,66 +349,15 @@ class UserRoleController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 0
             ]);
+            $this->audit_logs('roles', $id, 'has removed a role.', Role::find($id), $timestamp, Auth::user()->id);
             
             $data = array(
                 'title' => 'Well done!',
-                'text' => 'The header has been successfully removed.',
+                'text' => 'The role has been successfully removed.',
                 'type' => 'success',
                 'class' => 'btn-brand'
             );
     
-            echo json_encode( $data ); exit();
-        } 
-        else if ($action == 'Up') {
-            $headers = Role::find($id);
-
-            $headers2 = Role::where([
-                'order' => ($headers->order - 1),
-            ])
-            ->update([
-                'order' => $headers->order,
-                'updated_at' => $timestamp,
-                'updated_by' => Auth::user()->id
-            ]);
-
-            $headers->order = ($headers->order - 1);
-            $headers->updated_at = $timestamp;
-            $headers->updated_by = Auth::user()->id;
-            $headers->update();
-            
-            $data = array(
-                'title' => 'Well done!',
-                'text' => 'The header has been successfully removed.',
-                'type' => 'success',
-                'class' => 'btn-brand'
-            );
-    
-            echo json_encode( $data ); exit();
-        } 
-        else if ($action == 'Down') {
-            $headers = Role::find($id);
-
-            $headers2 = Role::where([
-                'order' => ($headers->order + 1),
-            ])
-            ->update([
-                'order' => $headers->order,
-                'updated_at' => $timestamp,
-                'updated_by' => Auth::user()->id
-            ]);
-
-            $headers->order = ($headers->order + 1);
-            $headers->updated_at = $timestamp;
-            $headers->updated_by = Auth::user()->id;
-            $headers->update();
-            
-            $data = array(
-                'title' => 'Well done!',
-                'text' => 'The header has been successfully removed.',
-                'type' => 'success',
-                'class' => 'btn-brand'
-            );
-
             echo json_encode( $data ); exit();
         }         
         else {
@@ -405,10 +369,11 @@ class UserRoleController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 1
             ]);
+            $this->audit_logs('roles', $id, 'has retrieved a role.', Role::find($id), $timestamp, Auth::user()->id);
             
             $data = array(
                 'title' => 'Well done!',
-                'text' => 'The header has been successfully activated.',
+                'text' => 'The role has been successfully activated.',
                 'type' => 'success',
                 'class' => 'btn-brand'
             );
@@ -433,5 +398,19 @@ class UserRoleController extends Controller
     {
         $result = (new RoleSubModule)->check_sub_module_if_checked($subModuleID, $roleID);
         return $result;
+    }
+
+    public function audit_logs($entity, $entity_id, $description, $data, $timestamp, $user)
+    {
+        $auditLogs = AuditLog::create([
+            'entity' => $entity,
+            'entity_id' => $entity_id,
+            'description' => $description,
+            'data' => json_encode($data),
+            'created_at' => $timestamp,
+            'created_by' => $user
+        ]);
+
+        return true;
     }
 }

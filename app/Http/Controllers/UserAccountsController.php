@@ -11,6 +11,7 @@ use App\User;
 use App\Models\Role;
 use App\Models\UserRole;
 use App\Models\SecretQuestion;
+use App\Models\AuditLog;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -148,7 +149,7 @@ class UserAccountsController extends Controller
             'email' => $request->email,
             'username' => $request->username,
             'password' => $request->password,
-            'type' => (new Role)->where('id', $user->role->role_id)->pluck('name'),
+            'type' => (new Role)->where('id', $request->role_id)->pluck('name'),
             'secret_question_id' => $request->secret_question_id,
             'secret_password' => $request->secret_password,
             'created_at' => $timestamp,
@@ -166,6 +167,9 @@ class UserAccountsController extends Controller
             throw new NotFoundHttpException();
         }
 
+        $this->audit_logs('users', $user->id, 'has inserted a new user.', User::find($user->id), $timestamp, Auth::user()->id);
+        $this->audit_logs('users_roles', $userRole->id, 'has inserted a new user role.', UserRole::find($userRole->id), $timestamp, Auth::user()->id);
+        
         $data = array(
             'title' => 'Well done!',
             'text' => 'The user has been successfully saved.',
@@ -249,6 +253,20 @@ class UserAccountsController extends Controller
             }
         }
 
+        $this->audit_logs('users', $id, 'has modified a user.', User::find($id), $timestamp, Auth::user()->id);
+        
+        $user_role = UserRole::where('user_id', '=', $id)
+        ->update([
+            'user_id' => $user->id,
+            'role_id' => $request->role_id,
+            'updated_at' => $timestamp,
+            'updated_by' => Auth::user()->id
+        ]);
+        $user_role = UserRole::where('user_id', '=', $id)->get();
+        if ($user_role->count() > 0) {
+            $this->audit_logs('users_roles', $user_role->first()->id, 'has modified a user role.', UserRole::find($user_role->first()->id), $timestamp, Auth::user()->id);
+        }
+
         $data = array(
             'title' => 'Well done!',
             'text' => 'The user has been successfully updated.',
@@ -273,6 +291,7 @@ class UserAccountsController extends Controller
                 'updated_at' => $timestamp,
                 'is_active' => 0
             ]);
+            $this->audit_logs('users', $id, 'has removed a user.', User::find($id), $timestamp, Auth::user()->id);
             
             $data = array(
                 'title' => 'Well done!',
@@ -291,6 +310,7 @@ class UserAccountsController extends Controller
                 'updated_at' => $timestamp,
                 'is_active' => 1
             ]);
+            $this->audit_logs('users', $id, 'has retrieved a user.', User::find($id), $timestamp, Auth::user()->id);
             
             $data = array(
                 'title' => 'Well done!',
@@ -303,4 +323,17 @@ class UserAccountsController extends Controller
         }   
     }
 
+    public function audit_logs($entity, $entity_id, $description, $data, $timestamp, $user)
+    {
+        $auditLogs = AuditLog::create([
+            'entity' => $entity,
+            'entity_id' => $entity_id,
+            'description' => $description,
+            'data' => json_encode($data),
+            'created_at' => $timestamp,
+            'created_by' => $user
+        ]);
+
+        return true;
+    }
 }
