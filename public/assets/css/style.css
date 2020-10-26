@@ -597,6 +597,8 @@ a[data-dismiss="modal"] {
     display: none !important;
 }
 
+.bootstrap-select button[data-id="education_type_id"][data-toggle="dropdown"],
+.bootstrap-select button[data-id="type"][data-toggle="dropdown"],
 .bootstrap-select button[data-id="quarter_id"][data-toggle="dropdown"],
 .bootstrap-select button[data-id="grade_level"][data-toggle="dropdown"] {
     padding: 1rem 1.5rem !important;

@@ -29,7 +29,7 @@ class Staff extends Model
                 'department_id' => ($staff->department_id) ? $staff->department_id : '',
                 'designation_id' => ($staff->designation_id) ? $staff->designation_id : '',
                 'identification_no' => ($staff->identification_no) ? $staff->identification_no : '',
-                'type' => ($staff->type) ? $staff->type : '',
+                'type' => ($staff->type) ? explode(',', $staff->type) : '',
                 'specification' => ($staff->specification) ? $staff->specification : '',
                 'firstname' => ($staff->firstname) ? $staff->firstname : '',
                 'middlename' => ($staff->middlename) ? $staff->middlename : '',
@@ -175,7 +175,7 @@ class Staff extends Model
 
     public function types()
     {	
-        $marital_status = array('' => 'select a type', 'Adviser' => 'Adviser', 'Teacher' => 'Teacher', 'Coordinator' => 'Coordinator', 'Administrator' => 'Administrator');
+        $marital_status = array('Adviser' => 'Adviser', 'Teacher' => 'Teacher', 'Coordinator' => 'Coordinator', 'Administrator' => 'Administrator');
         return $marital_status;
     }
 
@@ -221,7 +221,7 @@ class Staff extends Model
 
     public function all_coordinators()
     {	
-    	$user_types = self::where('type', 'Coordinator')->where('is_active', 1)->orderBy('id', 'asc')->get();
+    	$user_types = self::where('type', 'like', '%Coordinator%')->where('is_active', 1)->orderBy('id', 'asc')->get();
 
         $users = array();
         $users[] = array('' => 'select a coordinator');

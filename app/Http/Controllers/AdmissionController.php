@@ -617,7 +617,7 @@ class AdmissionController extends Controller
 
     public function get_all_advisers()
     {
-        $advisers = Staff::where('is_active', 1)->where('type', 'Adviser')->orderBy('id', 'asc')->get();
+        $advisers = Staff::where('is_active', 1)->where('type', 'like', '%Adviser%')->orderBy('id', 'asc')->get();
 
         $advs = array();
         $advs[] = array('0' => 'select a adviser');

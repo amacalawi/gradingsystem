@@ -680,7 +680,7 @@
                             <div class="form-group m-form__group required">
                                 {{ Form::label('type', 'Staff Type', ['class' => '']) }}
                                 {{
-                                    Form::select('type', $types, !empty($staff) ? $staff->type : '', ['class' => 'form-control form-control-lg m-input m-input--solid'])
+                                    Form::select('type[]', $types, !empty($staff) ? $staff->type : '', ['id' => 'type', 'multiple' => 'multiple', 'class' => 'form-control form-control-lg m-input m-input--solid m-bootstrap-select m_selectpicker'])
                                 }}
                                 <span class="m-form__help m--font-danger">
                                 </span>
@@ -710,7 +710,7 @@
                         </div>
                         <div class="col-md-12">
                             <div class="form-group m-form__group required">
-                                {{ Form::label('designation', 'Designation', ['class' => '']) }}
+                                {{ Form::label('designation', 'Position', ['class' => '']) }}
                                 {{
                                     Form::select('designation_id', $designations, !empty($staff) ? $staff->designation_id : '', ['class' => 'form-control form-control-lg m-input m-input--solid'])
                                 }}

@@ -289,7 +289,7 @@ class BatchesController extends Controller
         else if ($action == 'Current') {
             $batches = Batch::where('id', '!=', $id)->where('status', '!=', 'Closed')
             ->update([
-                'status' => 'Open',
+                'status' => 'Closed',
                 'updated_at' => $timestamp,
                 'updated_by' => Auth::user()->id,
                 'is_active' => 1
