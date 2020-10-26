@@ -26,7 +26,7 @@ class CreateStaffsTable extends Migration
             $table->integer('designation_id')->unsigned();
             $table->integer('specification')->unsigned();
             $table->string('identification_no', 11)->unique();
-            $table->string('type', 40);
+            $table->string('type', 255);
             $table->string('firstname', 40);
             $table->string('middlename', 40)->nullable();
             $table->string('lastname', 40);
