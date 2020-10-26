@@ -276,7 +276,7 @@
                     $(".remove-div:last").after("<div class='form-group m-form__group required remove-div' id='remove-div_"+ nextindex +"'></div>");
                     $.ajax({
                         type: "GET",
-                        url: base_url + 'academics/academics/subjects/get-all-teachers',
+                        url: base_url + 'memberships/staffs/get-all-teachers',
                         success: function (data) {
                             var data = $.parseJSON( data );
                             var teacher = $("<select></select>").attr("id", "teachers").attr("name", "teachers[]").attr("class", "form-control form-control-lg m-input m-input--solid");
@@ -433,7 +433,7 @@ function getTeacherList_type( type )
     //console.log(type);
     $.ajax({
         type: "GET",
-        url: base_url + 'academics/academics/subjects/get-all-teachers-bytype/',
+        url: base_url + 'memberships/staffs/get-all-teachers-bytype/',
         success: function (data) {
             var data = $.parseJSON( data );
 
@@ -478,7 +478,7 @@ function getAdviserList_type( )
 {
     $.ajax({
         type: "GET",
-        url: base_url + 'academics/academics/subjects/get-all-advisers-bytype',
+        url: base_url + 'memberships/staffs/get-all-advisers-bytype',
         success: function (data) {
             var data = $.parseJSON( data );
             var adviser = $("<select></select>").attr("id", "adviser").attr("name", "adviser").attr("class", "form-control form-control-lg m-input m-input--solid");

@@ -285,6 +285,12 @@ Route::prefix('memberships')->group(function () {
     Route::get('staffs/all-active', 'StaffsController@all_active')->name('staffs.all.active');
     Route::get('staffs/all-inactive', 'StaffsController@all_inactive')->name('staffs.all.inactive');
     Route::put('staffs/update-status/{id}', 'StaffsController@update_status')->name('staffs.update.status');
+    
+    Route::get('staffs/get-all-teachers-bytype', 'StaffsController@get_all_teachers_bytype');
+    Route::get('staffs/get-all-advisers-bytype', 'StaffsController@get_all_advisers_bytype');
+    Route::get('staffs/get-all-teachers', 'StaffsController@get_all_teachers'); 
+    /* End Staff Routes */ 
+    
     /* End Staffs Routes */
 
     /* User Accounts */
@@ -364,15 +370,8 @@ Route::prefix('academics')->group(function () {
         Route::put('subjects/update-status/{id}', 'SubjectsController@update_status')->name('subjects.update.status');
         Route::get('subjects/get-all-subjects', 'SubjectsController@get_all_subjects');
         Route::get('subjects/get-all-subjects-bytype/{type}', 'SubjectsController@get_all_subjects_bytype');
-        Route::get('subjects/get-all-teachers', 'SubjectsController@get_all_teachers'); 
         Route::post('subjects/import', 'SubjectsController@import')->name('subjects.import');
         /* End Subjects Routes */
-
-        /* Staff */ //move this in future
-        Route::get('subjects/get-all-teachers-bytype', 'SubjectsController@get_all_teachers_bytype');
-        Route::get('subjects/get-all-advisers-bytype', 'SubjectsController@get_all_advisers_bytype');
-        /* End Staff Routes */ 
-
     });
 
     /* Admission Sheets Routes */

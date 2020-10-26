@@ -159,55 +159,6 @@ class Subject extends Model
         return $subjects;  
     }
 
-    //Added here to avoid conflict //this function will be move if system is ready
-    public function get_all_teachers_bytype()
-    {
-        $teachers = Staff::where('is_active', 1)->orWhere('type', 'Adviser')->orWhere('type', 'Teacher')->orderBy('id', 'asc')->get();
-
-        $teac = array();
-        $teac[] = array('0' => 'select a teacher');
-
-        foreach ($teachers as $teacher) {
-            $teac[] = array(
-                $teacher->id => $teacher->lastname.', '.$teacher->firstname.' '.$teacher->middlename.'( '.$teacher->identification_no.' )',
-            );
-        }
-
-        $teachers = array();
-        foreach($teac as $tea) {
-            foreach($tea as $key => $val) {
-                $teachers[$key] = $val;
-            }
-        }
-
-        return $teachers;  
-    }
-
-    //Added here to avoid conflict
-    public function get_all_advisers_bytype()
-    {
-
-        $advisers = Staff::where('is_active', 1)->where('type', 'Adviser')->orderBy('id', 'asc')->get();
-
-        $advs = array();
-        $advs[] = array('0' => 'select a adviser');
-
-        foreach ($advisers as $adviser) {
-            $advs[] = array(
-                $adviser->id  => $adviser->lastname.', '.$adviser->firstname.' '.$adviser->middlename.'( '.$adviser->identification_no.' )',
-            );
-        }
-
-        $advisers = array();
-        foreach($advs as $adv) {
-            foreach($adv as $key => $val) {
-                $advisers[$key] = $val;
-            }
-        }
-
-        return $advisers;  
-    }
-
     public function edtype()
     {
         return $this->belongsTo('App\Models\EducationType', 'education_type_id', 'id');

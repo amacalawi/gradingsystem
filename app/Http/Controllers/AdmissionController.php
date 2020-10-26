@@ -260,7 +260,7 @@ class AdmissionController extends Controller
         $levels = (new Level)->get_all_levels_with_type($id);
         $subjects = (new Subject)->get_all_subjects_with_type($id);
         $advisers = $this->get_all_advisers();
-        $teachers = (new Subject)->get_all_teachers_bytype();
+        $teachers = (new Staff)->get_all_teachers_bytype();
         $sections_subjects = (new SectionsSubjects)->get_sections_subjects($id);
         
         $section_id = SectionInfo::where('id', $id)->pluck('section_id');
@@ -352,11 +352,12 @@ class AdmissionController extends Controller
                         } 
                         else  //ADD
                         {   
+                            //die(var_dump('gere ba?'));
                             $sections_subjects = Admission::create([
                                 'batch_id' => $batch_id[0],
                                 'section_id' =>  $request->section,
-                                'status' => 'admit',
                                 'student_id' => $member,
+                                'status' => 'admit',
                                 'created_at' => $timestamp,
                                 'created_by' => Auth::user()->id
                             ]);
@@ -617,10 +618,10 @@ class AdmissionController extends Controller
 
     public function get_all_advisers()
     {
-        $advisers = Staff::where('is_active', 1)->where('type', 'like', '%Adviser%')->orderBy('id', 'asc')->get();
+        $advisers = Staff::where('is_active', 1)->orWhere('type', 'like', '%Adviser%')->orderBy('id', 'asc')->get();
 
         $advs = array();
-        $advs[] = array('0' => 'select a adviser');
+        $advs[] = array('0' => 'selectssss a adviser');
         
         foreach ($advisers as $adviser) {
             $advs[] = array(
