@@ -12,6 +12,7 @@ use App\Models\Guardian;
 use App\Models\GuardianUser;
 use App\Models\Sibling;
 use App\Models\UserRole;
+use App\Models\AuditLog;
 use App\User;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -236,12 +237,15 @@ class StudentsController extends Controller
             throw new NotFoundHttpException();
         }  
 
+        $this->audit_logs('users', $user->id, 'has inserted a new user.', User::find($user->id), $timestamp, Auth::user()->id);
+
         $userRole = UserRole::create([
             'user_id' => $user->id,
             'role_id' => 4,
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
+        $this->audit_logs('users_roles', $userRole->id, 'has inserted a new user role.', UserRole::find($userRole->id), $timestamp, Auth::user()->id);
 
         $student = Student::create([
             'user_id' => $user->id,
@@ -290,6 +294,7 @@ class StudentsController extends Controller
                 'created_at' => $timestamp,
                 'created_by' => Auth::user()->id
             ]);
+            $this->audit_logs('guardians', $guardian->id, 'has inserted a new guardian.', Guardian::find($guardian->id), $timestamp, Auth::user()->id);
 
             $mother_user = User::create([
                 'name' => $request->mother_firstname.' '.$request->mother_lastname,
@@ -298,6 +303,7 @@ class StudentsController extends Controller
                 'password' => (new Student)->random(),
                 'type' => 'parent'
             ]);
+            $this->audit_logs('users', $mother_user->id, 'has inserted a new user.', User::find($mother_user->id), $timestamp, Auth::user()->id);
 
             $motherRole = UserRole::create([
                 'user_id' => $mother_user->id,
@@ -305,6 +311,7 @@ class StudentsController extends Controller
                 'created_at' => $timestamp,
                 'created_by' => Auth::user()->id
             ]);
+            $this->audit_logs('users_roles', $motherRole->id, 'has inserted a new user role.', UserRole::find($motherRole->id), $timestamp, Auth::user()->id);
 
             $mother_guardian_user = GuardianUser::create([
                 'guardian_id' => $guardian->id,
@@ -312,6 +319,7 @@ class StudentsController extends Controller
                 'created_at' => $timestamp,
                 'created_by' => Auth::user()->id
             ]);
+            $this->audit_logs('guardians_users', $mother_guardian_user->id, 'has inserted a new guardian user.', GuardianUser::find($mother_guardian_user->id), $timestamp, Auth::user()->id);
 
             $father_user = User::create([
                 'name' => $request->father_firstname.' '.$request->father_lastname,
@@ -320,6 +328,7 @@ class StudentsController extends Controller
                 'password' => (new Student)->random(),
                 'type' => 'parent'
             ]);
+            $this->audit_logs('users', $father_user->id, 'has inserted a new user.', User::find($father_user->id), $timestamp, Auth::user()->id);
 
             $fatherRole = UserRole::create([
                 'user_id' => $father_user->id,
@@ -327,6 +336,7 @@ class StudentsController extends Controller
                 'created_at' => $timestamp,
                 'created_by' => Auth::user()->id
             ]);
+            $this->audit_logs('users_roles', $fatherRole->id, 'has inserted a new user role.', UserRole::find($fatherRole->id), $timestamp, Auth::user()->id);
 
             $father_guardian_user = GuardianUser::create([
                 'guardian_id' => $guardian->id,
@@ -334,6 +344,7 @@ class StudentsController extends Controller
                 'created_at' => $timestamp,
                 'created_by' => Auth::user()->id
             ]);
+            $this->audit_logs('guardians_users', $father_guardian_user->id, 'has inserted a new guardian user.', GuardianUser::find($father_guardian_user->id), $timestamp, Auth::user()->id);
         }
 
         if ($request->is_sibling !== NULL) {
@@ -345,6 +356,7 @@ class StudentsController extends Controller
                         'created_at' => $timestamp,
                         'created_by' => Auth::user()->id
                     ]);
+                    $this->audit_logs('siblings', $siblings->id, 'has inserted a new sibling.', Sibling::find($siblings->id), $timestamp, Auth::user()->id);
                 }
             }
         }
@@ -352,6 +364,8 @@ class StudentsController extends Controller
         if (!$student) {
             throw new NotFoundHttpException();
         }
+
+        $this->audit_logs('students', $student->id, 'has inserted a new student.', Student::find($student->id), $timestamp, Auth::user()->id);
 
         $data = array(
             'title' => 'Well done!',
@@ -432,28 +446,37 @@ class StudentsController extends Controller
         }
 
         if ($request->is_guardian !== NULL) {
-            $guardian = Guardian::where('student_id', $id)->pluck('id');
-            $motherUser = GuardianUser::where('guardian_id', $guardian)->orderBy('id', 'asc')->first()->user_id;
-            $fatherUser = GuardianUser::where('guardian_id', $guardian)->orderBy('id', 'desc')->first()->user_id;
+            $guardian = Guardian::where('student_id', $id)->get();
+            if ($guardian->count() > 0) {
+                $guardian = $guardian->first()->id;
+                $motherUser = GuardianUser::where('guardian_id', $guardian)->orderBy('id', 'asc')->get();
+                if ($motherUser->count() > 0) {
+                    $motherUser = $motherUser->first()->user_id;
+                }
+                $fatherUser = GuardianUser::where('guardian_id', $guardian)->orderBy('id', 'desc')->get();
+                if ($fatherUser->count() > 0) {
+                    $fatherUser = $fatherUser->first()->user_id;
+                }
 
-            $rows = User::where(function ($query) use ($user_id, $email) {
-                $query->where('id', '!=', $user_id)->where('email', $email);
-            })->orWhere(function($query) use ($motherUser, $mother_email) {
-                $query->where('id', '!=', $motherUser)->where('email', $mother_email);
-            })->orWhere(function($query) use ($fatherUser, $father_email) {
-                $query->where('id', '!=', $fatherUser)->where('email', $father_email);
-            })->count();    
+                $rows = User::where(function ($query) use ($user_id, $email) {
+                    $query->where('id', '!=', $user_id)->where('email', $email);
+                })->orWhere(function($query) use ($motherUser, $mother_email) {
+                    $query->where('id', '!=', $motherUser)->where('email', $mother_email);
+                })->orWhere(function($query) use ($fatherUser, $father_email) {
+                    $query->where('id', '!=', $fatherUser)->where('email', $father_email);
+                })->count();    
 
-            if ($rows > 0) {
-                $data = array(
-                    'title' => 'Oh snap!',
-                    'rows' => $rows,
-                    'text' => 'The email is already in use.',
-                    'type' => 'error',
-                    'class' => 'btn-danger'
-                );
-        
-                echo json_encode( $data ); exit();
+                if ($rows > 0) {
+                    $data = array(
+                        'title' => 'Oh snap!',
+                        'rows' => $rows,
+                        'text' => 'The email is already in use.',
+                        'type' => 'error',
+                        'class' => 'btn-danger'
+                    );
+            
+                    echo json_encode( $data ); exit();
+                }
             }
         }
 
@@ -499,6 +522,7 @@ class StudentsController extends Controller
                     'username' => $request->username,
                 ]);
             }
+            $this->audit_logs('users', $user_id, 'has modified a user.', User::find($user_id), $timestamp, Auth::user()->id);
             
             $exist = UserRole::where('user_id', $user_id)->count();
             if (!($exist > 0)) {
@@ -508,6 +532,7 @@ class StudentsController extends Controller
                     'created_at' => $timestamp,
                     'created_by' => Auth::user()->id
                 ]);
+                $this->audit_logs('users_roles', $userRole->id, 'has inserted a new user role.', UserRole::find($userRole->id), $timestamp, Auth::user()->id);
             }
 
             if ($request->is_guardian !== NULL) {
@@ -552,6 +577,34 @@ class StudentsController extends Controller
                     ]);
                 }
 
+                $guardian = Guardian::where(['student_id' => $id])->get();
+                if ($guardian->count() > 0) {
+                    $this->audit_logs('guardians', $guardian->first()->id, 'has modified a guardian.', Guardian::find($guardian->first()->id), $timestamp, Auth::user()->id);
+                } else {
+                    $guardian = Guardian::create([
+                        'student_id' => $student->id,
+                        'mother_firstname' => $request->mother_firstname,
+                        'mother_middlename' => ($request->mother_middlename !== NULL) ? $request->mother_middlename : NULL, 
+                        'mother_lastname' => $request->mother_lastname,
+                        'mother_contact_no' => $request->mother_contact_no,
+                        'mother_email' => $request->mother_email,
+                        'mother_address' => ($request->mother_address !== NULL) ? $request->mother_address : NULL,
+                        'mother_avatar' => $request->get('mother_avatar'),
+                        'mother_selected' => ($request->guardian_selected == 'Mother') ? 1 : 0,
+                        'father_firstname' => $request->father_firstname,
+                        'father_middlename' => ($request->father_middlename !== NULL) ? $request->father_middlename : NULL, 
+                        'father_lastname' => $request->father_lastname,
+                        'father_contact_no' => $request->father_contact_no,
+                        'father_email' => $request->father_email,
+                        'father_address' => ($request->father_address !== NULL) ? $request->father_address : NULL,
+                        'father_avatar' => $request->get('father_avatar'),
+                        'father_selected' => ($request->guardian_selected == 'Father') ? 1 : 0,
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+                    $this->audit_logs('guardians', $guardian->id, 'has inserted a new guardian.', Guardian::find($guardian->id), $timestamp, Auth::user()->id);
+                }
+
                 $mother_user = User::where([
                     'username' => 'M'.$student->identification_no
                 ])
@@ -560,10 +613,10 @@ class StudentsController extends Controller
                     'email' => $mother_email,
                     'updated_at' => $timestamp
                 ]);
-
-                if ($mother_user) {
-                    $mother_user = User::where(['username' => 'M'.$student->identification_no])->first();
-                    $motherExist = UserRole::where('user_id', $mother_user->id)->count();
+                $mother_user = User::where(['username' => 'M'.$student->identification_no])->get();
+                if ($mother_user->count() > 0) {
+                    $this->audit_logs('users', $mother_user->first()->id, 'has modified a user.', User::find($mother_user->first()->id), $timestamp, Auth::user()->id);
+                    $motherExist = UserRole::where('user_id', $mother_user->first()->id)->count();
                     if (!($motherExist > 0)) {
                         $userRole = UserRole::create([
                             'user_id' => $mother_user->id,
@@ -571,7 +624,33 @@ class StudentsController extends Controller
                             'created_at' => $timestamp,
                             'created_by' => Auth::user()->id
                         ]);
+                        $this->audit_logs('users_roles', $userRole->id, 'has insert a new user role.', UserRole::find($userRole->id), $timestamp, Auth::user()->id);
                     }
+                } else {
+                    $mother_user = User::create([
+                        'name' => $request->mother_firstname.' '.$request->mother_lastname,
+                        'username' => 'M'.$student->identification_no,
+                        'email' => $request->mother_email,
+                        'password' => (new Student)->random(),
+                        'type' => 'parent'
+                    ]);
+                    $this->audit_logs('users', $mother_user->id, 'has inserted a new user.', User::find($mother_user->id), $timestamp, Auth::user()->id);
+        
+                    $motherRole = UserRole::create([
+                        'user_id' => $mother_user->id,
+                        'role_id' => 5,
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+                    $this->audit_logs('users_roles', $motherRole->id, 'has inserted a new user role.', UserRole::find($motherRole->id), $timestamp, Auth::user()->id);
+        
+                    $mother_guardian_user = GuardianUser::create([
+                        'guardian_id' => $guardian->id,
+                        'user_id' => $mother_user->id,
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+                    $this->audit_logs('guardians_users', $mother_guardian_user->id, 'has inserted a new guardian user.', GuardianUser::find($mother_guardian_user->id), $timestamp, Auth::user()->id);
                 }
     
                 $father_user = User::where([
@@ -582,10 +661,10 @@ class StudentsController extends Controller
                     'email' => $father_email,
                     'updated_at' => $timestamp
                 ]);
-
-                if ($father_user) {
-                    $father_user = User::where(['username' => 'F'.$student->identification_no])->first();
-                    $fatherExist = UserRole::where('user_id', $father_user->id)->count();
+                $father_user = User::where(['username' => 'F'.$student->identification_no])->get();
+                if ($father_user->count() > 0) {
+                    $this->audit_logs('users', $father_user->first()->id, 'has modified a user.', User::find($father_user->first()->id), $timestamp, Auth::user()->id);
+                    $fatherExist = UserRole::where('user_id', $father_user->first()->id)->count();
                     if (!($fatherExist > 0)) {
                         $userRole = UserRole::create([
                             'user_id' => $father_user->id,
@@ -593,7 +672,33 @@ class StudentsController extends Controller
                             'created_at' => $timestamp,
                             'created_by' => Auth::user()->id
                         ]);
+                        $this->audit_logs('users_roles', $userRole->id, 'has insert a new user role.', UserRole::find($userRole->id), $timestamp, Auth::user()->id);
                     }
+                } else {
+                    $father_user = User::create([
+                        'name' => $request->father_firstname.' '.$request->father_lastname,
+                        'username' => 'F'.$student->identification_no,
+                        'email' => $request->father_email,
+                        'password' => (new Student)->random(),
+                        'type' => 'parent'
+                    ]);
+                    $this->audit_logs('users', $father_user->id, 'has inserted a new user.', User::find($father_user->id), $timestamp, Auth::user()->id);
+        
+                    $fatherRole = UserRole::create([
+                        'user_id' => $father_user->id,
+                        'role_id' => 5,
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+                    $this->audit_logs('users_roles', $fatherRole->id, 'has inserted a new user role.', UserRole::find($fatherRole->id), $timestamp, Auth::user()->id);
+        
+                    $father_guardian_user = GuardianUser::create([
+                        'guardian_id' => $guardian->id,
+                        'user_id' => $father_user->id,
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+                    $this->audit_logs('guardians_users', $father_guardian_user->id, 'has inserted a new guardian user.', GuardianUser::find($father_guardian_user->id), $timestamp, Auth::user()->id);
                 }
             }
 
@@ -607,13 +712,16 @@ class StudentsController extends Controller
                             'created_at' => $timestamp,
                             'created_by' => Auth::user()->id
                         ]);
+                        $this->audit_logs('siblings', $siblings->id, 'has inserted a new sibling.', Sibling::find($siblings->id), $timestamp, Auth::user()->id);
                     }
                 }
             }
 
+            $this->audit_logs('students', $id, 'has modified a student.', Student::find($id), $timestamp, Auth::user()->id);
+
             $data = array(
                 'title' => 'Well done!',
-                'text' => 'The staff has been successfully updated.',
+                'text' => 'The student has been successfully updated.',
                 'type' => 'success',
                 'class' => 'btn-brand'
             );
@@ -637,7 +745,8 @@ class StudentsController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 0
             ]);
-            
+            $this->audit_logs('students', $id, 'has removed a student.', Student::find($id), $timestamp, Auth::user()->id);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The student has been successfully removed.',
@@ -656,7 +765,8 @@ class StudentsController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 1
             ]);
-            
+            $this->audit_logs('students', $id, 'has retrieved a student.', Student::find($id), $timestamp, Auth::user()->id);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The student has been successfully activated.',
@@ -685,21 +795,22 @@ class StudentsController extends Controller
                             if ($exist->count() > 0) {
                                 $student = Student::find($exist->first()->id);
                                 $student->identification_no = $data[0];
-                                $student->firstname = $data[1];
-                                $student->middlename = $data[2];
-                                $student->lastname = $data[3];
-                                $student->suffix = $data[4];
-                                $student->gender = $data[7];
-                                $student->marital_status = $data[5];
-                                $student->birthdate = date('Y-m-d', strtotime($data[6]));
-                                $student->current_address = $data[8];
-                                $student->permanent_address = ($data[9] !== '') ? $data[9] : NULL;
-                                $student->mobile_no = ($data[11] !== '') ? $data[11] : NULL;
-                                $student->telephone_no = ($data[10] !== '') ? $data[10] : NULL;
+                                $student->learners_reference_no = $data[1];
+                                $student->firstname = $data[2];
+                                $student->middlename = $data[3];
+                                $student->lastname = $data[4];
+                                $student->suffix = $data[5];
+                                $student->gender = $data[8];
+                                $student->marital_status = $data[6];
+                                $student->birthdate = date('Y-m-d', strtotime($data[7]));
+                                $student->current_address = $data[9];
+                                $student->permanent_address = ($data[10] !== '') ? $data[10] : NULL;
+                                $student->mobile_no = ($data[12] !== '') ? $data[12] : NULL;
+                                $student->telephone_no = ($data[11] !== '') ? $data[11] : NULL;
                                 $student->admitted_date = date('Y-m-d');
-                                $student->special_remarks = ($data[12] !== '') ? $data[12] : NULL;
-                                $student->is_guardian = ($data[16] !== '' || $data[22] !== '') ? 1 : 0; 
-                                $student->is_sibling = ($data[29] !== '') ? 1 : 0; 
+                                $student->special_remarks = ($data[13] !== '') ? $data[13] : NULL;
+                                $student->is_guardian = ($data[17] !== '' || $data[23] !== '') ? 1 : 0; 
+                                $student->is_sibling = ($data[30] !== '') ? 1 : 0; 
                                 $student->updated_at = $timestamp;
                                 $student->updated_by = Auth::user()->id;
                                 $student->is_active = 1;
@@ -707,22 +818,23 @@ class StudentsController extends Controller
                         
                                 if ($student->update()) {
                                     $password = User::where('id', $user_id)->pluck('password');
-                                    if ($password != $data[15]) {
+                                    if ($password != $data[16]) {
                                         User::where('id', $user_id)
                                         ->update([
-                                            'name' => $data[1].' '.$data[3],
-                                            'email' => $data[13],
-                                            'username' => $data[14],
-                                            'password' => Hash::make($data[15])
+                                            'name' => $data[2].' '.$data[4],
+                                            'email' => $data[14],
+                                            'username' => $data[15],
+                                            'password' => Hash::make($data[16])
                                         ]);
                                     } else {
                                         User::where('id', $user_id)
                                         ->update([
-                                            'name' => $data[1].' '.$data[3],
-                                            'email' => $data[13],
-                                            'username' => $data[14],
+                                            'name' => $data[2].' '.$data[4],
+                                            'email' => $data[14],
+                                            'username' => $data[15],
                                         ]);
                                     }
+                                    $this->audit_logs('users', $user_id, 'has imported and updated a user.', User::find($user_id), $timestamp, Auth::user()->id);
                                     
                                     $exist = UserRole::where('user_id', $user_id)->count();
                                     if (!($exist > 0)) {
@@ -732,44 +844,49 @@ class StudentsController extends Controller
                                             'created_at' => $timestamp,
                                             'created_by' => Auth::user()->id
                                         ]);
+                                        $this->audit_logs('users_roles', $userRole->id, 'has imported a new user role.', UserRole::find($userRole->id), $timestamp, Auth::user()->id);
                                     }
                         
-                                    if ($data[16] !== '' || $data[22] !== '') {
+                                    if ($data[17] !== '' || $data[23] !== '') {
                                         $guardian = Guardian::where([
                                             'student_id' => $student->id,
                                         ])
                                         ->update([
-                                            'mother_firstname' => $data[16],
-                                            'mother_middlename' => ($data[17] !== '') ? $data[17] : NULL, 
-                                            'mother_lastname' => $data[18],
-                                            'mother_contact_no' => $data[19],
-                                            'mother_email' => $data[20],
-                                            'mother_address' => ($data[21] !== '') ? $request->mother_address : NULL, 
-                                            'mother_selected' => ($data[28] == 'Mother') ? 1 : 0,
-                                            'father_firstname' => $data[22],
-                                            'father_middlename' => ($data[23] !== '') ? $data[23] : NULL, 
-                                            'father_lastname' => $data[24],
-                                            'father_contact_no' => $data[25],
-                                            'father_email' => $data[26],
-                                            'father_address' => ($data[27] !== '') ? $data[27] : NULL, 
-                                            'father_selected' => ($data[28] == 'Father') ? 1 : 0,
+                                            'mother_firstname' => $data[17],
+                                            'mother_middlename' => ($data[18] !== '') ? $data[18] : NULL, 
+                                            'mother_lastname' => $data[19],
+                                            'mother_contact_no' => $data[20],
+                                            'mother_email' => $data[21],
+                                            'mother_address' => ($data[22] !== '') ? $data[22] : NULL, 
+                                            'mother_selected' => ($data[29] == 'Mother') ? 1 : 0,
+                                            'father_firstname' => $data[23],
+                                            'father_middlename' => ($data[24] !== '') ? $data[24] : NULL, 
+                                            'father_lastname' => $data[25],
+                                            'father_contact_no' => $data[26],
+                                            'father_email' => $data[27],
+                                            'father_address' => ($data[28] !== '') ? $data[28] : NULL, 
+                                            'father_selected' => ($data[29] == 'Father') ? 1 : 0,
                                             'updated_at' => $timestamp,
                                             'updated_by' => Auth::user()->id,
                                             'is_active' => 1
                                         ]);
-                        
+                                        $guardian = Guardian::where(['student_id' => $student->id])->get();
+                                        if ($guardian->count() > 0) {
+                                            $this->audit_logs('guardians', $guardian->first()->id, 'has imported and updated a guardian.', Guardian::find($guardian->first()->id), $timestamp, Auth::user()->id);
+                                        }
+
                                         $mother_user = User::where([
                                             'username' => 'M'.$student->identification_no
                                         ])
                                         ->update([
-                                            'name' => $data[16].' '.$data[18],
-                                            'email' => $data[20],
+                                            'name' => $data[17].' '.$data[19],
+                                            'email' => $data[21],
                                             'updated_at' => $timestamp
                                         ]);
-                        
-                                        if ($mother_user) {
-                                            $mother_user = User::where(['username' => 'M'.$student->identification_no])->first();
-                                            $motherExist = UserRole::where('user_id', $mother_user->id)->count();
+                                        $mother_user = User::where(['username' => 'M'.$student->identification_no])->get();
+                                        if ($mother_user->count() > 0) {
+                                            $this->audit_logs('users', $mother_user->first()->id, 'has imported and updated a user.', User::find($mother_user->first()->id), $timestamp, Auth::user()->id);
+                                            $motherExist = UserRole::where('user_id', $mother_user->first()->id)->count();
                                             if (!($motherExist > 0)) {
                                                 $userRole = UserRole::create([
                                                     'user_id' => $mother_user->first()->id,
@@ -777,6 +894,7 @@ class StudentsController extends Controller
                                                     'created_at' => $timestamp,
                                                     'created_by' => Auth::user()->id
                                                 ]);
+                                                $this->audit_logs('users_roles', $userRole->id, 'has imported a new user role.', UserRole::find($userRole->id), $timestamp, Auth::user()->id);
                                             }
                                         }
                             
@@ -784,28 +902,29 @@ class StudentsController extends Controller
                                             'username' => 'F'.$student->identification_no
                                         ])
                                         ->update([
-                                            'name' => $data[22].' '.$data[24],
-                                            'email' => $data[26],
+                                            'name' => $data[23].' '.$data[25],
+                                            'email' => $data[27],
                                             'updated_at' => $timestamp
                                         ]);
-                        
-                                        if ($father_user) {
-                                            $father_user = User::where(['username' => 'F'.$student->identification_no])->first();
-                                            $fatherExist = UserRole::where('user_id', $father_user->id)->count();
+                                        $father_user = User::where(['username' => 'F'.$student->identification_no])->get();
+                                        if ($father_user->count() > 0) {
+                                            $this->audit_logs('users', $father_user->first()->id, 'has imported and updated a user.', User::find($father_user->first()->id), $timestamp, Auth::user()->id);
+                                            $fatherExist = UserRole::where('user_id', $father_user->first()->id)->count();
                                             if (!($fatherExist > 0)) {
                                                 $userRole = UserRole::create([
-                                                    'user_id' => $father_user->id,
+                                                    'user_id' => $father_user->first()->id,
                                                     'role_id' => 5,
                                                     'created_at' => $timestamp,
                                                     'created_by' => Auth::user()->id
                                                 ]);
+                                                $this->audit_logs('users_roles', $userRole->id, 'has imported a new user role.', UserRole::find($userRole->id), $timestamp, Auth::user()->id);
                                             }
                                         }
                                     }
                         
                                     Sibling::where('student_id', $student->id)->forceDelete();
-                                    if ($data[29] !== '') {
-                                        $siblingz = explode('-', $data[29]);
+                                    if ($data[30] !== '') {
+                                        $siblingz = explode('-', $data[30]);
                                         foreach ($siblingz as $sibling) {
                                             if ($sibling !== '') {
                                                 $siblingExist = Student::where('identification_no', substr($sibling, 0, 10))->count();
@@ -816,85 +935,95 @@ class StudentsController extends Controller
                                                         'created_at' => $timestamp,
                                                         'created_by' => Auth::user()->id
                                                     ]);
+                                                    $this->audit_logs('siblings', $siblings->id, 'has imported a new sibling.', Sibling::find($siblings->id), $timestamp, Auth::user()->id);
                                                 }
                                             }
                                         }
                                     }
                                 }
+
+                                $this->audit_logs('students', $student->id, 'has imported and updated a student.', Student::find($student->id), $timestamp, Auth::user()->id);
                             } else {
                                 $user = User::create([
-                                    'name' => $data[1].' '.$data[3],
-                                    'username' => $data[14],
-                                    'email' => $data[13],
-                                    'password' => $data[15],
+                                    'name' => $data[2].' '.$data[4],
+                                    'username' => $data[15],
+                                    'email' => $data[14],
+                                    'password' => $data[16],
                                     'type' => 'student'
                                 ]);
                         
                                 if (!$user) {
                                     throw new NotFoundHttpException();
                                 }  
-                        
+                                
+                                $this->audit_logs('users', $user->id, 'has imported a new user.', User::find($user->id), $timestamp, Auth::user()->id);
+
                                 $userRole = UserRole::create([
                                     'user_id' => $user->id,
                                     'role_id' => 4,
                                     'created_at' => $timestamp,
                                     'created_by' => Auth::user()->id
                                 ]);
+                                $this->audit_logs('users_roles', $userRole->id, 'has imported a new user role.', userRole::find($userRole->id), $timestamp, Auth::user()->id);
                         
                                 $student = Student::create([
                                     'user_id' => $user->id,
                                     'role_id' => 4,
                                     'identification_no' => $data[0],
-                                    'firstname' => $data[1],
-                                    'middlename' => $data[2],
-                                    'lastname' => $data[3],
-                                    'suffix' => $data[4],
-                                    'gender' => $data[7],
-                                    'marital_status' => $data[5],
-                                    'birthdate' => date('Y-m-d', strtotime($data[6])),
-                                    'current_address' => $data[8],
-                                    'permanent_address' => ($data[9] !== '') ? $data[9] : NULL,
-                                    'mobile_no' => ($data[11] !== '') ? $data[11] : NULL,
-                                    'telephone_no' => ($data[10] !== '') ? $data[10] : NULL,
+                                    'learners_reference_no' => $data[1],
+                                    'firstname' => $data[2],
+                                    'middlename' => $data[3],
+                                    'lastname' => $data[4],
+                                    'suffix' => $data[5],
+                                    'gender' => $data[8],
+                                    'marital_status' => $data[6],
+                                    'birthdate' => date('Y-m-d', strtotime($data[7])),
+                                    'current_address' => $data[9],
+                                    'permanent_address' => ($data[10] !== '') ? $data[10] : NULL,
+                                    'mobile_no' => ($data[12] !== '') ? $data[12] : NULL,
+                                    'telephone_no' => ($data[11] !== '') ? $data[11] : NULL,
                                     'admitted_date' => date('Y-m-d'),
-                                    'special_remarks' => ($data[12] !== '') ? $data[12] : NULL, 
-                                    'is_guardian' => ($data[16] !== '' || $data[22] !== '') ? 1 : 0, 
-                                    'is_sibling' => ($data[29] !== '') ? 1 : 0, 
+                                    'special_remarks' => ($data[13] !== '') ? $data[13] : NULL, 
+                                    'is_guardian' => ($data[17] !== '' || $data[23] !== '') ? 1 : 0, 
+                                    'is_sibling' => ($data[30] !== '') ? 1 : 0, 
                                     'avatar' => NULL,
                                     'created_at' => $timestamp,
                                     'created_by' => Auth::user()->id
                                 ]);
                         
-                                if ($data[16] !== '' || $data[22] !== '') {
+                                if ($data[17] !== '' || $data[23] !== '') {
                                     $guardian = Guardian::create([
                                         'student_id' => $student->id,
-                                        'mother_firstname' => $data[16],
-                                        'mother_middlename' => ($data[17] !== '') ? $data[17] : NULL, 
-                                        'mother_lastname' => $data[18],
-                                        'mother_contact_no' => $data[19],
-                                        'mother_email' => $data[20],
-                                        'mother_address' => ($data[21] !== '') ? $data[21] : NULL,
+                                        'mother_firstname' => $data[17],
+                                        'mother_middlename' => ($data[18] !== '') ? $data[18] : NULL, 
+                                        'mother_lastname' => $data[19],
+                                        'mother_contact_no' => $data[20],
+                                        'mother_email' => $data[21],
+                                        'mother_address' => ($data[22] !== '') ? $data[22] : NULL,
                                         'mother_avatar' => NULL,
-                                        'mother_selected' => ($data[28] == 'Mother') ? 1 : 0,
-                                        'father_firstname' => $data[22],
-                                        'father_middlename' => ($data[23] !== '') ? $data[23] : NULL, 
-                                        'father_lastname' => $data[24],
-                                        'father_contact_no' => $data[25],
-                                        'father_email' => $data[26],
-                                        'father_address' => ($data[27] !== '') ? $data[27] : NULL,
+                                        'mother_selected' => ($data[29] == 'Mother') ? 1 : 0,
+                                        'father_firstname' => $data[23],
+                                        'father_middlename' => ($data[24] !== '') ? $data[24] : NULL, 
+                                        'father_lastname' => $data[25],
+                                        'father_contact_no' => $data[26],
+                                        'father_email' => $data[27],
+                                        'father_address' => ($data[28] !== '') ? $data[28] : NULL,
                                         'father_avatar' => NULL,
-                                        'father_selected' => ($data[28] == 'Father') ? 1 : 0,
+                                        'father_selected' => ($data[29] == 'Father') ? 1 : 0,
                                         'created_at' => $timestamp,
                                         'created_by' => Auth::user()->id
                                     ]);
-                        
+                                    $this->audit_logs('guardians', $guardian->id, 'has imported a new guardian.', Guardian::find($guardian->id), $timestamp, Auth::user()->id);
+
+                                    //** MOTHER INFO */
                                     $mother_user = User::create([
-                                        'name' => $data[16].' '.$data[18],
+                                        'name' => $data[17].' '.$data[19],
                                         'username' => 'M'.$student->identification_no,
-                                        'email' => ($data[20] !== NULL) ? $data[20] : NULL,
+                                        'email' => ($data[21] !== NULL) ? $data[21] : NULL,
                                         'password' => (new Student)->random(),
                                         'type' => 'parent'
                                     ]);
+                                    $this->audit_logs('users', $mother_user->id, 'has imported a new user.', User::find($mother_user->id), $timestamp, Auth::user()->id);
                         
                                     $motherRole = UserRole::create([
                                         'user_id' => $mother_user->id,
@@ -902,21 +1031,26 @@ class StudentsController extends Controller
                                         'created_at' => $timestamp,
                                         'created_by' => Auth::user()->id
                                     ]);
-                        
+                                    $this->audit_logs('users_roles', $motherRole->id, 'has imported a new user role.', UserRole::find($motherRole->id), $timestamp, Auth::user()->id);
+                      
                                     $mother_guardian_user = GuardianUser::create([
                                         'guardian_id' => $guardian->id,
                                         'user_id' => $mother_user->id,
                                         'created_at' => $timestamp,
                                         'created_by' => Auth::user()->id
                                     ]);
-                        
+                                    $this->audit_logs('guardians_users', $mother_guardian_user->id, 'has imported a new guardian user.', GuardianUser::find($mother_guardian_user->id), $timestamp, Auth::user()->id);
+                                    //** END MOTHER INFO */
+                                        
+                                    //** FATHER INFO */
                                     $father_user = User::create([
-                                        'name' => $data[22].' '.$data[24],
+                                        'name' => $data[23].' '.$data[25],
                                         'username' => 'F'.$student->identification_no,
-                                        'email' => ($data[26] !== NULL) ? $data[26] : NULL,
+                                        'email' => ($data[27] !== NULL) ? $data[27] : NULL,
                                         'password' => (new Student)->random(),
                                         'type' => 'parent'
                                     ]);
+                                    $this->audit_logs('users', $father_user->id, 'has imported a new user.', User::find($father_user->id), $timestamp, Auth::user()->id);
                         
                                     $fatherRole = UserRole::create([
                                         'user_id' => $father_user->id,
@@ -924,17 +1058,20 @@ class StudentsController extends Controller
                                         'created_at' => $timestamp,
                                         'created_by' => Auth::user()->id
                                     ]);
-                        
+                                    $this->audit_logs('users_roles', $fatherRole->id, 'has imported a new user role.', UserRole::find($fatherRole->id), $timestamp, Auth::user()->id);
+
                                     $father_guardian_user = GuardianUser::create([
                                         'guardian_id' => $guardian->id,
                                         'user_id' => $father_user->id,
                                         'created_at' => $timestamp,
                                         'created_by' => Auth::user()->id
                                     ]);
+                                    $this->audit_logs('guardians_users', $father_guardian_user->id, 'has imported a new guardian user.', GuardianUser::find($father_guardian_user->id), $timestamp, Auth::user()->id);
+                                    //** END FATHER INFO */
                                 }
                         
-                                if ($data[29] !== NULL) {
-                                    $siblingz = explode('-',$data[29]);
+                                if ($data[30] !== NULL) {
+                                    $siblingz = explode('-',$data[30]);
                                     foreach ($siblingz as $sibling) {
                                         if ($sibling != '') {
                                             $siblingExist = Student::where('identification_no', substr($sibling, 0, 10))->count();
@@ -945,10 +1082,13 @@ class StudentsController extends Controller
                                                     'created_at' => $timestamp,
                                                     'created_by' => Auth::user()->id
                                                 ]);
+                                                $this->audit_logs('siblings', $siblings->id, 'has imported a new sibling.', Sibling::find($siblings->id), $timestamp, Auth::user()->id);
                                             }
                                         }
                                     }
                                 }
+
+                                $this->audit_logs('students', $student->id, 'has imported a new student.', Student::find($student->id), $timestamp, Auth::user()->id);
                             }
                         }
                     } // close for if $row > 1 condition                    
@@ -987,5 +1127,19 @@ class StudentsController extends Controller
     {
         $student = (new Student)->get_this_student( $id );
         echo json_encode( $student ); exit();
+    }
+
+    public function audit_logs($entity, $entity_id, $description, $data, $timestamp, $user)
+    {
+        $auditLogs = AuditLog::create([
+            'entity' => $entity,
+            'entity_id' => $entity_id,
+            'description' => $description,
+            'data' => json_encode($data),
+            'created_at' => $timestamp,
+            'created_by' => $user
+        ]);
+
+        return true;
     }
 }

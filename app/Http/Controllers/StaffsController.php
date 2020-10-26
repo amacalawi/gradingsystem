@@ -12,6 +12,7 @@ use App\Models\Department;
 use App\Models\Designation;
 use App\Models\UserRole;
 use App\Models\EducationType;
+use App\Models\AuditLog;
 use App\User;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -219,12 +220,15 @@ class StaffsController extends Controller
             throw new NotFoundHttpException();
         }  
 
+        $this->audit_logs('users', $user->id, 'has inserted a new user.', User::find($user->id), $timestamp, Auth::user()->id);
+
         $userRole = UserRole::create([
             'user_id' => $user->id,
             'role_id' => 3,
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
+        $this->audit_logs('users_roles', $userRole->id, 'has inserted a new user role.', UserRole::find($userRole->id), $timestamp, Auth::user()->id);
 
         $staff = Staff::create([
             'user_id' => $user->id,
@@ -232,7 +236,7 @@ class StaffsController extends Controller
             'department_id' => $request->department_id,
             'designation_id' => $request->designation_id,
             'identification_no' => $request->identification_no,
-            'type' => $request->type,
+            'type' => implode(',', $request->type),
             'specification' => $request->specification,
             'firstname' => $request->firstname,
             'middlename' => $request->middlename,
@@ -273,6 +277,8 @@ class StaffsController extends Controller
         if (!$staff) {
             throw new NotFoundHttpException();
         }
+
+        $this->audit_logs('staffs', $staff->id, 'has inserted a new staff.', Staff::find($staff->id), $timestamp, Auth::user()->id);
 
         $data = array(
             'title' => 'Well done!',
@@ -354,7 +360,7 @@ class StaffsController extends Controller
         $staff->identification_no = $request->identification_no;
         $staff->department_id = $request->department_id;
         $staff->designation_id = $request->designation_id;
-        $staff->type = $request->type;
+        $staff->type = implode(',', $request->type);
         $staff->specification = $request->specification;
         $staff->firstname = $request->firstname;
         $staff->middlename = $request->middlename;
@@ -421,6 +427,8 @@ class StaffsController extends Controller
                     'created_by' => Auth::user()->id
                 ]);
             }
+
+            $this->audit_logs('staffs', $id, 'has modified a staff.', Staff::find($id), $timestamp, Auth::user()->id);
             
             $data = array(
                 'title' => 'Well done!',
@@ -448,7 +456,8 @@ class StaffsController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 0
             ]);
-            
+            $this->audit_logs('staffs', $id, 'has removed a staff.', Staff::find($id), $timestamp, Auth::user()->id);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The staff has been successfully removed.',
@@ -467,6 +476,7 @@ class StaffsController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 1
             ]);
+            $this->audit_logs('staffs', $id, 'has retrieved a staff.', Staff::find($id), $timestamp, Auth::user()->id);
             
             $data = array(
                 'title' => 'Well done!',
@@ -555,6 +565,7 @@ class StaffsController extends Controller
                                             'username' => $data[16]
                                         ]);
                                     }
+                                    $this->audit_logs('users', $user->id, 'has imported and updated a user.', User::find($user->id), $timestamp, Auth::user()->id);
 
                                     $exist = UserRole::where('user_id', $user_id)->count();
                                     if (!($exist > 0)) {
@@ -564,8 +575,11 @@ class StaffsController extends Controller
                                             'created_at' => $timestamp,
                                             'created_by' => Auth::user()->id
                                         ]);
+                                        $this->audit_logs('users_roles', $userRole->id, 'has imported a new user role.', UserRole::find($userRole->id), $timestamp, Auth::user()->id);
                                     }
                                 }
+
+                                $this->audit_logs('staffs', $staff->id, 'has imported and updated a staff.', Staff::find($staff->id), $timestamp, Auth::user()->id);
                             } else {
                                 $user = User::create([
                                     'name' => $data[1].' '.$data[3],
@@ -578,13 +592,16 @@ class StaffsController extends Controller
                                 if (!$user) {
                                     throw new NotFoundHttpException();
                                 }  
-                        
+                                
+                                $this->audit_logs('users', $user->id, 'has imported a new user.', Staff::find($user->id), $timestamp, Auth::user()->id);
+
                                 $userRole = UserRole::create([
                                     'user_id' => $user->id,
                                     'role_id' => 3,
                                     'created_at' => $timestamp,
                                     'created_by' => Auth::user()->id
                                 ]);
+                                $this->audit_logs('users_roles', $userRole->id, 'has imported a new user role.', UserRole::find($userRole->id), $timestamp, Auth::user()->id);
                         
                                 $staff = Staff::create([
                                     'user_id' => $user->id,
@@ -629,6 +646,8 @@ class StaffsController extends Controller
                                     'created_at' => $timestamp,
                                     'created_by' => Auth::user()->id
                                 ]);
+
+                                $this->audit_logs('staffs', $staff->id, 'has imported a new staff.', Staff::find($staff->id), $timestamp, Auth::user()->id);
                             }
                         }
                     } // close for if $row > 1 condition                    
@@ -656,5 +675,19 @@ class StaffsController extends Controller
     {
         $staffNo = (new Staff)->generate_staff_no();
         return $staffNo;
+    }
+
+    public function audit_logs($entity, $entity_id, $description, $data, $timestamp, $user)
+    {
+        $auditLogs = AuditLog::create([
+            'entity' => $entity,
+            'entity_id' => $entity_id,
+            'description' => $description,
+            'data' => json_encode($data),
+            'created_at' => $timestamp,
+            'created_by' => $user
+        ]);
+
+        return true;
     }
 }

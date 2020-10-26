@@ -11,6 +11,7 @@ use App\Models\Staff;
 use App\Models\Quarter;
 use App\Models\EducationType;
 use App\Models\SubjectEducationTypes;
+use App\Models\AuditLog;
 use App\Helper\Helper;
 
 class SubjectsController extends Controller
@@ -112,7 +113,7 @@ class SubjectsController extends Controller
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
-        $types = (new EducationType)->all_education_types();
+        $types = (new EducationType)->all_education_types_selectpicker();
         $coordinators = (new Staff)->all_coordinators();
         if (count($flashMessage) && $flashMessage[0]['module'] == 'subject') {
             $subject = (new Subject)->fetch($flashMessage[0]['id']);
@@ -128,7 +129,7 @@ class SubjectsController extends Controller
         $menus = $this->load_menus();
         $flashMessage = self::messages();
         $segment = request()->segment(4);
-        $types = (new EducationType)->all_education_types();
+        $types = (new EducationType)->all_education_types_selectpicker();
         $coordinators = (new Staff)->all_coordinators();
         $subject = (new Subject)->fetch($id);
 
@@ -181,9 +182,12 @@ class SubjectsController extends Controller
                                 'created_at' => $timestamp,
                                 'created_by' => Auth::user()->id
                             ]);
+                            $this->audit_logs('subjects_education_types', $subjecteducationtypes->id, 'has inserted a new subject education type.', SubjectEducationTypes::find($subjecteducationtypes->id), $timestamp, Auth::user()->id);
                         }
                     }
                     
+                    $this->audit_logs('subjects', $subject->id, 'has inserted a new subject.', Subject::find($subject->id), $timestamp, Auth::user()->id);
+
                     $data = array(
                         'title' => 'Well done!',
                         'text' => 'The subject has been successfully saved.',
@@ -261,16 +265,18 @@ class SubjectsController extends Controller
                                         
                         foreach ($request->type as $type) {
                             if($type > 0){
-                                $subjecteducationtypes = SubjectEducationTypes::create([
+                                $subjects_education_types = SubjectEducationTypes::create([
                                     'subject_id' => $id,
                                     'education_type_id' => $type,
                                     'created_at' => $timestamp,
                                     'created_by' => Auth::user()->id
                                 ]);
+                                $this->audit_logs('subjects_education_types', $subjects_education_types->id, 'has inserted a new subject education type.', SubjectEducationTypes::find($subjects_education_types->id), $timestamp, Auth::user()->id);
                             }
                         }
                         
                         if ( $subject->update() ) {
+                            $this->audit_logs('subjects', $id, 'has modified a subject.', Subject::find($id), $timestamp, Auth::user()->id);
                             $data = array(
                                 'title' => 'Well done!',
                                 'text' => 'The subject has been successfully updated.',
@@ -324,6 +330,7 @@ class SubjectsController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 0
             ]);
+            $this->audit_logs('subjects', $id, 'has removed a subject.', Subject::find($id), $timestamp, Auth::user()->id);
             
             $data = array(
                 'title' => 'Well done!',
@@ -334,7 +341,7 @@ class SubjectsController extends Controller
     
             echo json_encode( $data ); exit();
         }
-        else if ($action == 'Active') {
+        else {
             $subjects = Subject::where([
                 'id' => $id,
             ])
@@ -343,6 +350,7 @@ class SubjectsController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 1
             ]);
+            $this->audit_logs('subjects', $id, 'has retrieved a subject.', Subject::find($id), $timestamp, Auth::user()->id);
             
             $data = array(
                 'title' => 'Well done!',
@@ -352,109 +360,7 @@ class SubjectsController extends Controller
             );
     
             echo json_encode( $data ); exit();
-        }    
-        else if ($action == 'Current') {
-            $subjects = Subject::where('id', '!=', $id)->where('status', '!=', 'Closed')
-            ->update([
-                'status' => 'Open',
-                'updated_at' => $timestamp,
-                'updated_by' => Auth::user()->id,
-                'is_active' => 1
-            ]);
-
-            $subjects = Subject::where([
-                'id' => $id,
-            ])
-            ->update([
-                'status' => $request->input('items')[0]['action'],
-                'updated_at' => $timestamp,
-                'updated_by' => Auth::user()->id,
-                'is_active' => 1
-            ]);
-            
-            $data = array(
-                'title' => 'Well done!',
-                'text' => 'The subject status has been successfully changed.',
-                'type' => 'success',
-                'class' => 'btn-brand'
-            );
-    
-            echo json_encode( $data ); exit();
-        }
-        else if ($action == 'Open') {
-            $rows = Subject::where('id', '!=', $id)->where([
-                'status' => 'Open',
-                'is_active' => 1
-            ])->count();
-                
-            if ($rows > 0) {
-                $data = array(
-                    'title' => 'Oh snap!',
-                    'text' => 'Only one (Open Status) can be changed at a time.',
-                    'type' => 'warning',
-                    'class' => 'btn-danger'
-                );
-        
-                echo json_encode( $data ); exit();
-            } else {
-                $subjects = Subject::where([
-                    'id' => $id,
-                ])
-                ->update([
-                    'status' => $request->input('items')[0]['action'],
-                    'updated_at' => $timestamp,
-                    'updated_by' => Auth::user()->id,
-                    'is_active' => 1
-                ]);
-
-                $data = array(
-                    'title' => 'Well done!',
-                    'text' => 'The subject status has been successfully changed.',
-                    'type' => 'success',
-                    'class' => 'btn-brand'
-                );
-
-                echo json_encode( $data ); exit();
-            }
-        }
-        else {
-            $rows = Subject::where('id', '!=', $id)->where([
-                'status' => 'Open',
-                'is_active' => 1
-            ])->count();
-
-            if ($rows == 1) {
-                $subjects = Subject::where('id', '!=', $id)->where([
-                    'status' => 'Open',
-                    'is_active' => 1
-                ])
-                ->update([
-                    'status' => 'Current',
-                    'updated_at' => $timestamp,
-                    'updated_by' => Auth::user()->id,
-                    'is_active' => 1
-                ]);
-            }
-
-            $subjects = Subject::where([
-                'id' => $id,
-            ])
-            ->update([
-                'status' => $request->input('items')[0]['action'],
-                'updated_at' => $timestamp,
-                'updated_by' => Auth::user()->id,
-                'is_active' => 1
-            ]);
-
-            $data = array(
-                'title' => 'Well done!',
-                'text' => 'The subject status has been successfully changed.',
-                'type' => 'success',
-                'class' => 'btn-brand'
-            );
-
-            echo json_encode( $data ); exit();
-        }
+        }  
     } 
 
         
@@ -552,6 +458,7 @@ class SubjectsController extends Controller
                                         $subject->updated_at = $timestamp;
                                         $subject->updated_by = Auth::user()->id;
                                         $subject->update();
+                                        $this->audit_logs('subjects', $subject->id, 'has modified a subject.', Subject::find($subject->id), $timestamp, Auth::user()->id);
 
                                         $subjecteducationtypes = SubjectEducationTypes::where('subject_id', $exist->first()->id);
                                         $subjecteducationtypes->delete();
@@ -566,6 +473,7 @@ class SubjectsController extends Controller
                                                     'created_at' => $timestamp,
                                                     'created_by' => Auth::user()->id
                                                 ]);
+                                                $this->audit_logs('subjects_education_types', $subjecteducationtypes->id, 'has inserted a new subject education type.', SubjectEducationTypes::find($subjecteducationtypes->id), $timestamp, Auth::user()->id);
                                             }
                                         }
                                     }else{
@@ -603,6 +511,7 @@ class SubjectsController extends Controller
                                             'created_at' => $timestamp,
                                             'created_by' => Auth::user()->id
                                         ]);
+                                        $this->audit_logs('subjects', $subject->id, 'has inserted a new subject.', Subject::find($subject->id), $timestamp, Auth::user()->id);
 
                                         $type_arrs = explode(',', $data[3]);
                                         foreach($type_arrs as $type_arr){
@@ -614,6 +523,7 @@ class SubjectsController extends Controller
                                                     'created_at' => $timestamp,
                                                     'created_by' => Auth::user()->id
                                                 ]);
+                                                $this->audit_logs('subjects_education_types', $subjecteducationtypes->id, 'has inserted a new subject education type.', SubjectEducationTypes::find($subjecteducationtypes->id), $timestamp, Auth::user()->id);
                                             }
                                         }
                                     }else{
@@ -652,4 +562,17 @@ class SubjectsController extends Controller
         exit();
     }
 
+    public function audit_logs($entity, $entity_id, $description, $data, $timestamp, $user)
+    {
+        $auditLogs = AuditLog::create([
+            'entity' => $entity,
+            'entity_id' => $entity_id,
+            'description' => $description,
+            'data' => json_encode($data),
+            'created_at' => $timestamp,
+            'created_by' => $user
+        ]);
+
+        return true;
+    }
 }

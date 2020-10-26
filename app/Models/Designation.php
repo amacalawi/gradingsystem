@@ -45,7 +45,7 @@ class Designation extends Model
     	$designations = self::where('is_active', 1)->orderBy('id', 'asc')->get();
 
         $desigs = array();
-        $desigs[] = array('' => 'select a designation');
+        $desigs[] = array('' => 'select a position');
         foreach ($designations as $designation) {
             $desigs[] = array(
                 $designation->id => $designation->name
