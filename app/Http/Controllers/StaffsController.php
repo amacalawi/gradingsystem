@@ -690,4 +690,43 @@ class StaffsController extends Controller
 
         return true;
     }
+
+
+
+    public function get_all_teachers_bytype()
+    {
+        $teachers = (new Staff)->get_all_teachers_bytype();
+        echo json_encode( $teachers ); exit();
+    }
+    
+    public function get_all_advisers_bytype()
+    {
+        $advisers = (new Staff)->get_all_advisers_bytype();
+        echo json_encode( $advisers ); exit();
+    }
+
+    //Added here to avoid conflict
+    public function get_all_teachers()
+    {
+        $teachers = Staff::where('is_active', 1)->orwhere('type', 'like', '%Adviser%')->orwhere('type', 'like', '%Teacher%')->orderBy('id', 'asc')->get();
+
+        $staffs = array();
+        $staffs[] = array('0' => 'select a teacher');
+
+        foreach ($teachers as $teacher) {
+            $staffs[] = array(
+                $teacher->id  => $teacher->lastname.', '.$teacher->firstname.' '.$teacher->middlename.' ('.$teacher->identification_no.')' ,
+            );
+        }
+
+        $teachers = array();
+        foreach($staffs as $staff) {
+            foreach($staff as $key => $val) {
+                $teachers[$key] = $val;
+            }
+        }
+
+        echo json_encode( $teachers ); exit();
+    }
+
 }
