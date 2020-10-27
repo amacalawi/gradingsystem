@@ -844,3 +844,12 @@ a[data-dismiss="modal"] {
 #enrollment-layer .form-control-feedback {
     color: #f4516c;
 }
+
+.active-menu-items i,
+.active-menu-items span.m-menu__link-text {
+    color: #22b9ff !important;
+}
+
+.active-menu-items i span {
+    background: #22b9ff !important;
+}

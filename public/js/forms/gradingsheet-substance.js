@@ -205,6 +205,10 @@
         $.gradingsheet.rankings();
     },
 
+    gradingsheet.prototype.recompute_acitivity_components = function() {
+
+    },
+
     gradingsheet.prototype.rankings = function()
     {
         $(".quarter-cell")
@@ -472,6 +476,41 @@
             }
         });
         
+
+        this.$body.on('blur', 'input[name="activity_header[]"]', function (e){
+            e.preventDefault();
+            var self = $(this);
+            var activityID = self.attr('activity_id');
+            var activityValue = self.val();
+
+            $.ajax({
+                type: 'GET',
+                url: base_url + 'academics/grading-sheets/all-gradingsheets/update-activity-header?id=' + activityID + '&val=' + activityValue,
+                success: function(response) {
+                    var data = JSON.parse(response);
+                    console.log(data);
+                },
+                async: false
+            });
+        });
+
+        this.$body.on('blur', 'input[name="activity_header_value[]"]', function (e){
+            e.preventDefault();
+            var self = $(this);
+            var activityID = self.attr('activity_id');
+            var activityValue = self.val();
+
+            $.ajax({
+                type: 'GET',
+                url: base_url + 'academics/grading-sheets/all-gradingsheets/update-activity-value?id=' + activityID + '&val=' + activityValue,
+                success: function(response) {
+                    var data = JSON.parse(response);
+                    $.gradingsheet.recompute_acitivity_components();
+                    console.log(data);
+                },
+                async: false
+            });
+        });
     }
 
     //init gradingsheet

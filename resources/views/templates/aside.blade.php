@@ -44,7 +44,7 @@
                                 <i class="m-menu__section-icon flaticon-more-v3"></i>
                             </li>
                                 @foreach ($menu['modules'] as $module)
-                                <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"  data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion">
+                                <li class="m-menu__item m-menu__item--submenu" slug="{{ $module['slug'] }}" aria-haspopup="true"  data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion">
                                     <a  href="#" class="m-menu__link m-menu__toggle">
                                         <span class="m-menu__link-text">
                                             <i class="{{ $module['icon'] }} module-icons"></i> {{ $module['name'] }}
@@ -57,7 +57,7 @@
                                         <ul class="m-menu__subnav">
                                             @foreach ($menu['sub_modules'][$module['id']] as $submodule)
                                                 @if ($submodule['name'] == 'Infoblast' || $submodule['name'] == 'Emailblast') 
-                                                    <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion" data-redirect="true">
+                                                    <li class="m-menu__item m-menu__item--submenu" slug="{{ $submodule['slug'] }}" aria-haspopup="true" data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion" data-redirect="true">
                                                         <a href="#" class="m-menu__link m-menu__toggle">
                                                             <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                                 <span></span>
@@ -70,7 +70,7 @@
                                                         <div class="m-menu__submenu " style="">
                                                             <span class="m-menu__arrow"></span>
                                                             <ul class="m-menu__subnav">
-                                                                <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
+                                                                <li class="m-menu__item" slug="new" aria-haspopup="true" data-redirect="true">
                                                                     <a href="{{ url($menu['slug'].'/'.$module['slug'].'/'.$submodule['slug'].'/new') }}" class="m-menu__link ">
                                                                         <i class="m-menu__link-icon flaticon-computer"></i>
                                                                         <span class="m-menu__link-title">
@@ -84,7 +84,7 @@
                                                                         </span>
                                                                     </a>
                                                                 </li>
-                                                                <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
+                                                                <li class="m-menu__item" slug="inbox" aria-haspopup="true" data-redirect="true">
                                                                     <a href="{{ url($menu['slug'].'/'.$module['slug'].'/'.$submodule['slug'].'/inbox') }}" class="m-menu__link ">
                                                                         <i class="m-menu__link-icon flaticon-signs-2"></i>
                                                                         <span class="m-menu__link-title">
@@ -101,7 +101,7 @@
                                                                         </span>
                                                                     </a>
                                                                 </li>
-                                                                <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
+                                                                <li class="m-menu__item" slug="outbox" aria-haspopup="true" data-redirect="true">
                                                                     <a href="{{ url($menu['slug'].'/'.$module['slug'].'/'.$submodule['slug'].'/outbox') }}" class="m-menu__link ">
                                                                         <i class="m-menu__link-icon flaticon-clipboard"></i>
                                                                         <span class="m-menu__link-title">
@@ -117,7 +117,7 @@
                                                                 </li>
 
                                                                 @if ($submodule['name'] == 'Emailblast') 
-                                                                    <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
+                                                                    <li class="m-menu__item" slug="settings" aria-haspopup="true" data-redirect="true">
                                                                         <a href="{{ url($menu['slug'].'/'.$module['slug'].'/'.$submodule['slug'].'/settings') }}" class="m-menu__link ">
                                                                             <i class="m-menu__link-icon flaticon-settings"></i>
                                                                             <span class="m-menu__link-title">
@@ -131,7 +131,7 @@
                                                                     </li>
                                                                 @endif
 
-                                                                <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
+                                                                <li class="m-menu__item" slug="tracking" aria-haspopup="true" data-redirect="true">
                                                                     <a href="{{ url($menu['slug'].'/'.$module['slug'].'/'.$submodule['slug'].'/tracking') }}" class="m-menu__link ">
                                                                         <i class="m-menu__link-icon flaticon-graph"></i>
                                                                         <span class="m-menu__link-title">
@@ -145,7 +145,7 @@
                                                                         </span>
                                                                     </a>
                                                                 </li>
-                                                                <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
+                                                                <li class="m-menu__item" slug="templates" aria-haspopup="true" data-redirect="true">
                                                                     <a href="{{ url($menu['slug'].'/'.$module['slug'].'/'.$submodule['slug'].'/templates') }}" class="m-menu__link ">
                                                                         <i class="m-menu__link-icon flaticon-multimedia-2"></i>
                                                                         <span class="m-menu__link-title">
@@ -164,7 +164,7 @@
                                                     </li>
 
                                                 @elseif($submodule['name'] == 'Student Attendance' || $submodule['name'] == 'Staff Attendance')
-                                                    <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion" data-redirect="true">
+                                                    <li class="m-menu__item m-menu__item--submenu" slug="{{ $submodule['slug'] }}" aria-haspopup="true" data-menu-submenu-toggle="click" data-menu-submenu-mode="accordion" data-redirect="true">
                                                         <a href="#" class="m-menu__link m-menu__toggle">
                                                             <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                                 <span></span>
@@ -174,10 +174,10 @@
                                                             </span>
                                                             <i class="m-menu__ver-arrow la la-angle-right"></i>
                                                         </a>
-                                                        <div class="m-menu__submenu " style="">
+                                                        <div class="m-menu__submenu" style="">
                                                             <span class="m-menu__arrow"></span>
                                                             <ul class="m-menu__subnav">
-                                                                <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
+                                                                <li class="m-menu__item" slug="file-attendance" aria-haspopup="true" data-redirect="true">
                                                                     <a href="{{ url($menu['slug'].'/'.$module['slug'].'/'.$submodule['slug'].'/file-attendance') }}" class="m-menu__link ">
                                                                         <i class="m-menu__link-icon flaticon-clipboard"></i>
                                                                         <span class="m-menu__link-title">
@@ -191,7 +191,7 @@
                                                                         </span>
                                                                     </a>
                                                                 </li>
-                                                                <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
+                                                                <li class="m-menu__item" slug="settings" aria-haspopup="true" data-redirect="true">
                                                                     <a href="{{ url($menu['slug'].'/'.$module['slug'].'/'.$submodule['slug'].'/settings') }}" class="m-menu__link ">
                                                                         <i class="m-menu__link-icon flaticon-clipboard"></i>
                                                                         <span class="m-menu__link-title">
@@ -209,7 +209,7 @@
                                                         </div>
                                                     </li>
                                                 @else
-                                                    <li class="m-menu__item" aria-haspopup="true"  data-redirect="true">
+                                                    <li class="m-menu__item" slug="{{ $submodule['slug'] }}" aria-haspopup="true"  data-redirect="true">
                                                         <a  href="{{ url($menu['slug'].'/'.$module['slug'].'/'.$submodule['slug']) }}" class="m-menu__link ">
                                                             <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                                 <span></span>

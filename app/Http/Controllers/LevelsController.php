@@ -9,6 +9,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Level;
 use App\Models\Quarter;
 use App\Models\EducationType;
+use App\Models\AuditLog;
 use Illuminate\Http\File;
 use App\Helper\Helper;
 
@@ -142,6 +143,8 @@ class LevelsController extends Controller
             throw new NotFoundHttpException();
         }
 
+        $this->audit_logs('levels', $level->id, 'has inserted a new level.', Level::find($level->id), $timestamp, Auth::user()->id);
+
         $data = array(
             'title' => 'Well done!',
             'text' => 'The level has been successfully saved.',
@@ -172,6 +175,8 @@ class LevelsController extends Controller
 
         if ($level->update()) {
 
+            $this->audit_logs('levels', $id, 'has modified a level.', Level::find($id), $timestamp, Auth::user()->id);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The level has been successfully updated.',
@@ -199,6 +204,7 @@ class LevelsController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 0
             ]);
+            $this->audit_logs('levels', $id, 'has removed a level.', Level::find($id), $timestamp, Auth::user()->id);
             
             $data = array(
                 'title' => 'Well done!',
@@ -209,7 +215,7 @@ class LevelsController extends Controller
     
             echo json_encode( $data ); exit();
         }
-        else if ($action == 'Active') {
+        else {
             $levels = Level::where([
                 'id' => $id,
             ])
@@ -218,6 +224,7 @@ class LevelsController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 1
             ]);
+            $this->audit_logs('levels', $id, 'has retrieved a level.', Level::find($id), $timestamp, Auth::user()->id);
             
             $data = array(
                 'title' => 'Well done!',
@@ -227,109 +234,7 @@ class LevelsController extends Controller
             );
     
             echo json_encode( $data ); exit();
-        }    
-        else if ($action == 'Current') {
-            $levels = Level::where('id', '!=', $id)->where('status', '!=', 'Closed')
-            ->update([
-                'status' => 'Open',
-                'updated_at' => $timestamp,
-                'updated_by' => Auth::user()->id,
-                'is_active' => 1
-            ]);
-
-            $levels = Level::where([
-                'id' => $id,
-            ])
-            ->update([
-                'status' => $request->input('items')[0]['action'],
-                'updated_at' => $timestamp,
-                'updated_by' => Auth::user()->id,
-                'is_active' => 1
-            ]);
-            
-            $data = array(
-                'title' => 'Well done!',
-                'text' => 'The level status has been successfully changed.',
-                'type' => 'success',
-                'class' => 'btn-brand'
-            );
-    
-            echo json_encode( $data ); exit();
-        }
-        else if ($action == 'Open') {
-            $rows = Level::where('id', '!=', $id)->where([
-                'status' => 'Open',
-                'is_active' => 1
-            ])->count();
-                
-            if ($rows > 0) {
-                $data = array(
-                    'title' => 'Oh snap!',
-                    'text' => 'Only one (Open Status) can be changed at a time.',
-                    'type' => 'warning',
-                    'class' => 'btn-danger'
-                );
-        
-                echo json_encode( $data ); exit();
-            } else {
-                $levels = Level::where([
-                    'id' => $id,
-                ])
-                ->update([
-                    'status' => $request->input('items')[0]['action'],
-                    'updated_at' => $timestamp,
-                    'updated_by' => Auth::user()->id,
-                    'is_active' => 1
-                ]);
-
-                $data = array(
-                    'title' => 'Well done!',
-                    'text' => 'The level status has been successfully changed.',
-                    'type' => 'success',
-                    'class' => 'btn-brand'
-                );
-
-                echo json_encode( $data ); exit();
-            }
-        }
-        else {
-            $rows = Level::where('id', '!=', $id)->where([
-                'status' => 'Open',
-                'is_active' => 1
-            ])->count();
-
-            if ($rows == 1) {
-                $levels = Level::where('id', '!=', $id)->where([
-                    'status' => 'Open',
-                    'is_active' => 1
-                ])
-                ->update([
-                    'status' => 'Current',
-                    'updated_at' => $timestamp,
-                    'updated_by' => Auth::user()->id,
-                    'is_active' => 1
-                ]);
-            }
-
-            $levels = Level::where([
-                'id' => $id,
-            ])
-            ->update([
-                'status' => $request->input('items')[0]['action'],
-                'updated_at' => $timestamp,
-                'updated_by' => Auth::user()->id,
-                'is_active' => 1
-            ]);
-
-            $data = array(
-                'title' => 'Well done!',
-                'text' => 'The level status has been successfully changed.',
-                'type' => 'success',
-                'class' => 'btn-brand'
-            );
-
-            echo json_encode( $data ); exit();
-        }
+        }  
     }
 
     public function get_all_levels_bytype(Request $request, $type)
@@ -364,6 +269,7 @@ class LevelsController extends Controller
                                     $level->updated_at = $timestamp;
                                     $level->updated_by = Auth::user()->id;
                                     $level->update();
+                                    $this->audit_logs('levels', $exist->first()->id, 'has imported and updated a level.', Level::find($exist->first()->id), $timestamp, Auth::user()->id);
                                 } else {
                                     $level = Level::create([
                                         'code' => $data[0],
@@ -373,6 +279,7 @@ class LevelsController extends Controller
                                         'created_at' => $timestamp,
                                         'created_by' => Auth::user()->id
                                     ]);
+                                    $this->audit_logs('levels', $level->id, 'has imported a new level.', Level::find($level->id), $timestamp, Auth::user()->id);
                                 }
                             }
                         }
@@ -390,4 +297,17 @@ class LevelsController extends Controller
         exit();
     }
 
+    public function audit_logs($entity, $entity_id, $description, $data, $timestamp, $user)
+    {
+        $auditLogs = AuditLog::create([
+            'entity' => $entity,
+            'entity_id' => $entity_id,
+            'description' => $description,
+            'data' => json_encode($data),
+            'created_at' => $timestamp,
+            'created_by' => $user
+        ]);
+
+        return true;
+    }
 }

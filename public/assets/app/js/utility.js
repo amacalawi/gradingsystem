@@ -110,6 +110,18 @@
         | # select, input, and textarea on change or keyup remove error
         | ---------------------------------
         */
+        $( document ).ready(function() {
+            var slugMenus = ['add', 'edit'];
+            $('body .m-menu__subnav .m-menu__item.m-menu__item--submenu[slug="' + activeModule + '"]').addClass('m-menu__item--open');
+            console.log(slugMenus.indexOf(activeSubSubModule));
+            if (slugMenus.indexOf(activeSubSubModule) === -1 && activeSubSubModule == '') {
+                $('body .m-menu__subnav .m-menu__item.m-menu__item--submenu .m-menu__item[slug="' + activeSubModule + '"]').addClass('active-menu-items');
+            } else {
+                $('body .m-menu__subnav .m-menu__subnav .m-menu__item.m-menu__item--submenu[slug="' + activeSubModule + '"]').addClass('m-menu__item--open');
+                $('body .m-menu__subnav .m-menu__subnav .m-menu__item.m-menu__item--submenu .m-menu__item[slug="' + activeSubSubModule + '"]').addClass('active-menu-items');
+            }
+        });
+
         this.$body.on('keypress', '.numeric-double', function (event) {
             var $this = $(this);
             if ((event.which != 46 || $this.val().indexOf('.') != -1) &&
