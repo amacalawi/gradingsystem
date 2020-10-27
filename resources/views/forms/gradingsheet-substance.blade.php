@@ -20,7 +20,9 @@
                 @foreach ($components as $component)
                     @php $iteration = 1; @endphp
                     @foreach ($component->activities as $activity)
-                        <th class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="{{ $activity->description }}">{{  $activity->activity }}</th>
+                        <th class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="{{ $activity->description }}">
+                            <input activity_id="{{ $activity->id }}" name="activity_header[]" class="text-cell" value="{{ $activity->activity }}" type="text"/>
+                        </th>
                         @php $iteration++; @endphp
                     @endforeach
                     @if ($component->is_sum_cell > 0)
@@ -47,7 +49,9 @@
                 @foreach ($components as $component)
                     @php $iteration = 1; $sumValue = 0; @endphp
                     @foreach ($component->activities as $activity)
-                        <th group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 activity-cell-header">{{ $activity->value }}</th>
+                        <th group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 activity-cell-header">
+                            <input activity_id="{{ $activity->id }}" name="activity_header_value[]" class="text-cell" value="{{ $activity->value }}" type="text"/>
+                        </th>
                         @php $iteration++; @endphp
                     @endforeach
                     @if ($component->is_sum_cell > 0)

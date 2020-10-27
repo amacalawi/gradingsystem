@@ -23,6 +23,9 @@
             var _token = "{{ csrf_token() }}";
             var _privileges = "{{  \Helper::get_privileges() }}";
             var user_role = "{{ Auth::user()->type }}";
+            var activeModule = "{{ Request::segment(2) }}";
+            var activeSubModule = "{{ Request::segment(3) }}";
+            var activeSubSubModule = "{{ Request::segment(4) }}";
             var stepStart = 1;
         </script>
     </head>

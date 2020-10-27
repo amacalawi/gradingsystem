@@ -18,6 +18,7 @@ use App\Models\SectionsSubjects;
 use App\Models\SectionInfo;
 use App\Models\Section;
 use App\Models\EducationType;
+use App\Models\AuditLog;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -352,30 +353,29 @@ class ComponentsController extends Controller
                 'created_at' => $timestamp,
                 'created_by' => Auth::user()->id
             ]);
+            $this->audit_logs('components_quarters', $component_quarter->id, 'has inserted a new component quarter.', ComponentQuarter::find($component_quarter->id), $timestamp, Auth::user()->id);
         }
 
-        /*
-            if (!empty($request->activity_name)) {
-                $activities = $request->activity_name; $iteration = 0;
-                foreach ($activities as $activity) {
-                    if ($activity !== NULL) {
-                        $activity = Activity::create([
-                            'component_id' => $component->id,
-                            'activity' => $request->activity_name[$iteration],
-                            'value' => $request->activity_value[$iteration],
-                            'description' => $request->activity_description[$iteration],
-                            'created_at' => $timestamp,
-                            'created_by' => Auth::user()->id
-                        ]);
-                    }
-                    $iteration++;
-                }
-            }
-        */
+        $activitiesCount = 10; $iteration = 1;
+        while ($activitiesCount != 0) {
+            $activity = Activity::create([
+                'component_id' => $component->id,
+                'activity' => 'A'.$iteration,
+                'value' => 10,
+                'description' => 'Activity '.$iteration,
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+            $this->audit_logs('activities', $activity->id, 'has generated a new component activity.', Activity::find($activity->id), $timestamp, Auth::user()->id);
+
+            $iteration++; $activitiesCount--;
+        }
 
         if (!$component) {
             throw new NotFoundHttpException();
         }
+
+        $this->audit_logs('components', $component->id, 'has inserted a new component.', Component::find($component->id), $timestamp, Auth::user()->id);
 
         $data = array(
             'title' => 'Well done!',
@@ -425,8 +425,24 @@ class ComponentsController extends Controller
                     'updated_by' => Auth::user()->id,
                     'is_active' => 1
                 ]);
+                $component_quarter = ComponentQuarter::where(['component_id' => $id, 'quarter_id' => $quarter, 'is_active' => 1])->get();
+                if ($component_quarter->count() > 0) {
+                    $this->audit_logs('components_quarters', $component_quarter->first()->id, 'has modified a component quarter.', ComponentQuarter::find($component_quarter->first()->id), $timestamp, Auth::user()->id);
+                } else {
+                    $component_quarter = ComponentQuarter::create([
+                        'component_id' => $component->id,
+                        'batch_id' => (new Batch)->get_current_batch(),
+                        'quarter_id' => $quarter,
+                        'education_type_id' => $request->education_type_id,
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+                    $this->audit_logs('components_quarters', $component_quarter->id, 'has inserted a new component quarter.', ComponentQuarter::find($component_quarter->id), $timestamp, Auth::user()->id);
+                }
             }
 
+            $this->audit_logs('components', $id, 'has modified a component.', Component::find($id), $timestamp, Auth::user()->id);
+            
         } else {
             Activity::where('component_id', $id)->update(['is_active' => 0]);
             if (!empty($request->activity_name)) {
@@ -446,6 +462,7 @@ class ComponentsController extends Controller
                                     'updated_by' => Auth::user()->id,
                                     'is_active' => 1
                                 ]);
+                                $this->audit_logs('activities', $activity_components[$iteration]->id, 'has modified a component activity.', Activity::find($activity_components[$iteration]->id), $timestamp, Auth::user()->id);
                             } else {
                                 $activity_component = Activity::create([
                                     'component_id' => $component->id,
@@ -455,6 +472,7 @@ class ComponentsController extends Controller
                                     'created_at' => $timestamp,
                                     'created_by' => Auth::user()->id
                                 ]);
+                                $this->audit_logs('activities', $activity_component->id, 'has inserted a new component activity.', Activity::find($activity_component->id), $timestamp, Auth::user()->id);
                             }
                         } else {
                             $activity_component = Activity::create([
@@ -465,6 +483,7 @@ class ComponentsController extends Controller
                                 'created_at' => $timestamp,
                                 'created_by' => Auth::user()->id
                             ]);
+                            $this->audit_logs('activities', $activity_component->id, 'has inserted a new component activity.', Activity::find($activity_component->id), $timestamp, Auth::user()->id);
                         }
                     }
                     $iteration++;
@@ -497,6 +516,7 @@ class ComponentsController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 0
             ]);
+            $this->audit_logs('components', $id, 'has removed a component.', Component::find($id), $timestamp, Auth::user()->id);
             
             $data = array(
                 'title' => 'Well done!',
@@ -506,59 +526,7 @@ class ComponentsController extends Controller
             );
     
             echo json_encode( $data ); exit();
-        } 
-        else if ($action == 'Up') {
-            $components = Component::find($id);
-
-            $components2 = Component::where([
-                'order' => ($components->order - 1),
-            ])
-            ->update([
-                'order' => $components->order,
-                'updated_at' => $timestamp,
-                'updated_by' => Auth::user()->id
-            ]);
-
-            $components->order = ($components->order - 1);
-            $components->updated_at = $timestamp;
-            $components->updated_by = Auth::user()->id;
-            $components->update();
-            
-            $data = array(
-                'title' => 'Well done!',
-                'text' => 'The component has been successfully removed.',
-                'type' => 'success',
-                'class' => 'btn-brand'
-            );
-    
-            echo json_encode( $data ); exit();
-        } 
-        else if ($action == 'Down') {
-            $components = Component::find($id);
-
-            $components2 = Component::where([
-                'order' => ($components->order + 1),
-            ])
-            ->update([
-                'order' => $components->order,
-                'updated_at' => $timestamp,
-                'updated_by' => Auth::user()->id
-            ]);
-
-            $components->order = ($components->order + 1);
-            $components->updated_at = $timestamp;
-            $components->updated_by = Auth::user()->id;
-            $components->update();
-            
-            $data = array(
-                'title' => 'Well done!',
-                'text' => 'The component has been successfully removed.',
-                'type' => 'success',
-                'class' => 'btn-brand'
-            );
-
-            echo json_encode( $data ); exit();
-        }         
+        }       
         else {
             $batches = Component::where([
                 'id' => $id,
@@ -568,6 +536,7 @@ class ComponentsController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 1
             ]);
+            $this->audit_logs('components', $id, 'has retrieved a component.', Component::find($id), $timestamp, Auth::user()->id);
             
             $data = array(
                 'title' => 'Well done!',
@@ -626,5 +595,19 @@ class ComponentsController extends Controller
         ->orderBy('id', 'ASC')->get();
 
         echo json_encode( $arr ); exit();
+    }
+
+    public function audit_logs($entity, $entity_id, $description, $data, $timestamp, $user)
+    {
+        $auditLogs = AuditLog::create([
+            'entity' => $entity,
+            'entity_id' => $entity_id,
+            'description' => $description,
+            'data' => json_encode($data),
+            'created_at' => $timestamp,
+            'created_by' => $user
+        ]);
+
+        return true;
     }
 }

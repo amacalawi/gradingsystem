@@ -64,6 +64,7 @@ table tr td.no-padding {
 	padding-right: 0;
 }
 
+table tr th input.text-cell,
 table tr td input.text-cell {
 	width: 100%;
 	border: none;
@@ -72,6 +73,8 @@ table tr td input.text-cell {
 	text-align: center;
 }
 
+table tr th input.text-cell:focus,
+table tr th input.text-cell:active,
 table tr td input.text-cell:focus,
 table tr td input.text-cell:active {
 	box-shadow: none !important;

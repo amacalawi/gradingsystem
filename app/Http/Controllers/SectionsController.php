@@ -13,6 +13,7 @@ use App\Models\Staff;
 use App\Models\Admission;
 use App\Models\Quarter;
 use App\Models\EducationType;
+use App\Models\AuditLog;
 use App\Helper\Helper;
 
 class SectionsController extends Controller
@@ -183,6 +184,8 @@ class SectionsController extends Controller
             'created_by' => Auth::user()->id
         ]);
         
+        $this->audit_logs('sections', $section->id, 'has inserted a new section.', Section::find($section->id), $timestamp, Auth::user()->id);
+
         $data = array(
             'title' => 'Well done!',
             'text' => 'The section has been successfully saved.',
@@ -214,6 +217,8 @@ class SectionsController extends Controller
 
         if ($section->update()) {
 
+            $this->audit_logs('sections', $id, 'has modified a section.', Section::find($id), $timestamp, Auth::user()->id);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The section has been successfully updated.',
@@ -241,7 +246,8 @@ class SectionsController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 0
             ]);
-            
+            $this->audit_logs('sections', $id, 'has removed a section.', Section::find($id), $timestamp, Auth::user()->id);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The section status has been successfully removed.',
@@ -251,7 +257,7 @@ class SectionsController extends Controller
     
             echo json_encode( $data ); exit();
         }
-        else if ($action == 'Active') {
+        else {
             $sections = Section::where([
                 'id' => $id,
             ])
@@ -260,7 +266,8 @@ class SectionsController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 1
             ]);
-            
+            $this->audit_logs('sections', $id, 'has retrieved a section.', Section::find($id), $timestamp, Auth::user()->id);
+
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The section status has been successfully activated.',
@@ -269,109 +276,7 @@ class SectionsController extends Controller
             );
     
             echo json_encode( $data ); exit();
-        }    
-        else if ($action == 'Current') {
-            $sections = Section::where('id', '!=', $id)->where('status', '!=', 'Closed')
-            ->update([
-                'status' => 'Open',
-                'updated_at' => $timestamp,
-                'updated_by' => Auth::user()->id,
-                'is_active' => 1
-            ]);
-
-            $sections = Section::where([
-                'id' => $id,
-            ])
-            ->update([
-                'status' => $request->input('items')[0]['action'],
-                'updated_at' => $timestamp,
-                'updated_by' => Auth::user()->id,
-                'is_active' => 1
-            ]);
-            
-            $data = array(
-                'title' => 'Well done!',
-                'text' => 'The section status has been successfully changed.',
-                'type' => 'success',
-                'class' => 'btn-brand'
-            );
-    
-            echo json_encode( $data ); exit();
-        }
-        else if ($action == 'Open') {
-            $rows = Section::where('id', '!=', $id)->where([
-                'status' => 'Open',
-                'is_active' => 1
-            ])->count();
-                
-            if ($rows > 0) {
-                $data = array(
-                    'title' => 'Oh snap!',
-                    'text' => 'Only one (Open Status) can be changed at a time.',
-                    'type' => 'warning',
-                    'class' => 'btn-danger'
-                );
-        
-                echo json_encode( $data ); exit();
-            } else {
-                $sections = Section::where([
-                    'id' => $id,
-                ])
-                ->update([
-                    'status' => $request->input('items')[0]['action'],
-                    'updated_at' => $timestamp,
-                    'updated_by' => Auth::user()->id,
-                    'is_active' => 1
-                ]);
-
-                $data = array(
-                    'title' => 'Well done!',
-                    'text' => 'The section status has been successfully changed.',
-                    'type' => 'success',
-                    'class' => 'btn-brand'
-                );
-
-                echo json_encode( $data ); exit();
-            }
-        }
-        else {
-            $rows = Section::where('id', '!=', $id)->where([
-                'status' => 'Open',
-                'is_active' => 1
-            ])->count();
-
-            if ($rows == 1) {
-                $sections = Section::where('id', '!=', $id)->where([
-                    'status' => 'Open',
-                    'is_active' => 1
-                ])
-                ->update([
-                    'status' => 'Current',
-                    'updated_at' => $timestamp,
-                    'updated_by' => Auth::user()->id,
-                    'is_active' => 1
-                ]);
-            }
-
-            $sections = Section::where([
-                'id' => $id,
-            ])
-            ->update([
-                'status' => $request->input('items')[0]['action'],
-                'updated_at' => $timestamp,
-                'updated_by' => Auth::user()->id,
-                'is_active' => 1
-            ]);
-
-            $data = array(
-                'title' => 'Well done!',
-                'text' => 'The section status has been successfully changed.',
-                'type' => 'success',
-                'class' => 'btn-brand'
-            );
-
-            echo json_encode( $data ); exit();
-        }
+        } 
     }  
 
     public function get_all_sections_bytype(Request $request, $type)
@@ -412,6 +317,7 @@ class SectionsController extends Controller
                                     $section->updated_at = $timestamp;
                                     $section->updated_by = Auth::user()->id;
                                     $section->update();
+                                    $this->audit_logs('sections', $exist->first()->id, 'has imported and updated a section.', Section::find($exist->first()->id), $timestamp, Auth::user()->id);
                                 } else {
                                     $section = Section::create([
                                         'code' => $data[0],
@@ -422,6 +328,7 @@ class SectionsController extends Controller
                                         'created_at' => $timestamp,
                                         'created_by' => Auth::user()->id
                                     ]);
+                                    $this->audit_logs('sections', $section->id, 'has imported a new section.', Section::find($section->id), $timestamp, Auth::user()->id);
                                 }
                             }
                         }
@@ -439,4 +346,17 @@ class SectionsController extends Controller
         exit();
     }
 
+    public function audit_logs($entity, $entity_id, $description, $data, $timestamp, $user)
+    {
+        $auditLogs = AuditLog::create([
+            'entity' => $entity,
+            'entity_id' => $entity_id,
+            'description' => $description,
+            'data' => json_encode($data),
+            'created_at' => $timestamp,
+            'created_by' => $user
+        ]);
+
+        return true;
+    }
 }

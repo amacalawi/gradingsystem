@@ -16,6 +16,7 @@ use App\Models\Section;
 use App\Models\Batch;
 use App\Models\Component;
 use App\Models\Admission;
+use App\Models\Activity;
 use App\Models\GradingSheetActivity;
 use App\Models\GradingSheetHomeroom;
 use App\Models\GradingSheetQuarter;
@@ -25,6 +26,7 @@ use App\Models\Staff;
 use App\Models\TransmutationElement;
 use App\Models\Transmutation;
 use App\Models\EducationType;
+use App\Models\AuditLog;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -317,6 +319,8 @@ class GradingSheetsController extends Controller
                         throw new NotFoundHttpException();
                     }
 
+                    $this->audit_logs('gradingsheets', $grading->id, 'has generated a new gradingsheet.', GradingSheet::find($grading->id), $timestamp, Auth::user()->id);
+
                     $data = array(
                         'title' => 'Well done!',
                         'text' => 'The grading sheet has been successfully saved.',
@@ -361,6 +365,8 @@ class GradingSheetsController extends Controller
                     if (!$grading) {
                         throw new NotFoundHttpException();
                     }
+
+                    $this->audit_logs('gradingsheets', $grading->id, 'has generated a new gradingsheet.', GradingSheet::find($grading->id), $timestamp, Auth::user()->id);
 
                     $data = array(
                         'title' => 'Well done!',
@@ -425,6 +431,8 @@ class GradingSheetsController extends Controller
                     if (!$grading) {
                         throw new NotFoundHttpException();
                     }
+
+                    $this->audit_logs('gradingsheets', $grading->id, 'has generated a new gradingsheet.', GradingSheet::find($grading->id), $timestamp, Auth::user()->id);
         
                     $data = array(
                         'title' => 'Well done!',
@@ -481,7 +489,9 @@ class GradingSheetsController extends Controller
                 if (!$grading) {
                     throw new NotFoundHttpException();
                 }
-    
+                
+                $this->audit_logs('gradingsheets', $grading->id, 'has generated a new gradingsheet.', GradingSheet::find($grading->id), $timestamp, Auth::user()->id);
+
                 $data = array(
                     'title' => 'Well done!',
                     'text' => 'The grading sheet has been successfully saved.',
@@ -530,6 +540,8 @@ class GradingSheetsController extends Controller
             if (!$grading) {
                 throw new NotFoundHttpException();
             }
+
+            $this->audit_logs('gradingsheets', $grading->id, 'has generated a new gradingsheet.', GradingSheet::find($grading->id), $timestamp, Auth::user()->id);
 
             $data = array(
                 'title' => 'Well done!',
@@ -687,6 +699,7 @@ class GradingSheetsController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 0
             ]);
+            $this->audit_logs('gradingsheets', $id, 'has removed a gradingsheet.', GradingSheet::find($id), $timestamp, Auth::user()->id);
             
             $data = array(
                 'title' => 'Well done!',
@@ -695,58 +708,6 @@ class GradingSheetsController extends Controller
                 'class' => 'btn-brand'
             );
     
-            echo json_encode( $data ); exit();
-        } 
-        else if ($action == 'Up') {
-            $gradings = GradingSheet::find($id);
-
-            $gradings2 = GradingSheet::where([
-                'order' => ($gradings->order - 1),
-            ])
-            ->update([
-                'order' => $gradings->order,
-                'updated_at' => $timestamp,
-                'updated_by' => Auth::user()->id
-            ]);
-
-            $gradings->order = ($gradings->order - 1);
-            $gradings->updated_at = $timestamp;
-            $gradings->updated_by = Auth::user()->id;
-            $gradings->update();
-            
-            $data = array(
-                'title' => 'Well done!',
-                'text' => 'The grading has been successfully removed.',
-                'type' => 'success',
-                'class' => 'btn-brand'
-            );
-    
-            echo json_encode( $data ); exit();
-        } 
-        else if ($action == 'Down') {
-            $gradings = GradingSheet::find($id);
-
-            $gradings2 = GradingSheet::where([
-                'order' => ($gradings->order + 1),
-            ])
-            ->update([
-                'order' => $gradings->order,
-                'updated_at' => $timestamp,
-                'updated_by' => Auth::user()->id
-            ]);
-
-            $gradings->order = ($gradings->order + 1);
-            $gradings->updated_at = $timestamp;
-            $gradings->updated_by = Auth::user()->id;
-            $gradings->update();
-            
-            $data = array(
-                'title' => 'Well done!',
-                'text' => 'The grading has been successfully removed.',
-                'type' => 'success',
-                'class' => 'btn-brand'
-            );
-
             echo json_encode( $data ); exit();
         }         
         else {
@@ -758,6 +719,7 @@ class GradingSheetsController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 1
             ]);
+            $this->audit_logs('gradingsheets', $id, 'has retrieved a gradingsheet.', GradingSheet::find($id), $timestamp, Auth::user()->id);
             
             $data = array(
                 'title' => 'Well done!',
@@ -946,5 +908,77 @@ class GradingSheetsController extends Controller
             return back();
         }
 
+    }
+
+    public function update_activity_header(Request $request)
+    {   
+        $this->is_permitted(2);
+        $timestamp = date('Y-m-d H:i:s');
+        $activity = Activity::find($request->get('id'));
+
+        if(!$activity) {
+            throw new NotFoundHttpException();
+        }
+
+        $activity->activity = $request->get('val');
+        $activity->updated_at = $timestamp;
+        $activity->updated_by = Auth::user()->id;
+
+        if ($activity->update()) {
+
+            $this->audit_logs('activities', $request->get('id'), 'has modified a component activity.', Activity::find($request->get('id')), $timestamp, Auth::user()->id);
+            
+            $data = array(
+                'title' => 'Well done!',
+                'text' => 'The component activity has been successfully updated.',
+                'type' => 'success',
+                'class' => 'btn-brand'
+            );
+    
+            echo json_encode( $data ); exit();
+        }
+    }
+
+    public function update_activity_value(Request $request)
+    {   
+        $this->is_permitted(2);
+        $timestamp = date('Y-m-d H:i:s');
+        $activity = Activity::find($request->get('id'));
+
+        if(!$activity) {
+            throw new NotFoundHttpException();
+        }
+
+        $activity->value = $request->get('val');
+        $activity->updated_at = $timestamp;
+        $activity->updated_by = Auth::user()->id;
+
+        if ($activity->update()) {
+
+            $this->audit_logs('activities', $request->get('id'), 'has modified a component activity.', Activity::find($request->get('id')), $timestamp, Auth::user()->id);
+            
+            $data = array(
+                'title' => 'Well done!',
+                'text' => 'The component activity has been successfully updated.',
+                'type' => 'success',
+                'class' => 'btn-brand'
+            );
+    
+            echo json_encode( $data ); exit();
+        }
+    }
+
+    public function audit_logs($entity, $entity_id, $description, $data, $timestamp, $user)
+    {
+        $auditLogs = AuditLog::create([
+            'entity' => $entity,
+            'entity_id' => $entity_id,
+            'description' => $description,
+            'data' => json_encode($data),
+            'created_at' => $timestamp,
+            'created_by' => $user
+        ]);
+
+        return true;
     }
 }
