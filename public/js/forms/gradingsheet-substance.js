@@ -205,8 +205,21 @@
         $.gradingsheet.rankings();
     },
 
-    gradingsheet.prototype.recompute_acitivity_components = function() {
+    gradingsheet.prototype.recompute_acitivity_components = function($group) {
+        var $totalHeader = 0;
+        $.each($('table th[group="' + $group + '"] input[name="activity_header_value[]"]'), function(){
+            var $score = $(this).val();
 
+            if ($score > 0) {
+                $totalHeader += parseFloat($score);
+            }
+        });
+
+        console.log($totalHeader);
+
+        $('table th[group="' + $group + '"].sum-header').text($totalHeader);
+        $('table th[group="' + $group + '"].hps-header').text($totalHeader);
+        $('table th[group="' + $group + '"].ps-header').attr('maxvalue', $totalHeader);
     },
 
     gradingsheet.prototype.rankings = function()
@@ -499,13 +512,14 @@
             var self = $(this);
             var activityID = self.attr('activity_id');
             var activityValue = self.val();
+            var group = self.closest('th').attr('group');
 
             $.ajax({
                 type: 'GET',
                 url: base_url + 'academics/grading-sheets/all-gradingsheets/update-activity-value?id=' + activityID + '&val=' + activityValue,
                 success: function(response) {
                     var data = JSON.parse(response);
-                    $.gradingsheet.recompute_acitivity_components();
+                    $.gradingsheet.recompute_acitivity_components(group);
                     console.log(data);
                 },
                 async: false
