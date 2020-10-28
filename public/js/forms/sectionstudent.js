@@ -199,7 +199,7 @@
                 getTeacherList_type();
                 $('#subject-teacher-main-div').css("display","block");
 
-                clearsubjectteacher(10);
+                clearsubjectteacher(100);
                 
                 $("#remove-div_1").append('<label style="visibility:hidden;"> Delete: </label><br/>');
                 $("#remove-div_1").append('<button style="visibility:hidden;" name="remove-button" type="button" id="remove_1" class="btn btn-lg remove">s</button>');
@@ -230,7 +230,7 @@
         this.$body.on('click', '#subject-teacher-addrow', function (e){
             e.preventDefault();
             
-            var limit = 10;
+            var limit = 100;
             var total_element = $(".subject-div").length;
             var lastid = $(".subject-div:last").attr("id");
             var split_id = lastid.split("_");
@@ -266,7 +266,7 @@
                         async: false
                     });
 
-                    var limit = 10;
+                    var limit = 100;
                     var total_element = $(".teacher-div").length;
                     var lastid = $(".teacher-div:last").attr("id");
                     var split_id = lastid.split("_");
