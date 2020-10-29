@@ -621,7 +621,7 @@ class AdmissionController extends Controller
         $advisers = Staff::where('is_active', 1)->orWhere('type', 'like', '%Adviser%')->orderBy('id', 'asc')->get();
 
         $advs = array();
-        $advs[] = array('0' => 'selectssss a adviser');
+        $advs[] = array('0' => 'select a adviser');
         
         foreach ($advisers as $adviser) {
             $advs[] = array(
@@ -711,11 +711,10 @@ class AdmissionController extends Controller
                                 $exist_type = EducationType::where('code', $data[2])->pluck('id');
                                 $exist_section = Section::where('code', $data[0])->where('education_type_id', $exist_type[0])->first();
                                 $exist_level = Level::where('code', $data[1])->where('education_type_id', $exist_type[0])->first();
-                                $exist_adviser = Staff::where('identification_no', $data[3])->orWhere('type', 'Teacher')->orWhere('type', 'Adviser')->first();
-                                
+                                $exist_adviser = Staff::where('identification_no', $data[3])->orWhere('type', 'like', '%Teacher%')->orWhere('type', 'like', '%Adviser%')->first();
                                 //die(var_dump( 'type='.$exist_type.' section='.$exist_section->id.' level='.$exist_level->id.' adv='.$exist_adviser->id ));
 
-                                if(($exist_section->id) && ($exist_level->id) && ($exist_adviser->id) && ($data[4] != ''))
+                                if(($exist_section) && ($exist_level) && ($exist_adviser) && ($data[4] != ''))
                                 {
                                     $classcode = $this->generate_classcode($exist_type[0], $exist_section->id, $batch_id[0]);
                                     $exist_classcode = SectionInfo::where('classcode', $classcode)->get();
@@ -747,7 +746,7 @@ class AdmissionController extends Controller
                                         {
                                             $sec_subs = explode("&", $sections_subjects);
                                             $exist_subject = Subject::where('code', $sec_subs[0])->first();
-                                            $exist_teacher = Staff::where('identification_no', $sec_subs[1])->orWhere('type', 'Teacher')->orWhere('type', 'Adviser')->first();
+                                            $exist_teacher = Staff::where('identification_no', $sec_subs[1])->orWhere('type', 'like', '%Teacher%')->orWhere('type', 'like', '%Adviser%')->first();
                                             
                                             if($exist_subject && $exist_teacher)
                                             {  
@@ -791,7 +790,6 @@ class AdmissionController extends Controller
                                         }
 
                                     }else { //ADD
-
                                         $check_sec_sub = $this->validate_sec_sub($data[4]);
 
                                         if($check_sec_sub > 0)
@@ -814,7 +812,7 @@ class AdmissionController extends Controller
                                             {
                                                 $sec_subs = explode("&", $sections_subjects);
                                                 $exist_subject = Subject::where('code', $sec_subs[0])->first();
-                                                $exist_teacher = Staff::where('identification_no', $sec_subs[1])->orWhere('type', 'Teacher')->orWhere('type', 'Adviser')->first();
+                                                $exist_teacher = Staff::where('identification_no', $sec_subs[1])->orWhere('type', 'like', '%Teacher%')->orWhere('type', 'like', '%Adviser%')->first();
 
                                                 if($exist_subject && $exist_teacher)
                                                 {   

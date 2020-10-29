@@ -198,7 +198,7 @@ jQuery(document).ready(function (e) {
 		acceptedFiles: accept,
 		init: function () {
 		this.on("processing", function(file) {
-			this.options.url = base_url + '/academics/admissions/classes/import';
+			this.options.url = base_url + 'academics/admissions/classes/import';
 			console.log(this.options.url);
 		}).on("queuecomplete", function (file, response) {
 			// console.log(response);
