@@ -2,7 +2,7 @@
 
 var DatatableDataLocalDemo = function () {
 	//== Private functions
- 	console.log(base_url + 'components/schools/batches/all-active');
+ 	console.log(base_url + 'components/schools/schoolyears/all-active');
 	
 	var datatable = $('.m_datatable').mDatatable({
 		// datasource definition
@@ -12,7 +12,7 @@ var DatatableDataLocalDemo = function () {
 			  read: {
 				// sample GET method
 				method: 'GET',
-				url: base_url + 'components/schools/batches/all-active',
+				url: base_url + 'components/schools/schoolyears/all-active',
 				map: function(raw) {
 				  // sample data mapping
 				  var dataSet = raw;
@@ -105,7 +105,7 @@ var DatatableDataLocalDemo = function () {
 								<i class="la la-ellipsis-h"></i>\
 							</a>\
 							<div class="dropdown-menu dropdown-menu-right">\
-								<a title="edit this" class="dropdown-item" href="' + base_url + 'components/schools/batches/edit/' + row.batchID + '"><i class="la la-edit"></i> Edit Details</a>\
+								<a title="edit this" class="dropdown-item" href="' + base_url + 'components/schools/schoolyears/edit/' + row.batchID + '"><i class="la la-edit"></i> Edit Details</a>\
 								<a title="remove this" data-row-id="' + row.batchID + '" action="Remove" class="dropdown-item toggle-status" href="javascript:;"><i class="la la-remove"></i> Remove Details</a>\
 								<a title="set this as current" data-row-id="' + row.batchID + '" action="Current" class="dropdown-item toggle-status" href="javascript:;"><i class="la la-flag"></i> Set as Current</a>\
 								<a title="set this as open" data-row-id="' + row.batchID + '" action="Open" class="dropdown-item toggle-status" href="javascript:;"><i class="la la-folder-open"></i> Set as Open</a>\
@@ -122,7 +122,7 @@ var DatatableDataLocalDemo = function () {
 									<i class="la la-ellipsis-h"></i>\
 								</a>\
 								<div class="dropdown-menu dropdown-menu-right">\
-									<a title="edit this" class="dropdown-item" href="' + base_url + 'components/schools/batches/edit/' + row.batchID + '"><i class="la la-edit"></i> Edit Details</a>\
+									<a title="edit this" class="dropdown-item" href="' + base_url + 'components/schools/schoolyears/edit/' + row.batchID + '"><i class="la la-edit"></i> Edit Details</a>\
 									<a title="set this as current" data-row-id="' + row.batchID + '" action="Current" class="dropdown-item toggle-status" href="javascript:;"><i class="la la-flag"></i> Set as Current</a>\
 									<a title="set this as open" data-row-id="' + row.batchID + '" action="Open" class="dropdown-item toggle-status" href="javascript:;"><i class="la la-folder-open"></i> Set as Open</a>\
 									<a title="set this as closed" data-row-id="' + row.batchID + '" action="Closed" class="dropdown-item toggle-status" href="javascript:;"><i class="la la-folder-o"></i> Set as Closed</a>\
@@ -193,7 +193,7 @@ jQuery(document).ready(function () {
 		var $rowID = $(this).attr('data-row-id');
 		console.log($rowID);
 		var $action = $(this).attr('action');
-		var $url = base_url + 'components/schools/batches/update-status/' + $rowID;
+		var $url = base_url + 'components/schools/schoolyears/update-status/' + $rowID;
 		var items = []; items.push({ action: $action });
 
 		console.log($url);

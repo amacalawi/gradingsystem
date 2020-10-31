@@ -140,7 +140,7 @@
 
     component.prototype.reload_quarter = function($type) 
     {   
-        var $quarter = $('#quarter_id'), $section = $('#section_id');
+        var $quarter = $('#quarter_id'), $section = $('#section_info_id');
         $quarter.find('option').remove(); $section.find('option').remove();
         $section.append('<option value="">select a section</option>');  
 
@@ -169,7 +169,6 @@
     {   
         var $subject = $('#subject_id');
         $subject.find('option').remove(); 
-        $subject.append('<option value="">select a subject</option>');  
 
         console.log(base_url + 'academics/grading-sheets/components/reload-subject-via-section/' + $section);
         $.ajax({
@@ -180,6 +179,7 @@
                 $.each(data.subjects, function(i, item) {
                     $subject.append('<option value="' + item.id + '">' + item.name + '</option>');  
                 }); 
+                $subject.selectpicker('refresh');
             },
             async: false
         });
@@ -309,7 +309,7 @@
             }
         });
 
-        this.$body.on('change', 'select[name="section_id"]', function (e) {
+        this.$body.on('change', 'select[name="section_info_id"]', function (e) {
             e.preventDefault();
             var $self = $(this);
             if ($self.val() > 0) {

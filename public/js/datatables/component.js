@@ -37,8 +37,8 @@ var DatatableDataLocalDemo = function () {
 		},
 
 		// column sorting
-		sortable: false,
-		ordering: false,
+		sortable: true,
+		ordering: true,
 
 		pagination: true,
 
@@ -67,12 +67,16 @@ var DatatableDataLocalDemo = function () {
 			field: "componentPercentage",
 			title: "Percentage"
 		}, {
+			field: "componentClass",
+			title: "Classes"
+		}, {
 			field: "componentQuarter",
 			title: "Quarter",
 			width: 120
 		}, {
 			field: "componentSubject",
-			title: "Subject"
+			title: "Subject",
+			overflow: 'visible'
 		}, {
 			field: "componentModified",
 			title: "Last Modified",

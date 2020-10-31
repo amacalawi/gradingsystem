@@ -11,6 +11,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
 use App\Models\GradingSheet;
 use App\Models\Quarter;
+use App\Models\QuarterEducationType;
 use App\Models\Subject;
 use App\Models\Section;
 use App\Models\Batch;
@@ -103,8 +104,16 @@ class GradingSheetsController extends Controller
         { 
             $res = GradingSheet::where('is_active', 1)
             ->with([
-                'section' =>  function($q) { 
-                    $q->select(['id', 'name']); 
+                'section_info' =>  function($q) { 
+                    $q->select(['sections_info.id', 'levels.name as level' , 'sections.name as section'])
+                    ->join('levels', function($join)
+                    {
+                        $join->on('levels.id', '=', 'sections_info.level_id');
+                    })
+                    ->join('sections', function($join)
+                    {
+                        $join->on('sections.id', '=', 'sections_info.section_id');
+                    });
                 },
                 'subject' =>  function($q) { 
                     $q->select(['id', 'name']); 
@@ -123,7 +132,7 @@ class GradingSheetsController extends Controller
                 return [
                     'gradingID' => $grading->id,
                     'gradingCode' => $grading->code,
-                    'gradingSection' => $grading->section->name,
+                    'gradingSection' => $grading->section_info->level.' - '.$grading->section_info->section,
                     'gradingSubject' => $grading->subject->name,
                     'gradingQuarter' => $grading->quarter->name,
                     'gradingModified' => ($grading->updated_at !== NULL) ? date('d-M-Y', strtotime($grading->updated_at)).'<br/>'. date('h:i A', strtotime($grading->updated_at)) : date('d-M-Y', strtotime($grading->created_at)).'<br/>'. date('h:i A', strtotime($grading->created_at))
@@ -262,8 +271,8 @@ class GradingSheetsController extends Controller
         $menus = $this->load_menus();
         $segment = request()->segment(4);
         $grading = (new GradingSheet)->fetch($id);
-        $quarters = (new Quarter)->all_quarters();
-        $sections = (new Section)->all_sections();
+        $quarters = (new Quarter)->all_quarters_selectpicker();
+        $sections = (new SectionInfo)->all_classes();
         $subjects = (new Subject)->all_subjects();
         $types = (new EducationType)->all_education_types();
         return view('modules/academics/gradingsheets/all/add')->with(compact('menus', 'grading', 'quarters', 'sections', 'subjects', 'types', 'segment'));
@@ -280,8 +289,9 @@ class GradingSheetsController extends Controller
         $sections = (new Section)->all_sections();
         $subjects = (new Subject)->all_subjects();
         $components = (new Component)->get_components_via_gradingsheet($id);
-        $students = (new Admission)->get_students_via_gradingsheet($id);
-        return view('modules/academics/gradingsheets/all/edit')->with(compact('menus', 'grading', 'quarters', 'sections', 'subjects', 'components', 'students', 'segment'));
+        $male_students = (new Admission)->get_students_via_gradingsheet($id, 'Male');
+        $female_students = (new Admission)->get_students_via_gradingsheet($id, 'Female');
+        return view('modules/academics/gradingsheets/all/edit')->with(compact('menus', 'grading', 'quarters', 'sections', 'subjects', 'components', 'male_students', 'female_students', 'segment'));
     }
     
     public function store(Request $request)
@@ -503,19 +513,20 @@ class GradingSheetsController extends Controller
             }
         } 
         else 
-        {
-            $rows = GradingSheet::where([
-                'section_id' => $request->section_id,
+        {   
+            $rows = GradingSheet::whereIn('quarter_id', $request->quarter_id)
+            ->where([
+                'section_info_id' => $request->section_info_id,
                 'subject_id' => $request->subject_id,
-                'quarter_id' => $request->quarter_id,
                 'education_type_id' => $request->education_type_id,
-                'batch_id' => (new Batch)->get_current_batch()
+                'batch_id' => (new Batch)->get_current_batch(),
+                'is_active' => 1
             ])->count();
 
             if ($rows > 0) {
                 $data = array(
                     'title' => 'Oh snap!',
-                    'text' => 'This section, subject and quarter is already exist.',
+                    'text' => 'This class, quarter and subject are already exist.',
                     'type' => 'error',
                     'class' => 'btn-danger'
                 );
@@ -524,26 +535,30 @@ class GradingSheetsController extends Controller
             }
 
             $count = GradingSheet::all()->count() + 1;
+            $classcode = (new Section)->get_column_via_identifier('name', (new SectionInfo)->where('id', $request->section_info_id)->pluck('section_id')).': '.(new Subject)->get_column_via_identifier('name', $request->subject_id);
 
-            $grading = GradingSheet::create([
-                'code' => (new Section)->get_column_via_identifier('name', $request->section_id).': '.(new Subject)->get_column_via_identifier('name', $request->subject_id),
-                'section_id' => $request->section_id,
-                'subject_id' => $request->subject_id,
-                'quarter_id' => $request->quarter_id,
-                'material_id' => (new Subject)->where('id', $request->subject_id)->first()->material_id,
-                'education_type_id' => $request->education_type_id,
-                'batch_id' => (new Batch)->get_current_batch(),
-                'created_at' => $timestamp,
-                'created_by' => Auth::user()->id
-            ]);
+            foreach ($request->quarter_id as $quarter) {
+                $grading = GradingSheet::create([
+                    'code' => $classcode,
+                    'section_info_id' => $request->section_info_id,
+                    'subject_id' => $request->subject_id,
+                    'quarter_id' => $quarter,
+                    'material_id' => (new Subject)->where('id', $request->subject_id)->first()->material_id,
+                    'education_type_id' => $request->education_type_id,
+                    'batch_id' => (new Batch)->get_current_batch(),
+                    'created_at' => $timestamp,
+                    'created_by' => Auth::user()->id
+                ]);
 
-            if (!$grading) {
-                throw new NotFoundHttpException();
+                if (!$grading) {
+                    throw new NotFoundHttpException();
+                }
+    
+                $this->audit_logs('gradingsheets', $grading->id, 'has generated a new gradingsheet.', GradingSheet::find($grading->id), $timestamp, Auth::user()->id);
             }
 
-            $this->audit_logs('gradingsheets', $grading->id, 'has generated a new gradingsheet.', GradingSheet::find($grading->id), $timestamp, Auth::user()->id);
-
             $data = array(
+                'data' => $rows,
                 'title' => 'Well done!',
                 'text' => 'The grading sheet has been successfully saved.',
                 'type' => 'success',
@@ -747,15 +762,28 @@ class GradingSheetsController extends Controller
         if (Auth::user()->type == 'administrator') 
         {   
             //--> sections
-            $arr['sections'] = (new Section)
-            ->whereIn('id', 
-                SectionInfo::select('section_id')->where([
-                    'batch_id' => (new Batch)->get_current_batch(), 
-                    'is_active' => 1
-                ])
-            )
-            ->where(['is_active' => 1, 'education_type_id' => $type])
+            $res = (new SectionInfo)
+            ->with([
+                'section' =>  function($q) { 
+                    $q->select(['id', 'name', 'description']);
+                },
+                'level' =>  function($q) { 
+                    $q->select(['id', 'name', 'description']);
+                }
+            ])
+            ->where([
+                'batch_id' => (new Batch)->get_current_batch(), 
+                'education_type_id' => $type,
+                'is_active' => 1
+            ])
             ->orderBy('id', 'ASC')->get();
+
+            $arr['sections'] = $res->map(function($class) {
+                return [
+                    'id' => $class->id,
+                    'name' => $class->level->name.' - '.$class->section->name
+                ];
+            });
 
             //--> subjects
             $arr['subjects'] = (new Subject)
@@ -773,7 +801,17 @@ class GradingSheetsController extends Controller
 
             //--> quarters
             $arr['quarters'] = (new Quarter)
-            ->where(['is_active' => 1, 'education_type_id' => $type])
+            ->whereIn('id',
+                QuarterEducationType::select('quarter_id')
+                ->where([
+                    'education_type_id' => $type,
+                    'is_active' => 1
+                ])
+            )
+            ->where([
+                'batch_id' => (new Batch)->get_current_batch(), 
+                'is_active' => 1
+            ])
             ->orderBy('id', 'ASC')->get();
         }
         else
@@ -829,13 +867,8 @@ class GradingSheetsController extends Controller
         $arr['subjects'] = (new Subject)
         ->whereIn('id', 
             SectionsSubjects::select('subject_id')
-            ->whereIn('section_info_id', 
-                SectionInfo::select('id')->where([
-                    'batch_id' => (new Batch)->get_current_batch(), 
-                    'is_active' => 1,
-                    'section_id' => $section
-                ])
-            )->where([
+            ->where([
+                'section_info_id' => $section,
                 'batch_id' => (new Batch)->get_current_batch(),
                 'is_active' => 1
             ])

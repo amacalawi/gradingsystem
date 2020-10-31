@@ -24,19 +24,19 @@ class GradingSheet extends Model
             'quarter' =>  function($q) { 
                 $q->select(['id', 'name']); 
             },
-            'section' =>  function($q) { 
-                $q->select(['staffs.firstname as adviser_firstname', 'staffs.lastname as adviser_lastname', 'sections.id', 'sections.name as section_name', 'levels.name as level_name', 'sections_info.education_type_id as type'])
-                ->join('sections_info', function($join)
+            'section_info' =>  function($q) { 
+                $q->select(['staffs.firstname as adviser_firstname', 'staffs.lastname as adviser_lastname','sections_info.id', 'levels.name as level_name' , 'sections.name as section_name'])
+                ->join('levels', function($join)
                 {
-                    $join->on('sections_info.section_id', '=', 'sections.id');
+                    $join->on('levels.id', '=', 'sections_info.level_id');
                 })
-                ->join('levels', function($join2)
+                ->join('sections', function($join)
                 {
-                    $join2->on('levels.id', '=', 'sections_info.level_id');
+                    $join->on('sections.id', '=', 'sections_info.section_id');
                 })
-                ->join('staffs', function($join3)
+                ->join('staffs', function($join)
                 {
-                    $join3->on('staffs.id', '=', 'sections_info.adviser_id');
+                    $join->on('staffs.id', '=', 'sections_info.adviser_id');
                 });
             },
             'subject' =>  function($q) { 
@@ -67,14 +67,15 @@ class GradingSheet extends Model
                 'quarter_name' => ($grading->quarter->name) ? $grading->quarter->name : '',
                 'material_id' => ($grading->material_id) ? $grading->material_id : '',
                 'section_id' => ($grading->section_id) ? $grading->section_id : '',
-                'section_name' => ($grading->section->section_name) ? $grading->section->section_name : '',
+                'section_name' => ($grading->section_info->section_name) ? $grading->section_info->section_name : '',
                 'subject_id' => ($grading->subject_id) ? $grading->subject_id : '',
                 'subject_name' => ($grading->subject->name) ? $grading->subject->name : '',
-                'level_name' => ($grading->section->level_name) ? $grading->section->level_name : '',
-                // 'type' => ($grading->section->type) ? $grading->section->type : '',
+                'level_name' => ($grading->section_info->level_name) ? $grading->section_info->level_name : '',
+                // 'type' => ($grading->section_info->type) ? $grading->section_info->type : '',
                 'type' => '',
+                'section_info_id' => $grading->section_info->id,
                 'education_type_id' => ($grading->education_type_id) ? $grading->education_type_id : '',
-                'adviser' => ($grading->section->adviser_firstname) ? ucfirst($grading->section->adviser_firstname).' '.ucfirst($grading->section->adviser_lastname) : '',
+                'adviser' => ($grading->section_info->adviser_firstname) ? ucfirst($grading->section_info->adviser_firstname).' '.ucfirst($grading->section_info->adviser_lastname) : '',
                 'teacher' => ($grading->subject->teacher_firstname) ? ucfirst($grading->subject->teacher_firstname).' '.ucfirst($grading->subject->teacher_lastname) : ''
             );
         } else {
@@ -84,7 +85,7 @@ class GradingSheet extends Model
                 'batch_id' => '',
                 'quarter_id' => '',
                 'material_id' => '',
-                'section_id' => '',
+                'section_info_id' => '',
                 'subject_id' => '',
                 'education_type_id' => ''
             );
@@ -102,9 +103,9 @@ class GradingSheet extends Model
         return $this->belongsTo('App\Models\Quarter');
     }
 
-    public function section()
+    public function section_info()
     {
-        return $this->belongsTo('App\Models\Section');
+        return $this->belongsTo('App\Models\SectionInfo', 'section_info_id', 'id');
     }
 
     public function subject()

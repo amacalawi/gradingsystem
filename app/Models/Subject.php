@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Staff;
+use App\Models\Component;
 
 class Subject extends Model
 {
@@ -68,6 +69,49 @@ class Subject extends Model
 
         $subjectx = array();
         $subjectx[] = array('' => 'select a subject');
+        foreach ($subjects as $subject) {
+            $subjectx[] = array(
+                $subject->id => $subject->name
+            );
+        }
+
+        $subjects = array();
+        foreach($subjectx as $subject) {
+            foreach($subject as $key => $val) {
+                $subjects[$key] = $val;
+            }
+        }
+
+        return $subjects;
+    }
+
+    public function all_subjects_selectpicker($id = '')
+    {	
+        if ($id == '') {
+            $subjects = self::where('is_active', 1)
+            ->orderBy('id', 'ASC')
+            ->get();
+        } else {
+            $subjects = self::
+            whereIn('id',
+                SectionsSubjects::select('subject_id')
+                ->whereIn('section_info_id', 
+                    SectionInfo::select('id')->where([
+                        'batch_id' => (new Batch)->get_current_batch(), 
+                        'is_active' => 1,
+                        'section_info_id' => (new Component)->where('id', $id)->pluck('section_info_id')
+                    ])
+                )->where([
+                    'batch_id' => (new Batch)->get_current_batch(),
+                    'is_active' => 1
+                ])
+            )
+            ->where(['is_active' => 1])
+            ->orderBy('id', 'ASC')
+            ->get();
+        }
+
+        $subjectx = array();
         foreach ($subjects as $subject) {
             $subjectx[] = array(
                 $subject->id => $subject->name

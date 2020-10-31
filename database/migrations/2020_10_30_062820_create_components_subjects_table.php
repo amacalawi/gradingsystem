@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateQuartersTable extends Migration
+class CreateComponentsSubjectsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,11 @@ class CreateQuartersTable extends Migration
      */
     public function up()
     {
-        Schema::create('quarters', function (Blueprint $table) {
+        Schema::create('components_subjects', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('component_id')->unsigned();
             $table->integer('batch_id')->unsigned();
-            $table->string('code', 40);
-            $table->string('name', 100);
-            $table->text('description')->nullable();
-            $table->date('date_start');
-            $table->date('date_end');
+            $table->integer('subject_id')->unsigned();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('created_by')->unsigned();
             $table->timestamp('updated_at')->nullable();
@@ -36,6 +33,6 @@ class CreateQuartersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('quarters');
+        Schema::dropIfExists('components_subjects');
     }
 }

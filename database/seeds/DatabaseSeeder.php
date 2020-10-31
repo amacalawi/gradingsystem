@@ -422,10 +422,10 @@ class DatabaseSeeder extends Seeder
             ],            
             [   
                 'module_id' => '5',
-                'code' => 'batches',
-                'name' => 'Batches',
-                'description' => 'Batches Description',
-                'slug' => 'batches',
+                'code' => 'schoolyears',
+                'name' => 'Schoolyears',
+                'description' => 'Schoolyear Description',
+                'slug' => 'schoolyears',
                 'icon' => '',
                 'order' => '13',
                 'created_by' => 1
@@ -2270,22 +2270,22 @@ class DatabaseSeeder extends Seeder
 
         $levels = [
             [
-                'code' => "Nursery (4 years old by October 31)",
-                'name' => "Nursery (4 years old by October 31)",
+                'code' => "Nursery",
+                'name' => "Nursery",
                 'description' => "Nursery (4 years old by October 31)",
                 'education_type_id' => 1,
                 'created_by' => 1
             ], 
             [
-                'code' => "Kinder (5 years old by October 31)",
-                'name' => "Kinder (5 years old by October 31)",
+                'code' => "Kinder",
+                'name' => "Kinder",
                 'description' => "Kinder (5 years old by October 31)",
                 'education_type_id' => 1,
                 'created_by' => 1
             ],
             [
-                'code' => "Grade 1 (6 years old by October 31)",
-                'name' => "Grade 1 (6 years old by October 31)",
+                'code' => "Grade 1",
+                'name' => "Grade 1",
                 'description' => "Grade 1 (6 years old by October 31)",
                 'education_type_id' => 2,
                 'created_by' => 1

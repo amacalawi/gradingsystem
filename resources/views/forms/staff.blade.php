@@ -666,7 +666,7 @@
                         <div class="col-md-12">
                             <h5 class="m-bottom-1">Roles and Type</h5>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-12 hidden">
                             <div class="form-group m-form__group">
                                 <label for="role">
                                     User Role
@@ -696,7 +696,7 @@
                 <div class="m-portlet__body">
                     <div class="row">
                         <div class="col-md-12">
-                            <h5 class="m-bottom-1">Departments & Designation</h5>
+                            <h5 class="m-bottom-1">Department & Position</h5>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group m-form__group required">
@@ -713,16 +713,6 @@
                                 {{ Form::label('designation', 'Position', ['class' => '']) }}
                                 {{
                                     Form::select('designation_id', $designations, !empty($staff) ? $staff->designation_id : '', ['class' => 'form-control form-control-lg m-input m-input--solid'])
-                                }}
-                                <span class="m-form__help m--font-danger">
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group m-form__group required">
-                                {{ Form::label('specification', 'Specification', ['class' => '']) }}
-                                {{
-                                    Form::select('specification', $specifications, !empty($staff) ? $staff->specification : '', ['class' => 'form-control form-control-lg m-input m-input--solid'])
                                 }}
                                 <span class="m-form__help m--font-danger">
                                 </span>

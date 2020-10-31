@@ -62,7 +62,7 @@ var DatatableDataLocalDemo = function () {
 			title: "Code"
 		}, {
 			field: "gradingSection",
-			title: "Section"
+			title: "Class"
 		}, {
 			field: "gradingSubject",
 			title: "Subject",

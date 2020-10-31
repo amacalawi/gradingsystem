@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Designation;
 use App\Models\EducationType;
+use App\Models\DesignationEducationType;
 use App\Models\AuditLog;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -58,14 +59,18 @@ class DesignationsController extends Controller
     }
 
     public function all_active(Request $request)
-    {
-        $res = Designation::
-        with([
-            'edtype' =>  function($q) { 
-                $q->select(['id', 'name']); 
+    {   
+        $res = Designation::with([
+            'edtypes' =>  function($q) { 
+                $q->select(['designations_education_types.id', 'designations_education_types.designation_id', 'designations_education_types.education_type_id', 'education_types.name'])->join('education_types', function($join)
+                {
+                    $join->on('education_types.id', '=', 'designations_education_types.education_type_id');
+                });
             }
         ])
-        ->where('is_active', 1)->orderBy('id', 'DESC')->get();
+        ->where('is_active', 1)
+        ->orderBy('id', 'DESC')
+        ->get();
 
         return $res->map(function($designation) {
             return [
@@ -73,8 +78,8 @@ class DesignationsController extends Controller
                 'designationCode' => $designation->code,
                 'designationName' => $designation->name,
                 'designationDescription' => $designation->description,
-                'designationTypeID' => $designation->edtype->id,
-                'designationType' => $designation->edtype->name,
+                'designationTypeID' => $designation->edtypes->map(function($a) { return $a->education_type_id; }),
+                'designationTypeName' => $designation->edtypes->map(function($a) { return $a->name; }),
                 'designationModified' => ($designation->updated_at !== NULL) ? date('d-M-Y', strtotime($designation->updated_at)).'<br/>'. date('h:i A', strtotime($designation->updated_at)) : date('d-M-Y', strtotime($designation->created_at)).'<br/>'. date('h:i A', strtotime($designation->created_at))
             ];
         });
@@ -82,13 +87,17 @@ class DesignationsController extends Controller
 
     public function all_inactive(Request $request)
     {
-        $res = Designation::
-        with([
-            'edtype' =>  function($q) { 
-                $q->select(['id', 'name']); 
+        $res = Designation::with([
+            'edtypes' =>  function($q) { 
+                $q->select(['designations_education_types.id', 'designations_education_types.designation_id', 'designations_education_types.education_type_id', 'education_types.name'])->join('education_types', function($join)
+                {
+                    $join->on('education_types.id', '=', 'designations_education_types.education_type_id');
+                });
             }
         ])
-        ->where('is_active', 0)->orderBy('id', 'DESC')->get();
+        ->where('is_active', 0)
+        ->orderBy('id', 'DESC')
+        ->get();
 
         return $res->map(function($designation) {
             return [
@@ -96,8 +105,8 @@ class DesignationsController extends Controller
                 'designationCode' => $designation->code,
                 'designationName' => $designation->name,
                 'designationDescription' => $designation->description,
-                'designationTypeID' => $designation->edtype->id,
-                'designationType' => $designation->edtype->name,
+                'designationTypeID' => $designation->edtypes->map(function($a) { return $a->education_type_id; }),
+                'designationTypeName' => $designation->edtypes->map(function($a) { return $a->name; }),
                 'designationModified' => ($designation->updated_at !== NULL) ? date('d-M-Y', strtotime($designation->updated_at)).'<br/>'. date('h:i A', strtotime($designation->updated_at)) : date('d-M-Y', strtotime($designation->created_at)).'<br/>'. date('h:i A', strtotime($designation->created_at))
             ];
         });
@@ -110,7 +119,7 @@ class DesignationsController extends Controller
         $flashMessage = self::messages();
         $segment = request()->segment(4);
         $designation = (new Designation)->fetch($id);
-        $types = (new EducationType)->all_education_types();
+        $types = (new EducationType)->all_education_types_selectpicker();
         return view('modules/components/schools/designations/add')->with(compact('menus', 'designation', 'types', 'segment'));
     }
     
@@ -121,7 +130,7 @@ class DesignationsController extends Controller
         $flashMessage = self::messages();
         $segment = request()->segment(4);
         $designation = (new Designation)->fetch($id);
-        $types = (new EducationType)->all_education_types();
+        $types = (new EducationType)->all_education_types_selectpicker();
         return view('modules/components/schools/designations/edit')->with(compact('menus', 'designation', 'types', 'segment'));
     }
     
@@ -149,7 +158,6 @@ class DesignationsController extends Controller
             'code' => $request->code,
             'name' => $request->name,
             'description' => $request->description,
-            'education_type_id' => $request->education_type_id,
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
@@ -158,14 +166,17 @@ class DesignationsController extends Controller
             throw new NotFoundHttpException();
         }
 
-        $auditLogs = AuditLog::create([
-            'entity' => 'designations',
-            'entity_id' => $designation->id,
-            'description' => 'has inserted a new designation.',
-            'data' => json_encode(Designation::find($designation->id)),
-            'created_at' => $timestamp,
-            'created_by' => Auth::user()->id
-        ]);
+        foreach ($request->education_type_id as $education_type) {
+            $designation_education_type = DesignationEducationType::create([
+                'designation_id' => $designation->id,
+                'education_type_id' => $education_type,
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+            $this->audit_logs('designations_education_types', $designation_education_type->id, 'has inserted a new designation education type.', DesignationEducationType::find($designation_education_type->id), $timestamp, Auth::user()->id);
+        }
+
+        $this->audit_logs('designations', $designation->id, 'has inserted a new designation.', Designation::find($designation->id), $timestamp, Auth::user()->id);
 
         $data = array(
             'title' => 'Well done!',
@@ -190,20 +201,35 @@ class DesignationsController extends Controller
         $designation->code = $request->code;
         $designation->name = $request->name;
         $designation->description = $request->description;
-        $designation->education_type_id = $request->education_type_id;
         $designation->updated_at = $timestamp;
         $designation->updated_by = Auth::user()->id;
 
         if ($designation->update()) {
 
-            $auditLogs = AuditLog::create([
-                'entity' => 'designations',
-                'entity_id' => $id,
-                'description' => 'has modified a designation.',
-                'data' => json_encode(Designation::find($id)),
-                'created_at' => $timestamp,
-                'created_by' => Auth::user()->id
-            ]);
+            DesignationEducationType::where('designation_id', $id)->update(['updated_at' => $timestamp, 'updated_by' => Auth::user()->id,'is_active' => 0]);
+            foreach ($request->education_type_id as $education_type) {
+                $designation_education_type = DesignationEducationType::where(['designation_id' => $id, 'education_type_id' => $education_type])
+                ->update([
+                    'education_type_id' => $education_type,
+                    'updated_at' => $timestamp,
+                    'updated_by' => Auth::user()->id,
+                    'is_active' => 1
+                ]);
+                $designation_education_type = DesignationEducationType::where(['designation_id' => $id, 'education_type_id' => $education_type, 'is_active' => 1])->get();
+                if ($designation_education_type->count() > 0) {
+                    $this->audit_logs('designations_education_types', $designation_education_type->first()->id, 'has modified a designation education type.', DesignationEducationType::find($designation_education_type->first()->id), $timestamp, Auth::user()->id);
+                } else {
+                    $designation_education_type = DesignationEducationType::create([
+                        'designation_id' => $id,
+                        'education_type_id' => $education_type,
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+                    $this->audit_logs('designations_education_types', $designation_education_type->id, 'has inserted a new designation education type.', DesignationEducationType::find($designation_education_type->id), $timestamp, Auth::user()->id);
+                }
+            }
+
+            $this->audit_logs('designations', $id, 'has modified a designation.', Designation::find($id), $timestamp, Auth::user()->id);
 
             $data = array(
                 'title' => 'Well done!',
@@ -231,16 +257,8 @@ class DesignationsController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 0
             ]);
-                
-            $auditLogs = AuditLog::create([
-                'entity' => 'designations',
-                'entity_id' => $id,
-                'description' => 'has removed a designation.',
-                'data' => json_encode(Designation::find($id)),
-                'created_at' => $timestamp,
-                'created_by' => Auth::user()->id
-            ]);
-
+            $this->audit_logs('designations', $id, 'has removed a designation.', Designation::find($id), $timestamp, Auth::user()->id);
+          
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The designation has been successfully removed.',
@@ -259,16 +277,8 @@ class DesignationsController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 1
             ]);
-            
-            $auditLogs = AuditLog::create([
-                'entity' => 'designations',
-                'entity_id' => $id,
-                'description' => 'has retrieved a designation.',
-                'data' => json_encode(Designation::find($id)),
-                'created_at' => $timestamp,
-                'created_by' => Auth::user()->id
-            ]);
-
+            $this->audit_logs('designations', $id, 'has retrieved a designation.', Designation::find($id), $timestamp, Auth::user()->id);
+        
             $data = array(
                 'title' => 'Well done!',
                 'text' => 'The designation has been successfully activated.',
@@ -280,4 +290,17 @@ class DesignationsController extends Controller
         }   
     }
 
+    public function audit_logs($entity, $entity_id, $description, $data, $timestamp, $user)
+    {
+        $auditLogs = AuditLog::create([
+            'entity' => $entity,
+            'entity_id' => $entity_id,
+            'description' => $description,
+            'data' => json_encode($data),
+            'created_at' => $timestamp,
+            'created_by' => $user
+        ]);
+
+        return true;
+    }
 }

@@ -45,9 +45,9 @@
         </div>
         <div class="col-md-4">
             <div class="form-group m-form__group required">
-                {{ Form::label('education_type_id', 'Type', ['class' => '']) }}
+                {{ Form::label('education_type_id', 'Education Type', ['class' => '']) }}
                 {{
-                    Form::select('education_type_id', $types, $value = $designation->education_type_id, ['class' => 'form-control form-control-lg m-input m-input--solid'])
+                    Form::select('education_type_id[]', $types, $value = $designation->education_type_id, ['id' => 'education_type_id', 'class' => 'form-control form-control-lg m-input m-input--solid m-bootstrap-select m_selectpicker', 'multiple'])
                 }}
                 <span class="m-form__help m--font-danger">
                 </span>

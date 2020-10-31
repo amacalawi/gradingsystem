@@ -13,15 +13,22 @@ class Department extends Model
     public $timestamps = false;
 
     public function fetch($id)
-    {
-        $department = self::find($id);
-        if ($department) {
+    {   
+        $department = self::with([
+            'edtypes' =>  function($q) { 
+                $q->select(['departments_education_types.id', 'departments_education_types.department_id', 'departments_education_types.education_type_id']);
+            }
+        ])
+        ->where('id', $id)->get();
+
+        if ($department->count() > 0) {
+            $department = $department->first();
             $results = array(
                 'id' => ($department->id) ? $department->id : '',
                 'code' => ($department->code) ? $department->code : '',
                 'name' => ($department->name) ? $department->name : '',
                 'description' => ($department->description) ? $department->description : '',
-                'education_type_id' => ($department->education_type_id) ? $department->education_type_id : ''
+                'education_type_id' => ($department->id) ? $department->edtypes->map(function($a) { return $a->education_type_id; }) : ''
             );
         } else {
             $results = array(
@@ -33,6 +40,11 @@ class Department extends Model
             );
         }
         return (object) $results;
+    }
+
+    public function edtypes()
+    {
+        return $this->hasMany('App\Models\DepartmentEducationType', 'department_id', 'id')->where('departments_education_types.is_active', 1);
     }
 
     public function edtype()

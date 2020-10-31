@@ -32,10 +32,12 @@ class Activity extends Model
         }
     }
 
-    public function sum_value_via_component($id)
+    public function sum_value_via_component($id, $quarter, $subject)
     {
         $sum = self::where([
             'component_id' => $id,
+            'quarter_id' => $quarter,
+            'subject_id' => $subject,
             'is_active' => 1
         ])->sum('value');
 

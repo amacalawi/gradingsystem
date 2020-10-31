@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateQuartersTable extends Migration
+class CreateQuartersEducationTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,10 @@ class CreateQuartersTable extends Migration
      */
     public function up()
     {
-        Schema::create('quarters', function (Blueprint $table) {
+        Schema::create('quarters_education_types', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('batch_id')->unsigned();
-            $table->string('code', 40);
-            $table->string('name', 100);
-            $table->text('description')->nullable();
-            $table->date('date_start');
-            $table->date('date_end');
+            $table->integer('quarter_id')->unsigned();
+            $table->integer('education_type_id')->unsigned();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('created_by')->unsigned();
             $table->timestamp('updated_at')->nullable();
@@ -36,6 +32,6 @@ class CreateQuartersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('quarters');
+        Schema::dropIfExists('quarters_education_types');
     }
 }

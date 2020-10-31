@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\EducationType;
+use App\Models\DepartmentEducationType;
 use App\Models\AuditLog;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -64,14 +65,19 @@ class DepartmentsController extends Controller
     }
 
     public function all_active(Request $request)
-    {
+    {  
         $res = Department::
         with([
-            'edtype' =>  function($q) { 
-                $q->select(['id', 'name']); 
+            'edtypes' =>  function($q) { 
+                $q->select(['departments_education_types.id', 'departments_education_types.department_id', 'departments_education_types.education_type_id', 'education_types.name'])->join('education_types', function($join)
+                {
+                    $join->on('education_types.id', '=', 'departments_education_types.education_type_id');
+                });
             }
         ])
-        ->where('is_active', 1)->orderBy('id', 'DESC')->get();
+        ->where('is_active', 1)
+        ->orderBy('id', 'DESC')
+        ->get();
 
         return $res->map(function($department) {
             return [
@@ -79,22 +85,27 @@ class DepartmentsController extends Controller
                 'departmentCode' => $department->code,
                 'departmentName' => $department->name,
                 'departmentDescription' => $department->description,
-                'departmentTypeID' => $department->edtype->id,
-                'departmentType' => $department->edtype->name,
+                'departmentTypeID' => $department->edtypes->map(function($a) { return $a->education_type_id; }),
+                'departmentTypeName' => $department->edtypes->map(function($a) { return $a->name; }),
                 'departmentModified' => ($department->updated_at !== NULL) ? date('d-M-Y', strtotime($department->updated_at)).'<br/>'. date('h:i A', strtotime($department->updated_at)) : date('d-M-Y', strtotime($department->created_at)).'<br/>'. date('h:i A', strtotime($department->created_at))
             ];
         });
     }
 
     public function all_inactive(Request $request)
-    {
+    {   
         $res = Department::
         with([
-            'edtype' =>  function($q) { 
-                $q->select(['id', 'name']); 
+            'edtypes' =>  function($q) { 
+                $q->select(['departments_education_types.id', 'departments_education_types.department_id', 'departments_education_types.education_type_id', 'education_types.name'])->join('education_types', function($join)
+                {
+                    $join->on('education_types.id', '=', 'departments_education_types.education_type_id');
+                });
             }
         ])
-        ->where('is_active', 0)->orderBy('id', 'DESC')->get();
+        ->where('is_active', 0)
+        ->orderBy('id', 'DESC')
+        ->get();
 
         return $res->map(function($department) {
             return [
@@ -102,8 +113,8 @@ class DepartmentsController extends Controller
                 'departmentCode' => $department->code,
                 'departmentName' => $department->name,
                 'departmentDescription' => $department->description,
-                'departmentTypeID' => $department->edtype->id,
-                'departmentType' => $department->edtype->name,
+                'departmentTypeID' => $department->edtypes->map(function($a) { return $a->education_type_id; }),
+                'departmentTypeName' => $department->edtypes->map(function($a) { return $a->name; }),
                 'departmentModified' => ($department->updated_at !== NULL) ? date('d-M-Y', strtotime($department->updated_at)).'<br/>'. date('h:i A', strtotime($department->updated_at)) : date('d-M-Y', strtotime($department->created_at)).'<br/>'. date('h:i A', strtotime($department->created_at))
             ];
         });
@@ -116,7 +127,7 @@ class DepartmentsController extends Controller
         $flashMessage = self::messages();
         $segment = request()->segment(4);
         $department = (new Department)->fetch($id);
-        $types = (new EducationType)->all_education_types();
+        $types = (new EducationType)->all_education_types_selectpicker();
         return view('modules/components/schools/departments/add')->with(compact('menus', 'department', 'types', 'segment'));
     }
     
@@ -127,7 +138,7 @@ class DepartmentsController extends Controller
         $flashMessage = self::messages();
         $segment = request()->segment(4);
         $department = (new Department)->fetch($id);
-        $types = (new EducationType)->all_education_types();
+        $types = (new EducationType)->all_education_types_selectpicker();
         return view('modules/components/schools/departments/edit')->with(compact('menus', 'department', 'types', 'segment'));
     }
     
@@ -155,7 +166,6 @@ class DepartmentsController extends Controller
             'code' => $request->code,
             'name' => $request->name,
             'description' => $request->description,
-            'education_type_id' => $request->education_type_id,
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
@@ -164,15 +174,18 @@ class DepartmentsController extends Controller
             throw new NotFoundHttpException();
         }
 
-        $auditLogs = AuditLog::create([
-            'entity' => 'departments',
-            'entity_id' => $department->id,
-            'description' => 'has inserted a new department.',
-            'data' => json_encode(Department::find($department->id)),
-            'created_at' => $timestamp,
-            'created_by' => Auth::user()->id
-        ]);
+        foreach ($request->education_type_id as $education_type) {
+            $department_education_type = DepartmentEducationType::create([
+                'department_id' => $department->id,
+                'education_type_id' => $education_type,
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+            $this->audit_logs('departments_education_types', $department_education_type->id, 'has inserted a new department education type.', DepartmentEducationType::find($department_education_type->id), $timestamp, Auth::user()->id);
+        }
 
+        $this->audit_logs('departments', $department->id, 'has inserted a new department.', Department::find($department->id), $timestamp, Auth::user()->id);
+        
         $data = array(
             'title' => 'Well done!',
             'text' => 'The department has been successfully saved.',
@@ -196,20 +209,35 @@ class DepartmentsController extends Controller
         $department->code = $request->code;
         $department->name = $request->name;
         $department->description = $request->description;
-        $department->education_type_id = $request->education_type_id;
         $department->updated_at = $timestamp;
         $department->updated_by = Auth::user()->id;
 
         if ($department->update()) {
 
-            $auditLogs = AuditLog::create([
-                'entity' => 'departments',
-                'entity_id' => $id,
-                'description' => 'has modified a department.',
-                'data' => json_encode(Department::find($id)),
-                'created_at' => $timestamp,
-                'created_by' => Auth::user()->id
-            ]);
+            DepartmentEducationType::where('department_id', $id)->update(['updated_at' => $timestamp, 'updated_by' => Auth::user()->id,'is_active' => 0]);
+            foreach ($request->education_type_id as $education_type) {
+                $department_education_type = DepartmentEducationType::where(['department_id' => $id, 'education_type_id' => $education_type])
+                ->update([
+                    'education_type_id' => $education_type,
+                    'updated_at' => $timestamp,
+                    'updated_by' => Auth::user()->id,
+                    'is_active' => 1
+                ]);
+                $department_education_type = DepartmentEducationType::where(['department_id' => $id, 'education_type_id' => $education_type, 'is_active' => 1])->get();
+                if ($department_education_type->count() > 0) {
+                    $this->audit_logs('departments_education_types', $department_education_type->first()->id, 'has modified a department education type.', DepartmentEducationType::find($department_education_type->first()->id), $timestamp, Auth::user()->id);
+                } else {
+                    $department_education_type = DepartmentEducationType::create([
+                        'department_id' => $id,
+                        'education_type_id' => $education_type,
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+                    $this->audit_logs('departments_education_types', $department_education_type->id, 'has inserted a new department education type.', DepartmentEducationType::find($department_education_type->id), $timestamp, Auth::user()->id);
+                }
+            }
+
+            $this->audit_logs('departments', $id, 'has modified a department.', Department::find($id), $timestamp, Auth::user()->id);
 
             $data = array(
                 'title' => 'Well done!',
@@ -237,15 +265,7 @@ class DepartmentsController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 0
             ]);
-
-            $auditLogs = AuditLog::create([
-                'entity' => 'departments',
-                'entity_id' => $id,
-                'description' => 'has removed a department.',
-                'data' => json_encode(Department::find($id)),
-                'created_at' => $timestamp,
-                'created_by' => Auth::user()->id
-            ]);
+            $this->audit_logs('departments', $id, 'has removed a department.', Department::find($id), $timestamp, Auth::user()->id);
             
             $data = array(
                 'title' => 'Well done!',
@@ -265,15 +285,7 @@ class DepartmentsController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 1
             ]);
-
-            $auditLogs = AuditLog::create([
-                'entity' => 'departments',
-                'entity_id' => $id,
-                'description' => 'has retrieved a department.',
-                'data' => json_encode(Department::find($id)),
-                'created_at' => $timestamp,
-                'created_by' => Auth::user()->id
-            ]);
+            $this->audit_logs('departments', $id, 'has retrieved a department.', Department::find($id), $timestamp, Auth::user()->id);
             
             $data = array(
                 'title' => 'Well done!',
@@ -286,4 +298,17 @@ class DepartmentsController extends Controller
         }   
     }
 
+    public function audit_logs($entity, $entity_id, $description, $data, $timestamp, $user)
+    {
+        $auditLogs = AuditLog::create([
+            'entity' => $entity,
+            'entity_id' => $entity_id,
+            'description' => $description,
+            'data' => json_encode($data),
+            'created_at' => $timestamp,
+            'created_by' => $user
+        ]);
+
+        return true;
+    }
 }
