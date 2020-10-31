@@ -1,7 +1,7 @@
 @if ( $segment == 'edit' )
-    {{ Form::open(array('url' => 'components/schools/batches/update/'.$batch->id, 'name' => 'batch_form', 'method' => 'PUT')) }}
+    {{ Form::open(array('url' => 'components/schools/schoolyears/update/'.$batch->id, 'name' => 'batch_form', 'method' => 'PUT')) }}
 @else
-    {{ Form::open(array('url' => 'components/schools/batches/store', 'name' => 'batch_form', 'method' => 'POST')) }}
+    {{ Form::open(array('url' => 'components/schools/schoolyears/store', 'name' => 'batch_form', 'method' => 'POST')) }}
 @endif
     <div class="row">
         <div class="col-md-12 hidden">

@@ -14,8 +14,15 @@ class Quarter extends Model
 
     public function fetch($id)
     {
-        $quarter = self::find($id);
-        if ($quarter) {
+        $quarter = self::with([
+            'edtypes' =>  function($q) { 
+                $q->select(['quarters_education_types.id', 'quarters_education_types.quarter_id', 'quarters_education_types.education_type_id']);
+            }
+        ])
+        ->where('id', $id)->get();
+
+        if ($quarter->count() > 0) {
+            $quarter = $quarter->first();
             $results = array(
                 'id' => ($quarter->id) ? $quarter->id : '',
                 'code' => ($quarter->code) ? $quarter->code : '',
@@ -23,7 +30,7 @@ class Quarter extends Model
                 'description' => ($quarter->description) ? $quarter->description : '',
                 'date_start' => ($quarter->date_start) ? $quarter->date_start : '',
                 'date_end' => ($quarter->date_end) ? $quarter->date_end : '',
-                'education_type_id' => ($quarter->education_type_id) ? $quarter->education_type_id : ''
+                'education_type_id' => ($quarter->id) ? $quarter->edtypes->map(function($a) { return $a->education_type_id; }) : ''
             );
         } else {
             $results = array(
@@ -59,6 +66,32 @@ class Quarter extends Model
         }
 
         return $quarters;
+    }
+
+    public function all_quarters_selectpicker($id = '')
+    {	
+        $quarters = self::where('is_active', 1)->orderBy('id', 'asc')->get();
+
+        $quarterx = array();
+        foreach ($quarters as $quarter) {
+            $quarterx[] = array(
+                $quarter->id => $quarter->name
+            );
+        }
+
+        $quarters = array();
+        foreach($quarterx as $quarter) {
+            foreach($quarter as $key => $val) {
+                $quarters[$key] = $val;
+            }
+        }
+
+        return $quarters;
+    }
+
+    public function edtypes()
+    {   
+        return $this->hasMany('App\Models\QuarterEducationType', 'quarter_id', 'id')->where('quarters_education_types.is_active', 1);
     }
 
     public function edtype()

@@ -28,17 +28,17 @@ Route::prefix('components')->group(function () {
     /* Schools Routes */
     Route::prefix('schools')->group(function () {
         /* Start Batches Routes */
-        Route::get('batches/add', 'BatchesController@add')->name('batches.add');
-        Route::get('batches/edit/{id?}', 'BatchesController@edit')->name('batches.edit');
-        Route::post('batches/store', 'BatchesController@store')->name('batches.store');
-        Route::put('batches/update/{id}', 'BatchesController@update')->name('batches.update');
-        Route::get('batches', 'BatchesController@manage')->name('batches.manage.active');
-        Route::get('batches/inactive', 'BatchesController@inactive')->name('batches.manage.inactive');
-        Route::post('batches/remove', 'BatchesController@remove')->name('batches.remove');
-        Route::post('batches/restore', 'BatchesController@restore')->name('batches.restore');
-        Route::get('batches/all-active', 'BatchesController@all_active')->name('batches.all.active');
-        Route::get('batches/all-inactive', 'BatchesController@all_inactive')->name('batches.all.inactive');
-        Route::put('batches/update-status/{id}', 'BatchesController@update_status')->name('batches.update.status');
+        Route::get('schoolyears/add', 'BatchesController@add')->name('schoolyears.add');
+        Route::get('schoolyears/edit/{id?}', 'BatchesController@edit')->name('schoolyears.edit');
+        Route::post('schoolyears/store', 'BatchesController@store')->name('schoolyears.store');
+        Route::put('schoolyears/update/{id}', 'BatchesController@update')->name('schoolyears.update');
+        Route::get('schoolyears', 'BatchesController@manage')->name('schoolyears.manage.active');
+        Route::get('schoolyears/inactive', 'BatchesController@inactive')->name('schoolyears.manage.inactive');
+        Route::post('schoolyears/remove', 'BatchesController@remove')->name('schoolyears.remove');
+        Route::post('schoolyears/restore', 'BatchesController@restore')->name('schoolyears.restore');
+        Route::get('schoolyears/all-active', 'BatchesController@all_active')->name('schoolyears.all.active');
+        Route::get('schoolyears/all-inactive', 'BatchesController@all_inactive')->name('schoolyears.all.inactive');
+        Route::put('schoolyears/update-status/{id}', 'BatchesController@update_status')->name('schoolyears.update.status');
         /* End Batches Routes */
 
         /* Start Quarters Routes */

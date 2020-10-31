@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
+use App\Models\Batch;
 use App\Models\Quarter;
 use App\Models\EducationType;
+use App\Models\QuarterEducationType;
 use App\Models\AuditLog;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -57,16 +59,17 @@ class QuartersController extends Controller
 
     public function all_active(Request $request)
     {
-        $res = Quarter::
-        with([
-            'edtype' =>  function($q) { 
-                $q->select(['id', 'name']); 
-            },
-            // 'quarters.quarter' => function($q) { 
-            //     $q->select(['component_id','name']); 
-            // },
+        $res = Quarter::with([
+            'edtypes' =>  function($q) { 
+                $q->select(['quarters_education_types.id', 'quarters_education_types.quarter_id', 'quarters_education_types.education_type_id', 'education_types.name'])->join('education_types', function($join)
+                {
+                    $join->on('education_types.id', '=', 'quarters_education_types.education_type_id');
+                });
+            }
         ])
-        ->where('is_active', 1)->orderBy('id', 'DESC')->get();
+        ->where('is_active', 1)
+        ->orderBy('id', 'DESC')
+        ->get();
 
         return $res->map(function($quarter) {
             return [
@@ -76,8 +79,8 @@ class QuartersController extends Controller
                 'quarterDescription' => $quarter->description,
                 'quarterStart' => date('d-M-Y', strtotime($quarter->date_start)),
                 'quarterEnd' => date('d-M-Y', strtotime($quarter->date_end)),
-                'quarterTypeID' => $quarter->edtype->id,
-                'quarterType' => $quarter->edtype->name,
+                'quarterTypeID' => $quarter->edtypes->map(function($a) { return $a->education_type_id; }),
+                'quarterTypeName' => $quarter->edtypes->map(function($a) { return $a->name; }),
                 'quarterModified' => ($quarter->updated_at !== NULL) ? date('d-M-Y', strtotime($quarter->updated_at)).'<br/>'. date('h:i A', strtotime($quarter->updated_at)) : date('d-M-Y', strtotime($quarter->created_at)).'<br/>'. date('h:i A', strtotime($quarter->created_at))
             ];
         });
@@ -85,13 +88,17 @@ class QuartersController extends Controller
 
     public function all_inactive(Request $request)
     {
-        $res = Quarter::
-        with([
-            'edtype' =>  function($q) { 
-                $q->select(['id', 'name']); 
+        $res = Quarter::with([
+            'edtypes' =>  function($q) { 
+                $q->select(['quarters_education_types.id', 'quarters_education_types.quarter_id', 'quarters_education_types.education_type_id', 'education_types.name'])->join('education_types', function($join)
+                {
+                    $join->on('education_types.id', '=', 'quarters_education_types.education_type_id');
+                });
             }
         ])
-        ->where('is_active', 0)->orderBy('id', 'DESC')->get();
+        ->where('is_active', 0)
+        ->orderBy('id', 'DESC')
+        ->get();
 
         return $res->map(function($quarter) {
             return [
@@ -101,8 +108,8 @@ class QuartersController extends Controller
                 'quarterDescription' => $quarter->description,
                 'quarterStart' => date('d-M-Y', strtotime($quarter->date_start)),
                 'quarterEnd' => date('d-M-Y', strtotime($quarter->date_end)),
-                'quarterTypeID' => $quarter->edtype->id,
-                'quarterType' => $quarter->edtype->name,
+                'quarterTypeID' => $quarter->edtypes->map(function($a) { return $a->education_type_id; }),
+                'quarterTypeName' => $quarter->edtypes->map(function($a) { return $a->name; }),
                 'quarterModified' => ($quarter->updated_at !== NULL) ? date('d-M-Y', strtotime($quarter->updated_at)).'<br/>'. date('h:i A', strtotime($quarter->updated_at)) : date('d-M-Y', strtotime($quarter->created_at)).'<br/>'. date('h:i A', strtotime($quarter->created_at))
             ];
         });
@@ -115,7 +122,7 @@ class QuartersController extends Controller
         $flashMessage = self::messages();
         $segment = request()->segment(4);
         $quarter = (new Quarter)->fetch($id);
-        $types = (new EducationType)->all_education_types();
+        $types = (new EducationType)->all_education_types_selectpicker();
         return view('modules/components/schools/quarters/add')->with(compact('menus', 'quarter', 'types', 'segment'));
     }
     
@@ -126,7 +133,7 @@ class QuartersController extends Controller
         $flashMessage = self::messages();
         $segment = request()->segment(4);
         $quarter = (new Quarter)->fetch($id);
-        $types = (new EducationType)->all_education_types();
+        $types = (new EducationType)->all_education_types_selectpicker();
         return view('modules/components/schools/quarters/edit')->with(compact('menus', 'quarter', 'types', 'segment'));
     }
     
@@ -136,8 +143,7 @@ class QuartersController extends Controller
         $timestamp = date('Y-m-d H:i:s');
 
         $rows = Quarter::where([
-            'code' => $request->code,
-            'education_type_id' => $request->education_type_id
+            'code' => $request->code
         ])->count();
 
         if ($rows > 0) {
@@ -152,10 +158,10 @@ class QuartersController extends Controller
         }
 
         $quarter = Quarter::create([
+            'batch_id' => (new Batch)->get_current_batch(),
             'code' => $request->code,
             'name' => $request->name,
             'description' => $request->description,
-            'education_type_id' => $request->education_type_id,
             'date_start' => date('Y-m-d', strtotime($request->date_start)),
             'date_end' => date('Y-m-d', strtotime($request->date_end)),
             'created_at' => $timestamp,
@@ -166,14 +172,17 @@ class QuartersController extends Controller
             throw new NotFoundHttpException();
         }
 
-        $auditLogs = AuditLog::create([
-            'entity' => 'quarters',
-            'entity_id' => $quarter->id,
-            'description' => 'has inserted a new quarter.',
-            'data' => json_encode(Quarter::find($quarter->id)),
-            'created_at' => $timestamp,
-            'created_by' => Auth::user()->id
-        ]);
+        foreach ($request->education_type_id as $education_type) {
+            $quarter_education_type = QuarterEducationType::create([
+                'quarter_id' => $quarter->id,
+                'education_type_id' => $education_type,
+                'created_at' => $timestamp,
+                'created_by' => Auth::user()->id
+            ]);
+            $this->audit_logs('quarters_education_types', $quarter_education_type->id, 'has inserted a new quarter education type.', QuarterEducationType::find($quarter_education_type->id), $timestamp, Auth::user()->id);
+        }
+
+        $this->audit_logs('quarters', $quarter->id, 'has inserted a new quarter.', Quarter::find($quarter->id), $timestamp, Auth::user()->id);
 
         $data = array(
             'title' => 'Well done!',
@@ -194,11 +203,10 @@ class QuartersController extends Controller
         if(!$quarter) {
             throw new NotFoundHttpException();
         }
-
+        
         $quarter->code = $request->code;
         $quarter->name = $request->name;
         $quarter->description = $request->description;
-        $quarter->education_type_id = $request->education_type_id;
         $quarter->date_start = date('Y-m-d', strtotime($request->date_start));
         $quarter->date_end = date('Y-m-d', strtotime($request->date_end));
         $quarter->updated_at = $timestamp;
@@ -206,16 +214,33 @@ class QuartersController extends Controller
 
         if ($quarter->update()) {
 
-            $auditLogs = AuditLog::create([
-                'entity' => 'quarters',
-                'entity_id' => $id,
-                'description' => 'has modified a quarter.',
-                'data' => json_encode(Quarter::find($id)),
-                'created_at' => $timestamp,
-                'created_by' => Auth::user()->id
-            ]);
+            QuarterEducationType::where('quarter_id', $id)->update(['updated_at' => $timestamp, 'updated_by' => Auth::user()->id,'is_active' => 0]);
+            foreach ($request->education_type_id as $education_type) {
+                $quarter_education_type = QuarterEducationType::where(['quarter_id' => $id, 'education_type_id' => $education_type])
+                ->update([
+                    'education_type_id' => $education_type,
+                    'updated_at' => $timestamp,
+                    'updated_by' => Auth::user()->id,
+                    'is_active' => 1
+                ]);
+                $quarter_education_type = QuarterEducationType::where(['quarter_id' => $id, 'education_type_id' => $education_type, 'is_active' => 1])->get();
+                if ($quarter_education_type->count() > 0) {
+                    $this->audit_logs('quarters_education_types', $quarter_education_type->first()->id, 'has modified a quarter education type.', QuarterEducationType::find($quarter_education_type->first()->id), $timestamp, Auth::user()->id);
+                } else {
+                    $quarter_education_type = QuarterEducationType::create([
+                        'quarter_id' => $id,
+                        'education_type_id' => $education_type,
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+                    $this->audit_logs('quarters_education_types', $quarter_education_type->id, 'has inserted a new quarter education type.', QuarterEducationType::find($quarter_education_type->id), $timestamp, Auth::user()->id);
+                }
+            }
+
+            $this->audit_logs('quarters', $id, 'has modified a quarter.', Quarter::find($id), $timestamp, Auth::user()->id);
 
             $data = array(
+                'data' => $request->education_type_id,
                 'title' => 'Well done!',
                 'text' => 'The quarter has been successfully updated.',
                 'type' => 'success',
@@ -241,15 +266,7 @@ class QuartersController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 0
             ]);
-
-            $auditLogs = AuditLog::create([
-                'entity' => 'quarters',
-                'entity_id' => $id,
-                'description' => 'has removed a quarter.',
-                'data' => json_encode(Quarter::find($id)),
-                'created_at' => $timestamp,
-                'created_by' => Auth::user()->id
-            ]);
+            $this->audit_logs('quarters', $id, 'has removed a quarter.', Quarter::find($id), $timestamp, Auth::user()->id);
             
             $data = array(
                 'title' => 'Well done!',
@@ -269,15 +286,7 @@ class QuartersController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 1
             ]);
-
-            $auditLogs = AuditLog::create([
-                'entity' => 'quarters',
-                'entity_id' => $id,
-                'description' => 'has retrieved a quarter.',
-                'data' => json_encode(Quarter::find($id)),
-                'created_at' => $timestamp,
-                'created_by' => Auth::user()->id
-            ]);
+            $this->audit_logs('quarters', $id, 'has retrieved a quarter.', Quarter::find($id), $timestamp, Auth::user()->id);
             
             $data = array(
                 'title' => 'Well done!',
@@ -290,4 +299,17 @@ class QuartersController extends Controller
         }   
     }
 
+    public function audit_logs($entity, $entity_id, $description, $data, $timestamp, $user)
+    {
+        $auditLogs = AuditLog::create([
+            'entity' => $entity,
+            'entity_id' => $entity_id,
+            'description' => $description,
+            'data' => json_encode($data),
+            'created_at' => $timestamp,
+            'created_by' => $user
+        ]);
+
+        return true;
+    }
 }

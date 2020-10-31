@@ -6,7 +6,7 @@
 @endif
     @if ($segment != 'edit')
         <div class="row">
-            <div class="col-md-9">
+            <div class="col-md-12">
                 <!-- BASIC INFOS START -->
                 <div class="m-portlet m-portlet--tab">
                     <div class="m-portlet__body">
@@ -27,18 +27,36 @@
                             </div>
                         </div> 
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="form-group m-form__group required">
-                                    {{ Form::label('section_id', 'Section', ['class' => '']) }}
+                                    {{ Form::label('education_type_id', 'Education Type', ['class' => '']) }}
                                     {{  
-                                        Form::select('section_id', $sections, !empty($grading) ? $grading->section_id : '', ['class' => 'form-control form-control-lg m-input m-input--solid'])
+                                        Form::select('education_type_id', $types, !empty($grading) ? $grading->education_type_id : '', ['class' => 'form-control form-control-lg m-input m-input--solid'])
                                     }}
                                     <span class="m-form__help m--font-danger"></span>
                                 </div>
                             </div>
-                        </div> 
+                            <div class="col-md-6">
+                                <div class="form-group m-form__group required">
+                                    {{ Form::label('quarter_id', 'Quarter', ['class' => '']) }}
+                                    {{  
+                                        Form::select('quarter_id[]', $quarters, !empty($grading) ? $grading->quarter_id : '', ['id' => 'quarter_id', 'class' => 'form-control form-control-lg m-input m-input--solid m-bootstrap-select m_selectpicker', 'multiple'])
+                                    }}
+                                    <span class="m-form__help m--font-danger"></span>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-group m-form__group required">
+                                    {{ Form::label('section_info_id', 'Class', ['class' => '']) }}
+                                    {{  
+                                        Form::select('section_info_id', $sections, !empty($grading) ? $grading->section_info_id : '', ['class' => 'form-control form-control-lg m-input m-input--solid'])
+                                    }}
+                                    <span class="m-form__help m--font-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
                                 <div class="form-group m-form__group required">
                                     {{ Form::label('subject_id', 'Subject', ['class' => '']) }}
                                     {{  
@@ -51,37 +69,6 @@
                     </div>
                 </div>
                 <!-- BASIC INFOS END -->
-            </div>
-            <div class="col-md-3">
-                <!-- Quarter TYPE -->
-                <div class="m-portlet m-portlet--tab">
-                    <div class="m-portlet__body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h5 class="m-bottom-1">Type & Quarter</h5>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group m-form__group required">
-                                    {{ Form::label('education_type_id', 'Type', ['class' => '']) }}
-                                    {{  
-                                        Form::select('education_type_id', $types, !empty($grading) ? $grading->education_type_id : '', ['class' => 'form-control form-control-lg m-input m-input--solid'])
-                                    }}
-                                    <span class="m-form__help m--font-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group m-form__group required">
-                                    {{ Form::label('quarter_id', 'Quarter', ['class' => '']) }}
-                                    {{  
-                                        Form::select('quarter_id', $quarters, !empty($grading) ? $grading->quarter_id : '', ['class' => 'form-control form-control-lg m-input m-input--solid'])
-                                    }}
-                                    <span class="m-form__help m--font-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- QUARTER END -->
             </div>
         </div>
     @else
@@ -109,8 +96,8 @@
                                 </div>
                                 <div class="col-md-6">
                                     <h5>
-                                        <strong>Batch & Quarter:</strong> 
-                                        {{ $grading->batch_name }} ({{ $grading->quarter_name }})
+                                        <strong>Quarter & Schoolyear:</strong> 
+                                        {{ $grading->quarter_name }} ({{ $grading->batch_name }})
                                     </h5>
                                     <h5 class="m-bottom-2">
                                         <strong>Adviser:</strong>

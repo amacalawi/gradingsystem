@@ -18,7 +18,7 @@ class CreateGradingsheetsTable extends Migration
             $table->integer('batch_id')->unsigned();
             $table->integer('quarter_id')->unsigned();
             $table->integer('education_type_id')->unsigned();
-            $table->integer('section_id')->unsigned();
+            $table->integer('section_info_id')->unsigned();
             $table->integer('material_id')->unsigned();
             $table->integer('subject_id')->unsigned();
             $table->string('code', 100);

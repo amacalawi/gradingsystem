@@ -496,17 +496,17 @@
             <div class="m-portlet__body">
                 <div class="row">
                     <div class="col-md-12">
-                        <h5 class="m-bottom-1">Section</h5>
+                        <h5 class="m-bottom-1">Classes</h5>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group m-form__group required">
                             @if (Auth::user()->type != 'administrator')
                                 {{  
-                                    Form::select('section_id', $sections, !empty($component) ? $component->section_id : '', ['id' => 'section_id', 'class' => 'form-control form-control-lg m-input m-input--solid', 'disabled' => 'disabled'])
+                                    Form::select('section_info_id', $sections, !empty($component) ? $component->section_info_id : '', ['id' => 'section_info_id', 'class' => 'form-control form-control-lg m-input m-input--solid', 'disabled' => 'disabled'])
                                 }}
                             @else
                                 {{  
-                                    Form::select('section_id', $sections, !empty($component) ? $component->section_id : '', ['id' => 'section_id', 'class' => 'form-control form-control-lg m-input m-input--solid'])
+                                    Form::select('section_info_id', $sections, !empty($component) ? $component->section_info_id : '', ['id' => 'section_info_id', 'class' => 'form-control form-control-lg m-input m-input--solid'])
                                 }}
                             @endif
                             <span class="m-form__help m--font-danger"></span>
@@ -526,11 +526,11 @@
                         <div class="form-group m-form__group required">
                             @if (Auth::user()->type != 'administrator')
                                 {{  
-                                    Form::select('subject_id', $subjects, !empty($component) ? $component->subject_id : '', ['id' => 'subject_id', 'class' => 'form-control form-control-lg m-input m-input--solid', 'disabled' => 'disabled'])
+                                    Form::select('subject_id[]', $subjects, !empty($component) ? $component->subject_id : '', ['id' => 'subject_id', 'data-live-search' => 'true', 'class' => 'form-control form-control-lg m-input m-input--solid m-bootstrap-select m_selectpicker', 'multiple',  'disabled' => 'disabled'])
                                 }}
                             @else
                                 {{  
-                                    Form::select('subject_id', $subjects, !empty($component) ? $component->subject_id : '', ['id' => 'subject_id', 'class' => 'form-control form-control-lg m-input m-input--solid'])
+                                    Form::select('subject_id[]', $subjects, !empty($component) ? $component->subject_id : '', ['id' => 'subject_id', 'data-live-search' => 'true', 'class' => 'form-control form-control-lg m-input m-input--solid m-bootstrap-select m_selectpicker', 'multiple'])
                                 }}
                             @endif
                             <span class="m-form__help m--font-danger"></span>

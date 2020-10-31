@@ -8,6 +8,7 @@ use App\Models\Batch;
 use App\Models\Activity;
 use App\Models\Quarter;
 use App\Models\Component;
+use App\Models\QuarterEducationType;
 
 class Component extends Model
 {	
@@ -25,7 +26,13 @@ class Component extends Model
                 {
                     $join->on('quarters.id', '=', 'components_quarters.quarter_id');
                 });
-            }
+            },
+            'subjects' =>  function($q) { 
+                $q->select(['components_subjects.id', 'components_subjects.component_id', 'components_subjects.subject_id', 'subjects.name'])->join('subjects', function($join)
+                {
+                    $join->on('subjects.id', '=', 'components_subjects.subject_id');
+                });
+            },
         ])
         ->where('id', $id)->get();
 
@@ -35,8 +42,8 @@ class Component extends Model
                 'id' => ($component->id) ? $component->id : '',
                 'batch_id' => ($component->batch_id) ? $component->batch_id : '',
                 'quarters' =>  ($component->id) ? $component->quarters->map(function($a) { return $a->quarter_id; }) : '',
-                'section_id' => ($component->section_id) ? $component->section_id : '',
-                'subject_id' => ($component->subject_id) ? $component->subject_id : '',
+                'section_info_id' => ($component->section_info_id) ? $component->section_info_id : '',
+                'subject_id' => ($component->id) ? $component->subjects->map(function($a) { return $a->subject_id; }) : '',
                 'education_type_id' => ($component->education_type_id) ? $component->education_type_id : '',
                 'material_id' => ($component->material_id) ? $component->material_id : '',
                 'percentage' => ($component->percentage) ? $component->percentage : '',
@@ -56,7 +63,7 @@ class Component extends Model
                 'id' => '',
                 'batch_id' => '',
                 'quarters' => '',
-                'section_id' => '',
+                'section_info_id' => '',
                 'subject_id' => '',
                 'education_type_id' => '',
                 'material_id' => '',
@@ -87,9 +94,19 @@ class Component extends Model
         return $this->hasMany('App\Models\ComponentQuarter', 'component_id', 'id')->where('components_quarters.is_active', 1);
     }
 
+    public function subjects()
+    {
+        return $this->hasMany('App\Models\ComponentSubject', 'component_id', 'id')->where('components_subjects.is_active', 1);
+    }
+
     public function activities()
     {
         return $this->hasMany('App\Models\Activity', 'component_id', 'id');    
+    }
+
+    public function section_info()
+    {
+        return $this->belongsTo('App\Models\SectionInfo');
     }
 
     public function subject()
@@ -103,29 +120,34 @@ class Component extends Model
     }
 
     public function get_components_via_gradingsheet($id)
-    {
+    {   
+        $quarter = (new GradingSheet)->get_column_via_identifier('quarter_id', $id);
+        $subject = (new GradingSheet)->get_column_via_identifier('subject_id', $id);
         $components = self::with([
-            'activities' => function($q) {
-                $q->select(['component_id', 'id', 'activity', 'value', 'description'])->orderBy('id', 'ASC'); 
+            'activities' => function($q) use ($id, $quarter, $subject) {
+                $q->select(['component_id', 'id', 'activity', 'value', 'description'])
+                ->where([
+                    'quarter_id' => $quarter,
+                    'subject_id' => $subject
+                ])
+                ->orderBy('id', 'ASC'); 
             },
         ])->where([
             'batch_id' => (new Batch)->get_current_batch(),
             'education_type_id' => (new GradingSheet)->get_column_via_identifier('education_type_id', $id),
-            'subject_id' => (new GradingSheet)->get_column_via_identifier('subject_id', $id),
             'is_active' => 1
         ])
         ->whereIn('id', 
             (new ComponentQuarter)->select('component_id')
             ->where([
                 'batch_id' => (new Batch)->get_current_batch(),
-                'education_type_id' => (new GradingSheet)->get_column_via_identifier('education_type_id', $id),
-                'quarter_id' => (new GradingSheet)->get_column_via_identifier('quarter_id', $id),
+                'quarter_id' => $quarter,
                 'is_active' => 1
             ])
         )
         ->orderBy('id', 'ASC')->get();
 
-        $components = $components->map(function($component) {
+        $components = $components->map(function($component) use ($quarter, $subject) {
             $cell = 1; $sum = 0;
             if ($component->is_sum_cell > 0) { $cell++; }
             if ($component->is_hps_cell > 0) { $cell++; }
@@ -142,8 +164,8 @@ class Component extends Model
                 'is_hps_cell' => $component->is_hps_cell,
                 'is_ps_cell' => $component->is_ps_cell,
                 'activities' => $component->activities,
-                'sum_value' => (new Activity)->sum_value_via_component($component->id),
-                'columns' => (new Activity)->where(['component_id' => $component->id, 'is_active' => 1])->count() + floatval($cell)
+                'sum_value' => (new Activity)->sum_value_via_component($component->id, $quarter, $subject),
+                'columns' => (new Activity)->where(['component_id' => $component->id, 'quarter_id' => $quarter, 'subject_id' => $subject, 'is_active' => 1])->count() + floatval($cell)
             ];
         });
 
@@ -152,9 +174,16 @@ class Component extends Model
 
     public function all_quarters($componentID)
     {	
-    	$quarters = Quarter::where([
+        $quarters = Quarter::
+        whereIn('id', (new QuarterEducationType)->select('quarter_id')
+            ->where([
+                'education_type_id' => (new Component)->where('id', $componentID)->pluck('education_type_id'),
+                'is_active' => 1
+            ])
+        )
+        ->where([
             'is_active' => 1,
-            'education_type_id' => (new Component)->where('id', $componentID)->pluck('education_type_id')
+            // 'education_type_id' => (new Component)->where('id', $componentID)->pluck('education_type_id')
         ])
         ->orderBy('id', 'asc')->get();
 

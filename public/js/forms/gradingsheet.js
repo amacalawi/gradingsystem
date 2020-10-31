@@ -204,11 +204,10 @@
 
     gradingsheet.prototype.reload_section_subject_quarter = function($type) 
     {   
-        var $section = $('#section_id'), $subject = $('#subject_id'), $quarter = $('#quarter_id');
+        var $section = $('#section_info_id'), $subject = $('#subject_id'), $quarter = $('#quarter_id');
         $section.find('option').remove(); $subject.find('option').remove(); $quarter.find('option').remove();
-        $section.append('<option value="">select a section</option>');  
+        $section.append('<option value="">select a class</option>');  
         $subject.append('<option value="">select a subject</option>');  
-        $quarter.append('<option value="">select a quarter</option>');  
 
         console.log(base_url + 'academics/grading-sheets/all-gradingsheets/reload/' + $type);
         $.ajax({
@@ -225,6 +224,7 @@
                 $.each(data.quarters, function(i, item) {
                     $quarter.append('<option value="' + item.id + '">' + item.name + '</option>');  
                 }); 
+                $quarter.selectpicker('refresh');
             } 
         });
 
@@ -232,17 +232,19 @@
     },
 
     gradingsheet.prototype.fetch_transmutations = function()
-    { 
-        $.ajax({
-            type: 'GET',
-            url: base_url + 'academics/grading-sheets/all-gradingsheets/fetch-transmutations/' + $('#type').text(),
-            success: function(response) {
-                transmutations = JSON.parse(response);
-            },
-            async: false
-        });
+    {   
+        if (activeSubSubModule == 'edit') {
+            $.ajax({
+                type: 'GET',
+                url: base_url + 'academics/grading-sheets/all-gradingsheets/fetch-transmutations/' + $('#type').text(),
+                success: function(response) {
+                    transmutations = JSON.parse(response);
+                },
+                async: false
+            });
 
-        console.log(transmutations);
+            console.log(transmutations);
+        }
     },
 
     gradingsheet.prototype.init = function()
@@ -355,7 +357,7 @@
             }
         });
 
-        this.$body.on('change', '#section_id', function (e){
+        this.$body.on('change', '#section_info_id', function (e){
             e.preventDefault();
             var self = $(this).val();
 
@@ -413,9 +415,9 @@
                                 $self.html('<i class="la la-save"></i> Save Changes').removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
                             }
                             $form.find('select[name="type"]').next().text('This is an existing type.');
-                            $form.find('select[name="section_id"]').next().text('This is an existing section.');
+                            $form.find('select[name="section_info_id"]').next().text('This is an existing class.');
                             $form.find('select[name="subject_id"]').next().text('This is an existing subject.');
-                            $form.find('select[name="quarter_id"]').next().text('This is an existing quarter.');
+                            $form.find('select[id="quarter_id"]').closest('.m-form__group').find('.m--font-danger').text('This is an existing quarter.');
                             swal({
                                 title: data.title,
                                 text: data.text,

@@ -237,7 +237,6 @@ class StaffsController extends Controller
             'designation_id' => $request->designation_id,
             'identification_no' => $request->identification_no,
             'type' => implode(',', $request->type),
-            'specification' => $request->specification,
             'firstname' => $request->firstname,
             'middlename' => $request->middlename,
             'lastname' => $request->lastname,
@@ -361,7 +360,6 @@ class StaffsController extends Controller
         $staff->department_id = $request->department_id;
         $staff->designation_id = $request->designation_id;
         $staff->type = implode(',', $request->type);
-        $staff->specification = $request->specification;
         $staff->firstname = $request->firstname;
         $staff->middlename = $request->middlename;
         $staff->lastname = $request->lastname;
@@ -511,7 +509,7 @@ class StaffsController extends Controller
                                 $staff->department_id = Department::where('name', $data[19])->first()->id;
                                 $staff->designation_id = Designation::where('name', $data[20])->first()->id;
                                 $staff->type = $data[18];
-                                $staff->specification = $data[21];
+                                // $staff->specification = $data[21];
                                 $staff->firstname = $data[1];
                                 $staff->middlename = $data[2];
                                 $staff->lastname = $data[3];
@@ -610,7 +608,7 @@ class StaffsController extends Controller
                                     'designation_id' => Designation::where('name', $data[20])->first()->id,
                                     'identification_no' => $data[0],
                                     'type' => $data[18],
-                                    'specification' => $data[21],
+                                    // 'specification' => $data[21],
                                     'firstname' => $data[1],
                                     'middlename' => $data[2],
                                     'lastname' => $data[3],

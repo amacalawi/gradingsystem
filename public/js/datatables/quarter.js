@@ -59,42 +59,64 @@ var DatatableDataLocalDemo = function () {
 			selector: {class: 'm-checkbox--solid m-checkbox--brand'}
 		}, {
 			field: "quarterCode",
-			title: "Code"
+			title: "Code",
+			sortable: true,
+			ordering: true,
 		}, {
 			field: "quarterName",
 			title: "Name",
+			sortable: true,
+			ordering: true,
 		}, {
 			field: "quarterDescription",
-			title: "Description"
+			title: "Description",
+			sortable: true,
+			ordering: true,
         }, {
 			field: "quarterStart",
-			title: "Quarter Start"
+			title: "Quarter Start",
+			sortable: true,
+			ordering: true,
 		}, {
 			field: "quarterEnd",
-			title: "Quarter End"
+			title: "Quarter End",
+			sortable: true,
+			ordering: true,
 		}, {
 			field: "quarterModified",
 			title: "Last Modified",
+			sortable: true,
+			ordering: true,
 		}, {
 			field: "quarterType",
 			width: 150,
-			title: "Type",
+			sortable: true,
+			ordering: true,
+			title: "Education Type",
 			// callback function support for column rendering
 			template: function (row) {
+				var class_type = '';
 				var type = {
 					1 : {'class': 'childhood-bg'},
 					2 : {'class': 'primary-bg'}, 
-                    3 : {'class': 'secondary-bg'},
-                    4 : {'class': 'higher-bg'}
+					3 : {'class': 'secondary-bg'},
+					4 : {'class': 'higher-bg'}
 				};
-				return '<span class="m-badge ' + type[row.quarterTypeID].class + ' m-badge--wide">' + row.quarterType + '</span>';
+
+				var str = '';
+				for(var x=0; x<row.quarterTypeID.length; x++){
+					str = row.quarterTypeName[x].charAt(0);
+					class_type += '<span class="m-badge ' + type[row.quarterTypeID[x]].class + ' m-badge--wide">' + str + '</span> '	
+				}
+					
+				return class_type;
 			}
 		}, {
 			field: "Actions",
 			width: 90,
 			title: "Actions",
-			sortable: false,
-			ordering: false,
+			sortable: true,
+			ordering: true,
 			overflow: 'visible',
 			template: function (row, index, datatable) {
 				var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
@@ -127,8 +149,8 @@ var DatatableDataLocalDemo = function () {
 		var query = datatable.getDataSourceQuery();
 
 		$('#m_form_type').on('change', function () {
-			datatable.search($(this).val(), 'quarterType');
-		}).val(typeof query.quarterType !== 'undefined' ? query.quarterType : '');
+			datatable.search($(this).val(), 'quarterTypeID');
+		}).val(typeof query.quarterTypeID !== 'undefined' ? query.quarterTypeID : '');
 
 		// $('#m_form_type').on('change', function () {
 		// 	datatable.search($(this).val(), 'Type');
@@ -167,25 +189,36 @@ jQuery(document).ready(function () {
 		var $url = base_url + 'components/schools/quarters/update-status/' + $rowID;
 		var items = []; items.push({ action: $action });
 
-		console.log($url);
-		$.ajax({
-			type: 'PUT',
-			url: $url,
-			data: { items },
-			success: function(response) {
-				var data = $.parseJSON(response);   
-				console.log(data);
-				swal({
-					"title": data.title, 
-					"text": data.text, 
-					"type": data.type,
-					"confirmButtonClass": "btn " + data.class + " m-btn m-btn--wide"
+		swal({
+			title: 'Are you sure?',
+			text: "The quarter will be removed!",
+			type: 'warning',
+			showCancelButton: true,
+			confirmButtonClass: "btn btn-brand m-btn m-btn--wide",
+			confirmButtonText: 'Yes, remove it!'
+		}).then(function(result) {
+			if (result.value) {
+				console.log($url);
+				$.ajax({
+					type: 'PUT',
+					url: $url,
+					data: { items },
+					success: function(response) {
+						var data = $.parseJSON(response);   
+						console.log(data);
+						swal({
+							"title": data.title, 
+							"text": data.text, 
+							"type": data.type,
+							"confirmButtonClass": "btn " + data.class + " m-btn m-btn--wide"
+						});
+						DatatableDataLocalDemo.reload();
+					}, 
+					complete: function() {
+						window.onkeydown = null;
+						window.onfocus = null;
+					}
 				});
-				DatatableDataLocalDemo.reload();
-			}, 
-			complete: function() {
-				window.onkeydown = null;
-				window.onfocus = null;
 			}
 		});
 	});

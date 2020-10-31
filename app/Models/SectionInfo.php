@@ -94,4 +94,37 @@ class SectionInfo extends Model
     {
         return $this->belongsTo('App\Models\EducationType', 'education_type_id', 'id');
     }
+
+    public function all_classes()
+    {	
+        $classes = self::with([
+            'section' =>  function($q) { 
+                $q->select(['id', 'name', 'description']);
+            },
+            'level' =>  function($q) { 
+                $q->select(['id', 'name', 'description']);
+            }
+        ])
+        ->where('is_active', 1)
+        ->orderBy('id', 'asc')
+        ->get();
+
+        $classx = array();
+        $classx[] = array('' => 'select a class');
+        foreach ($classes as $class) {
+            $classx[] = array(
+                $class->id  => $class->level->name.' - '.$class->section->name,
+            );
+        }
+
+        $classes = array();
+        foreach($classx as $class) {
+            foreach($class as $key => $val) {
+                $classes[$key] = $val;
+            }
+        }
+
+        return $classes;
+    }
+
 }

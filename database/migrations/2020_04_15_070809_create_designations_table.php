@@ -15,7 +15,6 @@ class CreateDesignationsTable extends Migration
     {
         Schema::create('designations', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('education_type_id')->unsigned();
             $table->string('code', 40);
             $table->string('name', 100);
             $table->text('description')->nullable();

@@ -71,16 +71,24 @@ var DatatableDataLocalDemo = function () {
 			title: "Last Modified",
 		}, {
 			field: "departmentType",
-			title: "Type",
+			title: "Education Type",
 			// callback function support for column rendering
 			template: function (row) {
+				var class_type = '';
 				var type = {
 					1 : {'class': 'childhood-bg'},
 					2 : {'class': 'primary-bg'}, 
-                    3 : {'class': 'secondary-bg'},
-                    4 : {'class': 'higher-bg'}
+					3 : {'class': 'secondary-bg'},
+					4 : {'class': 'higher-bg'}
 				};
-				return '<span class="m-badge ' + type[row.departmentTypeID].class + ' m-badge--wide">' + row.departmentType + '</span>';
+
+				var str = '';
+				for(var x=0; x<row.departmentTypeID.length; x++){
+					str = row.departmentTypeName[x].charAt(0);
+					class_type += '<span class="m-badge ' + type[row.departmentTypeID[x]].class + ' m-badge--wide">' + str + '</span> '	
+				}
+
+				return class_type;
 			}
 		}, {
 			field: "Actions",
@@ -160,25 +168,36 @@ jQuery(document).ready(function () {
 		var $url = base_url + 'components/schools/departments/update-status/' + $rowID;
 		var items = []; items.push({ action: $action });
 
-		console.log($url);
-		$.ajax({
-			type: 'PUT',
-			url: $url,
-			data: { items },
-			success: function(response) {
-				var data = $.parseJSON(response);   
-				console.log(data);
-				swal({
-					"title": data.title, 
-					"text": data.text, 
-					"type": data.type,
-					"confirmButtonClass": "btn " + data.class + " m-btn m-btn--wide"
+		swal({
+			title: 'Are you sure?',
+			text: "The department will be removed!",
+			type: 'warning',
+			showCancelButton: true,
+			confirmButtonClass: "btn btn-brand m-btn m-btn--wide",
+			confirmButtonText: 'Yes, remove it!'
+		}).then(function(result) {
+			if (result.value) {
+				console.log($url);
+				$.ajax({
+					type: 'PUT',
+					url: $url,
+					data: { items },
+					success: function(response) {
+						var data = $.parseJSON(response);   
+						console.log(data);
+						swal({
+							"title": data.title, 
+							"text": data.text, 
+							"type": data.type,
+							"confirmButtonClass": "btn " + data.class + " m-btn m-btn--wide"
+						});
+						DatatableDataLocalDemo.reload();
+					}, 
+					complete: function() {
+						window.onkeydown = null;
+						window.onfocus = null;
+					}
 				});
-				DatatableDataLocalDemo.reload();
-			}, 
-			complete: function() {
-				window.onkeydown = null;
-				window.onfocus = null;
 			}
 		});
 	});

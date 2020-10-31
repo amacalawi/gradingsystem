@@ -74,13 +74,21 @@ var DatatableDataLocalDemo = function () {
 			title: "Type",
 			// callback function support for column rendering
 			template: function (row) {
+				var class_type = '';
 				var type = {
 					1 : {'class': 'childhood-bg'},
 					2 : {'class': 'primary-bg'}, 
-                    3 : {'class': 'secondary-bg'},
-                    4 : {'class': 'higher-bg'}
+					3 : {'class': 'secondary-bg'},
+					4 : {'class': 'higher-bg'}
 				};
-				return '<span class="m-badge ' + type[row.designationTypeID].class + ' m-badge--wide">' + row.designationType + '</span>';
+
+				var str = '';
+				for(var x=0; x<row.designationTypeID.length; x++){
+					str = row.designationTypeName[x].charAt(0);
+					class_type += '<span class="m-badge ' + type[row.designationTypeID[x]].class + ' m-badge--wide">' + str + '</span> '	
+				}
+
+				return class_type;
 			}
 		}, {
 			field: "Actions",

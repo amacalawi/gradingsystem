@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\GradingSheet;
 use App\Models\Batch;
 use App\Models\Student;
+use App\Models\SectionInfo;
 
 class Admission extends Model
 {
@@ -85,7 +86,7 @@ class Admission extends Model
         return $this->hasOne('App\Models\Student', 'id', 'student_id');
     }
 
-    public function get_students_via_gradingsheet($id)
+    public function get_students_via_gradingsheet($id, $gender)
     {
         $results = self::with([
             'student' => function($q) {
@@ -98,9 +99,13 @@ class Admission extends Model
                     'lastname'
                 ]);
             },
-        ])->where([
+        ])
+        ->whereIn('student_id', 
+            (new Student)->select('id')->where('gender', $gender)
+        )
+        ->where([
             'batch_id' => (new Batch)->get_current_batch(),
-            'section_id' => (new GradingSheet)->get_column_via_identifier('section_id', $id),
+            'section_id' =>  (new SectionInfo)->where('id', (new GradingSheet)->get_column_via_identifier('section_info_id', $id))->pluck('section_id'),
             'status' => 'admit',
             'is_active' => 1
         ])->orderBy('id', 'ASC')->get();

@@ -14,14 +14,21 @@ class Designation extends Model
 
     public function fetch($id)
     {
-        $designation = self::find($id);
-        if ($designation) {
+        $designation = self::with([
+            'edtypes' =>  function($q) { 
+                $q->select(['designations_education_types.id', 'designations_education_types.designation_id', 'designations_education_types.education_type_id']);
+            }
+        ])
+        ->where('id', $id)->get();
+
+        if ($designation->count() > 0) {
+            $designation = $designation->first();
             $results = array(
                 'id' => ($designation->id) ? $designation->id : '',
                 'code' => ($designation->code) ? $designation->code : '',
                 'name' => ($designation->name) ? $designation->name : '',
                 'description' => ($designation->description) ? $designation->description : '',
-                'education_type_id' => ($designation->education_type_id) ? $designation->education_type_id : ''
+                'education_type_id' => ($designation->id) ? $designation->edtypes->map(function($a) { return $a->education_type_id; }) : ''
             );
         } else {
             $results = array(
@@ -33,6 +40,11 @@ class Designation extends Model
             );
         }
         return (object) $results;
+    }
+
+    public function edtypes()
+    {
+        return $this->hasMany('App\Models\DesignationEducationType', 'designation_id', 'id')->where('designations_education_types.is_active', 1);
     }
 
     public function edtype()

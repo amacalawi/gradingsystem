@@ -60,16 +60,16 @@ var DatatableDataLocalDemo = function () {
 			textAlign: 'center',
 			selector: {class: 'm-checkbox--solid m-checkbox--brand'}
 		}, 
-		/*{
+		{
 			field: "admissionSecCode",
 			title: "Classcode"
-		},*/
-		{
-			field: "admissionSecName",
-			title: "Section"
-		}, {
+		},
+		{	
 			field: "admissionLvlName",
             title: "Level",
+		}, {
+			field: "admissionSecName",
+			title: "Section"
         }, {
 			field: "admissionAdviserId",
             title: "Adviser",

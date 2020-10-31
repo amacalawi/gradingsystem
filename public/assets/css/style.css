@@ -477,7 +477,7 @@ span[aria-expanded="true"]:before {
 
 .class-record th:nth-child(2),
 .class-record td:nth-child(2) {
-    width: 200px !important;
+    width: 250px !important;
 }
 
 .class-record td {
@@ -597,6 +597,7 @@ a[data-dismiss="modal"] {
     display: none !important;
 }
 
+.bootstrap-select button[data-id="subject_id"][data-toggle="dropdown"],
 .bootstrap-select button[data-id="education_type_id"][data-toggle="dropdown"],
 .bootstrap-select button[data-id="type"][data-toggle="dropdown"],
 .bootstrap-select button[data-id="quarter_id"][data-toggle="dropdown"],
@@ -852,4 +853,8 @@ a[data-dismiss="modal"] {
 
 .active-menu-items i span {
     background: #22b9ff !important;
+}
+
+.gray-bg {
+    background: #d8dade !important;
 }
