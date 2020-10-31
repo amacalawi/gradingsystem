@@ -934,12 +934,14 @@ class GradingSheetsController extends Controller
         preg_match_all('!\d+!', $request->file('import_file')->getClientOriginalName(), $gradingsheet_id);
         $gs_id = implode(' ', $gradingsheet_id[0]); //get file id
 
-        if($gs_id == $id)
-        {
+        //if($gs_id == $id)
+        //{
             $path = $request->file('import_file')->store('Imports');
             Excel::import(new GradingSheetImport($id), $path);
             return back();
-        }
+        //} else {
+            //return back();
+        //}
 
     }
 
