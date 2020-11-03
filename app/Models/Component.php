@@ -138,6 +138,14 @@ class Component extends Model
             'is_active' => 1
         ])
         ->whereIn('id', 
+            (new ComponentSubject)->select('component_id')
+            ->where([
+                'batch_id' => (new Batch)->get_current_batch(),
+                'subject_id' => $subject,
+                'is_active' => 1
+            ])
+        )
+        ->whereIn('id', 
             (new ComponentQuarter)->select('component_id')
             ->where([
                 'batch_id' => (new Batch)->get_current_batch(),

@@ -433,21 +433,54 @@ class ComponentsController extends Controller
 
         foreach ($request->quarter_id as $quarter) {
             foreach ($request->subject_id as $subject) {
-                $activitiesCount = 10; $iteration = 1;
-                while ($activitiesCount != 0) {
-                    $activity = Activity::create([
-                        'component_id' => $component->id,
-                        'quarter_id' => $quarter,
-                        'subject_id' => $subject,
-                        'activity' => 'A'.$iteration,
-                        'value' => NULL,
-                        'description' => 'Activity '.$iteration,
-                        'created_at' => $timestamp,
-                        'created_by' => Auth::user()->id
-                    ]);
-                    $this->audit_logs('activities', $activity->id, 'has generated a new component activity.', Activity::find($activity->id), $timestamp, Auth::user()->id);
+                $material = Subject::where('id', $subject)->pluck('material_id')[0];
+                if ($material == 1) {
+                    $activitiesCount = 10; $iteration = 1;
+                    while ($activitiesCount != 0) {
+                        $activity = Activity::create([
+                            'component_id' => $component->id,
+                            'quarter_id' => $quarter,
+                            'subject_id' => $subject,
+                            'activity' => 'A'.$iteration,
+                            'value' => NULL,
+                            'description' => 'Activity '.$iteration,
+                            'created_at' => $timestamp,
+                            'created_by' => Auth::user()->id
+                        ]);
+                        $this->audit_logs('activities', $activity->id, 'has generated a new component activity.', Activity::find($activity->id), $timestamp, Auth::user()->id);
 
-                    $iteration++; $activitiesCount--;
+                        $iteration++; $activitiesCount--;
+                    }
+                }
+                else if ($material == 2) {
+                    $activitiesCount = 10; $iteration = 1;
+                    $conducts = array(
+                        "affirms one's faith by doing what is good and right",
+                        "shows honesty in dealing with others",
+                        "completes the assigned tasks promptly",
+                        "shares blessings with the less fortunate",
+                        "shows consistency in doing good to others",
+                        "maintains cleanliness or orderliness of the surroundings",
+                        "promotes and develops Filipino values and traditions",
+                        "respects people in the community",
+                        "shows concern to school properties",
+                        "demostrates discipline by working conscientiously",
+                    );
+                    while ($activitiesCount != 0) {
+                        $activity = Activity::create([
+                            'component_id' => $component->id,
+                            'quarter_id' => $quarter,
+                            'subject_id' => $subject,
+                            'activity' => 'C'.$iteration,
+                            'value' => 4,
+                            'description' => $conducts[$iteration-1],
+                            'created_at' => $timestamp,
+                            'created_by' => Auth::user()->id
+                        ]);
+                        $this->audit_logs('activities', $activity->id, 'has generated a new component activity.', Activity::find($activity->id), $timestamp, Auth::user()->id);
+
+                        $iteration++; $activitiesCount--;
+                    }
                 }
             }
         }

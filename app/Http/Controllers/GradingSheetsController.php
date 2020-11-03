@@ -291,7 +291,8 @@ class GradingSheetsController extends Controller
         $components = (new Component)->get_components_via_gradingsheet($id);
         $male_students = (new Admission)->get_students_via_gradingsheet($id, 'Male');
         $female_students = (new Admission)->get_students_via_gradingsheet($id, 'Female');
-        return view('modules/academics/gradingsheets/all/edit')->with(compact('menus', 'grading', 'quarters', 'sections', 'subjects', 'components', 'male_students', 'female_students', 'segment'));
+        $tests = Subject::where('id', 3)->pluck('material_id')[0];
+        return view('modules/academics/gradingsheets/all/edit')->with(compact('menus', 'grading', 'quarters', 'sections', 'subjects', 'components', 'male_students', 'female_students', 'segment', 'tests'));
     }
     
     public function store(Request $request)
