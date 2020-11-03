@@ -395,8 +395,20 @@
             var self = $(this);
             var maxValue = $(this).attr('maxvalue');
 
-            if (parseFloat(self.val()) > parseFloat(maxValue)) {
-                self.val(maxValue);
+            if (maxValue != '') { 
+                if (parseFloat(self.val()) > parseFloat(maxValue)) {
+                    swal({
+                        title: "Oops...",
+                        text: "the input value must be less than or equal to the HPS",
+                        type: "warning",
+                        showCancelButton: false,
+                        closeOnConfirm: true,
+                        confirmButtonClass: "btn btn-warning btn-focus m-btn m-btn--pill m-btn--air m-btn--custom"
+                    });
+                    self.val('');
+                }
+            } else {
+                self.val('');
             }
             $.gradingsheet.compute(self.closest('tr'), self.closest('td').attr('group'));
         });
@@ -406,8 +418,20 @@
             var self = $(this);
             var maxValue = $(this).attr('maxvalue');
 
-            if (parseFloat(self.val()) > parseFloat(maxValue)) {
-                self.val(maxValue);
+            if (maxValue != '') { 
+                if (parseFloat(self.val()) > parseFloat(maxValue)) {
+                    swal({
+                        title: "Oops...",
+                        text: "the input value must be less than or equal to the HPS",
+                        type: "warning",
+                        showCancelButton: false,
+                        closeOnConfirm: true,
+                        confirmButtonClass: "btn btn-warning btn-focus m-btn m-btn--pill m-btn--air m-btn--custom"
+                    });
+                    self.val('');
+                }
+            } else {
+                self.val('');
             }
             $.gradingsheet.compute(self.closest('tr'), self.closest('td').attr('group'));
         });
