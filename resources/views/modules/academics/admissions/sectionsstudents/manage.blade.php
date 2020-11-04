@@ -42,6 +42,8 @@
 </div>
 
 @include('modals.import-class')
+@include('modals.import-class-subject')
+@include('modals.import-class-student')
 
 @endsection
 

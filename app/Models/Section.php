@@ -145,7 +145,7 @@ class Section extends Model
     {
         $sections = self::where('is_active', 1)->where('education_type_id', $type)
         ->whereNotIn('id',function($query) {
-            $query->select('section_id')->from('admissions');
+            $query->select('section_id')->from('sections_info');
         })->orderBy('id', 'asc')->get();
         
 
@@ -172,7 +172,7 @@ class Section extends Model
     {
         $sections = self::where('is_active', 1)->where('level_id', $level)->where('education_type_id', $type)
         ->whereNotIn('id',function($query) {
-            $query->select('section_id')->from('admissions');
+            $query->select('section_id')->from('sections_info');
         })->orderBy('id', 'asc')->get();
         
 

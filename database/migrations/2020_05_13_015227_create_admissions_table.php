@@ -16,7 +16,7 @@ class CreateAdmissionsTable extends Migration
         Schema::create('admissions', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('batch_id')->unsigned();
-            $table->integer('section_id')->unsigned();
+            $table->integer('section_info_id')->unsigned();
             $table->integer('student_id')->unsigned();
             $table->string('status', 15)->nullable();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
