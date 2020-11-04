@@ -86,7 +86,7 @@
 <table id="gradingsheet-table" class="table-bordered" style="1px solid black;">
     <tbody>
         <tr>
-            <th style="font-size:15px;">
+            <th style="font-size:15px;" colspan="10">
                 <h4>Grading Sheet Information</h4>
             </th>
         </tr>

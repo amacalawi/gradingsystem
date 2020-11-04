@@ -78,7 +78,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group m-form__group required">
-                                {{ Form::label('type', 'Type', ['class' => '']) }}
+                                {{ Form::label('type', 'Education Type', ['class' => '']) }}
                                 {{
                                     Form::select('type', $types, $value = $section->education_type_id, ['class' => 'form-control form-control-lg m-input m-input--solid'])
                                 }}

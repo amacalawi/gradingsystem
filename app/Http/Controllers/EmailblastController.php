@@ -126,7 +126,7 @@ class EmailblastController extends Controller
             }
             if($sections){
                 foreach($sections as $section){
-                    $users_emails = Admission::select('email', 'type', 'users.id as users_id')->where('admissions.section_id', $section)->join('users', 'users.id', '=', 'admissions.student_id')->where('users.is_active', 1)->get();
+                    $users_emails = Admission::select('email', 'type', 'users.id as users_id')->where('admissions.section_info_id', $section)->join('users', 'users.id', '=', 'admissions.student_id')->where('users.is_active', 1)->get();
                     foreach($users_emails as $user_email){
                         if (!in_array($user_email->email, $emails)){
                             if($user_email->type == 'staff'){

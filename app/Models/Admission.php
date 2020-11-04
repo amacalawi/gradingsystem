@@ -23,7 +23,7 @@ class Admission extends Model
             $results = array(
                 'id' => ($admission->id) ? $admission->id : '',
                 'batch_id' => ($admission->batch_id) ? $admission->batch_id : '',
-                'section_id' => ($admission->section_id) ? $admission->section_id : '',
+                'section_info_id' => ($admission->section_info_id) ? $admission->section_info_id : '',
                 'student_id' => ($admission->student_id) ? $admission->student_id : '',
                 'status' => ($admission->status) ? $admission->status : '',
             );
@@ -31,7 +31,7 @@ class Admission extends Model
             $results = array(
                 'id' => '',
                 'batch_id' => '',
-                'section_id' => '',
+                'section_info_id' => '',
                 'student_id' =>  '',
                 'status' => '',
             );
@@ -60,7 +60,7 @@ class Admission extends Model
         $student = Admission::select('admissions.*','students.id as stud_id','students.firstname', 'students.middlename', 'students.lastname', 'students.user_id')
             ->join('students', 'students.id', '=', 'admissions.student_id')
             ->where('admissions.is_active', 1)
-            ->where('admissions.section_id', $section_id)
+            ->where('admissions.section_info_id', $section_id)
             ->get();
             
         return $student;
@@ -68,7 +68,7 @@ class Admission extends Model
     
     public function getthisAdmitted($id)
     {
-        $admitted = Admission::select('*', 'admissions.id as admission_id')->where('section_id', $id)
+        $admitted = Admission::select('*', 'admissions.id as admission_id')->where('section_info_id', $id)
         ->join('students', 'students.id', '=', 'admissions.student_id')
         ->orderBy('admissions.id', 'desc')
         ->get();
@@ -105,7 +105,7 @@ class Admission extends Model
         )
         ->where([
             'batch_id' => (new Batch)->get_current_batch(),
-            'section_id' =>  (new SectionInfo)->where('id', (new GradingSheet)->get_column_via_identifier('section_info_id', $id))->pluck('section_id'),
+            'section_info_id' =>  (new SectionInfo)->where('id', (new GradingSheet)->get_column_via_identifier('section_info_id', $id))->pluck('section_info_id'),
             'status' => 'admit',
             'is_active' => 1
         ])->orderBy('id', 'ASC')->get();
@@ -125,7 +125,7 @@ class Admission extends Model
     public function get_student_level_section($id, $batch)
     {
         $admitted = Admission::select('sections.name as section_name', 'levels.name as level_name')->where('admissions.student_id', $id)->where('admissions.batch_id', $batch)
-        ->join('sections', 'sections.id', '=', 'admissions.section_id')
+        ->join('sections', 'sections.id', '=', 'admissions.section_info_id')
         ->join('sections_info', 'sections_info.section_id', '=', 'sections.id')
         ->join('levels', 'levels.id', '=', 'sections_info.level_id')
         ->get();
