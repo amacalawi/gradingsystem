@@ -87,7 +87,7 @@ class AdmissionController extends Controller
                     'admissionAdviserId' => ucwords((new Staff)->where('id', $admission->adviser_id)->first()->firstname).' '.ucwords((new Staff)->where('id', $admission->adviser_id)->first()->lastname),
                     'admissionLevel' => $admission->level_id, 
                     'admissionLvlName' => $admission->lvlname,
-                    'admissionNoStudent' => (new Admission)->where(['section_info_id' => $admission->section_info_id, 'batch_id' => $admission->batch_id, 'is_active' => 1])->count(),
+                    'admissionNoStudent' => (new Admission)->where(['section_info_id' => $admission->id, 'batch_id' => $admission->batch_id, 'is_active' => 1])->count(),
                     'admissionNoSubject' => (new SectionsSubjects)->where(['section_info_id' => $admission->id, 'is_active' => 1])->count(),
                     'admissionModified' => ($admission->updated_at !== NULL) ? date('d-M-Y', strtotime($admission->updated_at)).'<br/>'. date('h:i A', strtotime($admission->updated_at)) : date('d-M-Y', strtotime($admission->created_at)).'<br/>'. date('h:i A', strtotime($admission->created_at))
                 ];
@@ -119,7 +119,7 @@ class AdmissionController extends Controller
                     'admissionAdviserId' => ucwords((new Staff)->where('id', $admission->adviser_id)->first()->firstname).' '.ucwords((new Staff)->where('id', $admission->adviser_id)->first()->lastname),
                     'admissionLevel' => $admission->level_id, 
                     'admissionLvlName' => $admission->lvlname,
-                    'admissionNoStudent' => (new Admission)->where(['section_info_id' => $admission->section_info_id, 'batch_id' => $admission->batch_id, 'is_active' => 1])->count(),
+                    'admissionNoStudent' => (new Admission)->where(['section_info_id' => $admission->id, 'batch_id' => $admission->batch_id, 'is_active' => 1])->count(),
                     'admissionNoSubject' => (new SectionsSubjects)->where(['section_info_id' => $admission->id, 'is_active' => 1])->count(),
                     'admissionModified' => ($admission->updated_at !== NULL) ? date('d-M-Y', strtotime($admission->updated_at)).'<br/>'. date('h:i A', strtotime($admission->updated_at)) : date('d-M-Y', strtotime($admission->created_at)).'<br/>'. date('h:i A', strtotime($admission->created_at))
                 ];
