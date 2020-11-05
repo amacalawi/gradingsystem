@@ -216,7 +216,7 @@ class ClassRecordController extends Controller
             ->where([
                 'batch_id' => $batch,
                 'quarter_id' => $quarter,
-                'section_id' => $section,
+                'section_info_id' => $id,
                 'is_active' => 1
             ])
             ->whereIn('subject_id', 
@@ -271,7 +271,7 @@ class ClassRecordController extends Controller
             ->where([
                 'batch_id' => $batch,
                 'quarter_id' => $quarter,
-                'section_id' => $section,
+                'section_info_id' => $id,
                 'is_active' => 1
             ])
             ->whereIn('subject_id', 
@@ -316,7 +316,7 @@ class ClassRecordController extends Controller
             $gradingsheetID = (new GradingSheet)->where([
                 'batch_id' => $batch,
                 'quarter_id' => $quarter,
-                'section_info_id' => $section,
+                'section_info_id' => $id,
                 'subject_id' => $subject,
                 'is_active' => 1
             ])->pluck('id')->first();

@@ -105,7 +105,7 @@ class Admission extends Model
         )
         ->where([
             'batch_id' => (new Batch)->get_current_batch(),
-            'section_id' =>  (new SectionInfo)->where('id', (new GradingSheet)->get_column_via_identifier('section_info_id', $id))->pluck('section_id'),
+            'section_info_id' =>  (new SectionInfo)->where('id', (new GradingSheet)->get_column_via_identifier('section_info_id', $id))->pluck('section_id'),
             'status' => 'admit',
             'is_active' => 1
         ])->orderBy('id', 'ASC')->get();

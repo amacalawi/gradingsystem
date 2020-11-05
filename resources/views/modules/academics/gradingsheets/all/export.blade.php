@@ -192,8 +192,38 @@
             //$total_row_after = $rownumber+count($students)+3; // 3 number of spaces row
             //$total_row_befor = $total_row_after+40 // 40 number of qg_lookup
         @endphp
-        
-        @foreach ($students as $student)
+
+        @if (count($male_students) > 0)
+            <tr class="tr_shaded">
+                <td class="fixed freeze text-center scrolling_table_1 gray-bg">-</td>
+                <td class="fixed freeze text-center scrolling_table_1 gray-bg">MALE</td>
+                @foreach ($components as $component)
+                    @foreach ($component->activities as $activity)
+                        <td group="{{ $component->id }}" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                    @endforeach
+                    @if ($component->is_sum_cell > 0)
+                        <td group="{{ $component->id }}" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                    @endif
+                    @if ($component->is_hps_cell > 0)
+                        <td group="{{ $component->id }}" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                    @endif
+                    @if ($component->is_ps_cell > 0)
+                        <td group="{{ $component->id }}" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                    @endif
+                    <td group="{{ $component->id }}" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                @endforeach
+                <td class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+            </tr>
+            @php
+                $rownumber++;   
+            @endphp
+        @endif
+
+        @foreach ($male_students as $student)
             @php
                 $columnletter_x = 'A'; 
                 $columnletter_y = 'A';
@@ -392,5 +422,235 @@
         
         @endforeach
 
+
+        <!-- Female -->
+        @if (count($female_students) > 0)
+            <tr class="tr_shaded">
+                <td class="fixed freeze text-center scrolling_table_1 gray-bg">-</td>
+                <td class="fixed freeze text-center scrolling_table_1 gray-bg">FEMALE</td>
+                @foreach ($components as $component)
+                    @foreach ($component->activities as $activity)
+                        <td group="{{ $component->id }}" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                    @endforeach
+                    @if ($component->is_sum_cell > 0)
+                        <td group="{{ $component->id }}" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                    @endif
+                    @if ($component->is_hps_cell > 0)
+                        <td group="{{ $component->id }}" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                    @endif
+                    @if ($component->is_ps_cell > 0)
+                        <td group="{{ $component->id }}" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                    @endif
+                    <td group="{{ $component->id }}" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                @endforeach
+                <td class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+            </tr>
+            @php
+                $rownumber++;   
+            @endphp
+        @endif
+
+        @foreach ($female_students as $student)
+            @php
+                $columnletter_x = 'A'; 
+                $columnletter_y = 'A';
+
+                $hps_col_x = 'C';
+                $percent_col_x = 'C';
+                $percent_array = array();
+            @endphp
+            <tr class="">
+                <td style="text-align: center; border: 1px solid black;" class="fixed freeze text-center scrolling_table_1">
+                    {{ $iteration }}
+                    @php 
+                        $totalpercentage = 0;
+                        $columnletter_x++;
+                        $columnletter_y++;
+                    @endphp
+                </td>
+                <td style="border: 1px solid black;" class="fixed freeze text-left scrolling_table_1" title="{{ $student->identification_no }}">
+                    {{ $student->fullname }}
+                    @php 
+                        $columnletter_x++;
+                        //$columnletter_y++;
+                    @endphp
+                </td>
+
+                @foreach ($components as $component)
+                    
+                    @php $colored = get_clour($component->palette); @endphp
+
+                    @php 
+                        $sum = 0;
+                        $hps = 0;
+                        $ps = 0;
+                        $percentage = 0;
+                    @endphp
+
+                    <!-- A(N) -->
+                    @foreach ($component->activities as $activity)
+                        @php 
+                            $score = $gradings->get_activity_score_via_activity($activity->id, $student->student_id, $grading->id);
+                            $sum += !empty($score) ? floatval($score) : 0 ; 
+                            
+                            if (floatval($score) > 0) { 
+                                $hps += $activity->value;
+                            }
+
+                            $columnletter_y++;
+                            $colored = get_clour($component->palette);
+                        @endphp
+                        <td style="text-align: center; border: 1px solid black; background-color:{{$colored}};" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding">
+                            {{$score}}
+                        </td>
+                    @endforeach
+
+
+                    <!-- SUM -->
+                    <td style="text-align: center; border: 1px solid black; background-color:{{$colored}};" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding sum-cell">
+                        =SUM({{$columnletter_x}}{{$rownumber}}:{{$columnletter_y}}{{$rownumber}})
+                    </td>
+                    @php
+                        $columnletter_x++;
+                        $columnletter_y++;
+                        $columnletter_x = $columnletter_y;
+                        $sum_col_location = $columnletter_x;
+                        $percent_col_x = $columnletter_x;
+                        $columnletter_x++;
+                    @endphp
+
+
+                    <!-- HPS -->
+                    @php
+                        $count = 1;
+                        $hps_row_default = 9; //Change only if table adjusted
+                        $hps_formula = '=(';
+                    @endphp
+
+                    @foreach ($component->activities as $activity)
+                        @php
+                            $hps_formula .= 'IF('.$hps_col_x.$rownumber.'="" , 0, '.$hps_col_x.$hps_row_default.')';
+                                
+                            if( count($component->activities) > $count ){
+                                $hps_formula .= '+';
+                                $count++;
+                            }
+
+                            $hps_col_x++;
+
+                        @endphp
+                    @endforeach
+
+                    @php
+                        $hps_formula .= ')';
+                        $hps_col_x++;
+                        $hps_col_location = $hps_col_x;
+                    @endphp
+
+                    <td style="text-align: center; border: 1px solid black; background-color:{{$colored}};" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding hps-cell">
+                        {{$hps_formula}} <!-- HPS Complete Formula -->
+                    </td>
+
+                    @php
+                        $columnletter_x++;
+                        $columnletter_y++;
+                        $hps_col_x++;
+                        $percent_col_x++; 
+                    @endphp 
+
+
+                    <!-- PS -->
+                    @php
+                        $ps_formula = '=IF('.$sum_col_location.$rownumber.'>0,'.'('.$sum_col_location.$rownumber.'/'.$hps_col_location.$rownumber.')*100,0)'; 
+                    @endphp
+                    
+                    <td style="text-align: center; border: 1px solid black; background-color:{{$colored}};" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding ps-cell">
+                        {{$ps_formula}} <!-- PS Complete Formula -->
+                    </td>            
+                    @php
+                        $columnletter_x++;
+                        $columnletter_y++;
+                        $hps_col_x++;
+                        $percent_col_x++; 
+                    @endphp
+
+
+                    <!-- Percent N% -->
+                    <td style="text-align: center; border: 1px solid black; background-color:{{$colored}};" group="{{ $component->id }}" maxvalue="{{ $component->percentage }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 percentage-cell">
+                        
+                        @php
+                            $percent_col_x++; 
+                            $percent_formula = '=ROUND('.$columnletter_y.$rownumber.'*'.$percent_col_x.'8'.',2)';
+                        @endphp
+                        {{ $percent_formula }} <!-- Percent Complete Formula -->
+                    </td>
+                    @php
+                        $columnletter_x++;
+                        $columnletter_y++;
+                        $hps_col_x++;
+                        array_push($percent_array, $columnletter_y);
+                    @endphp
+
+                @endforeach
+
+
+                <!-- Initial -->
+                <td style="text-align: center; border: 1px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1 initial-cell">
+                    @php
+                        $initial_formula = '=(';
+                        $initial_counter = 1;
+
+                        foreach($percent_array as $key => $value){
+                            
+                            $initial_formula .= $value.$rownumber;
+                            if(count($percent_array) > $initial_counter ){
+                                $initial_formula .= '+';
+                                $initial_counter++;
+                            }
+                        }
+                        
+                        //Add TC value
+                        $initial_formula .= ')+';
+                        $initial_formula .= $column_letter_repo['TC'].$rownumber;
+                        
+                    @endphp
+
+                    {{$initial_formula}} <!-- Initial Complete Formula -->
+                </td>
+
+
+                <!-- QG -->
+                <td style="text-align: center; border: 1px solid black; background-color:#fffcbe;" class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg quarter-cell">
+                    @php
+                        //$qg_formula = "=LOOKUP(".$column_letter_repo['initial'].$rownumber.","."'Quarter Grade'! A".$total_row_after.":"."B".$total_row_befor.")";
+                        $qg_formula = "=LOOKUP(".$column_letter_repo['initial'].$rownumber.","."'Quarter Grade'! A2:"."B42)";
+                    @endphp
+                    {{$qg_formula}} <!-- QG Complete Formula -->
+                </td>
+
+
+                <!-- TC -->
+                <td style="text-align: center; border: 1px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell">
+                    {{ $gradings->get_colum_via_gradingsheet_student('adjustment_grade', $grading->id, $student->student_id) }}
+                </td>
+
+                <!-- Rating -->
+                <td style="text-align: center; border: 1px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell">
+                    {{ $gradings->get_colum_via_gradingsheet_student('rating', $grading->id, $student->student_id) }}
+                </td>
+
+                <!-- Ranking -->
+                <td style="text-align: center; border: 1px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell">
+                    {{ $gradings->get_colum_via_gradingsheet_student('ranking', $grading->id, $student->student_id) }}
+                </td>                
+            </tr>
+
+            @php $iteration++; $rownumber++; @endphp
+        
+        @endforeach
     </tbody>
 </table>
