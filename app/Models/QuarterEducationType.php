@@ -21,5 +21,17 @@ class QuarterEducationType extends Model
     {   
         return $this->belongsTo('App\Models\EducationType');
     }
+    
+    public function all_quarters_via_type($type)
+    {
+        $quarters = self::where([
+            'education_type_id' => $type,
+            'is_active' => 1
+        ])
+        ->orderBy('id', 'asc')
+        ->get();
+
+        return $quarters;
+    }
 }
 
