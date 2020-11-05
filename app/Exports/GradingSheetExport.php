@@ -32,7 +32,8 @@ class GradingSheetExport implements FromView, WithMultipleSheets
             'sections' => (new Section)->all_sections(),
             'subjects' => (new Subject)->all_subjects(),
             'components' => (new Component)->get_components_via_gradingsheet($this->query),
-            'students' => (new Admission)->get_students_via_gradingsheet($this->query),
+            'male_students' => (new Admission)->get_students_via_gradingsheet($this->query, 'Male'),
+            'female_students' => (new Admission)->get_students_via_gradingsheet($this->query, 'Female')
         ]);
     }
  

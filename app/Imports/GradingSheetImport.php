@@ -23,7 +23,8 @@ class GradingSheetImport implements ToModel, WithCalculatedFormulas, WithMappedC
     
     public function mapping(): array
     {
-        $students = (new Admission)->get_students_via_gradingsheet($this->id);
+        $male_students = (new Admission)->get_students_via_gradingsheet($id, 'Male');
+        $female_students = (new Admission)->get_students_via_gradingsheet($id, 'Female');
         $components = (new Component)->get_components_via_gradingsheet($this->id);
 
         $row = 10 ;
@@ -50,7 +51,8 @@ class GradingSheetImport implements ToModel, WithCalculatedFormulas, WithMappedC
     {
         $timestamp = date('Y-m-d H:i:s');
 
-        $students = (new Admission)->get_students_via_gradingsheet($this->id);
+        $male_students = (new Admission)->get_students_via_gradingsheet($id, 'Male');
+        $female_students = (new Admission)->get_students_via_gradingsheet($id, 'Female');
         $components = (new Component)->get_components_via_gradingsheet($this->id);
        
         $row = 10 ;// row
