@@ -730,6 +730,26 @@ class DatabaseSeeder extends Seeder
                 'order' => '4',
                 'created_by' => 1
             ],
+            [   
+                'module_id' => '3',
+                'code' => 'report-card',
+                'name' => 'Report Card',
+                'description' => 'Report Card Description',
+                'slug' => 'report-card',
+                'icon' => '',
+                'order' => '44',
+                'created_by' => 1
+            ],
+            [   
+                'module_id' => '3',
+                'code' => 'transcript-of-record',
+                'name' => 'Transcript of Record',
+                'description' => 'Transcript of Record Description',
+                'slug' => 'transcript-of-record',
+                'icon' => '',
+                'order' => '45',
+                'created_by' => 1
+            ],
         ];
         foreach ($sub_modules as $sub_module) {
             DB::table('sub_modules')->insert($sub_module);
@@ -1100,6 +1120,18 @@ class DatabaseSeeder extends Seeder
             [   
                 'role_id' => '1',
                 'sub_module_id' => '43',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '44',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '45',
                 'permissions' => '1,1,1,1',
                 'created_by' => 1
             ]
@@ -2371,6 +2403,512 @@ class DatabaseSeeder extends Seeder
         foreach ($levels as $level) {
             DB::table('levels')->insert($level);
         }
-        
+
+        $materials = [
+            [
+                'code' => "substance",
+                'name' => "Substance",
+                'description' => "Substance Description",
+                'created_by' => 1
+            ], 
+            [
+                'code' => "conduct",
+                'name' => "Conduct",
+                'description' => "Conduct Description",
+                'created_by' => 1
+            ], 
+            [
+                'code' => "homeroom",
+                'name' => "Homeroom",
+                'description' => "Homeroom Description",
+                'created_by' => 1
+            ], 
+            [
+                'code' => "co-curricular",
+                'name' => "Co-curricular",
+                'description' => "Co-curricular Description",
+                'created_by' => 1
+            ]
+        ];
+        foreach ($materials as $material) {
+            DB::table('materials')->insert($material);
+        }
+
+        $subjects = [
+            [
+                'code' => "CLEd",
+                'name' => "CLEd",
+                'description' => "CLEd Description",
+                'coordinator_id' => NULL,
+                'is_mapeh' => 0,
+                'is_tle' => 0,
+                'material_id' => 1,
+                'order' => 1,
+                'created_by' => 1
+            ],
+            [
+                'code' => "Fil",
+                'name' => "Filipino",
+                'description' => "Filipino Description",
+                'coordinator_id' => NULL,
+                'is_mapeh' => 0,
+                'is_tle' => 0,
+                'material_id' => 1,
+                'order' => 2,
+                'created_by' => 1
+            ],
+            [
+                'code' => "Eng",
+                'name' => "English",
+                'description' => "English Description",
+                'coordinator_id' => NULL,
+                'is_mapeh' => 0,
+                'is_tle' => 0,
+                'material_id' => 1,
+                'order' => 3,
+                'created_by' => 1
+            ],
+            [
+                'code' => "Math",
+                'name' => "Mathematics",
+                'description' => "Mathematics Description",
+                'coordinator_id' => NULL,
+                'is_mapeh' => 0,
+                'is_tle' => 0,
+                'material_id' => 1,
+                'order' => 4,
+                'created_by' => 1
+            ],
+            [
+                'code' => "Sci",
+                'name' => "Science and Health",
+                'description' => "Science and Health Description",
+                'coordinator_id' => NULL,
+                'is_mapeh' => 0,
+                'is_tle' => 0,
+                'material_id' => 1,
+                'order' => 5,
+                'created_by' => 1
+            ],
+            [
+                'code' => "AP",
+                'name' => "Araling Panlipunan",
+                'description' => "Araling Panlipunan Description",
+                'coordinator_id' => NULL,
+                'is_mapeh' => 0,
+                'is_tle' => 0,
+                'material_id' => 1,
+                'order' => 6,
+                'created_by' => 1
+            ],
+            [
+                'code' => "Music",
+                'name' => "Music",
+                'description' => "Music Description",
+                'coordinator_id' => NULL,
+                'is_mapeh' => 1,
+                'is_tle' => 0,
+                'material_id' => 1,
+                'order' => 7,
+                'created_by' => 1
+            ],
+            [
+                'code' => "Arts",
+                'name' => "Arts",
+                'description' => "Arts Description",
+                'coordinator_id' => NULL,
+                'is_mapeh' => 1,
+                'is_tle' => 0,
+                'material_id' => 1,
+                'order' => 8,
+                'created_by' => 1
+            ],
+            [
+                'code' => "PE",
+                'name' => "Physical Education",
+                'description' => "Physical Education Description",
+                'coordinator_id' => NULL,
+                'is_mapeh' => 1,
+                'is_tle' => 0,
+                'material_id' => 1,
+                'order' => 9,
+                'created_by' => 1
+            ],
+            [
+                'code' => "Health",
+                'name' => "Health",
+                'description' => "Health Description",
+                'coordinator_id' => NULL,
+                'is_mapeh' => 1,
+                'is_tle' => 0,
+                'material_id' => 1,
+                'order' => 10,
+                'created_by' => 1
+            ],
+            [
+                'code' => "ICT",
+                'name' => "ICT",
+                'description' => "ICT Description",
+                'coordinator_id' => NULL,
+                'is_mapeh' => 0,
+                'is_tle' => 1,
+                'material_id' => 1,
+                'order' => 11,
+                'created_by' => 1
+            ],
+            [
+                'code' => "LE",
+                'name' => "LE",
+                'description' => "LE Description",
+                'coordinator_id' => NULL,
+                'is_mapeh' => 0,
+                'is_tle' => 1,
+                'material_id' => 1,
+                'order' => 12,
+                'created_by' => 1
+            ],
+            [
+                'code' => "Conduct",
+                'name' => "Conduct",
+                'description' => "Conduct Description",
+                'coordinator_id' => NULL,
+                'is_mapeh' => 0,
+                'is_tle' => 0,
+                'material_id' => 2,
+                'order' => 13,
+                'created_by' => 1
+            ],
+            [
+                'code' => "Homeroom",
+                'name' => "Homeroom",
+                'description' => "Homeroom Description",
+                'coordinator_id' => NULL,
+                'is_mapeh' => 0,
+                'is_tle' => 0,
+                'material_id' => 2,
+                'order' => 14,
+                'created_by' => 1
+            ],
+            [
+                'code' => "Co-curricular",
+                'name' => "Co-curricular",
+                'description' => "Co-curricular Description",
+                'coordinator_id' => NULL,
+                'is_mapeh' => 0,
+                'is_tle' => 0,
+                'material_id' => 2,
+                'order' => 15,
+                'created_by' => 1
+            ]
+        ];
+        foreach ($subjects as $subject) {
+            DB::table('subjects')->insert($subject);
+        }
+
+        $subject_education_types = [
+            [
+                'subject_id' => 1,
+                'education_type_id' => 1,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 1,
+                'education_type_id' => 2,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 1,
+                'education_type_id' => 3,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 1,
+                'education_type_id' => 4,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 2,
+                'education_type_id' => 1,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 2,
+                'education_type_id' => 2,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 2,
+                'education_type_id' => 3,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 2,
+                'education_type_id' => 4,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 3,
+                'education_type_id' => 1,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 3,
+                'education_type_id' => 2,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 3,
+                'education_type_id' => 3,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 3,
+                'education_type_id' => 4,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 4,
+                'education_type_id' => 1,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 4,
+                'education_type_id' => 2,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 4,
+                'education_type_id' => 3,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 4,
+                'education_type_id' => 4,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 5,
+                'education_type_id' => 1,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 5,
+                'education_type_id' => 2,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 5,
+                'education_type_id' => 3,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 5,
+                'education_type_id' => 4,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 6,
+                'education_type_id' => 1,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 6,
+                'education_type_id' => 2,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 6,
+                'education_type_id' => 3,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 6,
+                'education_type_id' => 4,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 7,
+                'education_type_id' => 1,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 7,
+                'education_type_id' => 2,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 7,
+                'education_type_id' => 3,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 7,
+                'education_type_id' => 4,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 8,
+                'education_type_id' => 1,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 8,
+                'education_type_id' => 2,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 8,
+                'education_type_id' => 3,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 8,
+                'education_type_id' => 4,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 9,
+                'education_type_id' => 1,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 9,
+                'education_type_id' => 2,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 9,
+                'education_type_id' => 3,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 9,
+                'education_type_id' => 4,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 10,
+                'education_type_id' => 1,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 10,
+                'education_type_id' => 2,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 10,
+                'education_type_id' => 3,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 10,
+                'education_type_id' => 4,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 11,
+                'education_type_id' => 1,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 11,
+                'education_type_id' => 2,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 11,
+                'education_type_id' => 3,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 11,
+                'education_type_id' => 4,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 12,
+                'education_type_id' => 1,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 12,
+                'education_type_id' => 2,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 12,
+                'education_type_id' => 3,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 12,
+                'education_type_id' => 4,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 13,
+                'education_type_id' => 1,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 13,
+                'education_type_id' => 2,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 13,
+                'education_type_id' => 3,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 13,
+                'education_type_id' => 4,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 14,
+                'education_type_id' => 1,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 14,
+                'education_type_id' => 2,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 14,
+                'education_type_id' => 3,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 14,
+                'education_type_id' => 4,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 15,
+                'education_type_id' => 1,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 15,
+                'education_type_id' => 2,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 15,
+                'education_type_id' => 3,
+                'created_by' => 1
+            ],
+            [
+                'subject_id' => 15,
+                'education_type_id' => 4,
+                'created_by' => 1
+            ],
+        ];
+        foreach ($subject_education_types as $subject_education_type) {
+            DB::table('subjects_education_types')->insert($subject_education_type);
+        }
     }
 }

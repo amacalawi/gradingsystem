@@ -291,8 +291,23 @@ class GradingSheetsController extends Controller
         $components = (new Component)->get_components_via_gradingsheet($id);
         $male_students = (new Admission)->get_students_via_gradingsheet($id, 'Male');
         $female_students = (new Admission)->get_students_via_gradingsheet($id, 'Female');
-        $tests = Subject::where('id', 3)->pluck('material_id')[0];
-        return view('modules/academics/gradingsheets/all/edit')->with(compact('menus', 'grading', 'quarters', 'sections', 'subjects', 'components', 'male_students', 'female_students', 'segment', 'tests'));
+        return view('modules/academics/gradingsheets/all/edit')->with(compact('menus', 'grading', 'quarters', 'sections', 'subjects', 'components', 'male_students', 'female_students', 'segment'));
+    }
+
+    public function view(Request $request, $id)
+    {   
+        $this->is_permitted(1);
+        $this->validated(Auth::user()->id, $id);
+        $menus = $this->load_menus();
+        $segment = request()->segment(4);
+        $grading = (new GradingSheet)->fetch($id);
+        $quarters = (new Quarter)->all_quarters();
+        $sections = (new Section)->all_sections();
+        $subjects = (new Subject)->all_subjects();
+        $components = (new Component)->get_components_via_gradingsheet($id);
+        $male_students = (new Admission)->get_students_via_gradingsheet($id, 'Male');
+        $female_students = (new Admission)->get_students_via_gradingsheet($id, 'Female');
+        return view('modules/academics/gradingsheets/all/view')->with(compact('menus', 'grading', 'quarters', 'sections', 'subjects', 'components', 'male_students', 'female_students', 'segment'));
     }
     
     public function store(Request $request)

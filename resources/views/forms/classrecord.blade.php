@@ -133,7 +133,9 @@
                                                                             <th class="text-center">#</th>
                                                                             <th class="text-center">Student</th>
                                                                             @foreach ($class_records->subjects as $subjects)
+                                                                                @if ($subjects->subject->material_id == 1) 
                                                                                 <th class="header text-center" data-toggle="m-tooltip" data-placement="bottom" colspan="{{ ($subjects->subject->material_id == 1) ? 1 : 2 }}" title="{{ $subjects->subject->description }}">{{ ucwords($subjects->subject->name) }}</th>
+                                                                                @endif
                                                                             @endforeach
                                                                             @if ($class_records->has_mapeh > 0) 
                                                                                 <th class="header text-center" data-toggle="m-tooltip" data-placement="bottom" title="MAPEH">MAPEH</th>
@@ -142,6 +144,11 @@
                                                                                 <th class="header text-center" data-toggle="m-tooltip" data-placement="bottom" colspan="2" title="ICT/LE">ICT(50%)<br/> LE(50%)</th>
                                                                                 <th class="header text-center" data-toggle="m-tooltip" data-placement="bottom" title="ICT/LE">ICT/LE</th>
                                                                             @endif
+                                                                            @foreach ($class_records->subjects as $subjects)
+                                                                                @if ($subjects->subject->material_id != 1) 
+                                                                                <th class="header text-center" data-toggle="m-tooltip" data-placement="bottom" colspan="{{ ($subjects->subject->material_id == 1) ? 1 : 2 }}" title="{{ $subjects->subject->description }}">{{ ucwords($subjects->subject->name) }}</th>
+                                                                                @endif
+                                                                            @endforeach
                                                                             <th class="header text-center">Quarter Grade</th>
                                                                             <th class="header text-center honors">Honors</th>
                                                                             <th class="header text-center merit">Merit</th>
@@ -154,29 +161,21 @@
                                                                                 <td class="text-center">{{ $i }}</td>
                                                                                 <td class="text-center">{{ ucfirst($students->student->firstname).' '. ucfirst($students->student->lastname) }}</td>
                                                                                 @foreach ($class_records->subjects as $subjects)
-                                                                                    @php
-                                                                                        $subjectGrade = $classrecords->get_subject_quarter_grade($class_records->id, $class_records->batch_id, $quarter->id, $class_records->section_id, $subjects->subject->id, $students->student->id, 0, 0);
-                                                                                        if ($subjectGrade != '') {
-                                                                                            $gradeCounter++;
-                                                                                            $quarterGrade += floatval($subjectGrade);
-                                                                                        }
-                                                                                    @endphp
-                                                                                    @php $grade = $classrecords->get_subject_quarter_grade($class_records->id, $class_records->batch_id, $quarter->id, $class_records->section_id, $subjects->subject->id, $students->student->id, 0, 0); @endphp
                                                                                     @if ($subjects->subject->material_id == 1) 
-                                                                                    <td class="text-center">
-                                                                                        @if ($grade != '') 
-                                                                                            <a class="m--font-light" href="javascript:;">{{ $grade }}</a>
-                                                                                        @endif
-                                                                                    </td>
-                                                                                    @else
-                                                                                    <td class="text-center">
-                                                                                        @if ($grade != '') 
-                                                                                            <a class="m--font-light" href="javascript:;">{{ $grade }}</a>
-                                                                                        @endif
-                                                                                    </td>
-                                                                                    <td class="text-center">
-                                                                                        {{ $classrecords->get_subject_quarter_rating($class_records->id, $class_records->batch_id, $quarter->id, $class_records->section_id, $subjects->subject->id, $students->student->id, 0, 0) }}
-                                                                                    </td>
+                                                                                        @php
+                                                                                            $subjectGrade = $classrecords->get_subject_quarter_grade($class_records->id, $class_records->batch_id, $quarter->id, $class_records->section_id, $subjects->subject->id, $students->student->id, 0, 0);
+                                                                                            if ($subjectGrade != '') {
+                                                                                                $gradeCounter++;
+                                                                                                $quarterGrade += floatval($subjectGrade);
+                                                                                            }
+                                                                                        @endphp
+                                                                                        @php $grade = $classrecords->get_subject_quarter_grade($class_records->id, $class_records->batch_id, $quarter->id, $class_records->section_id, $subjects->subject->id, $students->student->id, 0, 0); @endphp
+                                                                                        <td class="text-center">
+                                                                                            @if ($grade != '') 
+                                                                                                @php $gradeID = $classrecords->get_subject_quarter_grade_id($class_records->id, $class_records->batch_id, $quarter->id, $class_records->section_id, $subjects->subject->id, $students->student->id, 0, 0); @endphp
+                                                                                                <a onclick="popupWindow({{ $gradeID }});" class="m--font-light" href="javascript:;">{{ $grade }}</a>
+                                                                                            @endif
+                                                                                        </td>
                                                                                     @endif
                                                                                 @endforeach
                                                                                 @if ($class_records->has_mapeh > 0) 
@@ -199,14 +198,49 @@
                                                                                             $quarterGrade += floatval($tleGrade);
                                                                                         }
                                                                                     @endphp
-                                                                                    <td class="text-center">
+                                                                                    <td class="text-center" style="padding-left: 0 !important; padding-right: 0 !important">
+                                                                                        @php
+                                                                                            $ictGrade = $classrecords->get_ict_le_quarter_grade($class_records->id, $class_records->batch_id, $quarter->id, $class_records->section_id, 0, $students->student->id, 'ICT');
+                                                                                            $gradeID = $classrecords->get_ict_le_quarter_grade_id($class_records->id, $class_records->batch_id, $quarter->id, $class_records->section_id, 0, $students->student->id, 'ICT');
+                                                                                        @endphp
+                                                                                        @if ($ictGrade != '')
+                                                                                            <a onclick="popupWindow({{ $gradeID }});" class="m--font-light" href="javascript:;">{{ $ictGrade }}</a>
+                                                                                        @endif
                                                                                     </td>
-                                                                                    <td class="text-center">
+                                                                                    <td class="text-center" style="padding-left: 0 !important; padding-right: 0 !important">
+                                                                                        @php
+                                                                                            $leGrade = $classrecords->get_ict_le_quarter_grade($class_records->id, $class_records->batch_id, $quarter->id, $class_records->section_id, 0, $students->student->id, 'LE');
+                                                                                            $gradeID = $classrecords->get_ict_le_quarter_grade_id($class_records->id, $class_records->batch_id, $quarter->id, $class_records->section_id, 0, $students->student->id, 'LE');
+                                                                                        @endphp
+                                                                                        @if ($leGrade != '')
+                                                                                            <a onclick="popupWindow({{ $gradeID }});" class="m--font-light" href="javascript:;">{{ $leGrade }}</a>
+                                                                                        @endif
                                                                                     </td>
                                                                                     <td class="text-center">
                                                                                         {{ $tleGrade }}
                                                                                     </td>
                                                                                 @endif
+                                                                                @foreach ($class_records->subjects as $subjects)
+                                                                                    @if ($subjects->subject->material_id != 1) 
+                                                                                        @php
+                                                                                            $subjectGrade = $classrecords->get_subject_quarter_grade($class_records->id, $class_records->batch_id, $quarter->id, $class_records->section_id, $subjects->subject->id, $students->student->id, 0, 0);
+                                                                                            if ($subjectGrade != '') {
+                                                                                                $gradeCounter++;
+                                                                                                $quarterGrade += floatval($subjectGrade);
+                                                                                            }
+                                                                                        @endphp
+                                                                                        @php $grade = $classrecords->get_subject_quarter_grade($class_records->id, $class_records->batch_id, $quarter->id, $class_records->section_id, $subjects->subject->id, $students->student->id, 0, 0); @endphp
+                                                                                        <td class="text-center">
+                                                                                            @if ($grade != '') 
+                                                                                                @php $gradeID = $classrecords->get_subject_quarter_grade_id($class_records->id, $class_records->batch_id, $quarter->id, $class_records->section_id, $subjects->subject->id, $students->student->id, 0, 0); @endphp
+                                                                                                <a onclick="popupWindow({{ $gradeID }});" class="m--font-light" href="javascript:;">{{ $grade }}</a>
+                                                                                            @endif
+                                                                                        </td>
+                                                                                        <td class="text-center">
+                                                                                            {{ $classrecords->get_subject_quarter_rating($class_records->id, $class_records->batch_id, $quarter->id, $class_records->section_id, $subjects->subject->id, $students->student->id, 0, 0) }}
+                                                                                        </td>
+                                                                                    @endif
+                                                                                @endforeach
                                                                                 <td class="total_{{ $iteration }} text-center">
                                                                                     @if ($quarterGrade > 0)
                                                                                         @php $grades[$students->student->id][] = floatval(floatval($quarterGrade) / floatval($gradeCounter)); @endphp

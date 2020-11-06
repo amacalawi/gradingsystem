@@ -4,7 +4,7 @@
 @else
     {{ Form::open(array('url' => 'academics/grading-sheets/all-gradingsheets/store', 'name' => 'gradingsheet_form', 'method' => 'POST')) }}
 @endif
-    @if ($segment != 'edit')
+    @if ($segment != 'edit' && $segment != 'view')
         <div class="row">
             <div class="col-md-12">
                 <!-- BASIC INFOS START -->
@@ -122,7 +122,7 @@
         </div>
     </div>
         
-    <div class="row">
+    <div class="row {{ ($segment == 'edit')  ? '' : 'hidden' }}">
         <div class="col-md-12 ">
             <button type="button" class="btn btn-info pull-right m-2" data-toggle="modal" data-target="#importmodal">
                 Import gradingsheet

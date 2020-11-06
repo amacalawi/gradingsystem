@@ -740,3 +740,12 @@ function($) {
     $.class_record_wizzardS.required_fields();
     $.class_record_wizzardS.init();
 }(window.jQuery);
+
+function popupWindow($id) {
+    var url =  base_url + 'academics/grading-sheets/all-gradingsheets/view/' + $id;
+	var w = window.innerWidth;
+	var h = window.innerHeight;
+    const y = window.top.outerHeight / 2 + window.top.screenY - ( h / 2);
+    const x = window.top.outerWidth / 2 + window.top.screenX - ( w / 2);
+    return window.open(url, 'edit application', `toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=${w}, height=${h}, top=${y}, left=${x}`);
+}

@@ -18,10 +18,11 @@ class CreateSubjectsTable extends Migration
             $table->string('code', 40);
             $table->string('name', 100);
             $table->text('description')->nullable();
-            $table->integer('coordinator_id')->unsigned();
+            $table->integer('coordinator_id')->nullable();
             $table->boolean('is_mapeh')->default(0);
             $table->boolean('is_tle')->default(0);
             $table->integer('material_id')->default(1);
+            $table->integer('order')->unsigned();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('created_by');
             $table->timestamp('updated_at')->nullable();

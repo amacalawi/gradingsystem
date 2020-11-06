@@ -100,7 +100,7 @@ class SectionInfo extends Model
 
     public function section_students()
     {
-        return $this->hasMany('App\Models\Admission')->where('is_active', 1);      
+        return $this->hasMany('App\Models\Admission', 'section_info_id', 'id')->where('is_active', 1);      
     }
 
     public function edtype()

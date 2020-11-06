@@ -24,14 +24,26 @@ class QuarterEducationType extends Model
     
     public function all_quarters_via_type($type)
     {
-        $quarters = self::where([
+        $quarters = self::with([
+            'quarter' =>  function($q) { 
+                $q->select(['id', 'code', 'name', 'description']); 
+            },
+        ])
+        ->where([
             'education_type_id' => $type,
             'is_active' => 1
         ])
         ->orderBy('id', 'asc')
         ->get();
 
-        return $quarters;
+        return $quarters->map(function($quarterx) {
+            return (object) [
+                'id' => $quarterx->quarter->id,
+                'code' => $quarterx->quarter->code,
+                'name' => $quarterx->quarter->name,
+                'description' => $quarterx->quarter->description
+            ];
+        });
     }
 }
 
