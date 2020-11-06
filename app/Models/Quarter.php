@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\QuarterEducationType;
 
 class Quarter extends Model
 {	
@@ -101,10 +102,14 @@ class Quarter extends Model
 
     public function all_quarters_via_type($type)
     {
-        $quarters = self::where([
-            'education_type_id' => $type,
-            'is_active' => 1
-        ])
+        $quarters = self::whereIn('id',
+            QuarterEducationType::select('quarter_id')
+            ->where([
+                'education_type_id' => $type,
+                'is_active' => 1
+            ])
+        )
+        ->where(['is_active' => 1])
         ->orderBy('id', 'asc')
         ->get();
 

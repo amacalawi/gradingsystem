@@ -117,8 +117,7 @@
                                             @php $iteration = 0; $grades = array(); @endphp
                                             @foreach ($quarters as $quarter)
                                                 @php $iteration++; @endphp
-                                                @if ($iteration == 1) 
-                                                    <div class="m-wizard__form-step m-wizard__form-step--current" id="m_wizard_form_step_{{ $iteration }}">
+                                                    <div class="m-wizard__form-step {{ ($iteration == 1) ? 'm-wizard__form-step--current' : '' }}" id="m_wizard_form_step_{{ $iteration }}">
                                                         <div class="row">
                                                             <table class="class-record class-record-head table-bordered">
                                                                 <thead>
@@ -127,31 +126,33 @@
                                                                     </tr>
                                                                 </thead>
                                                             </table>
-                                                            <div id="scrolling_table_1" class=" scrolly_table">
-                                                                <table class="class-record table-bordered">
+                                                            <div>
+                                                                <table class="class-record class-record-body table-bordered">
                                                                     <tbody>
                                                                         <tr>
-                                                                            
-                                                                            <th class="shaded fixed freeze text-center scrolling_table_1">#</th>
-                                                                            <th class="shaded fixed freeze text-center scrolling_table_1">Student</th>
+                                                                            <th class="text-center">#</th>
+                                                                            <th class="text-center">Student</th>
                                                                             @foreach ($class_records->subjects as $subjects)
-                                                                                <th class="shaded fixed freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="{{ $subjects->subject->name }}">{{ ucwords($subjects->subject->code) }}</th>
+                                                                                <th class="header text-center" data-toggle="m-tooltip" data-placement="bottom" colspan="{{ ($subjects->subject->material_id == 1) ? 1 : 2 }}" title="{{ $subjects->subject->description }}">{{ ucwords($subjects->subject->name) }}</th>
                                                                             @endforeach
                                                                             @if ($class_records->has_mapeh > 0) 
-                                                                                <th class="shaded fixed freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="MAPEH">MAPEH</th>
+                                                                                <th class="header text-center" data-toggle="m-tooltip" data-placement="bottom" title="MAPEH">MAPEH</th>
                                                                             @endif
                                                                             @if ($class_records->has_tle > 0) 
-                                                                                <th class="shaded fixed freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="TLE">TLE</th>
+                                                                                <th class="header text-center" data-toggle="m-tooltip" data-placement="bottom" colspan="2" title="ICT/LE">ICT(50%)<br/> LE(50%)</th>
+                                                                                <th class="header text-center" data-toggle="m-tooltip" data-placement="bottom" title="ICT/LE">ICT/LE</th>
                                                                             @endif
-                                                                            <th class="shaded fixed freeze_vertical text-center scrolling_table_1">Quarter Grade</th>
-                                                                            <th class="shaded fixed freeze_vertical text-center scrolling_table_1">Ranking</th>
+                                                                            <th class="header text-center">Quarter Grade</th>
+                                                                            <th class="header text-center honors">Honors</th>
+                                                                            <th class="header text-center merit">Merit</th>
+                                                                            <th class="header text-center">Ranking</th>
                                                                         </tr>
                                                                         @php $i = 0; @endphp
                                                                         @foreach ($class_records->students as $students)
                                                                             @php $i++; $quarterGrade = 0; $gradeCounter = 0; @endphp
                                                                             <tr class="tr_shaded">
-                                                                                <td class="shaded fixed freeze text-center scrolling_table_1">{{ $i }}</td>
-                                                                                <td class="shaded fixed freeze text-center scrolling_table_1">{{ ucfirst($students->student->firstname).' '. ucfirst($students->student->lastname) }}</td>
+                                                                                <td class="text-center">{{ $i }}</td>
+                                                                                <td class="text-center">{{ ucfirst($students->student->firstname).' '. ucfirst($students->student->lastname) }}</td>
                                                                                 @foreach ($class_records->subjects as $subjects)
                                                                                     @php
                                                                                         $subjectGrade = $classrecords->get_subject_quarter_grade($class_records->id, $class_records->batch_id, $quarter->id, $class_records->section_id, $subjects->subject->id, $students->student->id, 0, 0);
@@ -160,9 +161,23 @@
                                                                                             $quarterGrade += floatval($subjectGrade);
                                                                                         }
                                                                                     @endphp
-                                                                                    <td class="shaded fixed freeze_vertical text-center scrolling_table_1">
-                                                                                        {{ $classrecords->get_subject_quarter_grade($class_records->id, $class_records->batch_id, $quarter->id, $class_records->section_id, $subjects->subject->id, $students->student->id, 0, 0) }}
+                                                                                    @php $grade = $classrecords->get_subject_quarter_grade($class_records->id, $class_records->batch_id, $quarter->id, $class_records->section_id, $subjects->subject->id, $students->student->id, 0, 0); @endphp
+                                                                                    @if ($subjects->subject->material_id == 1) 
+                                                                                    <td class="text-center">
+                                                                                        @if ($grade != '') 
+                                                                                            <a class="m--font-light" href="javascript:;">{{ $grade }}</a>
+                                                                                        @endif
                                                                                     </td>
+                                                                                    @else
+                                                                                    <td class="text-center">
+                                                                                        @if ($grade != '') 
+                                                                                            <a class="m--font-light" href="javascript:;">{{ $grade }}</a>
+                                                                                        @endif
+                                                                                    </td>
+                                                                                    <td class="text-center">
+                                                                                        {{ $classrecords->get_subject_quarter_rating($class_records->id, $class_records->batch_id, $quarter->id, $class_records->section_id, $subjects->subject->id, $students->student->id, 0, 0) }}
+                                                                                    </td>
+                                                                                    @endif
                                                                                 @endforeach
                                                                                 @if ($class_records->has_mapeh > 0) 
                                                                                     @php
@@ -172,7 +187,7 @@
                                                                                             $quarterGrade += floatval($mapehGrade);
                                                                                         }
                                                                                     @endphp
-                                                                                    <td class="shaded fixed freeze_vertical text-center scrolling_table_1">
+                                                                                    <td class="text-center">
                                                                                         {{  $mapehGrade }}
                                                                                     </td>
                                                                                 @endif
@@ -184,11 +199,15 @@
                                                                                             $quarterGrade += floatval($tleGrade);
                                                                                         }
                                                                                     @endphp
-                                                                                    <td class="shaded fixed freeze_vertical text-center scrolling_table_1">
+                                                                                    <td class="text-center">
+                                                                                    </td>
+                                                                                    <td class="text-center">
+                                                                                    </td>
+                                                                                    <td class="text-center">
                                                                                         {{ $tleGrade }}
                                                                                     </td>
                                                                                 @endif
-                                                                                <td class="total_{{ $iteration }} shaded fixed freeze_vertical text-center scrolling_table_1">
+                                                                                <td class="total_{{ $iteration }} text-center">
                                                                                     @if ($quarterGrade > 0)
                                                                                         @php $grades[$students->student->id][] = floatval(floatval($quarterGrade) / floatval($gradeCounter)); @endphp
                                                                                         {{ number_format(floatval($quarterGrade) / floatval($gradeCounter), 0) }}
@@ -196,7 +215,13 @@
                                                                                         @php $grades[$students->student->id][] = 0; @endphp
                                                                                     @endif
                                                                                 </td>
-                                                                                <td class="shaded fixed freeze_vertical text-center scrolling_table_1">
+                                                                                <td class="text-center">
+                                                                                    <a href="javascript:;" title="add/edit honors"><i class="la la-edit"></i></a>
+                                                                                </td>
+                                                                                <td class="text-center">
+                                                                                    <a href="javascript:;" title="add/edit merit"><i class="la la-edit"></i></a>
+                                                                                </td>
+                                                                                <td class="text-center">
                                                                                 </td>
                                                                             </tr>
                                                                         @endforeach
@@ -205,98 +230,10 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                @else
-                                                    <div class="m-wizard__form-step" id="m_wizard_form_step_{{ $iteration }}">
-                                                        <div class="row">
-                                                            <div id="scrolling_table_1" class=" scrolly_table">
-                                                                <table class="class-record class-record-head table-bordered">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th colspan="20" class="shaded text-center">{{ $quarter->name }}</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                </table>
-                                                                <table class="class-record table-bordered">
-                                                                    <tbody>
-                                                                        <tr>
-                                                                            <th class="shaded fixed freeze text-center scrolling_table_1">#</th>
-                                                                            <th class="shaded fixed freeze text-center scrolling_table_1">Student</th>
-                                                                            @foreach ($class_records->subjects as $subjects)
-                                                                                <th class="shaded fixed freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="{{ $subjects->subject->name }}">{{ ucwords($subjects->subject->code) }}</th>
-                                                                            @endforeach
-                                                                            @if ($class_records->has_mapeh > 0) 
-                                                                                <th class="shaded fixed freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="MAPEH">MAPEH</th>
-                                                                            @endif
-                                                                            @if ($class_records->has_tle > 0) 
-                                                                                <th class="shaded fixed freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="TLE">TLE</th>
-                                                                            @endif
-                                                                            <th class="shaded fixed freeze_vertical text-center scrolling_table_1">Quarter Grade</th>
-                                                                            <th class="shaded fixed freeze_vertical text-center scrolling_table_1">Ranking</th>
-                                                                        </tr>
-                                                                        @php $i = 0; @endphp
-                                                                        @foreach ($class_records->students as $students)
-                                                                            @php $i++; $quarterGrade = 0; $gradeCounter = 0; @endphp
-                                                                            <tr class="tr_shaded">
-                                                                                <td class="shaded fixed freeze text-center scrolling_table_1">{{ $i }}</td>
-                                                                                <td class="shaded fixed freeze text-center scrolling_table_1">{{ ucfirst($students->student->firstname).' '. ucfirst($students->student->lastname) }}</td>
-                                                                                @foreach ($class_records->subjects as $subjects)
-                                                                                    @php
-                                                                                        $subjectGrade = $classrecords->get_subject_quarter_grade($class_records->id, $class_records->batch_id, $quarter->id, $class_records->section_id, $subjects->subject->id, $students->student->id, 0, 0);
-                                                                                        if ($subjectGrade != '') {
-                                                                                            $gradeCounter++;
-                                                                                            $quarterGrade += floatval($subjectGrade);
-                                                                                        }
-                                                                                    @endphp
-                                                                                    <td class="shaded fixed freeze_vertical text-center scrolling_table_1">
-                                                                                        {{ $classrecords->get_subject_quarter_grade($class_records->id, $class_records->batch_id, $quarter->id, $class_records->section_id, $subjects->subject->id, $students->student->id, 0, 0) }}
-                                                                                    </td>
-                                                                                @endforeach
-                                                                                @if ($class_records->has_mapeh > 0) 
-                                                                                    @php
-                                                                                        $mapehGrade = $classrecords->get_subject_quarter_grade($class_records->id, $class_records->batch_id, $quarter->id, $class_records->section_id, 0, $students->student->id, 1, 0);
-                                                                                        if ($mapehGrade != '') {
-                                                                                            $gradeCounter++;
-                                                                                            $quarterGrade += floatval($mapehGrade);
-                                                                                        }
-                                                                                    @endphp
-                                                                                    <td class="shaded fixed freeze_vertical text-center scrolling_table_1">
-                                                                                        {{ $classrecords->get_subject_quarter_grade($class_records->id, $class_records->batch_id, $quarter->id, $class_records->section_id, 0, $students->student->id, 1, 0) }}
-                                                                                    </td>
-                                                                                @endif
-                                                                                @if ($class_records->has_tle > 0) 
-                                                                                    @php 
-                                                                                        $tleGrade = $classrecords->get_subject_quarter_grade($class_records->id, $class_records->batch_id, $quarter->id, $class_records->section_id, 0, $students->student->id, 0, 1);
-                                                                                        if ($tleGrade != '') {
-                                                                                            $gradeCounter++;
-                                                                                            $quarterGrade += floatval($tleGrade);
-                                                                                        }
-                                                                                    @endphp
-                                                                                    <td class="shaded fixed freeze_vertical text-center scrolling_table_1">
-                                                                                        {{ $classrecords->get_subject_quarter_grade($class_records->id, $class_records->batch_id, $quarter->id, $class_records->section_id, 0, $students->student->id, 0, 1) }}
-                                                                                    </td>
-                                                                                @endif
-                                                                                <td class="total_{{ $iteration }} shaded fixed freeze_vertical text-center scrolling_table_1">
-                                                                                    @if ($quarterGrade > 0)
-                                                                                        @php $grades[$students->student->id][] = floatval(floatval($quarterGrade) / floatval($gradeCounter)); @endphp
-                                                                                        {{ number_format(floatval($quarterGrade) / floatval($gradeCounter), 0) }}
-                                                                                    @else
-                                                                                        @php $grades[$students->student->id][] = 0; @endphp
-                                                                                    @endif
-                                                                                </td>
-                                                                                <td class="shaded fixed freeze_vertical text-center scrolling_table_1">
-                                                                                </td>
-                                                                            </tr>
-                                                                        @endforeach
-                                                                    <tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endif
                                             @endforeach
                                             <div class="m-wizard__form-step" id="m_wizard_form_step_{{ $quarters->count() + 1 }}">
                                                 <div class="row">
-                                                    <div id="scrolling_table_1" class=" scrolly_table">
+                                                    <div>
                                                         <table class="class-record class-record-head table-bordered">
                                                             <thead>
                                                                 <tr>
@@ -304,36 +241,44 @@
                                                                 </tr>
                                                             </thead>
                                                         </table>
-                                                        <table class="class-record table-bordered">
+                                                        <table class="class-record class-record-body table-bordered">
                                                             <tbody>
                                                                 <tr>
-                                                                    <th class="shaded fixed freeze text-center scrolling_table_1">#</th>
-                                                                    <th class="shaded fixed freeze text-center scrolling_table_1">Student</th>
+                                                                    <th class="text-center">#</th>
+                                                                    <th class="text-center">Student</th>
                                                                     @foreach ($quarters as $quarter)
-                                                                        <th class="shaded fixed freeze_vertical text-center scrolling_table_1">{{ $quarter->name }}</th>
+                                                                        <th class="text-center">{{ $quarter->name }}</th>
                                                                     @endforeach
-                                                                    <th class="shaded fixed freeze_vertical text-center scrolling_table_1">Final Grade</th>
-                                                                    <th class="shaded fixed freeze_vertical text-center scrolling_table_1">Ranking</th>
+                                                                    <th class="text-center">Final Grade</th>
+                                                                    <th class="text-center honors">Honors</th>
+                                                                    <th class="text-center merit">Merit</th>
+                                                                    <th class="text-center">Ranking</th>
                                                                 </tr>
                                                                 @foreach ($class_records->students as $students)
                                                                     <tr class="tr_shaded">
-                                                                        <td class="shaded fixed freeze text-center scrolling_table_1">{{ $i }}</td>
-                                                                        <td class="shaded fixed freeze text-center scrolling_table_1">{{ ucfirst($students->student->firstname).' '. ucfirst($students->student->lastname) }}</td>
+                                                                        <td class="text-center">{{ $i }}</td>
+                                                                        <td class="text-center">{{ ucfirst($students->student->firstname).' '. ucfirst($students->student->lastname) }}</td>
                                                                         @php $finalgrades = 0; $fgcounter = 0; @endphp
                                                                         @foreach ($grades[$students->student->id] as $grade) 
-                                                                            <td class="shaded fixed freeze_vertical text-center scrolling_table_1">
+                                                                            <td class="text-center">
                                                                                 @php $finalgrades += floatval($grade); $fgcounter++; @endphp
                                                                                 @if ($grade > 0)
                                                                                     {{ number_format($grade, 0) }}
                                                                                 @endif
                                                                             </td>
                                                                         @endforeach
-                                                                        <td class="total_{{ $quarters->count() + 1 }} shaded fixed freeze_vertical text-center scrolling_table_1">
+                                                                        <td class="total_{{ $quarters->count() + 1 }} text-center">
                                                                             @if ($finalgrades > 0) 
                                                                                 {{ number_format(floatval($finalgrades) / floatval($fgcounter)) }}
                                                                             @endif
                                                                         </td>
-                                                                        <td class="shaded fixed freeze_vertical text-center scrolling_table_1">
+                                                                        <td class="text-center">
+                                                                            <a href="javascript:;" title="add/edit honors"><i class="la la-edit"></i></a>
+                                                                        </td>
+                                                                        <td class="text-center">
+                                                                            <a href="javascript:;" title="add/edit merit"><i class="la la-edit"></i></a>
+                                                                        </td>
+                                                                        <td class="text-center">
                                                                         </td>
                                                                     </tr>
                                                                 @endforeach
