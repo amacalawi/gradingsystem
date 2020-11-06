@@ -464,14 +464,15 @@ class GradingSheetsController extends Controller
                     echo json_encode( $data ); exit();
                 }
             } else {
+
                 $rows = GradingSheet::where([
-                    'section_id' => $request->section_id,
+                    'section_id' => $request->section_info_id,
                     'subject_id' => $request->subject_id,
                     'quarter_id' => $request->quarter_id,
                     'education_type_id' => $request->education_type_id,
                     'batch_id' => (new Batch)->get_current_batch()
                 ])->count();
-    
+                 
                 if ($rows > 0) {
                     $data = array(
                         'title' => 'Oh snap!',

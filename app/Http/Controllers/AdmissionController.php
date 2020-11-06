@@ -82,12 +82,12 @@ class AdmissionController extends Controller
                     'admissionId' => $admission->id,
                     'admissionSecCode' => $admission->classcode,
                     'admissionBatchId' => $admission->batch_id,
-                    'admissionSectionId' => $admission->section_id,
+                    'admissionSectionId' => $admission->section_info_id,
                     'admissionSecName' => $admission->secname,
                     'admissionAdviserId' => ucwords((new Staff)->where('id', $admission->adviser_id)->first()->firstname).' '.ucwords((new Staff)->where('id', $admission->adviser_id)->first()->lastname),
                     'admissionLevel' => $admission->level_id, 
                     'admissionLvlName' => $admission->lvlname,
-                    'admissionNoStudent' => (new Admission)->where(['section_id' => $admission->section_id, 'batch_id' => $admission->batch_id, 'is_active' => 1])->count(),
+                    'admissionNoStudent' => (new Admission)->where(['section_info_id' => $admission->id, 'batch_id' => $admission->batch_id, 'is_active' => 1])->count(),
                     'admissionNoSubject' => (new SectionsSubjects)->where(['section_info_id' => $admission->id, 'is_active' => 1])->count(),
                     'admissionModified' => ($admission->updated_at !== NULL) ? date('d-M-Y', strtotime($admission->updated_at)).'<br/>'. date('h:i A', strtotime($admission->updated_at)) : date('d-M-Y', strtotime($admission->created_at)).'<br/>'. date('h:i A', strtotime($admission->created_at))
                 ];
@@ -114,12 +114,12 @@ class AdmissionController extends Controller
                     'admissionId' => $admission->id,
                     'admissionSecCode' => $admission->classcode,
                     'admissionBatchId' => $admission->batch_id,
-                    'admissionSectionId' => $admission->section_id,
+                    'admissionSectionId' => $admission->section_info_id,
                     'admissionSecName' => $admission->secname,
                     'admissionAdviserId' => ucwords((new Staff)->where('id', $admission->adviser_id)->first()->firstname).' '.ucwords((new Staff)->where('id', $admission->adviser_id)->first()->lastname),
                     'admissionLevel' => $admission->level_id, 
                     'admissionLvlName' => $admission->lvlname,
-                    'admissionNoStudent' => (new Admission)->where(['section_id' => $admission->section_id, 'batch_id' => $admission->batch_id, 'is_active' => 1])->count(),
+                    'admissionNoStudent' => (new Admission)->where(['section_info_id' => $admission->id, 'batch_id' => $admission->batch_id, 'is_active' => 1])->count(),
                     'admissionNoSubject' => (new SectionsSubjects)->where(['section_info_id' => $admission->id, 'is_active' => 1])->count(),
                     'admissionModified' => ($admission->updated_at !== NULL) ? date('d-M-Y', strtotime($admission->updated_at)).'<br/>'. date('h:i A', strtotime($admission->updated_at)) : date('d-M-Y', strtotime($admission->created_at)).'<br/>'. date('h:i A', strtotime($admission->created_at))
                 ];
@@ -210,7 +210,7 @@ class AdmissionController extends Controller
                         //admission
                         $enliststudent = Admission::create([
                             'batch_id' => $batch_id[0],
-                            'section_id' => $request->section,
+                            'section_info_id' => $sectioninfo->id,
                             'student_id' =>  $member,
                             'status' => 'admit',
                             'created_at' => $timestamp,
@@ -344,7 +344,7 @@ class AdmissionController extends Controller
                         {   
                             $enliststudent = Admission::where('student_id', $member)
                             ->update([
-                                'section_id' => $request->section,
+                                'section_info_id' => $id,
                                 'status' => 'admit',
                                 'updated_at' => $timestamp,
                                 'updated_by' => Auth::user()->id,
@@ -355,7 +355,7 @@ class AdmissionController extends Controller
                             //die(var_dump('gere ba?'));
                             $sections_subjects = Admission::create([
                                 'batch_id' => $batch_id[0],
-                                'section_id' =>  $request->section,
+                                'section_info_id' => $id,
                                 'student_id' => $member,
                                 'status' => 'admit',
                                 'created_at' => $timestamp,
@@ -365,7 +365,7 @@ class AdmissionController extends Controller
                     }
 
                     //DELETE
-                    $students = Admission::select('student_id')->where('section_id', $request->section)->whereNotIn('student_id', $request->list_admitted_student )->get();
+                    $students = Admission::select('student_id')->where('section_info_id', $request->section)->whereNotIn('student_id', $request->list_admitted_student )->get();
                     foreach($students as $student)
                     {
                         $ss = Admission::where('student_id', $student['student_id']);
@@ -375,7 +375,7 @@ class AdmissionController extends Controller
                 } 
                 else //No student selected 
                 {
-                    $ss = Admission::where('section_id', $request->section);
+                    $ss = Admission::where('section_info_id', $request->section);
                     $ss->delete();
                 }
                 //end admissions
@@ -707,20 +707,19 @@ class AdmissionController extends Controller
                             $batch_id = Batch::where('is_active', 1)->where('status','Current')->pluck('id');
                             
                             if(!$batch_id->isEmpty())
-                            {   
+                            {
                                 $exist_type = EducationType::where('code', $data[2])->pluck('id');
                                 $exist_section = Section::where('code', $data[0])->where('education_type_id', $exist_type[0])->first();
                                 $exist_level = Level::where('code', $data[1])->where('education_type_id', $exist_type[0])->first();
-                                $exist_adviser = Staff::where('identification_no', $data[3])->orWhere('type', 'like', '%Teacher%')->orWhere('type', 'like', '%Adviser%')->first();
-                                //die(var_dump( 'type='.$exist_type.' section='.$exist_section->id.' level='.$exist_level->id.' adv='.$exist_adviser->id ));
+                                $exist_adviser = Staff::where('identification_no', $data[3])->where('type', 'like', '%Teacher%')->where('type', 'like', '%Adviser%')->first();
+                                //die(var_dump( 'type='.$exist_type[0].' section='.$exist_section->id.' level='.$exist_level->id.' adv='.$exist_adviser->id ));
 
-                                if(($exist_section) && ($exist_level) && ($exist_adviser) && ($data[4] != ''))
+                                if(($exist_section) && ($exist_level) && ($exist_adviser))
                                 {
                                     $classcode = $this->generate_classcode($exist_type[0], $exist_section->id, $batch_id[0]);
                                     $exist_classcode = SectionInfo::where('classcode', $classcode)->get();
                                    
                                     if (($exist_classcode->count() > 0) ) { //UPDATE
-                                        
                                         //Section info
                                         $sectioninfo = SectionInfo::find($exist_classcode->first()->id);
                                         $sectioninfo->batch_id = $batch_id[0];
@@ -732,123 +731,129 @@ class AdmissionController extends Controller
                                         $sectioninfo->updated_at = $timestamp;
                                         $sectioninfo->updated_by = Auth::user()->id;
                                         $sectioninfo->update();
-                                        
-                                        //Section subject
-                                        $sections_subjects_str = $data[4];
-                                        $sections_subjects_arr = explode(", ", $sections_subjects_str);
+                                    }else { 
+                                        $sectioninfo = SectionInfo::create([
+                                            'batch_id' => $batch_id[0],
+                                            'section_id' => $exist_section->id,
+                                            'adviser_id' => $exist_adviser->id,
+                                            'level_id' => $exist_level->id,
+                                            'education_type_id' => $exist_type[0],
+                                            'classcode' => $classcode,
+                                            'created_at' => $timestamp,
+                                            'created_by' => Auth::user()->id
+                                        ]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                fclose($files);
+            }
+        }
 
-                                        $ss = SectionsSubjects::where('section_info_id', $exist_classcode->first()->id);
-                                        if($ss){
-                                            $ss->delete();
-                                        }
+        $data = array(
+            'message' => 'success'
+        );
 
-                                        foreach($sections_subjects_arr as $sections_subjects)
-                                        {
-                                            $sec_subs = explode("&", $sections_subjects);
-                                            $exist_subject = Subject::where('code', $sec_subs[0])->first();
-                                            $exist_teacher = Staff::where('identification_no', $sec_subs[1])->orWhere('type', 'like', '%Teacher%')->orWhere('type', 'like', '%Adviser%')->first();
-                                            
-                                            if($exist_subject && $exist_teacher)
-                                            {  
-                                                $sections_subjects = SectionsSubjects::create([
+        echo json_encode( $data );
+        exit();
+    }
+
+    public function import_student(Request $request)
+    {
+        foreach($_FILES as $file)
+        {  
+            $row = 0; $timestamp = date('Y-m-d H:i:s');
+            if (($files = fopen($file['tmp_name'], "r")) !== FALSE) 
+            {
+                while (($data = fgetcsv($files, 3000, ",")) !== FALSE) 
+                {
+                    $row++;
+                    if ($row > 1) { 
+                        if ($data[0] !== '') {
+
+                            $batch_id = Batch::where('is_active', 1)->where('status','Current')->pluck('id');
+                            if(!$batch_id->isEmpty())
+                            {   
+                                $exist_classcode = SectionInfo::where('classcode', $data[0])->get();
+                                   
+                                if (($exist_classcode->count() > 0) ) {
+                                       
+                                    if($data[1] != ''){
+
+                                        $student = Student::where('identification_no', $data[1])->where('is_active', 1)->first();
+                                        if( $student ){
+
+                                            $admit = Admission::where('batch_id', $batch_id[0])->where('student_id', $student->id)->where('is_active', 1)->get();
+                                            if( $admit->count() == 0 ){
+
+                                                $admission = Admission::create([
                                                     'batch_id' => $batch_id[0],
-                                                    'subject_id' => $exist_subject->id,
-                                                    'teacher_id' => $exist_teacher->id,
+                                                    'section_info_id' => $exist_classcode->first()->id,
+                                                    'student_id' => $student->id,
+                                                    'status' => 'admit',
+                                                    'created_at' => $timestamp,
+                                                    'created_by' => Auth::user()->id
+                                                ]);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                fclose($files);
+            }
+        }
+
+        $data = array(
+            'message' => 'success'
+        );
+
+        echo json_encode( $data );
+        exit();
+    }
+
+    public function import_subject(Request $request)
+    {
+        foreach($_FILES as $file)
+        {  
+            $row = 0; $timestamp = date('Y-m-d H:i:s');
+            if (($files = fopen($file['tmp_name'], "r")) !== FALSE) 
+            {
+                while (($data = fgetcsv($files, 3000, ",")) !== FALSE) 
+                {
+                    $row++;
+                    if ($row > 1) { 
+                        if ($data[0] !== '') {
+
+                            $batch_id = Batch::where('is_active', 1)->where('status','Current')->pluck('id');
+                            if(!$batch_id->isEmpty())
+                            {   
+                                $exist_classcode = SectionInfo::where('classcode', $data[0])->get();
+                                   
+                                if (($exist_classcode->count() > 0) ) {
+                                    if( ($data[1] != '') && ($data[2] != '') ){
+                                        $subject = Subject::where('code', $data[1])->where('is_active', 1)->first();
+                                        $teacher = Staff::where('identification_no', $data[2])->where('is_active', 1)->first();
+                                        
+                                        if($subject->id && $teacher->id){
+                                            $sectionsubject = SectionsSubjects::where('section_info_id', $exist_classcode->first()->id)->where('subject_id', $subject->id)->where('teacher_id', $teacher->id)->get();
+                                            if( $sectionsubject->count() == 0 ){
+
+                                                $admission = SectionsSubjects::create([
+                                                    'batch_id' => $batch_id[0],
+                                                    'subject_id' => $subject->id,
+                                                    'teacher_id' => $teacher->id,
                                                     'section_info_id' => $exist_classcode->first()->id,
                                                     'created_at' => $timestamp,
                                                     'created_by' => Auth::user()->id
-                                                ]); 
+                                                ]);
+
                                             }
                                         }
-
-                                        //Student
-                                        if($data[5] != ''){
-
-                                            $admit = Admission::where('batch_id', $batch_id[0])->where('section_id', $exist_section->id);
-                                            $admit->delete();
-
-                                            $students_arr = explode(", ", $data[5]);
-                                            foreach($students_arr as $student){
-                                                
-                                                $exist_student = Student::where('identification_no', $student)->first();
-                                                
-                                                if( $exist_student ){
-
-                                                    $check_student = Admission::where('batch_id', $batch_id[0])->where('student_id', $exist_student->id)->first();
-                                                    if( !$check_student ){
-                                                        $admission = Admission::create([
-                                                            'batch_id' => $batch_id[0],
-                                                            'section_id' => Section::where('code', $data[0])->first()->id,
-                                                            'student_id' => $exist_student->id,
-                                                            'status' => 'admit',
-                                                            'created_at' => $timestamp,
-                                                            'created_by' => Auth::user()->id
-                                                        ]);
-                                                    }
-                                                }
-                                            }
-                                        }
-
-                                    }else { //ADD
-                                        $check_sec_sub = $this->validate_sec_sub($data[4]);
-
-                                        if($check_sec_sub > 0)
-                                        {
-                                            $sectioninfo = SectionInfo::create([
-                                                'batch_id' => $batch_id[0],
-                                                'section_id' => $exist_section->id,
-                                                'adviser_id' => $exist_adviser->id,
-                                                'level_id' => $exist_level->id,
-                                                'education_type_id' => $exist_type[0],
-                                                'classcode' => $classcode,
-                                                'created_at' => $timestamp,
-                                                'created_by' => Auth::user()->id
-                                            ]);
-                                            
-                                            //Section subject
-                                            $sections_subjects_str = $data[4];
-                                            $sections_subjects_arr = explode(", ", $sections_subjects_str);
-                                            foreach($sections_subjects_arr as $sections_subjects)
-                                            {
-                                                $sec_subs = explode("&", $sections_subjects);
-                                                $exist_subject = Subject::where('code', $sec_subs[0])->first();
-                                                $exist_teacher = Staff::where('identification_no', $sec_subs[1])->orWhere('type', 'like', '%Teacher%')->orWhere('type', 'like', '%Adviser%')->first();
-
-                                                if($exist_subject && $exist_teacher)
-                                                {   
-                                                    $sections_subjects = SectionsSubjects::create([
-                                                        'batch_id' => $batch_id[0],
-                                                        'subject_id' => $exist_subject->id,
-                                                        'teacher_id' => $exist_teacher->id,
-                                                        'section_info_id' => $sectioninfo->id,
-                                                        'created_at' => $timestamp,
-                                                        'created_by' => Auth::user()->id
-                                                    ]);
-                                                }
-                                            }
-                                        }
-
-                                        //Student
-                                        if($data[5] != ''){
-                                            $students_arr = explode(", ", $data[5]);
-                                            foreach($students_arr as $student){
-                                                $exist_student = Student::where('identification_no', $student)->first();
-                                                if( $exist_student ){
-                                                    $check_student = Admission::where('batch_id', $batch_id[0])->where('student_id', $exist_student->id)->first();
-                                                    if( !$check_student ){
-                                                        $admission = Admission::create([
-                                                            'batch_id' => $batch_id[0],
-                                                            'section_id' => $exist_section->id,
-                                                            'student_id' =>  $exist_student->id,
-                                                            'status' => 'admit',
-                                                            'created_at' => $timestamp,
-                                                            'created_by' => Auth::user()->id
-                                                        ]);
-                                                    }
-                                                }
-                                            }
-                                        }
-
                                     }
                                 }
                             }

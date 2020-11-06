@@ -95,6 +95,8 @@ var DatatableDataLocalDemo = function () {
 				if ($privileges[2] == 1) {
 					return '\
 						<a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/admissions/classes/edit/' + row.admissionId +'"><i class="la la-edit"></i></a>\
+						<a title="import subject" class=" m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" data-backdrop="static" data-toggle="modal" data-target="#import-class-subject"><i class="la la-upload"></i></a>\
+						<a title="import student" class=" m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" data-backdrop="static" data-toggle="modal" data-target="#import-class-student"><i class="la la-upload"></i></a>\
 					';
 				}
 
@@ -199,6 +201,48 @@ jQuery(document).ready(function (e) {
 		init: function () {
 		this.on("processing", function(file) {
 			this.options.url = base_url + 'academics/admissions/classes/import';
+			console.log(this.options.url);
+		}).on("queuecomplete", function (file, response) {
+			// console.log(response);
+		}).on("success", function (file, response) {
+			console.log(response);
+			var data = $.parseJSON(response);
+			if (data.message == 'success') {
+				if ( $('.m_datatable').length ) {
+					$('.m_datatable').mDatatable().reload();
+				}
+			}
+		});  
+		this.on("error", function(file){if (!file.accepted) this.removeFile(file);});          
+		}
+	});
+
+	$('#import-class-student-dropzone').dropzone({
+		acceptedFiles: accept,
+		init: function () {
+		this.on("processing", function(file) {
+			this.options.url = base_url + 'academics/admissions/classes/import-student';
+			console.log(this.options.url);
+		}).on("queuecomplete", function (file, response) {
+			// console.log(response);
+		}).on("success", function (file, response) {
+			console.log(response);
+			var data = $.parseJSON(response);
+			if (data.message == 'success') {
+				if ( $('.m_datatable').length ) {
+					$('.m_datatable').mDatatable().reload();
+				}
+			}
+		});  
+		this.on("error", function(file){if (!file.accepted) this.removeFile(file);});          
+		}
+	});
+
+	$('#import-class-subject-dropzone').dropzone({
+		acceptedFiles: accept,
+		init: function () {
+		this.on("processing", function(file) {
+			this.options.url = base_url + 'academics/admissions/classes/import-subject';
 			console.log(this.options.url);
 		}).on("queuecomplete", function (file, response) {
 			// console.log(response);
