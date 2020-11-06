@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Subject;
 use App\Models\SectionsSubjects;
+use DB;
 
 class SectionInfo extends Model
 {
@@ -26,7 +27,9 @@ class SectionInfo extends Model
             'level' =>  function($q) { 
                 $q->select(['id', 'code', 'name', 'description']); 
             },
-            'section_subjects.subject',
+            'section_subjects.subject' => function($q) { 
+                $q->select('*')->orderBy('order', 'ASC');
+            },
             'section_students.student'
         ])
         ->where('id', '=', $id)
@@ -79,15 +82,25 @@ class SectionInfo extends Model
     }
 
     public function section_subjects()
-    {
+    {   
+        $subjects = (new Subject)->select('id')
+            ->where(['is_active' => 1, 'is_mapeh' => 0, 'is_tle' => 0])
+            ->orderBy('order', 'ASC')->get();
+
+        $arrs = array();
+        foreach ($subjects as $subject) {
+            $arrs[] = intval($subject->id);
+        }
+
         return $this->hasMany('App\Models\SectionsSubjects', 'section_info_id', 'id')
-        ->whereIn('subject_id', (new Subject)->select('id')->where(['is_active' => 1, 'is_mapeh' => 0, 'is_tle' => 0]))
+        ->whereIn('subject_id', $subjects)
+        ->orderByRaw(\DB::raw("FIELD(subject_id, ".implode(",",$arrs).")"))
         ->where('is_active', 1);   
     }
 
     public function section_students()
     {
-        return $this->hasMany('App\Models\Admission')->where('is_active', 1);      
+        return $this->hasMany('App\Models\Admission', 'section_info_id', 'id')->where('is_active', 1);      
     }
 
     public function edtype()

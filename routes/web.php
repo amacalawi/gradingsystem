@@ -414,6 +414,7 @@ Route::prefix('academics')->group(function () {
         /* Start Grading Sheets Routes */
         Route::get('all-gradingsheets/add', 'GradingSheetsController@add')->name('gradingsheets.add');
         Route::get('all-gradingsheets/edit/{id?}', 'GradingSheetsController@edit')->name('gradingsheets.edit');
+        Route::get('all-gradingsheets/view/{id?}', 'GradingSheetsController@view')->name('gradingsheets.view');
         Route::post('all-gradingsheets/store', 'GradingSheetsController@store')->name('gradingsheets.store');
         Route::put('all-gradingsheets/update/{id}', 'GradingSheetsController@update')->name('gradingsheets.update');
         Route::get('all-gradingsheets', 'GradingSheetsController@manage')->name('gradingsheets.manage.active');

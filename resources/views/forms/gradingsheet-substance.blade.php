@@ -21,7 +21,7 @@
                     @php $iteration = 1; @endphp
                     @foreach ($component->activities as $activity)
                         <th class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="{{ $activity->description }}">
-                            <input activity_id="{{ $activity->id }}" name="activity_header[]" class="text-cell" value="{{ $activity->activity }}" type="text"/>
+                            <input activity_id="{{ $activity->id }}" name="activity_header[]" class="text-cell" value="{{ $activity->activity }}" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
                         </th>
                         @php $iteration++; @endphp
                     @endforeach
@@ -52,7 +52,7 @@
                     @foreach ($component->activities as $activity)
                         @php $column++; @endphp
                         <th column="{{ $column }}" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 activity-cell-header">
-                            <input activity_id="{{ $activity->id }}" name="activity_header_value[]" class="text-cell" value="{{ $activity->value }}" type="text"/>
+                            <input activity_id="{{ $activity->id }}" name="activity_header_value[]" class="text-cell" value="{{ $activity->value }}" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
                         </th>
                         @php $iteration++; @endphp
                     @endforeach
@@ -135,8 +135,8 @@
                             }
                             @endphp
                             <td group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding">
-                                <input value="{{ $activity->id.'_'.$student->student_id }}" name="activity[]" class="hidden text-cell" type="text"/>    
-                                <input maxvalue="{{ $activity->value }}" value="{{ $score }}" name="score[]" class="numeric-double activity-cell text-cell" type="text"/>
+                                <input value="{{ $activity->id.'_'.$student->student_id }}" name="activity[]" class="hidden text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>    
+                                <input maxvalue="{{ $activity->value }}" value="{{ $score }}" name="score[]" class="numeric-double activity-cell text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
                             </td>
                         @endforeach
                         @if ($component->is_sum_cell > 0)
@@ -176,11 +176,11 @@
                         {{ $gradings->get_colum_via_gradingsheet_student('quarter_grade', $grading->id, $student->student_id) }}
                     </td>
                     <td class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell">
-                        <input maxvalue="100" name="init_grade[]" value="{{ $gradings->get_colum_via_gradingsheet_student('initial_grade', $grading->id, $student->student_id) }}" class="hidden numeric-double text-cell" type="text"/>
-                        <input maxvalue="100" name="quarter_grade[]" value="{{ $gradings->get_colum_via_gradingsheet_student('quarter_grade', $grading->id, $student->student_id) }}" class="hidden numeric-double text-cell" type="text"/>
-                        <input maxvalue="100" name="tc_score[]" value="{{ $gradings->get_colum_via_gradingsheet_student('adjustment_grade', $grading->id, $student->student_id) }}" class="numeric-double text-cell" type="text"/>
-                        <input name="rating[]" value="{{ $gradings->get_colum_via_gradingsheet_student('rating', $grading->id, $student->student_id) }}" class="hidden text-cell" type="text"/>
-                        <input name="ranking[]" value="{{ $gradings->get_colum_via_gradingsheet_student('ranking', $grading->id, $student->student_id) }}" class="hidden text-cell" type="text"/>        
+                        <input maxvalue="100" name="init_grade[]" value="{{ $gradings->get_colum_via_gradingsheet_student('initial_grade', $grading->id, $student->student_id) }}" class="hidden numeric-double text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
+                        <input maxvalue="100" name="quarter_grade[]" value="{{ $gradings->get_colum_via_gradingsheet_student('quarter_grade', $grading->id, $student->student_id) }}" class="hidden numeric-double text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
+                        <input maxvalue="100" name="tc_score[]" value="{{ $gradings->get_colum_via_gradingsheet_student('adjustment_grade', $grading->id, $student->student_id) }}" class="numeric-double text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
+                        <input name="rating[]" value="{{ $gradings->get_colum_via_gradingsheet_student('rating', $grading->id, $student->student_id) }}" class="hidden text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
+                        <input name="ranking[]" value="{{ $gradings->get_colum_via_gradingsheet_student('ranking', $grading->id, $student->student_id) }}" class="hidden text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>        
                     </td>
                     <td class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding rating-cell">
                         {{ $gradings->get_colum_via_gradingsheet_student('rating', $grading->id, $student->student_id) }}
@@ -245,8 +245,8 @@
                             $column++;
                             @endphp
                             <td column="{{ $column }}" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding">
-                                <input value="{{ $activity->id.'_'.$student->student_id }}" name="activity[]" class="hidden text-cell" type="text"/>    
-                                <input maxvalue="{{ $activity->value }}" value="{{ $score }}" name="score[]" class="numeric-double activity-cell text-cell" type="text"/>
+                                <input value="{{ $activity->id.'_'.$student->student_id }}" name="activity[]" class="hidden text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>    
+                                <input maxvalue="{{ $activity->value }}" value="{{ $score }}" name="score[]" class="numeric-double activity-cell text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
                             </td>
                         @endforeach
                         @if ($component->is_sum_cell > 0)
@@ -293,11 +293,11 @@
                     </td>
                     @php $column++; @endphp
                     <td column="{{ $column }}" class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell">
-                        <input maxvalue="100" name="init_grade[]" value="{{ $gradings->get_colum_via_gradingsheet_student('initial_grade', $grading->id, $student->student_id) }}" class="hidden numeric-double text-cell" type="text"/>
-                        <input maxvalue="100" name="quarter_grade[]" value="{{ $gradings->get_colum_via_gradingsheet_student('quarter_grade', $grading->id, $student->student_id) }}" class="hidden numeric-double text-cell" type="text"/>
-                        <input maxvalue="100" name="tc_score[]" value="{{ $gradings->get_colum_via_gradingsheet_student('adjustment_grade', $grading->id, $student->student_id) }}" class="numeric-double text-cell" type="text"/>
-                        <input name="rating[]" value="{{ $gradings->get_colum_via_gradingsheet_student('rating', $grading->id, $student->student_id) }}" class="hidden text-cell" type="text"/>
-                        <input name="ranking[]" value="{{ $gradings->get_colum_via_gradingsheet_student('ranking', $grading->id, $student->student_id) }}" class="hidden text-cell" type="text"/>        
+                        <input maxvalue="100" name="init_grade[]" value="{{ $gradings->get_colum_via_gradingsheet_student('initial_grade', $grading->id, $student->student_id) }}" class="hidden numeric-double text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
+                        <input maxvalue="100" name="quarter_grade[]" value="{{ $gradings->get_colum_via_gradingsheet_student('quarter_grade', $grading->id, $student->student_id) }}" class="hidden numeric-double text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/> 
+                        <input maxvalue="100" name="tc_score[]" value="{{ $gradings->get_colum_via_gradingsheet_student('adjustment_grade', $grading->id, $student->student_id) }}" class="numeric-double text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
+                        <input name="rating[]" value="{{ $gradings->get_colum_via_gradingsheet_student('rating', $grading->id, $student->student_id) }}" class="hidden text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
+                        <input name="ranking[]" value="{{ $gradings->get_colum_via_gradingsheet_student('ranking', $grading->id, $student->student_id) }}" class="hidden text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>        
                     </td>
                     @php $column++; @endphp
                     <td column="{{ $column }}" class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding rating-cell">

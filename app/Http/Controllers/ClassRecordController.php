@@ -206,7 +206,347 @@ class ClassRecordController extends Controller
         return view('modules/academics/gradingsheets/classrecord/view')->with(compact('menus', 'class_records', 'quarters'));
     }
 
+    public function get_subject_quarter_grade_id($id, $batch, $quarter, $section, $subject, $student, $is_mapeh = 0, $is_tle = 0)
+    {   
+        if ($is_mapeh > 0) 
+        {   
+            /* MAPEH */
+            $gradingsheetID = (new GradingSheet)
+            ->select('id')
+            ->where([
+                'batch_id' => $batch,
+                'quarter_id' => $quarter,
+                'section_info_id' => $id,
+                'is_active' => 1
+            ])
+            ->whereIn('subject_id', 
+                (new SectionsSubjects)
+                ->select('subject_id')
+                ->where([
+                    'section_info_id' => $id,
+                    'is_active' => 1
+                ])
+                ->whereIn('subject_id',
+                    (new Subject)->select('id')->where([
+                        'is_mapeh' => 1, 
+                        'is_active' => 1
+                    ])
+                    ->get()
+                )
+                ->get()
+            )
+            ->get();
+
+            $quarterGrade = GradingSheetQuarter::where([
+                'batch_id' => $batch,
+                'quarter_id' => $quarter,
+                'student_id' => $student,
+                'is_active' => 1
+            ])
+            ->whereIn('gradingsheet_id', $gradingsheetID)
+            ->get();
+
+            if ($quarterGrade->count() > 0) {
+                return $gradingsheetID;
+            } else {
+                return '';
+            }
+        } 
+        else if($is_tle > 0) 
+        {   
+            /* TLE */
+            $gradingsheetID = (new GradingSheet)
+            ->select('id')
+            ->where([
+                'batch_id' => $batch,
+                'quarter_id' => $quarter,
+                'section_info_id' => $id,
+                'is_active' => 1
+            ])
+            ->whereIn('subject_id', 
+                (new SectionsSubjects)
+                ->select('subject_id')
+                ->where([
+                    'section_info_id' => $id,
+                    'is_active' => 1
+                ])
+                ->whereIn('subject_id',
+                    (new Subject)->select('id')->where([
+                        'is_tle' => 1, 
+                        'is_active' => 1
+                    ])
+                    ->get()
+                )
+                ->get()
+            )
+            ->get();
+
+            $quarterGrade = GradingSheetQuarter::where([
+                'batch_id' => $batch,
+                'quarter_id' => $quarter,
+                'student_id' => $student,
+                'is_active' => 1
+            ])
+            ->whereIn('gradingsheet_id', $gradingsheetID)
+            ->get();
+
+            if ($quarterGrade->count() > 0) {
+                $grades = 0;
+                foreach ($quarterGrade as $qgrade)
+                {
+                    $grades += floatval($qgrade->quarter_grade);
+                }
+
+                return floatval(floatval($grades) / floatval($quarterGrade->count()));
+            } else {
+                return '';
+            }
+        } else {
+            $gradingsheetID = (new GradingSheet)->where([
+                'batch_id' => $batch,
+                'quarter_id' => $quarter,
+                'section_info_id' => $id,
+                'subject_id' => $subject,
+                'is_active' => 1
+            ])->pluck('id')->first();
+
+            $quarterGrade = GradingSheetQuarter::where([
+                'batch_id' => $batch,
+                'quarter_id' => $quarter,
+                'student_id' => $student,
+                'gradingsheet_id' => $gradingsheetID,
+                'is_active' => 1
+            ])->get();
+
+            if ($quarterGrade->count() > 0) {
+                return $gradingsheetID;
+            } else {
+                return '';
+            }
+        }
+    }
+
+    public function get_ict_le_quarter_grade($id, $batch, $quarter, $section, $subject, $student, $type)
+    {  
+        $gradingsheetID = (new GradingSheet)
+        ->select('id')
+        ->where([
+            'batch_id' => $batch,
+            'quarter_id' => $quarter,
+            'section_info_id' => $id,
+            'is_active' => 1
+        ])
+        ->whereIn('subject_id', 
+            (new SectionsSubjects)
+            ->select('subject_id')
+            ->where([
+                'section_info_id' => $id,
+                'is_active' => 1
+            ])
+            ->whereIn('subject_id',
+                (new Subject)->select('id')->where([
+                    'is_tle' => 1, 
+                    'is_active' => 1,
+                    'code' => $type
+                ])
+                ->get()
+            )
+            ->get()
+        )
+        ->get();
+
+        $quarterGrade = GradingSheetQuarter::where([
+            'batch_id' => $batch,
+            'quarter_id' => $quarter,
+            'student_id' => $student,
+            'is_active' => 1
+        ])
+        ->whereIn('gradingsheet_id', $gradingsheetID)
+        ->get();
+
+        if ($quarterGrade->count() > 0) {
+            $grades = 0;
+            foreach ($quarterGrade as $qgrade)
+            {
+                $grades += floatval($qgrade->quarter_grade);
+            }
+
+            return floatval(floatval($grades) / floatval($quarterGrade->count()));
+        } else {
+            return '';
+        }
+    }
+
+    public function get_ict_le_quarter_grade_id($id, $batch, $quarter, $section, $subject, $student, $type)
+    {  
+        $gradingsheetID = (new GradingSheet)
+        ->select('id')
+        ->where([
+            'batch_id' => $batch,
+            'quarter_id' => $quarter,
+            'section_info_id' => $id,
+            'is_active' => 1
+        ])
+        ->whereIn('subject_id', 
+            (new SectionsSubjects)
+            ->select('subject_id')
+            ->where([
+                'section_info_id' => $id,
+                'is_active' => 1
+            ])
+            ->whereIn('subject_id',
+                (new Subject)->select('id')->where([
+                    'is_tle' => 1, 
+                    'is_active' => 1,
+                    'code' => $type
+                ])
+                ->get()
+            )
+            ->get()
+        )
+        ->get();
+
+        if ($gradingsheetID->count() > 0) {
+            return $gradingsheetID->first()->id;
+        } else {
+            return '';
+        }
+    }
+
     public function get_subject_quarter_grade($id, $batch, $quarter, $section, $subject, $student, $is_mapeh = 0, $is_tle = 0)
+    {   
+        if ($is_mapeh > 0) 
+        {   
+            /* MAPEH */
+            $gradingsheetID = (new GradingSheet)
+            ->select('id')
+            ->where([
+                'batch_id' => $batch,
+                'quarter_id' => $quarter,
+                'section_info_id' => $id,
+                'is_active' => 1
+            ])
+            ->whereIn('subject_id', 
+                (new SectionsSubjects)
+                ->select('subject_id')
+                ->where([
+                    'section_info_id' => $id,
+                    'is_active' => 1
+                ])
+                ->whereIn('subject_id',
+                    (new Subject)->select('id')->where([
+                        'is_mapeh' => 1, 
+                        'is_active' => 1
+                    ])
+                    ->get()
+                )
+                ->get()
+            )
+            ->get();
+
+            $quarterGrade = GradingSheetQuarter::where([
+                'batch_id' => $batch,
+                'quarter_id' => $quarter,
+                'student_id' => $student,
+                'is_active' => 1
+            ])
+            ->whereIn('gradingsheet_id', $gradingsheetID)
+            ->get();
+
+            if ($quarterGrade->count() > 0) {
+                $grades = 0;
+                foreach ($quarterGrade as $qgrade)
+                {   
+                    if ($qgrade->quarter_grade > 0) {
+                        if (strtolower((new Subject)->find((new GradingSheet)->find($qgrade->gradingsheet_id)->subject_id)->code) == 'music') {
+                            $grades += floatval(floatval($qgrade->quarter_grade) * floatval(.25));
+                        } else {
+                            $grades += floatval(floatval($qgrade->quarter_grade) * floatval(.75));
+                        }
+                    }
+                }
+                return $grades;
+            } else {
+                return '';
+            }
+        } 
+        else if($is_tle > 0) 
+        {   
+            /* TLE */
+            $gradingsheetID = (new GradingSheet)
+            ->select('id')
+            ->where([
+                'batch_id' => $batch,
+                'quarter_id' => $quarter,
+                'section_info_id' => $id,
+                'is_active' => 1
+            ])
+            ->whereIn('subject_id', 
+                (new SectionsSubjects)
+                ->select('subject_id')
+                ->where([
+                    'section_info_id' => $id,
+                    'is_active' => 1
+                ])
+                ->whereIn('subject_id',
+                    (new Subject)->select('id')->where([
+                        'is_tle' => 1, 
+                        'is_active' => 1
+                    ])
+                    ->get()
+                )
+                ->get()
+            )
+            ->get();
+
+            $quarterGrade = GradingSheetQuarter::where([
+                'batch_id' => $batch,
+                'quarter_id' => $quarter,
+                'student_id' => $student,
+                'is_active' => 1
+            ])
+            ->whereIn('gradingsheet_id', $gradingsheetID)
+            ->get();
+
+            if ($quarterGrade->count() > 0) {
+                $grades = 0;
+                foreach ($quarterGrade as $qgrade)
+                {
+                    $grades += floatval($qgrade->quarter_grade);
+                }
+                
+                $grade = floatval(floatval($grades) / floatval($quarterGrade->count()));
+
+                return (floor($grade * 100) / 100) ;
+            } else {
+                return '';
+            }
+        } else {
+            $gradingsheetID = (new GradingSheet)->where([
+                'batch_id' => $batch,
+                'quarter_id' => $quarter,
+                'section_info_id' => $id,
+                'subject_id' => $subject,
+                'is_active' => 1
+            ])->pluck('id')->first();
+
+            $quarterGrade = GradingSheetQuarter::where([
+                'batch_id' => $batch,
+                'quarter_id' => $quarter,
+                'student_id' => $student,
+                'gradingsheet_id' => $gradingsheetID,
+                'is_active' => 1
+            ])->get();
+
+            if ($quarterGrade->count() > 0) {
+                return $quarterGrade->first()->quarter_grade;
+            } else {
+                return '';
+            }
+        }
+    }
+
+    public function get_subject_quarter_rating($id, $batch, $quarter, $section, $subject, $student, $is_mapeh = 0, $is_tle = 0)
     {   
         if ($is_mapeh > 0) 
         {   
@@ -330,7 +670,7 @@ class ClassRecordController extends Controller
             ])->get();
 
             if ($quarterGrade->count() > 0) {
-                return $quarterGrade->first()->quarter_grade;
+                return $quarterGrade->first()->rating;
             } else {
                 return '';
             }

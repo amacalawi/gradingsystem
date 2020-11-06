@@ -414,7 +414,7 @@
         .sort(function(a,b){return a - b })
         .reduce(function(a, b){ if (b != a[0]) a.unshift(b); return a }, [])
         .forEach((v,i)=>{
-            $('.total_1').filter(function() {return $(this).text() == v;}).next().text(i + 1);
+            $('.total_1').filter(function() {return $(this).text() == v;}).next().next().next().text(i + 1);
         });
         $(".total_2")
         .map(function(){return $(this).text()})
@@ -422,7 +422,7 @@
         .sort(function(a,b){return a - b })
         .reduce(function(a, b){ if (b != a[0]) a.unshift(b); return a }, [])
         .forEach((v,i)=>{
-            $('.total_2').filter(function() {return $(this).text() == v;}).next().text(i + 1);
+            $('.total_2').filter(function() {return $(this).text() == v;}).next().next().next().text(i + 1);
         });
         $(".total_3")
         .map(function(){return $(this).text()})
@@ -430,7 +430,7 @@
         .sort(function(a,b){return a - b })
         .reduce(function(a, b){ if (b != a[0]) a.unshift(b); return a }, [])
         .forEach((v,i)=>{
-            $('.total_3').filter(function() {return $(this).text() == v;}).next().text(i + 1);
+            $('.total_3').filter(function() {return $(this).text() == v;}).next().next().next().text(i + 1);
         });
         $(".total_4")
         .map(function(){return $(this).text()})
@@ -438,7 +438,7 @@
         .sort(function(a,b){return a - b })
         .reduce(function(a, b){ if (b != a[0]) a.unshift(b); return a }, [])
         .forEach((v,i)=>{
-            $('.total_4').filter(function() {return $(this).text() == v;}).next().text(i + 1);
+            $('.total_4').filter(function() {return $(this).text() == v;}).next().next().next().text(i + 1);
         });
         $(".total_5")
         .map(function(){return $(this).text()})
@@ -446,7 +446,7 @@
         .sort(function(a,b){return a - b })
         .reduce(function(a, b){ if (b != a[0]) a.unshift(b); return a }, [])
         .forEach((v,i)=>{
-            $('.total_5').filter(function() {return $(this).text() == v;}).next().text(i + 1);
+            $('.total_5').filter(function() {return $(this).text() == v;}).next().next().next().text(i + 1);
         });
 
         /*
@@ -696,6 +696,37 @@
             //     infoWidget.find('.' + className).text('');
             // }
         });
+
+        $(document).ready(function () {
+        (function () {
+            var maxW = 0,
+              maxH = 0;
+        
+            $("table.class-record-body th.header").each(function () {
+        
+              var $cell = $(this);
+        
+              var $dummyDiv = $("<div></div>", {
+                text: $cell.text()
+              });
+        
+              // Replaces the original text for a DummyDiv to figureout the cell size before the rotation
+              $cell.html($dummyDiv);
+        
+              if ($cell.width() > maxW) maxW = $cell.width();
+              if ($cell.height() > maxH) maxH = $cell.height();
+            });
+        
+            $("table.class-record-body th.header").each(function () {
+              // Applies the rotation and then the size previosly calculated
+              $(this)
+                .addClass("rotate")
+                .width(maxH + 10)
+                .height(maxW + 10);
+            });
+          })();
+
+        });
     }
 
     //init class_record_wizzardS
@@ -709,3 +740,12 @@ function($) {
     $.class_record_wizzardS.required_fields();
     $.class_record_wizzardS.init();
 }(window.jQuery);
+
+function popupWindow($id) {
+    var url =  base_url + 'academics/grading-sheets/all-gradingsheets/view/' + $id;
+	var w = window.innerWidth;
+	var h = window.innerHeight;
+    const y = window.top.outerHeight / 2 + window.top.screenY - ( h / 2);
+    const x = window.top.outerWidth / 2 + window.top.screenX - ( w / 2);
+    return window.open(url, 'edit application', `toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=${w}, height=${h}, top=${y}, left=${x}`);
+}
