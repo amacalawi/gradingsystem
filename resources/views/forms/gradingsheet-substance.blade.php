@@ -116,6 +116,7 @@
                         {{ $iteration }}
                         @php 
                             $totalpercentage = 0;
+                            $column = 0;
                         @endphp
                     </td>
                     <td class="fixed freeze text-left scrolling_table_1" title="{{ $student->identification_no }}">{{ $student->fullname }}</td>
@@ -133,24 +134,28 @@
                             if (floatval($score) > 0) { 
                                 $hps += $activity->value;
                             }
+                            $column++;
                             @endphp
-                            <td group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding">
+                            <td column="{{ $column }}" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding">
                                 <input value="{{ $activity->id.'_'.$student->student_id }}" name="activity[]" class="hidden text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>    
                                 <input maxvalue="{{ $activity->value }}" value="{{ $score }}" name="score[]" class="numeric-double activity-cell text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
                             </td>
                         @endforeach
                         @if ($component->is_sum_cell > 0)
-                            <td group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding sum-cell">
+                            @php $column++; @endphp
+                            <td column="{{ $column }}" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding sum-cell">
                                 {{ $sum }}
                             </td>
                         @endif
                         @if ($component->is_hps_cell > 0)
-                            <td group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding hps-cell">
+                            @php $column++; @endphp
+                            <td column="{{ $column }}" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding hps-cell">
                                 {{ $hps }}
                             </td>
                         @endif
                         @if ($component->is_ps_cell > 0)
-                            <td group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding ps-cell">
+                            @php $column++; @endphp
+                            <td column="{{ $column }}" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding ps-cell">
                                 @php 
                                     if (floatval($sum) > 0) {
                                         $ps = (floatval($sum) / floatval($hps)) * 100; 
@@ -159,7 +164,8 @@
                                 {{ floor($ps*100)/100 }}
                             </td>
                         @endif
-                        <td group="{{ $component->id }}" maxvalue="{{ $component->percentage }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 percentage-cell">
+                        @php $column++; @endphp
+                        <td column="{{ $column }}" group="{{ $component->id }}" maxvalue="{{ $component->percentage }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 percentage-cell">
                             @php 
                                 if (floatval($sum) > 0) {
                                     $percentage = (floatval($sum) / floatval($hps)) * $component->percentage; 
@@ -169,23 +175,28 @@
                             {{ floor($percentage*100)/100 }}
                         </td>
                     @endforeach
-                    <td class="shaded fixed freeze_vertical text-center scrolling_table_1 initial-cell">
+                    @php $column++; @endphp
+                    <td column="{{ $column }}" class="shaded fixed freeze_vertical text-center scrolling_table_1 initial-cell">
                         {{ $gradings->get_colum_via_gradingsheet_student('initial_grade', $grading->id, $student->student_id) }}
                     </td>
-                    <td class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg quarter-cell">
+                    @php $column++; @endphp
+                    <td column="{{ $column }}" class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg quarter-cell">
                         {{ $gradings->get_colum_via_gradingsheet_student('quarter_grade', $grading->id, $student->student_id) }}
                     </td>
-                    <td class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell">
+                    @php $column++; @endphp
+                    <td column="{{ $column }}" class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell">
                         <input maxvalue="100" name="init_grade[]" value="{{ $gradings->get_colum_via_gradingsheet_student('initial_grade', $grading->id, $student->student_id) }}" class="hidden numeric-double text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
-                        <input maxvalue="100" name="quarter_grade[]" value="{{ $gradings->get_colum_via_gradingsheet_student('quarter_grade', $grading->id, $student->student_id) }}" class="hidden numeric-double text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
+                        <input maxvalue="100" name="quarter_grade[]" value="{{ $gradings->get_colum_via_gradingsheet_student('quarter_grade', $grading->id, $student->student_id) }}" class="hidden numeric-double text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/> 
                         <input maxvalue="100" name="tc_score[]" value="{{ $gradings->get_colum_via_gradingsheet_student('adjustment_grade', $grading->id, $student->student_id) }}" class="numeric-double text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
                         <input name="rating[]" value="{{ $gradings->get_colum_via_gradingsheet_student('rating', $grading->id, $student->student_id) }}" class="hidden text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
                         <input name="ranking[]" value="{{ $gradings->get_colum_via_gradingsheet_student('ranking', $grading->id, $student->student_id) }}" class="hidden text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>        
                     </td>
-                    <td class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding rating-cell">
+                    @php $column++; @endphp
+                    <td column="{{ $column }}" class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding rating-cell">
                         {{ $gradings->get_colum_via_gradingsheet_student('rating', $grading->id, $student->student_id) }}
                     </td>
-                    <td class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding ranking-cell">
+                    @php $column++; @endphp
+                    <td column="{{ $column }}" class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding ranking-cell">
                         {{ $gradings->get_colum_via_gradingsheet_student('ranking', $grading->id, $student->student_id) }}
                     </td>
                 </tr>
