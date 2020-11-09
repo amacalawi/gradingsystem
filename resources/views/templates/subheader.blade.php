@@ -331,17 +331,23 @@
                 @if (\Request::is('*/*/view/*'))
 
                 @else
-                    <button type="button" class="submit-btn btn m-btn--pill btn-brand m-btn--custom">
-                        @if (\Request::is('*/*/edit/*'))
-                            <i class="la la-save"></i> Save Changes
+                    @if (\Request::is('*/*/edit/*'))
+                        @if (Request::segment(3) == 'all-gradingsheets')
+
                         @else
+                            <button type="button" class="submit-btn btn m-btn--pill btn-brand m-btn--custom">
+                                <i class="la la-save"></i> Save Changes
+                            </button>
+                        @endif
+                    @else
+                        <button type="button" class="submit-btn btn m-btn--pill btn-brand m-btn--custom">
                             @if (Request::segment(3) == 'all-gradingsheets')
                                 <i class="la la-save"></i> Generate Grading Sheet
                             @else
                                 <i class="la la-save"></i> Save Changes
                             @endif
-                        @endif
-                    </button>
+                        </button>
+                    @endif
                 @endif
             </div>
         </div>

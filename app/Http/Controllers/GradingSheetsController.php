@@ -598,77 +598,202 @@ class GradingSheetsController extends Controller
 
         if ($grading->material_id <= 2) {
             $iteration = 0; $students = array();
-            foreach ($request->activity as $activity) 
-            {
-                $activities = explode("_", $activity);
-                if (!in_array($activities[1], $students)) {
-                    $students[] = $activities[1];
-                }
+            // foreach ($request->activity as $activity) 
+            // {
+            //     $activities = explode("_", $activity);
+            //     if (!in_array($activities[1], $students)) {
+            //         $students[] = $activities[1];
+            //     }
+                
+            //     if ($grading->material_id == 2) {
+            //         $row = GradingSheetActivity::where([
+            //             'gradingsheet_id' => $id,
+            //             'activity_id' => $activities[0],
+            //             'student_id' => $activities[1]
+            //         ])->get();
 
-                $row = GradingSheetActivity::where([
+            //         if ($row->count() > 0) {
+            //             $gradingActivtity = GradingSheetActivity::where('id', '=', $row->first()->id)
+            //             ->update([
+            //                 'score' => ($request->score[$iteration] !== NULL) ? $request->score[$iteration] : NULL,
+            //                 'updated_at' => $timestamp,
+            //                 'updated_by' => Auth::user()->id
+            //             ]);
+            //         } else {
+            //             $gradingActivtity = GradingSheetActivity::create([
+            //                 'gradingsheet_id' => $id,
+            //                 'activity_id' => $activities[0],
+            //                 'student_id' => $activities[1],
+            //                 'score' => ($request->score[$iteration] !== NULL) ? $request->score[$iteration] : NULL,
+            //                 'created_at' => $timestamp,
+            //                 'created_by' => Auth::user()->id
+            //             ]);
+            //         }
+            //     }
+            //     $iteration++;
+            // }
+        } else {
+            // $iteration = 0; $students = array();
+            // foreach ($request->component as $component) 
+            // {
+            //     $components = explode("_", $component);
+            //     if (!in_array($components[1], $students)) {
+            //         $students[] = $components[1];
+            //     }
+
+            //     $row = GradingSheetHomeroom::where([
+            //         'gradingsheet_id' => $id,
+            //         'component_id' => $components[0],
+            //         'student_id' => $components[1]
+            //     ])->get();
+
+            //     if ($row->count() > 0) {
+            //         $gradingActivtity = GradingSheetHomeroom::where('id', '=', $row->first()->id)
+            //         ->update([
+            //             'score' => ($request->score[$iteration] !== NULL) ? $request->score[$iteration] : NULL,
+            //             'updated_at' => $timestamp,
+            //             'updated_by' => Auth::user()->id
+            //         ]);
+            //     } else {
+            //         $gradingActivtity = GradingSheetHomeroom::create([
+            //             'gradingsheet_id' => $id,
+            //             'component_id' => $components[0],
+            //             'student_id' => $components[1],
+            //             'score' => ($request->score[$iteration] !== NULL) ? $request->score[$iteration] : NULL,
+            //             'created_at' => $timestamp,
+            //             'created_by' => Auth::user()->id
+            //         ]);
+            //     }
+                
+            //     $iteration++;
+            // }
+
+            // $iteration = 0; $requestGrade = array();
+            // foreach ($students as $student) 
+            // {
+            //     $rowQuarter = GradingSheetQuarter::where([
+            //         'gradingsheet_id' => $id,
+            //         'student_id' => $student
+            //     ])->get();
+
+            //     if ($rowQuarter->count() > 0) {
+            //         $gradingQuarter = GradingSheetQuarter::where('id', '=', $rowQuarter->first()->id)
+            //         ->update([
+            //             'initial_grade' => ($request->init_grade[$iteration] !== NULL) ? $request->init_grade[$iteration] : NULL,
+            //             'adjustment_grade' => ($request->tc_score[$iteration] !== NULL) ? $request->tc_score[$iteration] : NULL,
+            //             'quarter_grade' => ($request->quarter_grade[$iteration] !== NULL) ? $request->quarter_grade[$iteration] : NULL,
+            //             'rating' => ($request->rating[$iteration] !== NULL) ? $request->rating[$iteration] : NULL,
+            //             'ranking' => ($request->ranking[$iteration] !== NULL) ? $request->ranking[$iteration] : NULL,
+            //             'updated_at' => $timestamp,
+            //             'updated_by' => Auth::user()->id
+            //         ]);
+            //     } else {
+            //         $gradingQuarter = GradingSheetQuarter::create([
+            //             'gradingsheet_id' => $id,
+            //             'batch_id' => (new Batch)->get_current_batch(),
+            //             'quarter_id' => (new GradingSheet)->get_column_via_identifier('quarter_id', $id),
+            //             'student_id' => $student,
+            //             'initial_grade' => ($request->init_grade[$iteration] !== NULL) ? $request->init_grade[$iteration] : NULL,
+            //             'adjustment_grade' => ($request->tc_score[$iteration] !== NULL) ? $request->tc_score[$iteration] : NULL,
+            //             'quarter_grade' => ($request->quarter_grade[$iteration] !== NULL) ? $request->quarter_grade[$iteration] : NULL,
+            //             'rating' => ($request->rating[$iteration] !== NULL) ? $request->rating[$iteration] : NULL,
+            //             'ranking' => ($request->ranking[$iteration] !== NULL) ? $request->ranking[$iteration] : NULL,
+            //             'created_at' => $timestamp,
+            //             'created_by' => Auth::user()->id
+            //         ]);
+            //     }
+
+            //     $requestGrade[] = $request->quarter_grade[$iteration];
+            //     $iteration++;
+            // }
+        }
+
+        $data = array(
+            'title' => 'Well done!',
+            'text' => 'The grading sheet has been successfully updated.',
+            'type' => 'success',
+            'class' => 'btn-brand'
+        );
+
+        echo json_encode( $data ); exit();
+    }
+
+    public function update_rows(Request $request, $id)
+    {
+        $this->is_permitted(2);
+        $timestamp = date('Y-m-d H:i:s');
+        $grading = GradingSheet::find($id);
+
+        if(!$grading) {
+            throw new NotFoundHttpException();
+        }
+
+        if ($grading->material_id <= 2) 
+        {
+            $students = array();
+            $activities = explode("_", $request->get('activity'));
+            if (!in_array($activities[1], $students)) {
+                $students[] = $activities[1];
+            }
+
+            $row = GradingSheetActivity::where([
+                'gradingsheet_id' => $id,
+                'activity_id' => $activities[0],
+                'student_id' => $activities[1]
+            ])->get();
+
+            if ($row->count() > 0) {
+                $gradingActivtity = GradingSheetActivity::where('id', '=', $row->first()->id)
+                ->update([
+                    'score' => ($request->get('score') !== NULL) ? $request->get('score') : NULL,
+                    'updated_at' => $timestamp,
+                    'updated_by' => Auth::user()->id
+                ]);
+            } else {
+                $gradingActivtity = GradingSheetActivity::create([
                     'gradingsheet_id' => $id,
                     'activity_id' => $activities[0],
-                    'student_id' => $activities[1]
-                ])->get();
-
-                if ($row->count() > 0) {
-                    $gradingActivtity = GradingSheetActivity::where('id', '=', $row->first()->id)
-                    ->update([
-                        'score' => ($request->score[$iteration] !== NULL) ? $request->score[$iteration] : NULL,
-                        'updated_at' => $timestamp,
-                        'updated_by' => Auth::user()->id
-                    ]);
-                } else {
-                    $gradingActivtity = GradingSheetActivity::create([
-                        'gradingsheet_id' => $id,
-                        'activity_id' => $activities[0],
-                        'student_id' => $activities[1],
-                        'score' => ($request->score[$iteration] !== NULL) ? $request->score[$iteration] : NULL,
-                        'created_at' => $timestamp,
-                        'created_by' => Auth::user()->id
-                    ]);
-                }
-                
-                $iteration++;
+                    'student_id' => $activities[1],
+                    'score' => ($request->get('score') !== NULL) ? $request->get('score') : NULL,
+                    'created_at' => $timestamp,
+                    'created_by' => Auth::user()->id
+                ]);
             }
-        } else {
-            $iteration = 0; $students = array();
-            foreach ($request->component as $component) 
-            {
-                $components = explode("_", $component);
-                if (!in_array($components[1], $students)) {
-                    $students[] = $components[1];
-                }
+        }
+        else
+        {
+            $students = array();
+            $components = explode("_", $request->get('component'));
+            if (!in_array($components[1], $students)) {
+                $students[] = $components[1];
+            }
 
-                $row = GradingSheetHomeroom::where([
+            $row = GradingSheetHomeroom::where([
+                'gradingsheet_id' => $id,
+                'component_id' => $components[0],
+                'student_id' => $components[1]
+            ])->get();
+
+            if ($row->count() > 0) {
+                $gradingActivtity = GradingSheetHomeroom::where('id', '=', $row->first()->id)
+                ->update([
+                    'score' => ($request->get('score') !== NULL) ? $request->get('score') : NULL,
+                    'updated_at' => $timestamp,
+                    'updated_by' => Auth::user()->id
+                ]);
+            } else {
+                $gradingActivtity = GradingSheetHomeroom::create([
                     'gradingsheet_id' => $id,
                     'component_id' => $components[0],
-                    'student_id' => $components[1]
-                ])->get();
-
-                if ($row->count() > 0) {
-                    $gradingActivtity = GradingSheetHomeroom::where('id', '=', $row->first()->id)
-                    ->update([
-                        'score' => ($request->score[$iteration] !== NULL) ? $request->score[$iteration] : NULL,
-                        'updated_at' => $timestamp,
-                        'updated_by' => Auth::user()->id
-                    ]);
-                } else {
-                    $gradingActivtity = GradingSheetHomeroom::create([
-                        'gradingsheet_id' => $id,
-                        'component_id' => $components[0],
-                        'student_id' => $components[1],
-                        'score' => ($request->score[$iteration] !== NULL) ? $request->score[$iteration] : NULL,
-                        'created_at' => $timestamp,
-                        'created_by' => Auth::user()->id
-                    ]);
-                }
-                
-                $iteration++;
+                    'student_id' => $components[1],
+                    'score' => ($request->get('score') !== NULL) ? $request->get('score') : NULL,
+                    'created_at' => $timestamp,
+                    'created_by' => Auth::user()->id
+                ]);
             }
         }
 
-        $iteration = 0;
+        $iteration = 0; $requestGrade = array();
         foreach ($students as $student) 
         {
             $rowQuarter = GradingSheetQuarter::where([
@@ -679,11 +804,11 @@ class GradingSheetsController extends Controller
             if ($rowQuarter->count() > 0) {
                 $gradingQuarter = GradingSheetQuarter::where('id', '=', $rowQuarter->first()->id)
                 ->update([
-                    'initial_grade' => ($request->init_grade[$iteration] !== NULL) ? $request->init_grade[$iteration] : NULL,
-                    'adjustment_grade' => ($request->tc_score[$iteration] !== NULL) ? $request->tc_score[$iteration] : NULL,
-                    'quarter_grade' => ($request->quarter_grade[$iteration] !== NULL) ? $request->quarter_grade[$iteration] : NULL,
-                    'rating' => ($request->rating[$iteration] !== NULL) ? $request->rating[$iteration] : NULL,
-                    'ranking' => ($request->ranking[$iteration] !== NULL) ? $request->ranking[$iteration] : NULL,
+                    'initial_grade' => ($request->get('igrade') !== NULL) ? $request->get('igrade') : NULL,
+                    'adjustment_grade' => ($request->get('tcscore') !== NULL) ? $request->get('tcscore') : NULL,
+                    'quarter_grade' => ($request->get('qgrade') !== NULL) ? $request->get('qgrade') : NULL,
+                    'rating' => ($request->get('rating') !== NULL) ? $request->get('rating') : NULL,
+                    'ranking' => ($request->get('ranking') !== NULL) ? $request->get('ranking') : NULL,
                     'updated_at' => $timestamp,
                     'updated_by' => Auth::user()->id
                 ]);
@@ -693,11 +818,11 @@ class GradingSheetsController extends Controller
                     'batch_id' => (new Batch)->get_current_batch(),
                     'quarter_id' => (new GradingSheet)->get_column_via_identifier('quarter_id', $id),
                     'student_id' => $student,
-                    'initial_grade' => ($request->init_grade[$iteration] !== NULL) ? $request->init_grade[$iteration] : NULL,
-                    'adjustment_grade' => ($request->tc_score[$iteration] !== NULL) ? $request->tc_score[$iteration] : NULL,
-                    'quarter_grade' => ($request->quarter_grade[$iteration] !== NULL) ? $request->quarter_grade[$iteration] : NULL,
-                    'rating' => ($request->rating[$iteration] !== NULL) ? $request->rating[$iteration] : NULL,
-                    'ranking' => ($request->ranking[$iteration] !== NULL) ? $request->ranking[$iteration] : NULL,
+                    'initial_grade' => ($request->get('igrade') !== NULL) ? $request->get('igrade') : NULL,
+                    'adjustment_grade' => ($request->get('tcscore') !== NULL) ? $request->get('tcscore') : NULL,
+                    'quarter_grade' => ($request->get('qgrade') !== NULL) ? $request->get('qgrade') : NULL,
+                    'rating' => ($request->get('rating') !== NULL) ? $request->get('rating') : NULL,
+                    'ranking' => ($request->get('ranking') !== NULL) ? $request->get('ranking') : NULL,
                     'created_at' => $timestamp,
                     'created_by' => Auth::user()->id
                 ]);
@@ -707,6 +832,7 @@ class GradingSheetsController extends Controller
         }
 
         $data = array(
+            'data' => $row,
             'title' => 'Well done!',
             'text' => 'The grading sheet has been successfully updated.',
             'type' => 'success',

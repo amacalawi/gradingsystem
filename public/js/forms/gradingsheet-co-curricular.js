@@ -87,7 +87,7 @@
         return true;
     },
 
-    gradingsheet.prototype.compute = function($rows, $group = '') 
+    gradingsheet.prototype.compute = function($rows, $group = '', $activity, $component) 
     {   
         if ($group != '') {
             var $tcCell  = $rows.find('.tc-cell input[name="tc_score[]"]');
@@ -160,27 +160,67 @@
         initGrade.val($scoring);
         quarterGrade.val(qg);
 
+        var $rating = '';
         if (parseFloat(qg) >= 95) {
             $rows.find('.rating-cell').text('E');
             $rows.find('input[name="rating[]"]').val('E');
+            $rating = 'E';
         } else if (parseFloat(qg) >= 90) {
             $rows.find('.rating-cell').text('VS');
             $rows.find('input[name="rating[]"]').val('VS');
+            $rating = 'VS';
         } else if (parseFloat(qg) >= 85) {
             $rows.find('.rating-cell').text('S');
             $rows.find('input[name="rating[]"]').val('S');
+            $rating = 'S';
         } else if (parseFloat(qg) >= 80) {
             $rows.find('.rating-cell').text('MS');
             $rows.find('input[name="rating[]"]').val('MS');
+            $rating = 'MS';
         } else if (parseFloat(qg) >= 75) {
             $rows.find('.rating-cell').text('FS');
             $rows.find('input[name="rating[]"]').val('FS');
+            $rating = 'FS';
         } else {
             $rows.find('.rating-cell').text('NI');
             $rows.find('input[name="rating[]"]').val('NI');
+            $rating = 'NI';
         }
 
-        $.gradingsheet.rankings();
+        $.gradingsheet.rankings($rows, $scoring, qg, $rating, $activity, $component);
+    },
+
+    gradingsheet.prototype.rankings = function($rows = '', $scoring = '', $quartergrade = '', $rating = '', $activity = '', $component = '')
+    {
+        $(".quarter-cell")
+        .map(function(){return $(this).text()})
+        .get()
+        .sort(function(a,b){return a - b })
+        .reduce(function(a, b){ if (b != a[0]) a.unshift(b); return a }, [])
+        .forEach((v,i)=>{
+            var $i = i + 1;
+            $('.quarter-cell').filter(function() {return $(this).text() == v;}).next().find('input[name="ranking[]"]').val($i).parents('td').next().next().text($i);
+        });
+
+        if ($rows !== '' && $component !== '') {
+            var rowActivity = $component;
+            var rowGrade = $scoring;
+            var rowQuarter = $quartergrade;
+            var rowTc = $rows.find('input[name="tc_score[]"]').val();
+            var rowRating = $rating;
+            var rowRanking = $rows.find('input[name="ranking[]"]').val();
+            
+            console.log(base_url + 'academics/grading-sheets/all-gradingsheets/update-rows/' +  + $('#gradingsheetid').val() + '?component=' + rowActivity + '&score=' + $activity + '&igrade=' + rowGrade + '&qgrade=' + rowQuarter + '&tcscore=' + rowTc + '&rating=' + rowRating + '&ranking=' + rowRanking);
+            $.ajax({
+                type: 'GET',
+                url: base_url + 'academics/grading-sheets/all-gradingsheets/update-rows/' +  + $('#gradingsheetid').val() + '?component=' + rowActivity + '&score=' + $activity + '&igrade=' + rowGrade + '&qgrade=' + rowQuarter + '&tcscore=' + rowTc + '&rating=' + rowRating + '&ranking=' + rowRanking,
+                success: function(response) {
+                    var data = JSON.parse(response);
+                    console.log(data);
+                },
+                async: false
+            });
+        }
     },
 
     gradingsheet.prototype.reload_subject_via_section = function($section)
@@ -247,23 +287,10 @@
         console.log(transmutations);
     },
 
-    gradingsheet.prototype.rankings = function()
-    {
-        $(".quarter-cell")
-        .map(function(){return $(this).text()})
-        .get()
-        .sort(function(a,b){return a - b })
-        .reduce(function(a, b){ if (b != a[0]) a.unshift(b); return a }, [])
-        .forEach((v,i)=>{
-            var $i = i + 1;
-            $('.quarter-cell').filter(function() {return $(this).text() == v;}).next().find('input[name="ranking[]"]').val($i).parents('td').next().next().text($i);
-        });
-    },
-
     gradingsheet.prototype.init = function()
     {   
         $.gradingsheet.fetch_transmutations();
-        $.gradingsheet.rankings();
+        $.gradingsheet.rankings('');
         /*
         | ---------------------------------
         | # select, input, and textarea on change or keyup remove error
@@ -349,28 +376,28 @@
             }
             $.gradingsheet.compute(self.closest('tr'), self.closest('td').attr('group'));
         });
-        this.$body.on('blur', '.component-cell', function (e){
-            e.preventDefault();
-            var self = $(this);
-            var maxValue = $(this).attr('maxvalue');
+        // this.$body.on('blur', '.component-cell', function (e){
+        //     e.preventDefault();
+        //     var self = $(this);
+        //     var maxValue = $(this).attr('maxvalue');
 
-            if (maxValue != '') { 
-                if (parseFloat(self.val()) > parseFloat(maxValue)) {
-                    swal({
-                        title: "Oops...",
-                        text: "the input value must be less than or equal to the HPS",
-                        type: "warning",
-                        showCancelButton: false,
-                        closeOnConfirm: true,
-                        confirmButtonClass: "btn btn-warning btn-focus m-btn m-btn--pill m-btn--air m-btn--custom"
-                    });
-                    self.val('');
-                }
-            } else {
-                self.val('');
-            }
-            $.gradingsheet.compute(self.closest('tr'), self.closest('td').attr('group'));
-        });
+        //     if (maxValue != '') { 
+        //         if (parseFloat(self.val()) > parseFloat(maxValue)) {
+        //             swal({
+        //                 title: "Oops...",
+        //                 text: "the input value must be less than or equal to the HPS",
+        //                 type: "warning",
+        //                 showCancelButton: false,
+        //                 closeOnConfirm: true,
+        //                 confirmButtonClass: "btn btn-warning btn-focus m-btn m-btn--pill m-btn--air m-btn--custom"
+        //             });
+        //             self.val('');
+        //         }
+        //     } else {
+        //         self.val('');
+        //     }
+        //     $.gradingsheet.compute(self.closest('tr'), self.closest('td').attr('group'));
+        // });
 
         this.$body.on('keyup', 'input[name="tc_score[]"]', function (e){
             e.preventDefault();
@@ -471,7 +498,40 @@
                 });
             }
         });
-        
+
+        this.$body.on('blur', 'input[name="score[]"]', function (e){
+            e.preventDefault();
+            var self = $(this);
+            var row = $(this).closest('tr');
+            var col = $(this).closest('td');
+            var rowId = $('#gradingsheetid').val();
+            var rowActivity = col.find('input[name="component[]"]').val();
+            var rowGrade = row.find('input[name="init_grade[]"]').val();
+            var rowQuarter = row.find('input[name="quarter_grade[]"]').val();
+            var rowTc = row.find('input[name="tc_score[]"]').val();
+            var rowRating = row.find('input[name="rating[]"]').val();
+            var rowRanking = row.find('input[name="ranking[]"]').val();
+            var maxValue = $(this).attr('maxvalue');
+
+            if (self.val() != '') {
+                if (maxValue != '') { 
+                    if (parseFloat(self.val()) > parseFloat(maxValue)) {
+                        swal({
+                            title: "Oops...",
+                            text: "the input value must be less than or equal to the HPS (100)",
+                            type: "warning",
+                            showCancelButton: false,
+                            closeOnConfirm: true,
+                            confirmButtonClass: "btn btn-warning btn-focus m-btn m-btn--pill m-btn--air m-btn--custom"
+                        });
+                        self.val('');
+                    } 
+                } else {
+                    self.val('');
+                }
+                $.gradingsheet.compute(self.closest('tr'), self.closest('td').attr('group'), self.val(), rowActivity);
+            }
+        });
     }
 
     //init gradingsheet

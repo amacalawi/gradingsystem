@@ -2585,7 +2585,7 @@ class DatabaseSeeder extends Seeder
                 'coordinator_id' => NULL,
                 'is_mapeh' => 0,
                 'is_tle' => 0,
-                'material_id' => 2,
+                'material_id' => 3,
                 'order' => 14,
                 'created_by' => 1
             ],
@@ -2596,7 +2596,7 @@ class DatabaseSeeder extends Seeder
                 'coordinator_id' => NULL,
                 'is_mapeh' => 0,
                 'is_tle' => 0,
-                'material_id' => 2,
+                'material_id' => 4,
                 'order' => 15,
                 'created_by' => 1
             ]

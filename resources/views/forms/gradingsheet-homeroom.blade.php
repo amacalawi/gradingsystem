@@ -13,6 +13,7 @@
                 <th class="shaded fixed freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="rating value">Rating</th>
                 <th class="shaded fixed freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="ranking value">Ranking</th>
             </tr>
+            
             <tr>
                 <th class="shaded fixed freeze text-center scrolling_table_1"><strong>-</strong></th>
                 <th class="shaded fixed freeze text-center scrolling_table_1">&nbsp;</th>
