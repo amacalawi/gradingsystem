@@ -23,12 +23,15 @@ class GradingSheetImport implements ToModel, WithCalculatedFormulas, WithMappedC
     
     public function mapping(): array
     {
-        $male_students = (new Admission)->get_students_via_gradingsheet($id, 'Male');
-        $female_students = (new Admission)->get_students_via_gradingsheet($id, 'Female');
+        $male_students = (new Admission)->get_students_via_gradingsheet($this->id, 'Male');
+        $female_students = (new Admission)->get_students_via_gradingsheet($this->id, 'Female');
         $components = (new Component)->get_components_via_gradingsheet($this->id);
 
         $row = 10 ;
-        foreach($students as $student)
+        if (count($male_students) > 0){
+            $row++;
+        }
+        foreach($male_students as $student)
         {
             $col = 'B';
             foreach($components as $component)
@@ -44,6 +47,25 @@ class GradingSheetImport implements ToModel, WithCalculatedFormulas, WithMappedC
             $row++;
         }
         
+        if (count($female_students) > 0){
+            $row++;
+        }
+        foreach($female_students as $student)
+        {
+            $col = 'B';
+            foreach($components as $component)
+            {
+                foreach($component->activities as $activity)
+                {
+                    $col++;
+                    $score = $col.$row;
+                    $data[$score] = $score;
+                }
+                $col = $this->increment($col, 4);
+            }
+            $row++;
+        }
+
         return $data;
     }
 
@@ -51,12 +73,42 @@ class GradingSheetImport implements ToModel, WithCalculatedFormulas, WithMappedC
     {
         $timestamp = date('Y-m-d H:i:s');
 
-        $male_students = (new Admission)->get_students_via_gradingsheet($id, 'Male');
-        $female_students = (new Admission)->get_students_via_gradingsheet($id, 'Female');
+        $male_students = (new Admission)->get_students_via_gradingsheet($this->id, 'Male');
+        $female_students = (new Admission)->get_students_via_gradingsheet($this->id, 'Female');
         $components = (new Component)->get_components_via_gradingsheet($this->id);
        
         $row = 10 ;// row
-        foreach($students as $student)
+        if (count($male_students) > 0){
+            $row++;
+        }
+        foreach($male_students as $student)
+        {
+            $col = 'B'; // column
+            foreach($components as $component)
+            {
+                foreach($component->activities as $activity)
+                {
+                    $col++;
+                    $score = $col.$row;
+                    if($rows[$score] !== NULL){
+                        $gradingActivtity = GradingSheetActivity::where('activity_id', '=', $activity->id)->where('student_id', '=', $student->student_id)
+                        ->update([
+                            'score' => $rows[$score],
+                            'updated_at' => $timestamp,
+                            'updated_by' => Auth::user()->id
+                        ]);
+                    }
+                }
+                $col = $this->increment($col, 4);
+            }
+            $row++;
+        }
+
+        if (count($female_students) > 0){
+            $row++;
+        }
+
+        foreach($female_students as $student)
         {
             $col = 'B'; // column
             foreach($components as $component)
