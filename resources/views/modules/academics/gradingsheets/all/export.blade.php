@@ -88,8 +88,8 @@
         <tr>
             <th style="font-size:15px;" colspan="2">
             </th>   
-            <th style="font-size:30px; text-align: center;" colspan="28">
-                <h3>E-CLASS RECORD</h3>
+            <th style="font-size:20px; text-align: center;" colspan="28">
+                <h4>E-CLASS RECORD</h4>
             </th>
         </tr>
         <tr>
@@ -193,7 +193,7 @@
                 $column_letter = 'A';
             @endphp
 
-            <th style="width:5px; text-align: center; border: 1px solid black;" class="shaded fixed freeze text-center scrolling_table_1">#</th> 
+            <th style="width:5px; text-align: center; border: 1px solid black; font-size:25px;" class="shaded fixed freeze text-center scrolling_table_1"> </th> 
             <th style="word-wrap: break-word; overflow-wrap: break-word; font-size:15px; vertical-align: middle; width:30px; border: 1px solid black; text-align: center;" class="shaded fixed freeze text-center scrolling_table_1">LEARNERS' NAME</th>
             @foreach ($components as $component)
                 @php $colored = get_clour($component->palette); @endphp
@@ -268,28 +268,28 @@
 
         @if (count($male_students) > 0)
             <tr class="tr_shaded">
-                <td style="background-color:#f4f5f8;" class="fixed freeze text-center scrolling_table_1 gray-bg">-</td>
-                <td style="background-color:#f4f5f8;" class="fixed freeze text-center scrolling_table_1 gray-bg">MALE</td>
+                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze text-center scrolling_table_1 gray-bg"> </td>
+                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze text-center scrolling_table_1 gray-bg">MALE</td>
                 @foreach ($components as $component)
                     @foreach ($component->activities as $activity)
-                        <td group="{{ $component->id }}" style="background-color:#f4f5f8;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                        <td group="{{ $component->id }}" style="background-color:#ffcc59; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
                     @endforeach
-                    @if ($component->is_sum_cell > 0)
-                        <td group="{{ $component->id }}" style="background-color:#f4f5f8;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
-                    @endif
-                    @if ($component->is_hps_cell > 0)
-                        <td group="{{ $component->id }}" style="background-color:#f4f5f8;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
-                    @endif
-                    @if ($component->is_ps_cell > 0)
-                        <td group="{{ $component->id }}" style="background-color:#f4f5f8;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
-                    @endif
-                    <td group="{{ $component->id }}" style="background-color:#f4f5f8;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                    {{--@if ($component->is_sum_cell > 0)--}}
+                        <td group="{{ $component->id }}" style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                    {{--@endif--}}
+                    {{--@if ($component->is_hps_cell > 0)--}}
+                        <td group="{{ $component->id }}" style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                    {{--@endif--}}
+                    {{--@if ($component->is_ps_cell > 0)--}}
+                        <td group="{{ $component->id }}" style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                    {{--@endif--}}
+                        <td group="{{ $component->id }}" style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
                 @endforeach
-                <td style="background-color:#f4f5f8;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
-                <td style="background-color:#f4f5f8;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
-                <td style="background-color:#f4f5f8;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
-                <td style="background-color:#f4f5f8;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
-                <td style="background-color:#f4f5f8;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
             </tr>
             @php
                 $rownumber++;   
@@ -357,7 +357,7 @@
 
 
                     <!-- SUM -->
-                    <td style="text-align: center; border: 1px solid black; background-color:{{$colored}};" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding sum-cell">
+                    <td style="text-align: center; border: 1px solid black;" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding sum-cell">
                         =SUM({{$columnletter_x}}{{$rownumber}}:{{$columnletter_y}}{{$rownumber}})
                     </td>
                     @php
@@ -397,7 +397,7 @@
                         $hps_col_location = $hps_col_x;
                     @endphp
 
-                    <td style="text-align: center; border: 1px solid black; background-color:{{$colored}};" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding hps-cell">
+                    <td style="text-align: center; border: 1px solid black;" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding hps-cell">
                         {{$hps_formula}} <!-- HPS Complete Formula -->
                     </td>
 
@@ -414,7 +414,7 @@
                         $ps_formula = '=IF('.$sum_col_location.$rownumber.'>0,'.'('.$sum_col_location.$rownumber.'/'.$hps_col_location.$rownumber.')*100,0)'; 
                     @endphp
                     
-                    <td style="text-align: center; border: 1px solid black; background-color:{{$colored}};" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding ps-cell">
+                    <td style="text-align: center; border: 1px solid black;" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding ps-cell">
                         {{$ps_formula}} <!-- PS Complete Formula -->
                     </td>            
                     @php
@@ -426,7 +426,7 @@
 
 
                     <!-- Percent N% -->
-                    <td style="text-align: center; border: 1px solid black; background-color:{{$colored}};" group="{{ $component->id }}" maxvalue="{{ $component->percentage }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 percentage-cell">
+                    <td style="text-align: center; border: 1px solid black;" group="{{ $component->id }}" maxvalue="{{ $component->percentage }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 percentage-cell">
                         
                         @php
                             $percent_col_x++; 
@@ -503,28 +503,28 @@
         <!-- Female -->
         @if (count($female_students) > 0)
             <tr class="tr_shaded">
-                <td style="background-color:#f4f5f8;" class="fixed freeze text-center scrolling_table_1 gray-bg">-</td>
-                <td style="background-color:#f4f5f8;" class="fixed freeze text-center scrolling_table_1 gray-bg">FEMALE</td>
+                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze text-center scrolling_table_1 gray-bg"> </td>
+                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze text-center scrolling_table_1 gray-bg">FEMALE</td>
                 @foreach ($components as $component)
                     @foreach ($component->activities as $activity)
-                        <td group="{{ $component->id }}" style="background-color:#f4f5f8;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                        <td group="{{ $component->id }}" style="background-color:#ffcc59; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
                     @endforeach
-                    @if ($component->is_sum_cell > 0)
-                        <td group="{{ $component->id }}" style="background-color:#f4f5f8;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
-                    @endif
-                    @if ($component->is_hps_cell > 0)
-                        <td group="{{ $component->id }}" style="background-color:#f4f5f8;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
-                    @endif
-                    @if ($component->is_ps_cell > 0)
-                        <td group="{{ $component->id }}" style="background-color:#f4f5f8;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
-                    @endif
-                    <td group="{{ $component->id }}" style="background-color:#f4f5f8;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                    {{--@if ($component->is_sum_cell > 0)--}}
+                        <td group="{{ $component->id }}" style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                    {{--@endif--}}
+                    {{--@if ($component->is_hps_cell > 0)--}}
+                        <td group="{{ $component->id }}" style="background-color:#9e9e9e; border: 1px solid black; " class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                    {{--@endif--}}
+                    {{--@if ($component->is_ps_cell > 0)--}}
+                        <td group="{{ $component->id }}" style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                    {{--@endif--}}
+                        <td group="{{ $component->id }}" style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
                 @endforeach
-                <td style="background-color:#f4f5f8;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
-                <td style="background-color:#f4f5f8;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
-                <td style="background-color:#f4f5f8;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
-                <td style="background-color:#f4f5f8;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
-                <td style="background-color:#f4f5f8;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
             </tr>
             @php
                 $rownumber++;   
@@ -592,7 +592,7 @@
 
 
                     <!-- SUM -->
-                    <td style="text-align: center; border: 1px solid black; background-color:{{$colored}};" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding sum-cell">
+                    <td style="text-align: center; border: 1px solid black;" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding sum-cell">
                         =SUM({{$columnletter_x}}{{$rownumber}}:{{$columnletter_y}}{{$rownumber}})
                     </td>
                     @php
@@ -632,7 +632,7 @@
                         $hps_col_location = $hps_col_x;
                     @endphp
 
-                    <td style="text-align: center; border: 1px solid black; background-color:{{$colored}};" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding hps-cell">
+                    <td style="text-align: center; border: 1px solid black; " group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding hps-cell">
                         {{$hps_formula}} <!-- HPS Complete Formula -->
                     </td>
 
@@ -649,7 +649,7 @@
                         $ps_formula = '=IF('.$sum_col_location.$rownumber.'>0,'.'('.$sum_col_location.$rownumber.'/'.$hps_col_location.$rownumber.')*100,0)'; 
                     @endphp
                     
-                    <td style="text-align: center; border: 1px solid black; background-color:{{$colored}};" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding ps-cell">
+                    <td style="text-align: center; border: 1px solid black;" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding ps-cell">
                         {{$ps_formula}} <!-- PS Complete Formula -->
                     </td>            
                     @php
@@ -661,7 +661,7 @@
 
 
                     <!-- Percent N% -->
-                    <td style="text-align: center; border: 1px solid black; background-color:{{$colored}};" group="{{ $component->id }}" maxvalue="{{ $component->percentage }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 percentage-cell">
+                    <td style="text-align: center; border: 1px solid black;" group="{{ $component->id }}" maxvalue="{{ $component->percentage }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 percentage-cell">
                         
                         @php
                             $percent_col_x++; 
