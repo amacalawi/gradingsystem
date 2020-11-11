@@ -597,9 +597,12 @@ a[data-dismiss="modal"] {
     display: none !important;
 }
 
+.bootstrap-select button[data-id="student_id"][data-toggle="dropdown"],
+.bootstrap-select button[data-id="section_info_id"][data-toggle="dropdown"],
 .bootstrap-select button[data-id="subject_id"][data-toggle="dropdown"],
 .bootstrap-select button[data-id="education_type_id"][data-toggle="dropdown"],
 .bootstrap-select button[data-id="type"][data-toggle="dropdown"],
+.bootstrap-select button[data-id="batch_id"][data-toggle="dropdown"],
 .bootstrap-select button[data-id="quarter_id"][data-toggle="dropdown"],
 .bootstrap-select button[data-id="grade_level"][data-toggle="dropdown"] {
     padding: 1rem 1.5rem !important;
@@ -895,4 +898,16 @@ a[data-dismiss="modal"] {
 .m--font-bold {
     color: #414144 !important;
     font-weight: bold;
+}
+
+#report-card-table {
+    table-layout: fixed;
+    min-width: 100%;
+}
+
+#report-card-table td {
+    border: 1px solid #575962 !important;
+    color: #212529 !important;
+    padding: 0.75rem;
+    vertical-align: middle;
 }

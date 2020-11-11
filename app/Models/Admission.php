@@ -76,9 +76,24 @@ class Admission extends Model
         return $admitted;
     }
 
+    public function batch()
+    {   
+        return $this->belongsTo('App\Models\Batch');
+    }
+
     public function section()
     {   
         return $this->belongsTo('App\Models\Section');
+    }
+
+    public function section_info()
+    {   
+        return $this->belongsTo('App\Models\SectionInfo', 'section_info_id', 'id');
+    }
+
+    public function subjects()
+    {   
+        return $this->hasMany('App\Models\SectionsSubjects', 'section_info_id', 'section_info_id'); 
     }
 
     public function student()
