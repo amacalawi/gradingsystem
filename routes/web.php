@@ -470,6 +470,13 @@ Route::prefix('academics')->group(function () {
         Route::get('transmutations/all-inactive', 'TransmutationsController@all_inactive')->name('menus.transmutations.all.inactive');
         Route::put('transmutations/update-status/{id}', 'TransmutationsController@update_status')->name('menus.transmutations.update.status');
         /* End Transmutation Routes */
+
+        /* Start Report Card Routes */
+        Route::get('report-card/export', 'ReportCardController@export')->name('report.card.export');
+        Route::get('report-card/export-view', 'ReportCardController@export_view')->name('report.card.export_view');
+        Route::get('report-card/reload-classes', 'ReportCardController@reload_classes')->name('report.card.reload_classes');
+        Route::get('report-card/reload-students', 'ReportCardController@reload_students')->name('report.card.reload_students');
+        /* End Report Card Routes */
     });
     /* End Grading Sheets Routes */
 

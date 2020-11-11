@@ -43,5 +43,27 @@ class Batch extends Model
     {
         return self::where('status', 'Current')->first()->id;
     }
+
+    public function all_batches()
+    {	
+    	$batchs = self::where('is_active', 1)->orderBy('id', 'asc')->get();
+
+        $batchx = array();
+        $batchx[] = array('' => 'select a batch');
+        foreach ($batchs as $batch) {
+            $batchx[] = array(
+                $batch->id => $batch->name
+            );
+        }
+
+        $batchs = array();
+        foreach($batchx as $batch) {
+            foreach($batch as $key => $val) {
+                $batchs[$key] = $val;
+            }
+        }
+
+        return $batchs;
+    }
 }
 

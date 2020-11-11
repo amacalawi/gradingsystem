@@ -555,6 +555,8 @@
                         {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
                     @elseif( in_array(Request::segment(3), $url) && ( \Request::is('*/*/*/settings') || \Request::is('*/*/*/settings/*') ) )
                         {{ ucwords(str_replace('-',' ', Request::segment(3).' '.Request::segment(4))) }}
+                    @else
+                    {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
                     @endif
                 </h3>
 
@@ -574,7 +576,7 @@
                     <li class="m-nav__item">
                         @php 
                             $string = substr(ucwords(Request::segment(3)), 0, -1);
-                            $url = ['staff-attendance', 'student-attendance'];
+                            $url = ['staff-attendance', 'student-attendance', 'report-card'];
                         @endphp
 
                         @if(Request::segment(4) == 'settings')
@@ -599,6 +601,8 @@
                                     @else
                                         @if (in_array(Request::segment(3), $url) && \Request::is('*/*/*/file-attendance'))
                                             Manage {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
+                                        @elseif (in_array(Request::segment(3), $url))
+                                            Manage {{ ucwords(str_replace('-',' ', Request::segment(3))) }}
                                         @else
                                             Manage {{ substr(ucwords(str_replace('-',' ', Request::segment(3))), 0, -1) }}
                                         @endif
@@ -610,7 +614,15 @@
                 </ul>
             </div>
 
-            @if (Request::segment(5) == '')   
+            @if (Request::segment(4) == 'export')   
+            <div>                                                      
+                <a href="javascript:;" class="export-btn btn m-btn--pill btn-brand add-btn m-btn--custom">
+                    <i class="flaticon-graphic-1"></i> 
+                    Export Report Card
+                </a>
+            </div>
+            @elseif (Request::segment(4) == 'export-view')   
+            @elseif (Request::segment(5) == '')   
                 <div>
                     <a href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/'.Request::segment(3).'/'.Request::segment(4).'/add') }}" class="btn m-btn--pill btn-brand add-btn m-btn--custom">
                         <i class="la la-commenting"></i>
