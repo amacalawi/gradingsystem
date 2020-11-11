@@ -71,7 +71,11 @@
                                                 {{ ($finalGrade > 0) ? number_format(floor($finalGrade*100)/100,2) : '' }}
                                             </td>
                                             <td class="text-center">1.0</td>
-                                            <td colspan="2" class="text-center"></td>
+                                            <td colspan="2" class="text-center">
+                                                {{ 
+                                                    ($finalGrade > 0) ? ($finalGrade >= 75) ? 'Passed' : 'Failed' : ''
+                                                }}
+                                            </td>
                                         </tr>
                                     @else
                                         @if($subject->is_mapeh == 1 && $subject->is_tle == 0)
@@ -127,7 +131,11 @@
                                             {{ ($finalGrade > 0) ? number_format(floor($finalGrade*100)/100,2) : '' }}
                                         </td>
                                         <td class="text-center"></td>
-                                        <td colspan="2" class="text-center"></td>
+                                        <td colspan="2" class="text-center">
+                                            {{ 
+                                                ($finalGrade > 0) ? ($finalGrade >= 75) ? 'Passed' : 'Failed' : ''
+                                            }}
+                                        </td>
                                     </tr>
                                 @endif
                             @endforeach
