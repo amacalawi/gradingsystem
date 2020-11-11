@@ -27,13 +27,13 @@ class GradingSheetImport implements ToModel, WithCalculatedFormulas, WithMappedC
         $female_students = (new Admission)->get_students_via_gradingsheet($this->id, 'Female');
         $components = (new Component)->get_components_via_gradingsheet($this->id);
 
-        $row = 10 ;
+        $row = 11 ;
         if (count($male_students) > 0){
             $row++;
         }
         foreach($male_students as $student)
         {
-            $col = 'B';
+            $col = 'E';
             foreach($components as $component)
             {
                 foreach($component->activities as $activity)
@@ -52,7 +52,7 @@ class GradingSheetImport implements ToModel, WithCalculatedFormulas, WithMappedC
         }
         foreach($female_students as $student)
         {
-            $col = 'B';
+            $col = 'E';
             foreach($components as $component)
             {
                 foreach($component->activities as $activity)
@@ -77,13 +77,13 @@ class GradingSheetImport implements ToModel, WithCalculatedFormulas, WithMappedC
         $female_students = (new Admission)->get_students_via_gradingsheet($this->id, 'Female');
         $components = (new Component)->get_components_via_gradingsheet($this->id);
        
-        $row = 10 ;// row
+        $row = 11 ;// row
         if (count($male_students) > 0){
             $row++;
         }
         foreach($male_students as $student)
         {
-            $col = 'B'; // column
+            $col = 'E'; // column
             foreach($components as $component)
             {
                 foreach($component->activities as $activity)
@@ -110,7 +110,7 @@ class GradingSheetImport implements ToModel, WithCalculatedFormulas, WithMappedC
 
         foreach($female_students as $student)
         {
-            $col = 'B'; // column
+            $col = 'E'; // column
             foreach($components as $component)
             {
                 foreach($component->activities as $activity)

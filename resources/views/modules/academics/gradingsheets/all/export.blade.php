@@ -28,6 +28,9 @@
     .m-badge--purple{
       background-color:#BA68C8 ;
     }
+    .font-family-default{
+      font-family:Arial;
+    }
 </style>
 
 @php
@@ -83,233 +86,230 @@
     }
 @endphp
 
-<table id="gradingsheet-table" class="table-bordered" style="1px solid black; font-family:Arial;">
+<table id="gradingsheet-table" class="table-bordered" style="1px solid black;">
     <tbody>
+        {{--1--}}
         <tr>
-            <th style="font-size:15px;" colspan="2">
-            </th>   
-            <th style="font-size:20px; text-align: center;" colspan="28">
-                <h4>E-CLASS RECORD</h4>
-            </th>
-        </tr>
-        <tr>
-            <th style="font-size:15px;" colspan="2">
-            </th>
-            <th style="font-size:20px; text-align: center;" colspan="28">
+            <th colspan="35" rowspan="2" valign="middle" style="text-align:center;">
+                <h4><b>Class Record</b></h4>
             </th>
         </tr>
 
+        {{--2--}}
         <tr>
-            <th style="font-size:15px; text-align: right;" colspan="2">
+            <th colspan="35" style="text-align:center;">
+            </th>
+        </tr>
+
+        {{--3--}}
+        <tr>
+            <th colspan="35" style="text-align:center;">
+                <li>(Pursuant to Deped Order 8 series of 2015)</li>
+            </th>
+        </tr>
+
+        {{--4--}}
+        <tr>
+            <th colspan="6" style="text-align: right;">
                 <h4><b>REGION</b></h4>
             </th>
-            <th style="font-size:15px; border: 1px solid black; color:blue;" colspan="4">
-            </th>
+            <th colspan="4" style="border: 5px solid black;"></th>
 
-            <th style="font-size:15px; text-align: right;" colspan="2">
+            <th colspan="4" style="text-align: right;">
                 <h4><b>DIVISION</b></h4>
             </th>
-            <th style="font-size:15px; border: 1px solid black; color:blue;" colspan="4">
-            </th>
+            <th colspan="4" style="border: 5px solid black;"></th>
 
-            <th style="font-size:15px; text-align: right;" colspan="2">
+            <th></th>
+            
+            <th colspan="4" style="text-align: right;">
                 <h4><b>DISTRICT</b></h4>
             </th>
-            <th style="font-size:15px; border: 1px solid black; color:blue;" colspan="4">
-            </th>
-            {{--
-            <th class="shaded fixed freeze text-center scrolling_table_1 cities">
-                Level and Section: <b> {{ $grading->level_name }} ({{ $grading->section_name }}) </b>
-            </th>
-            --}}
+            <th colspan="6" style="border: 1px solid black;"></th>
         </tr>
+
+        {{--5--}}
         <tr>
-            <th style="font-size:15px; text-align: right;" colspan="2">
+            <th colspan="6" style="text-align: right;">
                 <h4><b>SCHOOL NAME</b></h4>
             </th>
-            <th style="font-size:15px; border: 1px solid black; color:blue;" colspan="16">
-            </th>
+            <th colspan="12" style="border: 5px solid black;"></th>
 
-            <th style="font-size:15px; text-align: right;" colspan="2">
+            <th></th>
+
+            <th colspan="4" style="text-align: right;">
                 <h4><b>SCHOOL ID</b></h4>
             </th>
-            <th style="font-size:15px; border: 1px solid black; color:blue;" colspan="4">
-            </th>
+            <th colspan="6" style="border: 5px solid black;"></th>
 
-            <th style="font-size:15px; text-align: right;" colspan="2">
+            <th colspan="3" style="text-align: right;">
                 <h4><b>SCHOOL YEAR</b></h4>
             </th>
-            <th style="font-size:15px; border: 1px solid black; color:blue;" colspan="4">
-            </th>
-            {{--
-            <th class="shaded fixed freeze text-center scrolling_table_1">
-                Subject and Teacher: <b> {{ $grading->subject_name }} ({{ $grading->teacher }}) </b>
-            </th>
-            --}}
+            <th colspan="3" style="border: 1px solid black;"></th>
         </tr>
         
+        {{--6--}}
         <tr>
-            <th style="font-size:15px;" colspan="2">
-            </th>
-            <th style="font-size:25px; text-align: center;" colspan="28">
+            <th colspan="35">
             </th>
         </tr> 
 
+        {{--7--}}
         <tr>
-            <th style="font-size:15px; border: 1px solid black; color:red; text-align: center;" colspan="2">
+            <th colspan="5" style="text-align: center;" >
                 <h4><b>{{ strtoupper($grading->quarter_name) }}</b></h4>
             </th>
 
-            <th style="font-size:15px; text-align: right; border: 1px solid black;" colspan="4">
+            <th colspan="5" style="border: 50px solid black; text-align: right;">
                 <h4><b>GRADE AND SECTION: </b></h4>
             </th>
-            <th style="font-size:15px; border: 1px solid black; color:blue;" colspan="4">
+            <th colspan="6" style="border: 50px solid black; text-align: left;">
                 <h4><b>{{ strtoupper($grading->level_name) }} - {{ strtoupper($grading->section_name) }}</b></h4>
             </th>
 
-            <th style="font-size:15px; text-align: right; border: 1px solid black;" colspan="2">
+            <th colspan="3" style="border: 50px solid black; text-align: right;">
                 <h4><b>TEACHER: </b></h4>
             </th>
-            <th style="font-size:15px; border: 1px solid black; color:blue;" colspan="4">
+            <th colspan="9" style="border: 50px solid black; text-align: left;">
                 <h4><b>{{ strtoupper($grading->adviser) }}</b></h4>
             </th>
 
-            <th style="font-size:15px; text-align: right; border: 1px solid black;" colspan="2">
+            <th colspan="4" style="border: 50px solid black; text-align: right;">
                 <h4><b>SUBJECT: </b></h4>
             </th>
-            <th style="font-size:15px; border: 1px solid black; color:red;" colspan="6">
+            <th colspan="3" style="border: 50px solid black; text-align: left;">
                 <h4><b>{{ strtoupper($grading->subject_name) }}</b></h4>
             </th>
-            {{--
-            <th class="shaded fixed freeze text-center scrolling_table_1">
-                Batch and Quarter: <b> {{ $grading->batch_name }} ({{ $grading->quarter_name }}) </b>
-            </th>
-            --}}
         </tr>
                
+        {{--8--}}
         <tr>
             @php
                 $column_letter_repo = array();
                 $column_letter = 'A';
             @endphp
 
-            <th style="width:5px; text-align: center; border: 1px solid black; font-size:25px;" class="shaded fixed freeze text-center scrolling_table_1"> </th> 
-            <th style="word-wrap: break-word; overflow-wrap: break-word; font-size:15px; vertical-align: middle; width:30px; border: 1px solid black; text-align: center;" class="shaded fixed freeze text-center scrolling_table_1">LEARNERS' NAME</th>
+            <th valign="middle" style="border: 1px solid black;" class="shaded fixed freeze text-center scrolling_table_1"> </th> 
+            <th valign="middle" colspan="4" style="word-wrap: break-word; overflow-wrap: break-word; border: 1px solid black; text-align: center;" class="shaded fixed freeze text-center scrolling_table_1">LEARNERS' NAME</th>
             @foreach ($components as $component)
                 @php $colored = get_clour($component->palette); @endphp
                 @php $coloumcount = get_coloumcount($component->activities); @endphp
-                <th colspan="{{ $coloumcount }}" style="font-size:15px; vertical-align: middle; text-align: center; border-collapse: collapse; border: 1px solid black;" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 component-header" >{{ strtoupper($component->name) }} ({{$component->percentage}}%)</th>
+                <th valign="middle" colspan="{{ $coloumcount }}" style="word-wrap: break-word; overflow-wrap: break-word; text-align: center; border-collapse: collapse; border: 1px solid black;" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 component-header" >{{ strtoupper($component->name) }} ({{$component->percentage}}%)</th>
             @endforeach
-            <th style="font-size:15px; vertical-align: middle; text-align: center; border: 1px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1" title="initial grade">INITIAL</th>
-            <th style="font-size:15px; vertical-align: middle; text-align: center; border: 1px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg" title="quarterly grade">QG</th>
-            <th style="font-size:15px; vertical-align: middle; text-align: center; border: 1px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1" title="transmutation value">TC</th>
-            <th style="font-size:15px; vertical-align: middle; text-align: center; border: 1px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1" title="transmutation value">RATING</th>
-            <th style="font-size:15px; vertical-align: middle; text-align: center; border: 1px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1" title="transmutation value">RANKING</th>
-            
+            <th valign="middle" style="word-wrap: break-word; overflow-wrap: break-word; text-align: center; border: 2px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1" title="initial grade">INITIAL</th>
+            <th valign="middle" style="word-wrap: break-word; overflow-wrap: break-word; text-align: center; border: 2px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg" title="quarterly grade">QG</th>
+            <th valign="middle" style="word-wrap: break-word; overflow-wrap: break-word; text-align: center; border: 2px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1" title="transmutation value">TC</th>
+            <th valign="middle" style="word-wrap: break-word; overflow-wrap: break-word; text-align: center; border: 2px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1" title="transmutation value">RATING</th>
+            <th valign="middle" style="word-wrap: break-word; overflow-wrap: break-word; text-align: center; border: 2px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1" title="transmutation value">RANKING</th>
         </tr>
+
+        {{--9--}}
         <tr>
-            <th style="text-align: center; border: 1px solid black;" class="shaded fixed freeze text-center scrolling_table_1"></th> @php $column_letter_repo['#'] = $column_letter++; @endphp
-            <th style="text-align: left; border: 1px solid black; color:red;" class="shaded fixed freeze text-center scrolling_table_1">{{ strtoupper($grading->subject_name) }}</th> @php $column_letter_repo['student'] = $column_letter++; @endphp
+            <th style="border: 1px solid black;" class="shaded fixed freeze text-center scrolling_table_1"></th> @php $column_letter_repo['#'] = $column_letter++; @endphp
+            <th colspan="4" style="text-align: left; border: 1px solid black;" class="shaded fixed freeze text-center scrolling_table_1">{{ strtoupper($grading->subject_name) }}</th> 
+            @php 
+                for($x=0; $x<4; $x++ ){
+                    $column_letter++; 
+                }
+                $column_letter_repo['student'] = $column_letter;
+            @endphp
             @php $component_percentage = 0; @endphp
             
             @foreach ($components as $component)
                 @php $iteration = 1; @endphp
                 @php $colored = get_clour($component->palette); @endphp
                 @foreach ($component->activities as $activity)
-                    <th style="text-align: center; text-align: center; border: 1px solid black;" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1" title="{{ $activity->activity }}">A{{ $iteration }}</th> @php $column_letter_repo['A'.$column_letter] =  $column_letter++; @endphp
+                    <th style="text-align: center; border: 2px solid black;" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1" title="{{ $activity->activity }}">A{{ $iteration }}</th> @php $column_letter_repo['A'.$column_letter] =  $column_letter++; @endphp
                     @php $iteration++; @endphp
                 @endforeach
-                <th style="text-align: center; border: 1px solid black; " class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1" title="total activities">SUM</th> @php $column_letter_repo['SUM'.$column_letter] =  $column_letter++; @endphp
-                <th style="text-align: center; border: 1px solid black; " class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1" title="highest possible score">HPS</th>@php $column_letter_repo['HPS'.$column_letter] =  $column_letter++; @endphp
-                <th style="text-align: center; border: 1px solid black; " class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1" title="percentage score">PS</th>@php $column_letter_repo['PS'.$column_letter] =  $column_letter++; @endphp
-                <th style="text-align: center; border: 1px solid black; " class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1" title="quarterly percentage">{{ $component->percentage }}%</th> @php $column_letter_repo['percent'.$column_letter] =  $column_letter++; @endphp
+                <th style="text-align: center; border: 2px solid black; " class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1" title="total activities">SUM</th> @php $column_letter_repo['SUM'.$column_letter] =  $column_letter++; @endphp
+                <th style="text-align: center; border: 2px solid black; " class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1" title="highest possible score">HPS</th>@php $column_letter_repo['HPS'.$column_letter] =  $column_letter++; @endphp
+                <th style="text-align: center; border: 2px solid black; " class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1" title="percentage score">PS</th>@php $column_letter_repo['PS'.$column_letter] =  $column_letter++; @endphp
+                <th style="text-align: center; border: 2px solid black; " class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1" title="quarterly percentage">{{ $component->percentage }}%</th> @php $column_letter_repo['percent'.$column_letter] =  $column_letter++; @endphp
                 @php $component_percentage += $component->percentage; @endphp
-
             @endforeach
-            <th style="text-align: center; border: 1px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1" title="total quarterly percentage">{{ $component_percentage }}%</th>@php $column_letter_repo['initial'] =  $column_letter++; @endphp
-            <th style="text-align: center; border: 1px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg">&nbsp;</th>@php $column_letter_repo['QG'] =  $column_letter++; @endphp
-            <th style="text-align: center; border: 1px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</th>@php $column_letter_repo['TC'] =  $column_letter++; @endphp
-        
-            <th style="text-align: center; border: 1px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</th>
-            <th style="text-align: center; border: 1px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</th>
-
+            <th style="text-align: center; border: 2px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1" title="total quarterly percentage">{{ $component_percentage }}%</th>@php $column_letter_repo['initial'] =  $column_letter++; @endphp
+            <th style="text-align: center; border: 2px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg">&nbsp;</th>@php $column_letter_repo['QG'] =  $column_letter++; @endphp
+            <th style="text-align: center; border: 2px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</th>@php $column_letter_repo['TC'] =  $column_letter++; @endphp
+            <th style="text-align: center; border: 2px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</th>
+            <th style="text-align: center; border: 2px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</th>
         </tr>
+
+        {{--10--}}
         <tr class="tr_shaded">
-            <td style="text-align: center; border: 1px solid black;" class="shaded fixed freeze text-center scrolling_table_1"></td>
-            <td style="text-align: right; border: 1px solid black;" class="shaded fixed freeze text-center scrolling_table_1">HIGHEST POSIBLE SCORE;</td>
+            <td style="border: 2px solid black;" class="shaded fixed freeze text-center scrolling_table_1"></td>
+            <td colspan="4" style="text-align: right; border: 2px solid black;" class="shaded fixed freeze text-center scrolling_table_1">HIGHEST POSIBLE SCORE</td>
             @foreach ($components as $component)
                 @php $iteration = 1; $sumValue = 0; @endphp
                 @foreach ($component->activities as $activity)
                     @php $colored = get_clour($component->palette); @endphp
-                    <th style="text-align: center; border: 1px solid black;" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 activity-cell-header">{{ $activity->value }}</th>
+                    <th style="text-align: center; border: 2px solid black;" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 activity-cell-header">{{ $activity->value }}</th>
                     @php $iteration++; @endphp
                 @endforeach
-                    <th style="text-align: center; border: 1px solid black;" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 sum-header">{{ $component->sum_value }}</th>
-                    <th style="text-align: center; border: 1px solid black;" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 hps-header">{{ $component->sum_value }}</th>
-                    <th style="text-align: center; border: 1px solid black;" group="{{ $component->id }}" maxvalue="{{ $component->sum_value }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 ps-header">100%</th>
-                    <td style="text-align: center; border: 1px solid black;" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 percentage-header">&nbsp;</td>
+                    <td style="text-align: center; border: 2px solid black;" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 sum-header">{{ $component->sum_value }}</td>
+                    <td style="text-align: center; border: 2px solid black;" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 hps-header">{{ $component->sum_value }}</td>
+                    <td style="text-align: center; border: 2px solid black;" group="{{ $component->id }}" maxvalue="{{ $component->sum_value }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 ps-header">100%</td>
+                    <td style="text-align: center; border: 2px solid black;" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 percentage-header">&nbsp;</td>
             @endforeach
-            <td style="text-align: center; border: 1px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</td>
-            <td style="text-align: center; border: 1px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg">&nbsp;</td>
-            <td style="text-align: center; border: 1px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</td>
-        
-            <th style="text-align: center; border: 1px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</th>
-            <th style="text-align: center; border: 1px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</th>
-
+            <td style="text-align: center; border: 2px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</td>
+            <td style="text-align: center; border: 2px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg">&nbsp;</td>
+            <td style="text-align: center; border: 2px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</td>
+            <td style="text-align: center; border: 2px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</td>
+            <td style="text-align: center; border: 2px solid black;" class="shaded fixed freeze_vertical text-center scrolling_table_1">&nbsp;</td>
         </tr>
         
+        {{--11--}}
         @php 
-            $iteration = 3; 
-            $rownumber = 10; //start of student
-
+            $iteration = 6; 
+            $rownumber = 11; //start of student
             //$total_row_after = $rownumber+count($students)+3; // 3 number of spaces row
             //$total_row_befor = $total_row_after+40 // 40 number of qg_lookup
         @endphp
-
         @if (count($male_students) > 0)
             <tr class="tr_shaded">
-                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze text-center scrolling_table_1 gray-bg"> </td>
-                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze text-center scrolling_table_1 gray-bg">MALE</td>
+                <td style="background-color:#9e9e9e; border: 2px solid black;" class="fixed freeze text-center scrolling_table_1 gray-bg"> </td>
+                <td colspan="4" style="background-color:#9e9e9e; border: 2px solid black;" class="fixed freeze text-center scrolling_table_1 gray-bg">MALE</td>
                 @foreach ($components as $component)
                     @foreach ($component->activities as $activity)
-                        <td group="{{ $component->id }}" style="background-color:#ffcc59; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                        <td group="{{ $component->id }}" style="background-color:#9e9e9e; border: 2px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
                     @endforeach
                     {{--@if ($component->is_sum_cell > 0)--}}
-                        <td group="{{ $component->id }}" style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                        <td group="{{ $component->id }}" style="background-color:#9e9e9e; border: 2px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
                     {{--@endif--}}
                     {{--@if ($component->is_hps_cell > 0)--}}
-                        <td group="{{ $component->id }}" style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                        <td group="{{ $component->id }}" style="background-color:#9e9e9e; border: 2px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
                     {{--@endif--}}
                     {{--@if ($component->is_ps_cell > 0)--}}
-                        <td group="{{ $component->id }}" style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                        <td group="{{ $component->id }}" style="background-color:#9e9e9e; border: 2px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
                     {{--@endif--}}
-                        <td group="{{ $component->id }}" style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                        <td group="{{ $component->id }}" style="background-color:#9e9e9e; border: 2px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
                 @endforeach
-                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
-                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
-                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
-                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
-                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td style="background-color:#9e9e9e; border: 2px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td style="background-color:#9e9e9e; border: 2px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td style="background-color:#9e9e9e; border: 2px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td style="background-color:#9e9e9e; border: 2px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td style="background-color:#9e9e9e; border: 2px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
             </tr>
             @php
                 $rownumber++;   
             @endphp
         @endif
 
+        {{--12--}}
         @php
             $count_male = 1;    
         @endphp
         @foreach ($male_students as $student)
             @php
-                $columnletter_x = 'A'; 
+                $columnletter_x = 'B'; 
                 $columnletter_y = 'A';
 
-                $hps_col_x = 'C';
-                $percent_col_x = 'C';
+                $hps_col_x = 'F';
+                $percent_col_x = 'F';
                 $percent_array = array();
             @endphp
             <tr class="">
-                <td style="text-align: center; border: 1px solid black;" class="fixed freeze text-center scrolling_table_1">
+                <td style="text-align: center; border: 2px solid black;" class="fixed freeze text-center scrolling_table_1">
                     {{-- $iteration --}} {{ $count_male }}
                     @php
                         $count_male++;
@@ -318,10 +318,13 @@
                         $columnletter_y++;
                     @endphp
                 </td>
-                <td style="border: 1px solid black;" class="fixed freeze text-left scrolling_table_1" title="{{ $student->identification_no }}">
+                <td colspan="4" style="border: 2px solid black;" class="fixed freeze text-left scrolling_table_1" title="{{ $student->identification_no }}">
                     {{ $student->fullname }}
                     @php 
-                        $columnletter_x++;
+                        for($x=0; $x<3; $x++){
+                            $columnletter_x++;
+                            $columnletter_y++;
+                        }
                         //$columnletter_y++;
                     @endphp
                 </td>
@@ -350,14 +353,15 @@
                             $columnletter_y++;
                             $colored = get_clour($component->palette);
                         @endphp
-                        <td style="text-align: center; border: 1px solid black; background-color:{{$colored}};" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding">
+                        {{--background-color:{{$colored}};--}}
+                        <td style="text-align: center; border: 2px solid black;" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding">
                             {{$score}}
                         </td>
                     @endforeach
 
 
                     <!-- SUM -->
-                    <td style="text-align: center; border: 1px solid black;" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding sum-cell">
+                    <td style="text-align: center; border: 2px solid black;" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding sum-cell">
                         =SUM({{$columnletter_x}}{{$rownumber}}:{{$columnletter_y}}{{$rownumber}})
                     </td>
                     @php
@@ -373,7 +377,7 @@
                     <!-- HPS -->
                     @php
                         $count = 1;
-                        $hps_row_default = 9; //Change only if table adjusted
+                        $hps_row_default = 10; //Change only if table adjusted
                         $hps_formula = '=(';
                     @endphp
 
@@ -397,7 +401,7 @@
                         $hps_col_location = $hps_col_x;
                     @endphp
 
-                    <td style="text-align: center; border: 1px solid black;" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding hps-cell">
+                    <td style="text-align: center; border: 2px solid black;" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding hps-cell">
                         {{$hps_formula}} <!-- HPS Complete Formula -->
                     </td>
 
@@ -414,7 +418,7 @@
                         $ps_formula = '=IF('.$sum_col_location.$rownumber.'>0,'.'('.$sum_col_location.$rownumber.'/'.$hps_col_location.$rownumber.')*100,0)'; 
                     @endphp
                     
-                    <td style="text-align: center; border: 1px solid black;" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding ps-cell">
+                    <td style="text-align: center; border: 2px solid black;" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding ps-cell">
                         {{$ps_formula}} <!-- PS Complete Formula -->
                     </td>            
                     @php
@@ -426,11 +430,11 @@
 
 
                     <!-- Percent N% -->
-                    <td style="text-align: center; border: 1px solid black;" group="{{ $component->id }}" maxvalue="{{ $component->percentage }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 percentage-cell">
+                    <td style="text-align: center; border: 2px solid black;" group="{{ $component->id }}" maxvalue="{{ $component->percentage }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 percentage-cell">
                         
                         @php
                             $percent_col_x++; 
-                            $percent_formula = '=ROUND('.$columnletter_y.$rownumber.'*'.$percent_col_x.'8'.',2)';
+                            $percent_formula = '=ROUND('.$columnletter_y.$rownumber.'*'.$percent_col_x.'9'.',2)';
                         @endphp
                         {{ $percent_formula }} <!-- Percent Complete Formula -->
                     </td>
@@ -445,7 +449,7 @@
 
 
                 <!-- Initial -->
-                <td style="text-align: center; border: 1px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1 initial-cell">
+                <td style="text-align: center; border: 2px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1 initial-cell">
                     @php
                         $initial_formula = '=(';
                         $initial_counter = 1;
@@ -470,7 +474,7 @@
 
 
                 <!-- QG -->
-                <td style="text-align: center; border: 1px solid black; background-color:#fffcbe;" class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg quarter-cell">
+                <td style="text-align: center; border: 2px solid black; background-color:#fffcbe;" class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg quarter-cell">
                     @php
                         //$qg_formula = "=LOOKUP(".$column_letter_repo['initial'].$rownumber.","."'Quarter Grade'! A".$total_row_after.":"."B".$total_row_befor.")";
                         $qg_formula = "=LOOKUP(".$column_letter_repo['initial'].$rownumber.","."'Quarter Grade'! A2:"."B42)";
@@ -480,17 +484,17 @@
 
 
                 <!-- TC -->
-                <td style="text-align: center; border: 1px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell">
+                <td style="text-align: center; border: 2px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell">
                     {{ $gradings->get_colum_via_gradingsheet_student('adjustment_grade', $grading->id, $student->student_id) }}
                 </td>
 
                 <!-- Rating -->
-                <td style="text-align: center; border: 1px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell">
+                <td style="text-align: center; border: 2px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell">
                     {{ $gradings->get_colum_via_gradingsheet_student('rating', $grading->id, $student->student_id) }}
                 </td>
 
                 <!-- Ranking -->
-                <td style="text-align: center; border: 1px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell">
+                <td style="text-align: center; border: 2px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell">
                     {{ $gradings->get_colum_via_gradingsheet_student('ranking', $grading->id, $student->student_id) }}
                 </td>                
             </tr>
@@ -503,28 +507,28 @@
         <!-- Female -->
         @if (count($female_students) > 0)
             <tr class="tr_shaded">
-                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze text-center scrolling_table_1 gray-bg"> </td>
-                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze text-center scrolling_table_1 gray-bg">FEMALE</td>
+                <td style="background-color:#9e9e9e; border: 2px solid black;" class="fixed freeze text-center scrolling_table_1 gray-bg"> </td>
+                <td colspan="4" style="background-color:#9e9e9e; border: 2px solid black;" class="fixed freeze text-center scrolling_table_1 gray-bg">FEMALE</td>
                 @foreach ($components as $component)
                     @foreach ($component->activities as $activity)
-                        <td group="{{ $component->id }}" style="background-color:#ffcc59; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                        <td group="{{ $component->id }}" style="background-color:#9e9e9e; border: 2px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
                     @endforeach
                     {{--@if ($component->is_sum_cell > 0)--}}
-                        <td group="{{ $component->id }}" style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                        <td group="{{ $component->id }}" style="background-color:#9e9e9e; border: 2px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
                     {{--@endif--}}
                     {{--@if ($component->is_hps_cell > 0)--}}
-                        <td group="{{ $component->id }}" style="background-color:#9e9e9e; border: 1px solid black; " class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                        <td group="{{ $component->id }}" style="background-color:#9e9e9e; border: 2px solid black; " class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
                     {{--@endif--}}
                     {{--@if ($component->is_ps_cell > 0)--}}
-                        <td group="{{ $component->id }}" style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                        <td group="{{ $component->id }}" style="background-color:#9e9e9e; border: 2px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
                     {{--@endif--}}
-                        <td group="{{ $component->id }}" style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                        <td group="{{ $component->id }}" style="background-color:#9e9e9e; border: 2px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
                 @endforeach
-                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
-                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
-                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
-                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
-                <td style="background-color:#9e9e9e; border: 1px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td style="background-color:#9e9e9e; border: 2px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td style="background-color:#9e9e9e; border: 2px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td style="background-color:#9e9e9e; border: 2px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td style="background-color:#9e9e9e; border: 2px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
+                <td style="background-color:#9e9e9e; border: 2px solid black;" class="fixed freeze_vertical text-center scrolling_table_1 gray-bg">&nbsp;</td>
             </tr>
             @php
                 $rownumber++;   
@@ -536,15 +540,15 @@
         @endphp
         @foreach ($female_students as $student)
             @php
-                $columnletter_x = 'A'; 
+                $columnletter_x = 'B'; 
                 $columnletter_y = 'A';
 
-                $hps_col_x = 'C';
-                $percent_col_x = 'C';
+                $hps_col_x = 'F';
+                $percent_col_x = 'F';
                 $percent_array = array();
             @endphp
             <tr class="">
-                <td style="text-align: center; border: 1px solid black;" class="fixed freeze text-center scrolling_table_1">
+                <td style="text-align: center; border: 2px solid black;" class="fixed freeze text-center scrolling_table_1">
                     {{-- $iteration --}} {{ $count_female }}
                     @php 
                         $count_female++;
@@ -553,10 +557,13 @@
                         $columnletter_y++;
                     @endphp
                 </td>
-                <td style="border: 1px solid black;" class="fixed freeze text-left scrolling_table_1" title="{{ $student->identification_no }}">
+                <td colspan="4" style="border: 2px solid black;" class="fixed freeze text-left scrolling_table_1" title="{{ $student->identification_no }}">
                     {{ $student->fullname }}
                     @php 
-                        $columnletter_x++;
+                        for($x=0; $x<3; $x++){
+                            $columnletter_x++;
+                            $columnletter_y++;
+                        }
                         //$columnletter_y++;
                     @endphp
                 </td>
@@ -585,14 +592,15 @@
                             $columnletter_y++;
                             $colored = get_clour($component->palette);
                         @endphp
-                        <td style="text-align: center; border: 1px solid black; background-color:{{$colored}};" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding">
+                        {{-- background-color:{{$colored}}; --}}
+                        <td style="text-align: center; border: 2px solid black;" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding">
                             {{$score}}
                         </td>
                     @endforeach
 
 
                     <!-- SUM -->
-                    <td style="text-align: center; border: 1px solid black;" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding sum-cell">
+                    <td style="text-align: center; border: 2px solid black;" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding sum-cell">
                         =SUM({{$columnletter_x}}{{$rownumber}}:{{$columnletter_y}}{{$rownumber}})
                     </td>
                     @php
@@ -608,7 +616,7 @@
                     <!-- HPS -->
                     @php
                         $count = 1;
-                        $hps_row_default = 9; //Change only if table adjusted
+                        $hps_row_default = 10; //Change only if table adjusted
                         $hps_formula = '=(';
                     @endphp
 
@@ -632,7 +640,7 @@
                         $hps_col_location = $hps_col_x;
                     @endphp
 
-                    <td style="text-align: center; border: 1px solid black; " group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding hps-cell">
+                    <td style="text-align: center; border: 2px solid black; " group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding hps-cell">
                         {{$hps_formula}} <!-- HPS Complete Formula -->
                     </td>
 
@@ -649,7 +657,7 @@
                         $ps_formula = '=IF('.$sum_col_location.$rownumber.'>0,'.'('.$sum_col_location.$rownumber.'/'.$hps_col_location.$rownumber.')*100,0)'; 
                     @endphp
                     
-                    <td style="text-align: center; border: 1px solid black;" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding ps-cell">
+                    <td style="text-align: center; border: 2px solid black;" group="{{ $component->id }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 no-padding ps-cell">
                         {{$ps_formula}} <!-- PS Complete Formula -->
                     </td>            
                     @php
@@ -661,11 +669,11 @@
 
 
                     <!-- Percent N% -->
-                    <td style="text-align: center; border: 1px solid black;" group="{{ $component->id }}" maxvalue="{{ $component->percentage }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 percentage-cell">
+                    <td style="text-align: center; border: 2px solid black;" group="{{ $component->id }}" maxvalue="{{ $component->percentage }}" class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 percentage-cell">
                         
                         @php
                             $percent_col_x++; 
-                            $percent_formula = '=ROUND('.$columnletter_y.$rownumber.'*'.$percent_col_x.'8'.',2)';
+                            $percent_formula = '=ROUND('.$columnletter_y.$rownumber.'*'.$percent_col_x.'9'.',2)';
                         @endphp
                         {{ $percent_formula }} <!-- Percent Complete Formula -->
                     </td>
@@ -680,7 +688,7 @@
 
 
                 <!-- Initial -->
-                <td style="text-align: center; border: 1px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1 initial-cell">
+                <td style="text-align: center; border: 2px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1 initial-cell">
                     @php
                         $initial_formula = '=(';
                         $initial_counter = 1;
@@ -705,7 +713,7 @@
 
 
                 <!-- QG -->
-                <td style="text-align: center; border: 1px solid black; background-color:#fffcbe;" class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg quarter-cell">
+                <td style="text-align: center; border: 2px solid black; background-color:#fffcbe;" class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg quarter-cell">
                     @php
                         //$qg_formula = "=LOOKUP(".$column_letter_repo['initial'].$rownumber.","."'Quarter Grade'! A".$total_row_after.":"."B".$total_row_befor.")";
                         $qg_formula = "=LOOKUP(".$column_letter_repo['initial'].$rownumber.","."'Quarter Grade'! A2:"."B42)";
@@ -715,17 +723,17 @@
 
 
                 <!-- TC -->
-                <td style="text-align: center; border: 1px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell">
+                <td style="text-align: center; border: 2px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell">
                     {{ $gradings->get_colum_via_gradingsheet_student('adjustment_grade', $grading->id, $student->student_id) }}
                 </td>
 
                 <!-- Rating -->
-                <td style="text-align: center; border: 1px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell">
+                <td style="text-align: center; border: 2px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell">
                     {{ $gradings->get_colum_via_gradingsheet_student('rating', $grading->id, $student->student_id) }}
                 </td>
 
                 <!-- Ranking -->
-                <td style="text-align: center; border: 1px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell">
+                <td style="text-align: center; border: 2px solid black; background-color:#f4f5f8;" class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell">
                     {{ $gradings->get_colum_via_gradingsheet_student('ranking', $grading->id, $student->student_id) }}
                 </td>                
             </tr>
