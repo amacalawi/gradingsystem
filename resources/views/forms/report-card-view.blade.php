@@ -2,7 +2,7 @@
 <div class="row">
     <div class="col-md-12">
         <!-- BASIC INFOS START -->
-        <div class="m-portlet m-portlet--tab">
+        <div id="section-to-print" class="m-portlet m-portlet--tab">
             <div class="m-portlet__body">
                 @foreach($students as $student)
                 <div class="row">
@@ -51,7 +51,7 @@
                                 @if($subject->material == 1) 
                                     @if($subject->is_mapeh == 0 && $subject->is_tle == 0)
                                         <tr>    
-                                            @php $finalGrade = 0; @endphp;
+                                            @php $finalGrade = 0; @endphp
                                             <td colspan="16">{{ $subject->subject_name }}</td>
                                             @foreach($quarters as $quarter)
                                                 @php 
@@ -111,7 +111,7 @@
                             @foreach($student->subjects as $subject)
                                 @if($subject->material > 1) 
                                     <tr>    
-                                        @php $finalGrade = 0; @endphp;
+                                        @php $finalGrade = 0; @endphp
                                         <td colspan="16">{{ $subject->subject_name }}</td>
                                         @foreach($quarters as $quarter)
                                             @php 
@@ -140,7 +140,97 @@
                                 @endif
                             @endforeach
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="17">GRADING SYSTEM AVERAGING</td>
+                                <td colspan="3">GENERAL AVERAGE</td>
+                                <td colspan="1" class="text-center">92.44</td>
+                                <td colspan="1" class="text-center">8.0</td>
+                                <td colspan="1"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5"></td>
+                                <td class="text-center">JUN</td>
+                                <td class="text-center">JUL</td>
+                                <td class="text-center">AUG</td>
+                                <td class="text-center">SEP</td>
+                                <td class="text-center">OCT</td>
+                                <td class="text-center">NOV</td>
+                                <td class="text-center">DEC</td>
+                                <td class="text-center">JAN</td>
+                                <td class="text-center">FEB</td>
+                                <td class="text-center">MAR</td>
+                                <td class="text-center">APR</td>
+                                <td class="text-center">TOTAL</td>
+                                <td colspan="4" class="text-left p-b-0 border-0">Eligible for transfer & admission to</td>
+                                <td colspan="3" class="border-0 border-bottom"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">Days of School</td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td colspan="3" class="text-left p-b-0 border-0">Has advanced credits in</td>
+                                <td colspan="3" class="border-0 border-bottom"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">Days Present</td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td colspan="2" class="text-left p-b-0 border-0">Lack credits in</td>
+                                <td colspan="4" class="border-0 border-bottom"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">Times Tardy</td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td colspan="1" class="text-left p-b-0 border-0">Date</td>
+                                <td colspan="5" class="border-0 border-bottom"></td>
+                            </tr>
+                        </tfoot>
                     </table>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <p class="text-center m-t-30 m-b-0"><em>{{ ucwords($student->section_info->adviser_firstname).' '.ucwords($student->section_info->adviser_lastname) }}</em></p>
+                        <p class="text-center border-top"><strong>CLASS ADVISER</strong></p>
+                    </div>
+                    <div class="col-md-6">
+                    </div>
+                    <div class="col-md-3">
+                        <p class="text-center m-t-30 m-b-0">&nbsp;</p>
+                        <p class="text-center border-top"><strong>PRINCIPAL</strong></p>
+                    </div>
                 </div>
                 @endforeach
             </div>
@@ -148,3 +238,5 @@
         <!-- BASIC INFOS END -->
     </div>
 </div>
+
+<button id="preview-btn" data-toggle="m-tooltip" data-placement="top" title="print preview" class="btn btn-float"><i class="la la-print"></i></button>
