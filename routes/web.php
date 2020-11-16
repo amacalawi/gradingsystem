@@ -398,6 +398,7 @@ Route::prefix('academics')->group(function () {
         Route::post('classes/import-student', 'AdmissionController@import_student')->name('sectionstudent.import.student');
         Route::post('classes/import-subject', 'AdmissionController@import_subject')->name('sectionstudent.import.subject');
         Route::get('classes/remove-admitted-student/{id?}', 'AdmissionController@remove_admitted_student')->name('sectionstudent.remove.admitted');
+        Route::get('classes/remove-admitted-student-admission-id/{id?}', 'AdmissionController@remove_admitted_student_admission_id')->name('sectionstudent.remove.admitted.admission.id');
         /* End Admissions Routes */
 
         /* Enrollment */

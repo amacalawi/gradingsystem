@@ -230,6 +230,7 @@
                     <h5 class="m-bottom-1">Admit Student</h5>
                 </div>
 
+                {{--}}
                 <div class="col-md-12">
                     <div id="admitted_student">
                         <table class="table">
@@ -263,9 +264,36 @@
                     <span class="m-form__help m--font-danger">
                     </span>
                 </div>
+                {{--}}
 
+                {{----}}
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="m-input-icon m-input-icon--left m-bottom-2">
+                                <input type="text" class="form-control m-input m-input--solid" placeholder="Search Keywords" id="enlist_generalSearch">
+                                <span class="m-input-icon__icon m-input-icon__icon--left">
+                                    <span>
+                                        <i class="la la-search"></i>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="enlist_datatable" id="local_data"></div>
+                </div>
+
+                @if ( $segment == 'edit' )
+                    <div class='tbody-enlisted-student'>
+                        <input class="edit-admission-enlist-student" value="{{$sectioninfos->id}}" hidden>
+                    </div>
+                @else
+                    <div class='tbody-enlisted-student'></div>
+                @endif
+                
+                {{----}}
                 <div class="col-md-6" style="margin:10px 0px 0px 0px;">
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#enlist"> Add Student </button>
+                    <button type="button" class="btn btn-success" data-toggle="modal" id="enlist-btn-load" data-target="#enlist"> Add Student </button>
                 </div> 
 
             </div>
