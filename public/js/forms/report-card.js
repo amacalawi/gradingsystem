@@ -363,7 +363,24 @@
                 win.focus();
             }
         });
-        
+
+        this.$body.on('click', '#preview-btn', function (e){
+            e.preventDefault();
+            var divContents = document.getElementById("section-to-print").innerHTML; 
+            var a = window.open('', '', 'height=500, width=500'); 
+            a.document.write('<html>'); 
+            a.document.write('<head><style>'); 
+            a.document.write('<style>'); 
+            a.document.write('@media print { .row { display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px; }  .col-md-6 { position: relative;width: 100%;min-height: 1px;padding-right: 15px;padding-left: 15px; flex: 0 0 50%; max-width: 50%; } #report-card-table td { border: 1px solid #575962 !important; } }'); 
+            a.document.write('</style>'); 
+            a.document.write('</head>'); 
+            a.document.write('<body>'); 
+            a.document.write(divContents); 
+            a.document.write('</body></html>'); 
+            a.document.close(); 
+            a.print(); 
+        })
+    
     }
 
     //init reportcard

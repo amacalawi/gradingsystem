@@ -69,7 +69,7 @@ class ReportCardController extends Controller
                 $q->select(['id', 'code', 'name', 'description']);
             },
             'section_info' =>  function($q) { 
-                $q->select(['sections_info.id', 'levels.name as level' , 'sections.name as section'])
+                $q->select(['staffs.firstname as adviser_firstname', 'staffs.lastname as adviser_lastname', 'sections_info.id', 'levels.name as level' , 'sections.name as section'])
                 ->join('levels', function($join)
                 {
                     $join->on('levels.id', '=', 'sections_info.level_id');
@@ -77,6 +77,10 @@ class ReportCardController extends Controller
                 ->join('sections', function($join)
                 {
                     $join->on('sections.id', '=', 'sections_info.section_id');
+                })
+                ->join('staffs', function($join)
+                {
+                    $join->on('staffs.id', '=', 'sections_info.adviser_id');
                 });
             },
             'subjects' =>  function($q) { 

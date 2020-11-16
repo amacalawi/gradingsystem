@@ -904,10 +904,91 @@ a[data-dismiss="modal"] {
     table-layout: fixed;
     min-width: 100%;
 }
+#report-card-table th, 
+#report-card-table td.border-0 {
+    border: 1px solid transparent !important;
+}
 
 #report-card-table td {
     border: 1px solid #575962 !important;
     color: #212529 !important;
     padding: 0.75rem;
     vertical-align: middle;
+}
+
+#report-card-table td.border-0 {
+    border: 1px solid transparent !important;
+}
+
+#report-card-table td.border-bottom {
+    border-bottom: 1px solid #575962 !important;
+}
+
+#report-card-table td.p-b-0 {
+    font-size: .85rem;
+}
+
+.m-t-30 {
+    margin-top: 30px;
+}
+
+.border-top {
+    border-top: 1px solid #575962 !important;
+}
+
+.btn-float {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    line-height: 45px!important;
+    z-index: 1;
+    bottom: 40px;
+    right: 40px;
+    position: fixed!important;
+    vertical-align: middle;
+    background: #22b9ff;
+    border: 1px solid #22b9ff;
+}
+
+.btn-float i {
+    font-size: 23px;
+    -webkit-transition: all;
+    -o-transition: all;
+    transition: all;
+    -webkit-transition-duration: 500ms;
+    transition-duration: 500ms;
+    margin-top: -15px;
+    margin-left: -1px;
+    color: #fff;
+}
+
+
+@media print {
+    .col-md-6 {
+        position: relative;
+        width: 100%;
+        min-height: 1px;
+        padding-right: 15px;
+        padding-left: 15px;
+        flex: 0 0 50% !important;
+        max-width: 50%  !important;
+    }
+    #report-card-table td {
+        border: 1px solid #575962 !important;
+    }
+
+    #report-card-table {
+        table-layout: fixed;
+        min-width: 100%;
+    }
+    
+    .table-responsive > .table-bordered {
+        border: 0;
+    }
+    .table-bordered {
+        border: 1px solid #f4f5f8;
+    }
+    table {
+        border-collapse: collapse;
+    }
 }
