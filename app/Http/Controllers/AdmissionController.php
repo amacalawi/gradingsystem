@@ -913,4 +913,23 @@ class AdmissionController extends Controller
         return $data;
     }
 
+    public function remove_admitted_student_admission_id($id)
+    {
+        $batch_id = Batch::where('is_active', 1)->where('status','Current')->pluck('id');
+        
+        if(!$batch_id->isEmpty())
+        {   
+            $student_admission = Admission::where('id', $id)->where('batch_id', $batch_id[0])->first();
+            if($student_admission){
+                $student_admission->delete();
+            }
+        }
+
+        $data = array(
+            'message' => 'success'
+        );
+
+        echo json_encode( $data );
+        return $data;
+    }
 }

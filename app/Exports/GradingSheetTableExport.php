@@ -83,7 +83,7 @@ class GradingSheetTableExport implements WithTitle, FromView, WithStyles, WithCo
             $logo_right->setPath( storage_path('app/public/uploads/deped.jpg') );
             $logo_right->setHeight(80);
             $logo_right->setCoordinates('AG1');
-
+            
             return [$logo_left, $logo_right];
         }
     }
