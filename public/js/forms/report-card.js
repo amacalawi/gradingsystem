@@ -366,12 +366,14 @@
 
         this.$body.on('click', '#preview-btn', function (e){
             e.preventDefault();
+            var w = window.innerWidth;
+            var h = window.innerHeight;
             var divContents = document.getElementById("section-to-print").innerHTML; 
-            var a = window.open('', '', 'height=500, width=500'); 
+            var a = window.open('', '', 'height='+h+', width='+w+''); 
             a.document.write('<html>'); 
-            a.document.write('<head><style>'); 
+            a.document.write('<head>'); 
             a.document.write('<style>'); 
-            a.document.write('@media print { .row { display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px; }  .col-md-6 { position: relative;width: 100%;min-height: 1px;padding-right: 15px;padding-left: 15px; flex: 0 0 50%; max-width: 50%; } #report-card-table td { border: 1px solid #575962 !important; } }'); 
+            a.document.write('@media print{body *{ font-family: arial,sans-serif; }.col-md-6{position:relative;width:50%!important;float:left!important}.col-md-3{position:relative;width:25%!important;float:left!important}#report-card-table td{border:1px solid #575962!important; padding: 2px;}#report-card-table{table-layout:fixed;min-width:100%}.table-responsive>.table-bordered{border:0}.table-bordered{border:1px solid #f4f5f8}table{border-collapse:collapse}#report-card-table td{border:1px solid #575962!important;color:#212529!important;vertical-align:middle}.text-center{text-align:center}#report-card-table td.border-0{border:1px solid transparent!important}#report-card-table td.border-bottom{border-bottom:1px solid #575962!important}#report-card-table td.p-b-0{font-size:.85rem}p{margin-bottom:0!important;margin-top:0!important}.m-t-30{margin-top:30px !important}.border-top{border-top:1px solid #575962!important}.m-b-0{margin-bottom:0!important}.text-right{text-align:right}h5{margin: 0 !important;font-size: 1.2rem;font-weight: normal;}.m-bottom-1{margin-bottom: 1.2rem !important;}}'); 
             a.document.write('</style>'); 
             a.document.write('</head>'); 
             a.document.write('<body>'); 
@@ -379,6 +381,7 @@
             a.document.write('</body></html>'); 
             a.document.close(); 
             a.print(); 
+            a.onfocus=function(){ a.close();}
         })
     
     }

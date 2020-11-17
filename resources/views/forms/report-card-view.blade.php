@@ -46,34 +46,31 @@
                                 @endforeach
                                 <td class="text-center"><strong>Final</strong></td>
                             </tr>
-                            @php $is_mapeh = 0; $is_tle = 0; @endphp
+                            @php $is_mapeh = 0; $is_tle = 0; $unit = 0; @endphp
                             @foreach($student->subjects as $subject)
                                 @if($subject->material == 1) 
                                     @if($subject->is_mapeh == 0 && $subject->is_tle == 0)
                                         <tr>    
-                                            @php $finalGrade = 0; @endphp
+                                            @php $finalGrade = 0; $unit++; $subjectCounter = 0; @endphp
                                             <td colspan="16">{{ $subject->subject_name }}</td>
                                             @foreach($quarters as $quarter)
                                                 @php 
-                                                    $quarterGrade = $reportcards->get_column_grade('quarter_grade', $type, $batch, $quarter->id, $student->section_info_id, $subject->subject_id, $student->student->id, $subject->material); 
+                                                    $quarterGrade = $reportcards->get_column_grade('quarter_grade', $type, $batch, $quarter->id, $student->section_info_id, $subject->subject_id, $student->student->id, $subject->material, 0, 0); 
                                                     if ($quarterGrade !== '') {
                                                         $finalGrade += floatval($quarterGrade);
+                                                        $subjectCounter++;
                                                     }
                                                 @endphp
-                                                @if($quarterGrade !== '')
-                                                    <td class="text-center">{{ $quarterGrade }}</td>
-                                                @else
-                                                    <td class="text-center"></td>
-                                                @endif
+                                                <td class="text-center">{{ ($quarterGrade !== '') ? $quarterGrade : '' }}</td>
                                             @endforeach
                                             <td class="text-center">
                                                 @php $finalGrade = ($finalGrade / count($quarters)); @endphp
-                                                {{ ($finalGrade > 0) ? number_format(floor($finalGrade*100)/100,2) : '' }}
+                                                {{ (($finalGrade > 0) && ($subjectCounter == count($quarters))) ? number_format(floor($finalGrade*100)/100,2) : '' }}
                                             </td>
                                             <td class="text-center">1.0</td>
                                             <td colspan="2" class="text-center">
                                                 {{ 
-                                                    ($finalGrade > 0) ? ($finalGrade >= 75) ? 'Passed' : 'Failed' : ''
+                                                    (($finalGrade > 0) && ($subjectCounter == count($quarters))) ? ($finalGrade >= 75) ? 'Passed' : 'Failed' : ''
                                                 }}
                                             </td>
                                         </tr>
@@ -87,37 +84,68 @@
                                 @endif
                             @endforeach
                             @if($is_mapeh > 0)
-                                <tr>
+                                <tr>    
+                                    @php $finalGrade = 0; $unit++; $subjectCounter = 0; @endphp
                                     <td colspan="16">MAPEH</td>
                                     @foreach($quarters as $quarter)
-                                        <td class="text-center"></td>
+                                        @php 
+                                            $quarterGrade = $reportcards->get_column_grade('quarter_grade', $type, $batch, $quarter->id, $student->section_info_id, $subject->subject_id, $student->student->id, $subject->material, 1, 0); 
+                                            if ($quarterGrade !== '') {
+                                                $finalGrade += floatval($quarterGrade);
+                                                $subjectCounter++;
+                                            }
+                                        @endphp
+                                        <td class="text-center">{{ ($quarterGrade !== '') ? $quarterGrade : '' }}</td>
                                     @endforeach
-                                    <td class="text-center"></td>
+                                    <td class="text-center">
+                                        @php $finalGrade = ($finalGrade / count($quarters)); @endphp
+                                        {{ (($finalGrade > 0) && ($subjectCounter == count($quarters))) ? number_format(floor($finalGrade*100)/100,2) : '' }}
+                                    </td>
                                     <td class="text-center">1.0</td>
-                                    <td colspan="2" class="text-center"></td>
+                                    <td colspan="2" class="text-center">
+                                        {{ 
+                                            (($finalGrade > 0) && ($subjectCounter == count($quarters))) ? ($finalGrade >= 75) ? 'Passed' : 'Failed' : ''
+                                        }}
+                                    </td>
                                 </tr>
                             @endif
                             @if($is_tle > 0)
                                 <tr>
+                                    @php $finalGrade = 0; $unit++; $subjectCounter = 0; @endphp
                                     <td colspan="16">ICT/LE</td>
                                     @foreach($quarters as $quarter)
-                                        <td class="text-center"></td>
+                                        @php 
+                                            $quarterGrade = $reportcards->get_column_grade('quarter_grade', $type, $batch, $quarter->id, $student->section_info_id, $subject->subject_id, $student->student->id, $subject->material, 0, 1); 
+                                            if ($quarterGrade !== '') {
+                                                $finalGrade += floatval($quarterGrade);
+                                                $subjectCounter++;
+                                            }
+                                        @endphp
+                                        <td class="text-center">{{ ($quarterGrade !== '') ? $quarterGrade : '' }}</td>
                                     @endforeach
-                                    <td class="text-center"></td>
+                                    <td class="text-center">
+                                        @php $finalGrade = ($finalGrade / count($quarters)); @endphp
+                                        {{ (($finalGrade > 0) && ($subjectCounter == count($quarters))) ? number_format(floor($finalGrade*100)/100,2) : '' }}
+                                    </td>
                                     <td class="text-center">1.0</td>
-                                    <td colspan="2" class="text-center"></td>
+                                    <td colspan="2" class="text-center">
+                                        {{ 
+                                            (($finalGrade > 0) && ($subjectCounter == count($quarters))) ? ($finalGrade >= 75) ? 'Passed' : 'Failed' : ''
+                                        }}
+                                    </td>
                                 </tr>
                             @endif
                             @foreach($student->subjects as $subject)
                                 @if($subject->material > 1) 
                                     <tr>    
-                                        @php $finalGrade = 0; @endphp
+                                        @php $finalGrade = 0; $subjectCounter = 0; @endphp
                                         <td colspan="16">{{ $subject->subject_name }}</td>
                                         @foreach($quarters as $quarter)
                                             @php 
-                                                $quarterGrade = $reportcards->get_column_grade('quarter_grade', $type, $batch, $quarter->id, $student->section_info_id, $subject->subject_id, $student->student->id, $subject->material); 
+                                                $quarterGrade = $reportcards->get_column_grade('quarter_grade', $type, $batch, $quarter->id, $student->section_info_id, $subject->subject_id, $student->student->id, $subject->material, 0, 0); 
                                                 if ($quarterGrade !== '') {
                                                     $finalGrade += floatval($quarterGrade);
+                                                    $subjectCounter++;
                                                 }
                                             @endphp
                                             @if($quarterGrade !== '')
@@ -128,12 +156,12 @@
                                         @endforeach
                                         <td class="text-center">
                                             @php $finalGrade = ($finalGrade / count($quarters)); @endphp
-                                            {{ ($finalGrade > 0) ? number_format(floor($finalGrade*100)/100,2) : '' }}
+                                            {{ (($finalGrade > 0) && ($subjectCounter == count($quarters))) ? number_format(floor($finalGrade*100)/100,2) : '' }}
                                         </td>
                                         <td class="text-center"></td>
                                         <td colspan="2" class="text-center">
                                             {{ 
-                                                ($finalGrade > 0) ? ($finalGrade >= 75) ? 'Passed' : 'Failed' : ''
+                                                (($finalGrade > 0) && ($subjectCounter == count($quarters))) ? ($finalGrade >= 75) ? 'Passed' : 'Failed' : ''
                                             }}
                                         </td>
                                     </tr>
@@ -144,8 +172,8 @@
                             <tr>
                                 <td colspan="17">GRADING SYSTEM AVERAGING</td>
                                 <td colspan="3">GENERAL AVERAGE</td>
-                                <td colspan="1" class="text-center">92.44</td>
-                                <td colspan="1" class="text-center">8.0</td>
+                                <td colspan="1" class="text-center"></td>
+                                <td colspan="1" class="text-center">{{ $unit }}.0</td>
                                 <td colspan="1"></td>
                             </tr>
                             <tr>
@@ -214,7 +242,7 @@
                                 <td class="text-center"></td>
                                 <td class="text-center"></td>
                                 <td colspan="1" class="text-left p-b-0 border-0">Date</td>
-                                <td colspan="5" class="border-0 border-bottom"></td>
+                                <td colspan="5" class="border-0 border-bottom">{{ date('F d, Y') }}</td>
                             </tr>
                         </tfoot>
                     </table>
@@ -226,6 +254,7 @@
                         <p class="text-center border-top"><strong>CLASS ADVISER</strong></p>
                     </div>
                     <div class="col-md-6">
+                        &nbsp;
                     </div>
                     <div class="col-md-3">
                         <p class="text-center m-t-30 m-b-0">&nbsp;</p>

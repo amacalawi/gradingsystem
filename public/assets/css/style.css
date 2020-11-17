@@ -966,22 +966,21 @@ a[data-dismiss="modal"] {
 @media print {
     .col-md-6 {
         position: relative;
-        width: 100%;
-        min-height: 1px;
-        padding-right: 15px;
-        padding-left: 15px;
-        flex: 0 0 50% !important;
-        max-width: 50%  !important;
+        width: 50% !important;
+        float: left !important;
+    }
+    .col-md-3 {
+        position: relative;
+        width: 25% !important;
+        float: left !important;
     }
     #report-card-table td {
         border: 1px solid #575962 !important;
     }
-
     #report-card-table {
         table-layout: fixed;
         min-width: 100%;
     }
-    
     .table-responsive > .table-bordered {
         border: 0;
     }
@@ -990,5 +989,35 @@ a[data-dismiss="modal"] {
     }
     table {
         border-collapse: collapse;
+    }
+    #report-card-table td {
+        border: 1px solid #575962 !important;
+        color: #212529 !important;
+        vertical-align: middle;
+    }
+    .text-center {
+        text-align: center;
+    }
+    #report-card-table td.border-0 {
+        border: 1px solid transparent !important;
+    }
+    #report-card-table td.border-bottom {
+        border-bottom: 1px solid #575962 !important;
+    }
+    #report-card-table td.p-b-0 {
+        font-size: .85rem;
+    }
+    p {
+        margin-bottom: 0 !important;
+        margin-top: 0 !important;
+    }
+    .m-t-30 {
+        margin-top: 30px !important;
+    }
+    .border-top {
+        border-top: 1px solid #575962 !important;
+    }
+    .m-b-0 {
+        margin-bottom: 0 !important;
     }
 }
