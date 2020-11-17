@@ -257,9 +257,9 @@ class ReportCardController extends Controller
         echo json_encode( $arr ); exit();
     }
 
-    public function get_column_grade($column, $type, $batch, $quarter, $section, $subject, $student, $material)
+    public function get_column_grade($column, $type, $batch, $quarter, $section, $subject, $student, $material, $is_mapeh, $is_tle)
     {
-        $res = (new GradingSheetQuarter)->get_column_grade($column, $type, $batch, $quarter, $section, $subject, $student, $material);
+        $res = (new GradingSheetQuarter)->get_column_grade($column, $type, $batch, $quarter, $section, $subject, $student, $material, $is_mapeh, $is_tle);
         return $res;
     }
 
