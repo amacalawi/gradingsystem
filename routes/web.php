@@ -478,6 +478,14 @@ Route::prefix('academics')->group(function () {
         Route::get('report-card/reload-classes', 'ReportCardController@reload_classes')->name('report.card.reload_classes');
         Route::get('report-card/reload-students', 'ReportCardController@reload_students')->name('report.card.reload_students');
         /* End Report Card Routes */
+
+        /* Start Report Card Routes */
+        Route::get('form-137/export', 'Form137Controller@export')->name('form.137.export');
+        Route::get('form-137/export-view', 'Form137Controller@export_view')->name('form.137.export_view');
+        Route::get('form-137/reload-classes', 'Form137Controller@reload_classes')->name('form.137.reload_classes');
+        Route::get('form-137/reload-students', 'Form137Controller@reload_students')->name('form.137.reload_students');
+        Route::get('form-137/fetch-students', 'Form137Controller@fetch_students')->name('form.137.students');
+        /* End Report Card Routes */
     });
     /* End Grading Sheets Routes */
 

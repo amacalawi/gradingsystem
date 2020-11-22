@@ -576,7 +576,7 @@
                     <li class="m-nav__item">
                         @php 
                             $string = substr(ucwords(Request::segment(3)), 0, -1);
-                            $url = ['staff-attendance', 'student-attendance', 'report-card'];
+                            $url = ['staff-attendance', 'student-attendance', 'report-card', 'form-137'];
                         @endphp
 
                         @if(Request::segment(4) == 'settings')
@@ -618,7 +618,11 @@
             <div>                                                      
                 <a href="javascript:;" class="export-btn btn m-btn--pill btn-brand add-btn m-btn--custom">
                     <i class="flaticon-graphic-1"></i> 
-                    Export Report Card
+                    @if(Request::segment(3) == 'report-card')
+                        Export Report Card
+                    @else 
+                        Export Form 137
+                    @endif
                 </a>
             </div>
             @elseif (Request::segment(4) == 'export-view')   

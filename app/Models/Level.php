@@ -156,6 +156,26 @@ class Level extends Model
         return $levels;  
     }
 
+    public function all_levels_via_type($type)
+    {
+        $levels = self::select(['id', 'code', 'name', 'description'])
+        ->where([
+            'education_type_id' => $type,
+            'is_active' => 1
+        ])
+        ->orderBy('id', 'asc')
+        ->get();
+        
+        return $levels->map(function($levelx) {
+            return (object) [
+                'id' => $levelx->id,
+                'code' => $levelx->code,
+                'name' => $levelx->name,
+                'description' => $levelx->description
+            ];
+        });
+    }
+
     public function edtype()
     {
         return $this->belongsTo('App\Models\EducationType', 'education_type_id', 'id');

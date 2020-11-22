@@ -264,7 +264,7 @@ class AdmissionController extends Controller
         $sections_subjects = (new SectionsSubjects)->get_sections_subjects($id);
         
         $section_id = SectionInfo::where('id', $id)->pluck('section_id');
-        $sections_students = (new Admission)->getthisAdmitted($section_id[0]); //section_id
+        $sections_students = (new Admission)->getthisAdmitted($id); //section_info_id
 
         if (count($flashMessage) && $flashMessage[0]['module'] == 'sectionstudent') {
             $sectioninfos = (new SectionInfo)->fetch($flashMessage[0]['id']);
