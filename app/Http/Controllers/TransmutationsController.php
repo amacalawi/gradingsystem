@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Transmutation;
 use App\Models\TransmutationElement;
+use App\Models\AuditLog;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\File;
@@ -83,23 +84,17 @@ class TransmutationsController extends Controller
     public function add(Request $request, $id = '')
     {   
         $menus = $this->load_menus();
-        $flashMessage = self::messages();
         $segment = request()->segment(4);
-        if (count($flashMessage) && $flashMessage[0]['module'] == 'trans') {
-            $trans = (new Header)->fetch($flashMessage[0]['id']);
-        } else {
-            $trans = (new Header)->fetch($id);
-        }
-        return view('modules/academics/gradingsheets/transmutations/add')->with(compact('menus', 'trans', 'segment', 'flashMessage'));
+        $trans = (new Transmutation)->fetch($id);
+        return view('modules/academics/gradingsheets/transmutations/add')->with(compact('menus', 'trans', 'segment'));
     }
     
     public function edit(Request $request, $id)
     {   
         $menus = $this->load_menus();
-        $flashMessage = self::messages();
         $segment = request()->segment(4);
-        $trans = (new Header)->find($id);
-        return view('modules/academics/gradingsheets/transmutations/edit')->with(compact('menus', 'trans', 'segment', 'flashMessage'));
+        $trans = (new Transmutation)->find($id);
+        return view('modules/academics/gradingsheets/transmutations/edit')->with(compact('menus', 'trans', 'segment'));
     }
     
     public function store(Request $request)
@@ -121,14 +116,11 @@ class TransmutationsController extends Controller
             echo json_encode( $data ); exit();
         }
 
-        $count = Transmutation::all()->count() + 1;
-
         $trans = Transmutation::create([
             'code' => $request->code,
             'name' => $request->name,
             'description' => $request->description,
-            'slug' => str_replace(' ', '-', strtolower($request->name)),
-            'order' => $count,
+            'education_type_id' => $request->education_type_id,
             'created_at' => $timestamp,
             'created_by' => Auth::user()->id
         ]);
@@ -136,6 +128,23 @@ class TransmutationsController extends Controller
         if (!$trans) {
             throw new NotFoundHttpException();
         }
+
+        $iteration = 0;
+        foreach ($request->element_score as $score) {
+            if ($request->element_score[$iteration] !== NULL) {
+                $transmutation_element = TransmutationElement::create([
+                    'trransmutation_id' => $trans->id,
+                    'score' => ($request->element_score[$iteration] !== NULL) ? $request->element_score[$iteration] : NULL,
+                    'equivalent' => ($request->element_equivalent[$iteration] !== NULL) ? $request->element_equivalent[$iteration] : NULL,
+                    'created_at' => $timestamp,
+                    'created_by' => Auth::user()->id
+                ]);
+                $this->audit_logs('transmutations_elements', $transmutation_element->id, 'has inserted a new transmutation element.', TransmutationElement::find($transmutation_element->id), $timestamp, Auth::user()->id);
+            }
+            $iteration++;
+        }
+
+        $this->audit_logs('transmutations', $trans->id, 'has inserted a new department.', Transmutation::find($trans->id), $timestamp, Auth::user()->id);
 
         $data = array(
             'title' => 'Well done!',
@@ -159,11 +168,40 @@ class TransmutationsController extends Controller
         $trans->code = $request->code;
         $trans->name = $request->name;
         $trans->description = $request->description;
-        $trans->slug = str_replace(' ', '-', strtolower($request->name));
+        $trans->education_type_id = $request->education_type_id;
         $trans->updated_at = $timestamp;
         $trans->updated_by = Auth::user()->id;
 
         if ($trans->update()) {
+
+            $iteration = 0;
+            foreach ($request->element_score as $score) {
+                if ($request->element_score[$iteration] !== NULL) {
+                    $transmutation_element = TransmutationElement::where(['transmutation_id' => $id, 'score' => $score])
+                    ->update([
+                        'score' => ($request->element_score[$iteration] !== NULL) ? $request->element_score[$iteration] : NULL,
+                        'equivalent' => ($request->element_equivalent[$iteration] !== NULL) ? $request->element_equivalent[$iteration] : NULL,
+                        'updated_at' => $timestamp,
+                        'updated_by' => Auth::user()->id
+                    ]);
+                    $transmutation_element = TransmutationElement::where(['transmutation_id' => $id, 'score' => $score])->get();
+                    if ($transmutation_element->count() > 0) {
+                        $this->audit_logs('transmutations_elements', $transmutation_element->first()->id, 'has modified a transmutation element.', TransmutationElement::find($transmutation_element->first()->id), $timestamp, Auth::user()->id);
+                    } else {
+                        $transmutation_element = TransmutationElement::create([
+                            'trransmutation_id' => $id,
+                            'score' => ($request->element_score[$iteration] !== NULL) ? $request->element_score[$iteration] : NULL,
+                            'equivalent' => ($request->element_equivalent[$iteration] !== NULL) ? $request->element_equivalent[$iteration] : NULL,
+                            'created_at' => $timestamp,
+                            'created_by' => Auth::user()->id
+                        ]);
+                        $this->audit_logs('transmutations_elements', $transmutation_element->id, 'has inserted a new transmutation element.', TransmutationElement::find($transmutation_element->id), $timestamp, Auth::user()->id);
+                    }
+                }
+                $iteration++;
+            }
+
+            $this->audit_logs('transmutations', $id, 'has modified a transmutation.', Department::find($id), $timestamp, Auth::user()->id);
 
             $data = array(
                 'title' => 'Well done!',
@@ -190,6 +228,7 @@ class TransmutationsController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 0
             ]);
+            $this->audit_logs('transmutations', $id, 'has removed a transmutation.', Transmutation::find($id), $timestamp, Auth::user()->id);
             
             $data = array(
                 'title' => 'Well done!',
@@ -199,59 +238,7 @@ class TransmutationsController extends Controller
             );
     
             echo json_encode( $data ); exit();
-        } 
-        else if ($action == 'Up') {
-            $transs = Transmutation::find($id);
-
-            $transs2 = Transmutation::where([
-                'order' => ($transs->order - 1),
-            ])
-            ->update([
-                'order' => $transs->order,
-                'updated_at' => $timestamp,
-                'updated_by' => Auth::user()->id
-            ]);
-
-            $transs->order = ($transs->order - 1);
-            $transs->updated_at = $timestamp;
-            $transs->updated_by = Auth::user()->id;
-            $transs->update();
-            
-            $data = array(
-                'title' => 'Well done!',
-                'text' => 'The trans has been successfully removed.',
-                'type' => 'success',
-                'class' => 'btn-brand'
-            );
-    
-            echo json_encode( $data ); exit();
-        } 
-        else if ($action == 'Down') {
-            $transs = Transmutation::find($id);
-
-            $transs2 = Transmutation::where([
-                'order' => ($transs->order + 1),
-            ])
-            ->update([
-                'order' => $transs->order,
-                'updated_at' => $timestamp,
-                'updated_by' => Auth::user()->id
-            ]);
-
-            $transs->order = ($transs->order + 1);
-            $transs->updated_at = $timestamp;
-            $transs->updated_by = Auth::user()->id;
-            $transs->update();
-            
-            $data = array(
-                'title' => 'Well done!',
-                'text' => 'The trans has been successfully removed.',
-                'type' => 'success',
-                'class' => 'btn-brand'
-            );
-
-            echo json_encode( $data ); exit();
-        }         
+        }   
         else {
             $batches = Transmutation::where([
                 'id' => $id,
@@ -261,6 +248,7 @@ class TransmutationsController extends Controller
                 'updated_by' => Auth::user()->id,
                 'is_active' => 1
             ]);
+            $this->audit_logs('transmutations', $id, 'has removed a transmutation.', Transmutation::find($id), $timestamp, Auth::user()->id);
             
             $data = array(
                 'title' => 'Well done!',
@@ -273,4 +261,17 @@ class TransmutationsController extends Controller
         }   
     }
 
+    public function audit_logs($entity, $entity_id, $description, $data, $timestamp, $user)
+    {
+        $auditLogs = AuditLog::create([
+            'entity' => $entity,
+            'entity_id' => $entity_id,
+            'description' => $description,
+            'data' => json_encode($data),
+            'created_at' => $timestamp,
+            'created_by' => $user
+        ]);
+
+        return true;
+    }
 }
