@@ -15,15 +15,19 @@ class Transmutation extends Model
 
     public function fetch($id)
     {
-        $header = self::find($id);
-        if ($header) {
+        $trans = self::with([
+            'elements' => function($q) {
+                $q->select(['id', 'transmutation_id', 'score', 'equivalent']); 
+            },
+        ])->find($id);
+        if ($trans) {
             $results = array(
-                'id' => ($header->id) ? $header->id : '',
-                'code' => ($header->code) ? $header->code : '',
-                'name' => ($header->name) ? $header->name : '',
-                'description' => ($header->description) ? $header->description : '',
-                'slug' => ($header->slug) ? $header->slug : '',
-                'order' => ($header->order) ? $header->order : ''
+                'id' => ($trans->id) ? $trans->id : '',
+                'code' => ($trans->code) ? $trans->code : '',
+                'name' => ($trans->name) ? $trans->name : '',
+                'description' => ($trans->description) ? $trans->description : '',
+                'education_type_id' => ($trans->education_type_id) ? $trans->education_type_id : '',
+                'elements' ($trans->id) ? ($trans->elements) : ''
             );
         } else {
             $results = array(
@@ -31,11 +35,16 @@ class Transmutation extends Model
                 'code' => '',
                 'name' => '',
                 'description' => '',
-                'slug' => '',
-                'order' => ''
+                'education_type_id' => '',
+                'elements' => ''
             );
         }
         return (object) $results;
+    }
+
+    public function elements()
+    {
+        return $this->hasMany('App\Models\TransmutationElement', 'transmutation_id', 'id');    
     }
 }
 

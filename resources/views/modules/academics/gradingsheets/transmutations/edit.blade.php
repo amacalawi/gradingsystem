@@ -3,11 +3,7 @@
 @section('content')
 <div class="row">
     <div class="col-md-12">
-        <div class="m-portlet m-portlet--tab">
-            <div class="m-portlet__body">
-                @include('forms.transmutation')
-            </div>
-        </div>
+        @include('forms.transmutation')
     </div>
 </div>
 @endsection
