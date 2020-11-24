@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\GradingSheet;
+use App\Models\SectionInfo;
 
 class GradingSheetQuarter extends Model
 {	

@@ -422,7 +422,7 @@
             }
         });
         */
-       this.$body.on('click', '#preview-btn', function (e){
+        this.$body.on('click', '#preview-btn', function (e){
             e.preventDefault();
             var w = window.innerWidth;
             var h = window.innerHeight;
