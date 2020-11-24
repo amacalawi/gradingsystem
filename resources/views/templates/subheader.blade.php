@@ -576,7 +576,7 @@
                     <li class="m-nav__item">
                         @php 
                             $string = substr(ucwords(Request::segment(3)), 0, -1);
-                            $url = ['staff-attendance', 'student-attendance', 'report-card', 'form-137'];
+                            $url = ['staff-attendance', 'student-attendance', 'report-card', 'trasncript-of-record'];
                         @endphp
 
                         @if(Request::segment(4) == 'settings')
@@ -621,7 +621,7 @@
                     @if(Request::segment(3) == 'report-card')
                         Export Report Card
                     @else 
-                        Export Form 137
+                        Export Transcript Record
                     @endif
                 </a>
             </div>
