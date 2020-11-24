@@ -115,5 +115,11 @@ class Quarter extends Model
 
         return $quarters;
     }
+
+    public function get_quarter_per_batch($batch)
+    {
+        $quarters = self::where('batch_id', $batch)->get();
+        return $quarters;
+    }
 }
 

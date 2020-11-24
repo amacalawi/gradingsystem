@@ -12,6 +12,7 @@ use App\Models\Batch;
 use App\Models\EducationType;
 use App\Models\QuarterEducationType;
 use App\Models\GradingSheetQuarter;
+use App\Models\Quarter;
 use App\Models\Level;
 use App\Models\Admission;
 use Session;
@@ -60,6 +61,7 @@ class Form137Controller extends Controller
     { 
         $this->is_permitted(1);
         $menus = $this->load_menus();
+        $type = $request->get('type_id');
 
         $students = (new Admission)
         ->with([
@@ -96,13 +98,21 @@ class Form137Controller extends Controller
             'student_id' => $request->get('student_id'),
             'is_active' => 1
         ])
+        ->groupBy('student_id')
         ->orderBy('id', 'ASC')->get();
 
         $quarters = (new QuarterEducationType)->all_quarters_via_type($request->get('type_id'));
-        $levels = (new Level)->all_levels_via_type($request->get('type_id'));
-        $type = $request->get('type_id');
 
-        return view('modules/academics/gradingsheets/form137/view')->with(compact('menus', 'students', 'quarters', 'batch', 'type', 'levels'));
+        $levels_section_infos = Level::select('levels.name as level_name', 'batches.name as batch_name', 'batches.id as batch_id', 'quarters.name as quarter_name', 'sections_info.id as section_info_id')
+        ->join('sections_info', 'sections_info.level_id', 'levels.id')
+        ->join('batches', 'batches.id', 'sections_info.batch_id')
+        ->join('quarters', 'quarters.batch_id', 'batches.id')
+        ->where('levels.education_type_id', $request->get('type_id'))
+        ->groupBy('levels.code')
+        ->orderBy('levels.id', 'ASC')
+        ->get();
+        
+        return view('modules/academics/gradingsheets/form137/view')->with(compact('menus', 'students', 'quarters', 'batch', 'type', 'levels', 'levels_section_infos'));
     }
 
     public function reload_classes(Request $request)
@@ -284,6 +294,12 @@ class Form137Controller extends Controller
     public function get_column_grade($column, $type, $batch, $quarter, $section, $subject, $student, $material, $is_mapeh, $is_tle)
     {
         $res = (new GradingSheetQuarter)->get_column_grade($column, $type, $batch, $quarter, $section, $subject, $student, $material, $is_mapeh, $is_tle);
+        return $res;
+    }
+
+    public function get_quarter_per_batch($batch)
+    {
+        $res = (new Quarter)->get_quarter_per_batch($batch);
         return $res;
     }
 

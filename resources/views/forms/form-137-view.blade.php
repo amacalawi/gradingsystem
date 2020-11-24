@@ -90,32 +90,35 @@
 
                 <div class="row">
 
-                    @foreach($levels as $level)
+                    @foreach($levels_section_infos as $levels_section_info)
+                        @php
+                            $quarterDetails = $form137s->get_quarter_per_batch($levels_section_info->batch_id);
+                        @endphp
                         <div class="col-md-6 pt-5">
                             <div class="table-responsive">
                                 <table id="report-card-table" class="table-bordered">
                                     <tbody>
                                         <tr>
                                             <td colspan="16" class="text-left"><strong>Elegible for Admission to Grade</strong></td>
-                                            <td colspan="5"></td>
+                                            <td colspan="{{ (count($quarterDetails)+2) }}"></td>
                                         </tr>
                                         <tr>
                                             <td colspan="16" class="text-left"><strong>Grade  </strong></td>
-                                            <td colspan="5">{{$level->name}}</td>
+                                            <td colspan="{{ (count($quarterDetails)+2) }}">{{$levels_section_info->level_name}}</td>
                                         </tr>
                                         <tr>
                                             <td colspan="16" class="text-left"><strong>School Year </strong></td>
-                                            <td colspan="5"></td>
+                                            <td colspan="{{ (count($quarterDetails)+2) }}">{{$levels_section_info->batch_name}}</td>
                                         </tr>
 
                                         <tr>
                                             <td rowspan="2" colspan="16" class="text-center"><strong>LEARNING AREAS</strong></td>
-                                            <td colspan="{{ (count($quarters)) }}" class="text-center"><strong>Quarterly Ratings</strong></td>
+                                            <td colspan="{{ (count($quarterDetails)) }}" class="text-center"><strong>Quarterly Ratings</strong></td>
                                             <td rowspan="2" colspan="2" class="text-center"><strong>Remarks</strong></td>
                                         </tr>
-                                        <tr>   
-                                            @foreach($quarters as $quarter)
-                                                <td class="text-center"><strong>{{ $quarter->code }}</strong></td>
+                                        <tr>
+                                            @foreach($quarterDetails as $quarterDetail)
+                                                <td class="text-center"><strong>{{ $quarterDetail->name }}</strong></td>
                                             @endforeach
                                         </tr>
                                         @php $is_mapeh = 0; $is_tle = 0; $unit = 0; @endphp
@@ -125,9 +128,9 @@
                                                     <tr>    
                                                         @php $finalGrade = 0; $unit++; $subjectCounter = 0; @endphp
                                                         <td colspan="16">{{ $subject->subject_name }}</td>
-                                                        @foreach($quarters as $quarter)
+                                                        @foreach($quarterDetails as $quarterDetail)
                                                             @php 
-                                                                $quarterGrade = $form137s->get_column_grade('quarter_grade', $type, $student->batch->id, $quarter->id, $student->section_info_id, $subject->subject_id, $student->student->id, $subject->material, 0, 0); 
+                                                                $quarterGrade = $form137s->get_column_grade('quarter_grade', $type, $levels_section_info->batch_id, $quarterDetail->id, $levels_section_info->section_info_id, $subject->subject_id, $student->student->id, $subject->material, 0, 0); 
                                                                 if ($quarterGrade !== '') {
                                                                     $finalGrade += floatval($quarterGrade);
                                                                     $subjectCounter++;
@@ -135,7 +138,7 @@
                                                             @endphp
                                                             <td class="text-center">{{ ($quarterGrade !== '') ? $quarterGrade : '' }}</td>
                                                         @endforeach
-                                                        <td class="text-center"> </td>
+                                                        <td class="text-center" > </td>
                                                     </tr>
                                                 @else
                                                     @if($subject->is_mapeh == 1 && $subject->is_tle == 0)
@@ -150,9 +153,9 @@
                                             <tr>    
                                                 @php $finalGrade = 0; $unit++; $subjectCounter = 0; @endphp
                                                 <td colspan="16">MAPEH</td>
-                                                @foreach($quarters as $quarter)
+                                                @foreach($quarterDetails as $quarterDetail)
                                                     @php 
-                                                        $quarterGrade = $form137s->get_column_grade('quarter_grade', $type, $student->batch->id, $quarter->id, $student->section_info_id, $subject->subject_id, $student->student->id, $subject->material, 1, 0); 
+                                                        $quarterGrade = $form137s->get_column_grade('quarter_grade', $type, $levels_section_info->batch_id, $quarterDetail->id, $student->section_info_id, $subject->subject_id, $student->student->id, $subject->material, 1, 0); 
                                                         if ($quarterGrade !== '') {
                                                             $finalGrade += floatval($quarterGrade);
                                                             $subjectCounter++;
@@ -160,16 +163,16 @@
                                                     @endphp
                                                     <td class="text-center">{{ ($quarterGrade !== '') ? $quarterGrade : '' }}</td>
                                                 @endforeach
-                                                <td colspan="1"></td>
+                                                <td class="text-center" > </td>
                                             </tr>
                                         @endif
                                         @if($is_tle > 0)
                                             <tr>
                                                 @php $finalGrade = 0; $unit++; $subjectCounter = 0; @endphp
                                                 <td colspan="16">ICT/LE</td>
-                                                @foreach($quarters as $quarter)
+                                                @foreach($quarterDetails as $quarterDetail)
                                                     @php 
-                                                        $quarterGrade = $form137s->get_column_grade('quarter_grade', $type, $student->batch->id, $quarter->id, $student->section_info_id, $subject->subject_id, $student->student->id, $subject->material, 0, 1); 
+                                                        $quarterGrade = $form137s->get_column_grade('quarter_grade', $type, $levels_section_info->batch_id, $quarterDetail->id, $student->section_info_id, $subject->subject_id, $student->student->id, $subject->material, 0, 1); 
                                                         if ($quarterGrade !== '') {
                                                             $finalGrade += floatval($quarterGrade);
                                                             $subjectCounter++;
@@ -177,7 +180,7 @@
                                                     @endphp
                                                     <td class="text-center">{{ ($quarterGrade !== '') ? $quarterGrade : '' }}</td>
                                                 @endforeach
-                                                <td colspan="1"></td>
+                                                <td class="text-center" > </td>
                                             </tr>
                                         @endif
                                         @foreach($student->subjects as $subject)
@@ -185,9 +188,10 @@
                                                 <tr>    
                                                     @php $finalGrade = 0; $subjectCounter = 0; @endphp
                                                     <td colspan="16">{{ $subject->subject_name }}</td>
-                                                    @foreach($quarters as $quarter)
+                                                    @foreach($quarterDetails as $quarterDetails)
                                                         <td class="text-center"></td>
                                                     @endforeach
+                                                    <td class="text-center" > </td>
                                                 </tr>
                                             @endif
                                         @endforeach
@@ -195,10 +199,10 @@
                                     <tfoot>
                                         <tr>
                                             <td colspan="16">GENERAL AVERAGE</td>
-                                            @foreach($quarters as $quarter)
+                                            @foreach($quarterDetails as $quarterDetail)
                                                 <td class="text-center">{{--general average--}}</td>
                                             @endforeach
-                                            <td colspan="1"></td>
+                                            <td class="text-center" > </td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -214,7 +218,7 @@
                             <p class="text-center m-t-30 m-b-0"><em>{{ ucwords($student->section_info->adviser_firstname).' '.ucwords($student->section_info->adviser_lastname) }}</em></p>
                             <p class="text-center border-top"><strong>CLASS ADVISER</strong></p>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-5">
                             &nbsp;
                         </div>
                         <div class="col-md-3">

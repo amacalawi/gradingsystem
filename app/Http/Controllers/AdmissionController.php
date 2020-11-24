@@ -88,7 +88,7 @@ class AdmissionController extends Controller
                     'admissionLevel' => $admission->level_id, 
                     'admissionLvlName' => $admission->lvlname,
                     'admissionNoStudent' => (new Admission)->where(['section_info_id' => $admission->id, 'batch_id' => $admission->batch_id, 'is_active' => 1])->count(),
-                    'admissionNoSubject' => (new SectionsSubjects)->where(['section_info_id' => $admission->id, 'is_active' => 1])->count(),
+                    'admissionNoSubject' => (new SectionsSubjects)->where(['section_info_id' => $admission->id, 'batch_id' => $admission->batch_id, 'is_active' => 1])->count(),
                     'admissionModified' => ($admission->updated_at !== NULL) ? date('d-M-Y', strtotime($admission->updated_at)).'<br/>'. date('h:i A', strtotime($admission->updated_at)) : date('d-M-Y', strtotime($admission->created_at)).'<br/>'. date('h:i A', strtotime($admission->created_at))
                 ];
             });
@@ -168,7 +168,7 @@ class AdmissionController extends Controller
                 $batch_id[0] = '0';
             } 
 
-            $exist_classcode = SectionInfo::where('classcode', $classcode)->get();  //die(var_dump($classcode));                    
+            $exist_classcode = SectionInfo::where('classcode', $classcode)->where('batch_id', $batch_id[0])->get();  //die(var_dump($classcode));                    
             if (($exist_classcode->count() <= 0) )
             {
                 //sections_info
@@ -286,9 +286,9 @@ class AdmissionController extends Controller
             $classcode = $this->generate_classcode($request->type, $request->section, $batch_id[0]);
             if(!$batch_id){
                 $batch_id[0] = '0';
-            } 
+            }
 
-            $exist_classcode = SectionInfo::where('classcode', $classcode)->get();
+            $exist_classcode = SectionInfo::where('classcode', $classcode)->where('batch_id', $batch_id[0])->get();
             if (($exist_classcode->count() > 0) )
             {
 
@@ -776,7 +776,7 @@ class AdmissionController extends Controller
                             $batch_id = Batch::where('is_active', 1)->where('status','Current')->pluck('id');
                             if(!$batch_id->isEmpty())
                             {   
-                                $exist_classcode = SectionInfo::where('classcode', $data[0])->get();
+                                $exist_classcode = SectionInfo::where('classcode', $data[0])->where('batch_id', $batch_id[0])->get();
                                    
                                 if (($exist_classcode->count() > 0) ) {
                                        
@@ -785,7 +785,7 @@ class AdmissionController extends Controller
                                         $student = Student::where('identification_no', $data[1])->where('is_active', 1)->first();
                                         if( $student ){
 
-                                            $admit = Admission::where('batch_id', $batch_id[0])->where('student_id', $student->id)->where('is_active', 1)->get();
+                                            $admit = Admission::where('batch_id', $batch_id[0])->where('student_id', $student->id)->where('batch_id', $batch_id[0])->where('is_active', 1)->get();
                                             if( $admit->count() == 0 ){
 
                                                 $admission = Admission::create([
@@ -832,7 +832,7 @@ class AdmissionController extends Controller
                             $batch_id = Batch::where('is_active', 1)->where('status','Current')->pluck('id');
                             if(!$batch_id->isEmpty())
                             {   
-                                $exist_classcode = SectionInfo::where('classcode', $data[0])->get();
+                                $exist_classcode = SectionInfo::where('classcode', $data[0])->where('batch_id', $batch_id[0])->get();
                                    
                                 if (($exist_classcode->count() > 0) ) {
                                     if( ($data[1] != '') && ($data[2] != '') ){
@@ -840,7 +840,7 @@ class AdmissionController extends Controller
                                         $teacher = Staff::where('identification_no', $data[2])->where('is_active', 1)->first();
                                         
                                         if($subject->id && $teacher->id){
-                                            $sectionsubject = SectionsSubjects::where('section_info_id', $exist_classcode->first()->id)->where('subject_id', $subject->id)->where('teacher_id', $teacher->id)->get();
+                                            $sectionsubject = SectionsSubjects::where('section_info_id', $exist_classcode->first()->id)->where('subject_id', $subject->id)->where('teacher_id', $teacher->id)->where('batch_id', $batch_id[0])->get();
                                             if( $sectionsubject->count() == 0 ){
 
                                                 $admission = SectionsSubjects::create([
