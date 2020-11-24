@@ -749,17 +749,7 @@ class DatabaseSeeder extends Seeder
                 'icon' => '',
                 'order' => '45',
                 'created_by' => 1
-            ],
-            [   
-                'module_id' => '3',
-                'code' => 'form-137',
-                'name' => 'Form 137',
-                'description' => 'Form 137 Description',
-                'slug' => 'form-137',
-                'icon' => '',
-                'order' => '46',
-                'created_by' => 1
-            ],
+            ]
         ];
         foreach ($sub_modules as $sub_module) {
             DB::table('sub_modules')->insert($sub_module);
@@ -1142,12 +1132,6 @@ class DatabaseSeeder extends Seeder
             [   
                 'role_id' => '1',
                 'sub_module_id' => '45',
-                'permissions' => '1,1,1,1',
-                'created_by' => 1
-            ],
-            [   
-                'role_id' => '1',
-                'sub_module_id' => '46',
                 'permissions' => '1,1,1,1',
                 'created_by' => 1
             ]

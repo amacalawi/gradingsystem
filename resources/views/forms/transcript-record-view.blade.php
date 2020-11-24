@@ -1,4 +1,4 @@
-@inject('form137s', 'App\Http\Controllers\Form137Controller')
+@inject('transcriptrecords', 'App\Http\Controllers\TranscriptRecordController')
 <div class="row">
     <div class="col-md-12">
         <!-- BASIC INFOS START -->
@@ -7,7 +7,7 @@
                 @foreach($students as $student)
                 <div class="row">
                     <div class="col-md-12">
-                        <h5 class=""><strong>Form 137-E</strong></h5>
+                        <h5 class=""><strong>Transcript Records</strong></h5>
                     </div>
                     <div class="col-md-12">
                         <h5 class="text-center">Republica ng Pilipinas</h5>
@@ -28,7 +28,7 @@
                 </div>
 
                 <div class="table-responsive pt-3">
-                    <table id="form-137-table" class="w-100 border-1">
+                    <table id="transcript-record-table" class="w-100 border-1">
                         <thead>
                             <tr>
                                 <td class=""><h6><b>Pangalan</b></h6></td>
@@ -92,7 +92,7 @@
 
                     @foreach($levels_section_infos as $levels_section_info)
                         @php
-                            $quarterDetails = $form137s->get_quarter_per_batch($levels_section_info->batch_id);
+                            $quarterDetails = $transcriptrecords->get_quarter_per_batch($levels_section_info->batch_id);
                         @endphp
                         <div class="col-md-6 pt-5">
                             <div class="table-responsive">
@@ -130,7 +130,7 @@
                                                         <td colspan="16">{{ $subject->subject_name }}</td>
                                                         @foreach($quarterDetails as $quarterDetail)
                                                             @php 
-                                                                $quarterGrade = $form137s->get_column_grade('quarter_grade', $type, $levels_section_info->batch_id, $quarterDetail->id, $levels_section_info->section_info_id, $subject->subject_id, $student->student->id, $subject->material, 0, 0); 
+                                                                $quarterGrade = $transcriptrecords->get_column_grade('quarter_grade', $type, $levels_section_info->batch_id, $quarterDetail->id, $levels_section_info->section_info_id, $subject->subject_id, $student->student->id, $subject->material, 0, 0); 
                                                                 if ($quarterGrade !== '') {
                                                                     $finalGrade += floatval($quarterGrade);
                                                                     $subjectCounter++;
@@ -155,7 +155,7 @@
                                                 <td colspan="16">MAPEH</td>
                                                 @foreach($quarterDetails as $quarterDetail)
                                                     @php 
-                                                        $quarterGrade = $form137s->get_column_grade('quarter_grade', $type, $levels_section_info->batch_id, $quarterDetail->id, $student->section_info_id, $subject->subject_id, $student->student->id, $subject->material, 1, 0); 
+                                                        $quarterGrade = $transcriptrecords->get_column_grade('quarter_grade', $type, $levels_section_info->batch_id, $quarterDetail->id, $student->section_info_id, $subject->subject_id, $student->student->id, $subject->material, 1, 0); 
                                                         if ($quarterGrade !== '') {
                                                             $finalGrade += floatval($quarterGrade);
                                                             $subjectCounter++;
@@ -172,7 +172,7 @@
                                                 <td colspan="16">ICT/LE</td>
                                                 @foreach($quarterDetails as $quarterDetail)
                                                     @php 
-                                                        $quarterGrade = $form137s->get_column_grade('quarter_grade', $type, $levels_section_info->batch_id, $quarterDetail->id, $student->section_info_id, $subject->subject_id, $student->student->id, $subject->material, 0, 1); 
+                                                        $quarterGrade = $transcriptrecords->get_column_grade('quarter_grade', $type, $levels_section_info->batch_id, $quarterDetail->id, $student->section_info_id, $subject->subject_id, $student->student->id, $subject->material, 0, 1); 
                                                         if ($quarterGrade !== '') {
                                                             $finalGrade += floatval($quarterGrade);
                                                             $subjectCounter++;
