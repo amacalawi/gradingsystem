@@ -67,7 +67,10 @@ class QuartersController extends Controller
                 });
             }
         ])
-        ->where('is_active', 1)
+        ->where([
+            'batch_id' => (new Batch)->get_current_batch(),
+            'is_active' => 1
+        ])
         ->orderBy('id', 'DESC')
         ->get();
 
@@ -96,7 +99,10 @@ class QuartersController extends Controller
                 });
             }
         ])
-        ->where('is_active', 0)
+        ->where([
+            'batch_id' => (new Batch)->get_current_batch(),
+            'is_active' => 0
+        ])
         ->orderBy('id', 'DESC')
         ->get();
 

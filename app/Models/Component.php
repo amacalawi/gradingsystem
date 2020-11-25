@@ -128,7 +128,8 @@ class Component extends Model
                 $q->select(['component_id', 'id', 'activity', 'value', 'description'])
                 ->where([
                     'quarter_id' => $quarter,
-                    'subject_id' => $subject
+                    'subject_id' => $subject,
+                    'is_active' => 1
                 ])
                 ->orderBy('id', 'ASC'); 
             },

@@ -992,6 +992,31 @@ a[data-dismiss="modal"] {
     color: #fff;
 }
 
+.edit-components,
+.edit-components:hover {
+    text-decoration: none;
+    color: #212529 !important;
+    font-weight: bold !important;
+}
+
+
+.panel-disabled {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+    height: 100%;
+    z-index: 98;
+	background: rgba(255, 255, 255, 0.8);
+}
+
+.preloader {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-top: -50px;
+	margin-left: -50px;
+}
 
 @media print {
     .col-md-6 {

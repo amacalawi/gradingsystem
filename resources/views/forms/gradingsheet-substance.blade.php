@@ -1,11 +1,12 @@
 <div id="scrolling_table_1" class="scrolly_table">
+    <div class="panel-disabled"><div class="m-loader" style="left: 50%; top: 10%; margin-left: -50px; width: 100px; height: 100px; display: inline-block;"></div></div>
     <table id="gradingsheet-table" class="table-bordered">
         <tbody>
             <tr>
                 <th class="shaded fixed freeze text-center scrolling_table_1">#</th>
                 <th class="shaded fixed freeze text-center scrolling_table_1">STUDENT</th>
                 @foreach ($components as $component)
-                    <th class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 component-header" colspan="{{ $component->columns }}" data-toggle="m-tooltip" data-placement="bottom" title="{{ $component->description }}">{{ $component->name }}</th>
+                    <th class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 component-header" colspan="{{ $component->columns }}" title="{{ $component->description }}">{{ $component->name }} <a component_title="{{ $component->name }}" component_id="{{ $component->id }}" data-toggle="m-tooltip" data-placement="bottom" title="add/edit components" href="javascript:;" class="edit-components pull-right"><i class="flaticon-file-1"></i></a></th>
                 @endforeach
                 <th class="shaded fixed freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="initial grade">Initial</th>
                 <th class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg" data-toggle="m-tooltip" data-placement="bottom" title="quarterly grade">QG</th>

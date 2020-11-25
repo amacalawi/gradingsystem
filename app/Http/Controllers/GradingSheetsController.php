@@ -1140,6 +1140,118 @@ class GradingSheetsController extends Controller
         }
     }
 
+    public function get_activity_components(Request $request)
+    {
+        $res = Activity::select(['activities.id', 'activities.activity', 'activities.value', 'activities.description'])
+        ->join('components', function($join)
+        {
+            $join->on('components.id', '=', 'activities.component_id');
+        })
+        ->where([
+            'activities.component_id' => $request->get('component_id'),
+            'activities.quarter_id' => $request->get('quarter_id'),
+            'activities.subject_id' => $request->get('subject_id'),
+            'components.section_info_id' => $request->get('section_info_id'),
+            'components.batch_id' => $request->get('batch_id'),
+            'activities.is_active' => 1
+        ])
+        ->get();
+
+        return response()
+        ->json([
+            'status' => 'ok',
+            'data' => $res
+        ]);
+    }
+
+    public function update_components(Request $request)
+    {   
+        $timestamp = date('Y-m-d H:i:s');
+
+        Activity::join('components', function($join)
+        {
+            $join->on('components.id', '=', 'activities.component_id');
+        })
+        ->where([
+            'activities.component_id' => $request->get('component_id'),
+            'activities.quarter_id' => $request->get('quarter_id'),
+            'activities.subject_id' => $request->get('subject_id'),
+            'components.section_info_id' => $request->get('section_info_id'),
+            'components.batch_id' => $request->get('batch_id')
+        ])
+        ->update(['activities.is_active' => 0]);
+        if (!empty($request->activity_name)) {
+            $activities = $request->activity_name; $iteration = 0;
+            $activity_components = Activity::select('activities.id')
+            ->join('components', function($join)
+            {
+                $join->on('components.id', '=', 'activities.component_id');
+            })
+            ->where([
+                'activities.component_id' => $request->get('component_id'),
+                'activities.quarter_id' => $request->get('quarter_id'),
+                'activities.subject_id' => $request->get('subject_id'),
+                'components.section_info_id' => $request->get('section_info_id'),
+                'components.batch_id' => $request->get('batch_id')
+            ])
+            ->orderBy('activities.id', 'ASC')->get();
+            foreach ($activities as $activity) 
+            {
+                if ($activity !== NULL) {
+                    if ($activity_components->count() > 0 && $activity_components->count() > $iteration) {
+                        if ($activity_components[$iteration]->id !== NULL) {
+                            $activity_component = Activity::where('id', $activity_components[$iteration]->id)
+                            ->update([
+                                'activity' => $request->activity_name[$iteration],
+                                'value' => $request->activity_value[$iteration],
+                                'description' => $request->activity_description[$iteration],
+                                'updated_at' => $timestamp,
+                                'updated_by' => Auth::user()->id,
+                                'is_active' => 1
+                            ]);
+                            $this->audit_logs('activities', $activity_components[$iteration]->id, 'has modified a component activity.', Activity::find($activity_components[$iteration]->id), $timestamp, Auth::user()->id);
+                        } else {
+                            $activity_component = Activity::create([
+                                'component_id' => $request->get('component_id'),
+                                'quarter_id' => $request->get('quarter_id'),
+                                'subject_id' => $request->get('subject_id'),
+                                'activity' => $request->activity_name[$iteration],
+                                'value' => $request->activity_value[$iteration],
+                                'description' => $request->activity_description[$iteration],
+                                'created_at' => $timestamp,
+                                'created_by' => Auth::user()->id
+                            ]);
+                            $this->audit_logs('activities', $activity_component->id, 'has inserted a new component activity.', Activity::find($activity_component->id), $timestamp, Auth::user()->id);
+                        }
+                    } else {
+                        $activity_component = Activity::create([
+                            'component_id' => $request->get('component_id'),
+                            'quarter_id' => $request->get('quarter_id'),
+                            'subject_id' => $request->get('subject_id'),
+                            'activity' => $request->activity_name[$iteration],
+                            'value' => $request->activity_value[$iteration],
+                            'description' => $request->activity_description[$iteration],
+                            'created_at' => $timestamp,
+                            'created_by' => Auth::user()->id
+                        ]);
+                        $this->audit_logs('activities', $activity_component->id, 'has inserted a new component activity.', Activity::find($activity_component->id), $timestamp, Auth::user()->id);
+                    }
+                }
+                $iteration++;
+            }
+        }
+
+        $data = array(
+            'data' => $activity_components,
+            'title' => 'Well done!',
+            'text' => 'The component has been successfully updated.',
+            'type' => 'success',
+            'class' => 'btn-brand'
+        );
+
+        echo json_encode( $data ); exit();
+    }
+
     public function audit_logs($entity, $entity_id, $description, $data, $timestamp, $user)
     {
         $auditLogs = AuditLog::create([
