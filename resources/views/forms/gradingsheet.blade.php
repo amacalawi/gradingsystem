@@ -25,6 +25,15 @@
                                     )) 
                                 }}
                             </div>
+                            <div class="col-md-12 hidden">
+                                {{ 
+                                    Form::text($name = 'gradingsheet_id', $value = !empty($grading) ? $grading->id : '', 
+                                    $attributes = array(
+                                        'id' => 'gradingsheet_id',
+                                        'class' => 'form-control form-control-lg m-input m-input--solid'
+                                    )) 
+                                }}
+                            </div>
                         </div> 
                         <div class="row">
                             <div class="col-md-6">
@@ -82,6 +91,43 @@
                             <h4 class="m-bottom-1">Grading Sheet Information</h4>
                             <div class="row hidden">
                                 <h5 id="type">{{ $grading->education_type_id }}</h5>
+                                <div class="col-md-12 hidden">
+                                    {{ 
+                                        Form::text($name = 'gradingsheet_id', $value = !empty($grading) ? $grading->id : '', 
+                                        $attributes = array(
+                                            'id' => 'gradingsheet_id',
+                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                        )) 
+                                    }}
+                                    {{ 
+                                        Form::text($name = 'subject_id', $value = !empty($grading) ? $grading->subject_id : '', 
+                                        $attributes = array(
+                                            'id' => 'subject_id',
+                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                        )) 
+                                    }}
+                                    {{ 
+                                        Form::text($name = 'quarter_id', $value = !empty($grading) ? $grading->quarter_id : '', 
+                                        $attributes = array(
+                                            'id' => 'quarter_id',
+                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                        )) 
+                                    }}
+                                    {{ 
+                                        Form::text($name = 'section_info_id', $value = !empty($grading) ? $grading->section_info_id : '', 
+                                        $attributes = array(
+                                            'id' => 'section_info_id',
+                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                        )) 
+                                    }}
+                                    {{
+                                        Form::text($name = 'batch_id', $value = !empty($grading) ? $grading->batch_id : '', 
+                                        $attributes = array(
+                                            'id' => 'batch_id',
+                                            'class' => 'form-control form-control-lg m-input m-input--solid'
+                                        )) 
+                                    }}
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">

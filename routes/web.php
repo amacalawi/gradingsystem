@@ -433,6 +433,8 @@ Route::prefix('academics')->group(function () {
         Route::post('all-gradingsheets/import-gradingsheet/{id}', 'GradingSheetsController@import_gradingsheet')->name('gradingsheets.fetch.import.gradingsheet');
         Route::get('all-gradingsheets/update-activity-header', 'GradingSheetsController@update_activity_header')->name('gradingsheets.update.activity.header');
         Route::get('all-gradingsheets/update-activity-value', 'GradingSheetsController@update_activity_value')->name('gradingsheets.update.activity.value');
+        Route::get('all-gradingsheets/get-activity-components', 'GradingSheetsController@get_activity_components')->name('gradingsheets.get.activity.components');
+        Route::post('all-gradingsheets/update-components', 'GradingSheetsController@update_components')->name('gradingsheets.update.gradingsheet.components');
         /* End Grading Sheets Routes */
 
         /* Start Class Record Routes */

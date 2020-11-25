@@ -7,6 +7,43 @@
 
     var $required = 0; var files = []; var transmutations = [];
 
+    var $activity_layer = '<div class="row activity-panel-layout">' +
+        '<div class="col-md-11">' +
+        '<div class="row">' +
+        '<div class="col-md-4">' +
+        '<div class="form-group m-form__group required">' +
+        '<label for="activity" class="">Code</label>' +
+        '<input class="form-control form-control-lg m-input m-input--solid required" name="activity_name[]" type="text">' +
+        '<span class="m-form__help m--font-danger"></span>' +
+        '</div>' +
+        '</div>' +
+        '<div class="col-md-4">' +
+        '<div class="form-group m-form__group required">' +
+        '<label for="value" class="">Value</label>' +
+        '<input class="numeric-double form-control form-control-lg m-input m-input--solid required" name="activity_value[]" type="text">' +
+        '<span class="m-form__help m--font-danger"></span>' +
+        '</div>' +
+        '</div>' +
+        '<div class="col-md-4">' +
+        '<div class="form-group m-form__group required">' +
+        '<label for="description" class="">Description</label>' +
+        '<input class="form-control form-control-lg m-input m-input--solid required" name="activity_description[]" type="text">' +
+        '<span class="m-form__help m--font-danger"></span>' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '<div class="col-md-1">' +
+        '<div class="row">' +
+        '<div class="col-md-12">' +
+        '<button type="button" class="minus-activity btn">' +
+        '<i class="la la-minus"></i>' +
+        '</button>' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '</div>';
+
     gradingsheet.prototype.validate = function($form, $required)
     {   
         $required = 0;
@@ -624,6 +661,201 @@
                 $.gradingsheet.compute(self.closest('tr'), self.closest('td').attr('group'), self.val(), rowActivity);
             }
         });
+
+        this.$body.on('click', '.edit-components', function (e){
+            e.preventDefault();
+            var modal = $('#gradingsheet-components');
+            var modalBody = modal.find('.modal-body');
+            var gradingsheetID = $('#gradingsheet_id').val();
+            var subjectID = $('#subject_id').val();
+            var quarterID = $('#quarter_id').val();
+            var sectioninfoID = $('#section_info_id').val();
+            var batchID = $('#batch_id').val();
+            var componentID = $(this).attr('component_id'); 
+            var componentTitle = $(this).attr('component_title'); 
+            modal.modal({
+                'show': true,
+                'backdrop': 'static',
+                'keyboard': false
+            });
+            modalBody.empty();
+            modal.find('.components-title').text(componentTitle);
+            modal.find('.component_id').text(componentID);
+            modal.find('.section_info_id').text(sectioninfoID);
+            modal.find('.quarter_id').text(quarterID);
+            modal.find('.subject_id').text(subjectID);
+            modal.find('.batch_id').text(batchID);
+
+            console.log(base_url + 'academics/grading-sheets/all-gradingsheets/get-activity-components?gradingsheet_id=' + gradingsheetID + '&subject_id=' + subjectID + '&component_id=' + componentID + '&quarter_id=' + quarterID + '&section_info_id=' + sectioninfoID + '&batch_id=' + batchID);
+            $.ajax({
+                type: 'GET',
+                url: base_url + 'academics/grading-sheets/all-gradingsheets/get-activity-components?gradingsheet_id=' + gradingsheetID + '&subject_id=' + subjectID + '&component_id=' + componentID + '&quarter_id=' + quarterID + '&section_info_id=' + sectioninfoID + '&batch_id=' + batchID,
+                success: function(response) {
+                    var data = response;
+                    var htmlData = '';
+                    $.each(data.data, function(i, item) {
+                        var itemValue = (item.value !== null) ? item.value : '';
+                        var itemActivity = (item.activity !== null) ? item.activity : '';
+                        var itemDescription = (item.description !== null) ? item.description : '';
+                        if (i >= 1) {
+                            htmlData += '' +
+                            '<div class="row activity-panel-layout">' +
+                                '<div class="col-md-11">' +
+                                    '<div class="row">' +
+                                        '<div class="col-md-4">' +
+                                            '<div class="form-group m-form__group required">' +
+                                                '<label for="activity_name" class="">Code</label>' +
+                                                '<input class="form-control form-control-lg m-input m-input--solid required" name="activity_name[]" type="text" value="' + itemActivity + '">' +
+                                                '<span class="m-form__help m--font-danger"></span>' +
+                                            '</div>' +
+                                        '</div>' +
+                                        '<div class="col-md-4">' +
+                                            '<div class="form-group m-form__group required">' +
+                                                '<label for="activity_value" class="">Value</label>' +
+                                                '<input class="numeric-double form-control form-control-lg m-input m-input--solid required" name="activity_value[]" value="' + itemValue + '" type="text">' +
+                                                '<span class="m-form__help m--font-danger"></span>' + 
+                                            '</div>' +
+                                        '</div>' +
+                                        '<div class="col-md-4">' +
+                                            '<div class="form-group m-form__group required">' +
+                                                '<label for="activity_description" class="">Description</label>' +
+                                                '<input class="form-control form-control-lg m-input m-input--solid required" name="activity_description[]" type="text" value="' + itemDescription + '">' +
+                                                '<span class="m-form__help m--font-danger">' +
+                                                '</span>' +
+                                            '</div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>' +
+                                '<div class="col-md-1">' +
+                                    '<div class="row"><div class="col-md-12"><button type="button" class="minus-activity btn"><i class="la la-minus"></i></button></div></div>' +
+                                '</div>' +
+                            '</div>';
+                        } else {
+                            htmlData += '' +
+                                '<div class="row activity-panel-layout">' +
+                                    '<div class="col-md-11">' +
+                                        '<div class="row">' +
+                                            '<div class="col-md-4">' +
+                                                '<div class="form-group m-form__group required">' +
+                                                    '<label for="activity_name" class="">Code</label>' +
+                                                    '<input class="form-control form-control-lg m-input m-input--solid required" name="activity_name[]" type="text" value="' + itemActivity + '">' +
+                                                    '<span class="m-form__help m--font-danger"></span>' +
+                                                '</div>' +
+                                            '</div>' +
+                                            '<div class="col-md-4">' +
+                                                '<div class="form-group m-form__group required">' +
+                                                    '<label for="activity_value" class="">Value</label>' +
+                                                    '<input class="numeric-double form-control form-control-lg m-input m-input--solid required" name="activity_value[]" value="' + itemValue + '" type="text">' +
+                                                    '<span class="m-form__help m--font-danger"></span>' + 
+                                                '</div>' +
+                                            '</div>' +
+                                            '<div class="col-md-4">' +
+                                                '<div class="form-group m-form__group required">' +
+                                                    '<label for="activity_description" class="">Description</label>' +
+                                                    '<input class="form-control form-control-lg m-input m-input--solid required" name="activity_description[]" type="text" value="' + itemDescription + '">' +
+                                                    '<span class="m-form__help m--font-danger">' +
+                                                    '</span>' +
+                                                '</div>' +
+                                            '</div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<div class="col-md-1"></div>' +
+                                    '</div>';
+                        }
+                    }); 
+                    var htmlData2 = '<div class="row">' +
+                                    '<div class="col-md-12">' +
+                                        '<button id="add-activity" type="button" class="btn btn-brand">' +
+                                            '<i class="la la-plus"></i>&nbsp;Add Activity' +
+                                        '</button>' +
+                                    '</div>' +
+                                '</div>';
+                    modalBody.append('<div id="activity-panel">' + htmlData + '</div>' + htmlData2);
+                },
+                async: false
+            });
+        });
+
+        this.$body.on('hidden.bs.modal', '#gradingsheet-components', function (e) {
+            var $self = $(this);
+            $self.find('.variables').text('');
+            window.location.reload();
+        });
+
+        this.$body.on('click', '.minus-activity', function (e) {
+            e.preventDefault();
+            var $self = $(this);
+            var $panel = $self.closest('.activity-panel-layout');
+            $panel.remove();
+        });
+
+        this.$body.on('click', '#add-activity', function (e) {
+            e.preventDefault();
+            var $self = $(this);
+            var $panel = $('#activity-panel');
+            $panel.append($activity_layer);
+            $.gradingsheet.required_fields();
+        });
+
+        this.$body.on('click', '#component-save-btn', function (e){
+            e.preventDefault();
+            var $self = $(this);
+            var $modal = $self.closest('.modal');
+            var $form = $('form[name="gradingsheet-components"]');
+            var $componentID = $modal.find('.component_id').text();
+            var $batchID = $modal.find('.batch_id').text();
+            var $quarterID = $modal.find('.quarter_id').text();
+            var $sectioninfoID = $modal.find('.section_info_id').text();
+            var $subjectID = $modal.find('.subject_id').text();
+            var $url  = base_url + 'academics/grading-sheets/all-gradingsheets/update-components?component_id=' + $componentID + '&batch_id=' + $batchID + '&section_info_id=' + $sectioninfoID + '&quarter_id=' + $quarterID + '&subject_id=' + $subjectID;
+            var $error = $.gradingsheet.validate($form, 0);
+
+            if ($error != 0) {
+                swal({
+                    title: "Oops...",
+                    text: "Something went wrong! \nPlease fill in the required fields first.",
+                    type: "warning",
+                    showCancelButton: false,
+                    closeOnConfirm: true,
+                    confirmButtonClass: "btn btn-warning btn-focus m-btn m-btn--pill m-btn--air m-btn--custom"
+                });
+                window.onkeydown = null;
+                window.onfocus = null;   
+                $.gradingsheet.required_fields();
+            } else {
+                $self.prop('disabled', true).html('wait.....').addClass('m-btn--custom m-loader m-loader--light m-loader--right');
+                console.log($url);
+                $.ajax({
+                    type: $form.attr('method'),
+                    url: $url,
+                    data: $form.serialize(),
+                    success: function(response) {
+                        var data = $.parseJSON(response);   
+                        console.log(data);
+                        if (data.type == 'success') {
+                            setTimeout(function () {
+                                $self.html('Save Changes').removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
+                                swal({
+                                    title: data.title,
+                                    text: data.text,
+                                    type: data.type,
+                                    confirmButtonClass: "btn " + data.class + " btn-focus m-btn m-btn--pill m-btn--air m-btn--custom",
+                                    onClose: () => {
+                                        if ($form.find("input[name='method']").val() == 'add') {
+                                            window.location.replace(base_url + 'components/schools/departments');
+                                        }
+                                    }
+                                });
+                            }, 500 + 300 * (Math.random() * 5));
+                        }
+                    }, 
+                    complete: function() {
+                        window.onkeydown = null;
+                        window.onfocus = null;
+                    }
+                });
+            }
+        });
     }
 
     //init gradingsheet
@@ -637,3 +869,18 @@ function($) {
     $.gradingsheet.required_fields();
     $.gradingsheet.init();
 }(window.jQuery);
+
+function ready(fn) {
+    if (document.readyState != 'loading'){
+      fn();
+    } else if (document.addEventListener) {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      document.attachEvent('onreadystatechange', function() {
+        if (document.readyState != 'loading')
+          fn();
+      });
+    }
+}
+
+ready(function() { $('.panel-disabled').remove(); });

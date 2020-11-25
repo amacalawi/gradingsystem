@@ -3,6 +3,7 @@
 @section('content')
     @include('forms.gradingsheet')
     @include('modules.academics.gradingsheets.all.import')
+    @include('modals.gradingsheet-components')
 @endsection
 
 @push('styles')
