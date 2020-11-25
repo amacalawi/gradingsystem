@@ -208,7 +208,7 @@
                                                         </div>
                                                     </li>
                                                 @else
-                                                    @if ( $submodule['name'] != 'Report Card' && $submodule['name'] != 'Transcript of Record' && $submodule['name'] != 'Form 137')
+                                                    @if ( $submodule['name'] != 'Report Card' && $submodule['name'] != 'Transcript of Record')
                                                         <li class="m-menu__item" slug="{{ $submodule['slug'] }}" aria-haspopup="true"  data-redirect="true">
                                                             <a  href="{{ url($menu['slug'].'/'.$module['slug'].'/'.$submodule['slug']) }}" class="m-menu__link ">
                                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">

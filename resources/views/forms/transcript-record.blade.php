@@ -1,4 +1,4 @@
-{{ Form::open(array('url' => 'academics/grading-sheets/form-137/export-view', 'name' => 'form137_form', 'method' => 'POST')) }}
+{{ Form::open(array('url' => 'academics/grading-sheets/transcript-of-record/export-view', 'name' => 'transcriptrecord_form', 'method' => 'POST')) }}
     <div class="row">
         <div class="col-md-12">
             <!-- BASIC INFOS START -->
@@ -6,7 +6,7 @@
                 <div class="m-portlet__body">
                     <div class="row">
                         <div class="col-md-12">
-                            <h5 class="m-bottom-1">Form 137 Information</h5>
+                            <h5 class="m-bottom-1">Transcript Record Information</h5>
                         </div>
                     </div>
                     <div class="row">

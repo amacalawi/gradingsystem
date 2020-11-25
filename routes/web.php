@@ -482,12 +482,13 @@ Route::prefix('academics')->group(function () {
         /* End Report Card Routes */
 
         /* Start Report Card Routes */
-        Route::get('form-137/export', 'Form137Controller@export')->name('form.137.export');
-        Route::get('form-137/export-view', 'Form137Controller@export_view')->name('form.137.export_view');
-        Route::get('form-137/reload-classes', 'Form137Controller@reload_classes')->name('form.137.reload_classes');
-        Route::get('form-137/reload-students', 'Form137Controller@reload_students')->name('form.137.reload_students');
-        Route::get('form-137/fetch-students', 'Form137Controller@fetch_students')->name('form.137.students');
+        Route::get('transcript-of-record/export', 'TranscriptRecordController@export')->name('transcript.record.export');
+        Route::get('transcript-of-record/export-view', 'TranscriptRecordController@export_view')->name('transcript.record.export_view');
+        Route::get('transcript-of-record/reload-classes', 'TranscriptRecordController@reload_classes')->name('transcript.record.reload_classes');
+        Route::get('transcript-of-record/reload-students', 'TranscriptRecordController@reload_students')->name('transcript.record.reload_students');
+        Route::get('transcript-of-record/fetch-students', 'TranscriptRecordController@fetch_students')->name('transcript.record.students');
         /* End Report Card Routes */
+        
     });
     /* End Grading Sheets Routes */
 

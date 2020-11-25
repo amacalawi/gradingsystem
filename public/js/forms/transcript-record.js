@@ -1,13 +1,13 @@
 !function($) {
     "use strict";
 
-    var form137 = function() {
+    var transcriptrecord = function() {
         this.$body = $("body");
     };
 
     var $required = 0; var files = []; var transmutations = [];
 
-    form137.prototype.validate = function($form, $required)
+    transcriptrecord.prototype.validate = function($form, $required)
     {   
         $required = 0;
 
@@ -36,7 +36,7 @@
         return $required;
     },
 
-    form137.prototype.required_fields = function() {
+    transcriptrecord.prototype.required_fields = function() {
         
         $.each(this.$body.find(".form-group"), function(){
             if ($(this).hasClass('required')) {       
@@ -52,7 +52,7 @@
 
     },
 
-    form137.prototype.price_separator = function (input) {
+    transcriptrecord.prototype.price_separator = function (input) {
         var output = input
         if (parseFloat(input)) {
             input = new String(input); // so you can perform string operations
@@ -64,7 +64,7 @@
         return output;
     },
 
-    form137.prototype.do_uploads = function($id) {
+    transcriptrecord.prototype.do_uploads = function($id) {
         var data = new FormData();
         $.each(files, function(key, value)
         {   
@@ -87,7 +87,7 @@
         return true;
     },
 
-    form137.prototype.compute = function($rows, $group = '') 
+    transcriptrecord.prototype.compute = function($rows, $group = '') 
     {   
         if ($group != '') {
             var $sumCell = $rows.find('.sum-cell[group="'+ $group + '"]');
@@ -97,8 +97,8 @@
             var $qcCell  = $rows.find('.quarter-cell');
             var $percentageCell = $rows.find('.percentage-cell[group="'+ $group + '"]');
             var $initialCell = $rows.find('.initial-cell');
-            var $sumHeader = $('#form137-table th.sum-header[group="'+ $group + '"]');
-            var $psHeader = $('#form137-table th.ps-header[group="'+ $group + '"]');
+            var $sumHeader = $('#transcriptrecord-table th.sum-header[group="'+ $group + '"]');
+            var $psHeader = $('#transcriptrecord-table th.ps-header[group="'+ $group + '"]');
     
             var $sum = 0, $hps = 0;
             $.each($rows.find('td[group="'+ $group + '"] .activity-cell'), function(){
@@ -181,16 +181,16 @@
         quarterGrade.val(qg);
     },
 
-    form137.prototype.reload_students = function($section, $batch)
+    transcriptrecord.prototype.reload_students = function($section, $batch)
     {   
         var $student = $('#student_id');
         $student.find('option').remove();
         
 
-        console.log(base_url + 'academics/grading-sheets/form-137/reload-students?sections=' + $section + '&batch=' + $batch);
+        console.log(base_url + 'academics/grading-sheets/transcript-of-record/reload-students?sections=' + $section + '&batch=' + $batch);
         $.ajax({
             type: "GET",
-            url: base_url + 'academics/grading-sheets/form-137/reload-students?sections=' + $section + '&batch=' + $batch,
+            url: base_url + 'academics/grading-sheets/transcript-of-record/reload-students?sections=' + $section + '&batch=' + $batch,
             success: function(response) {
                 var data = JSON.parse(response);
                 if (data.students.length > 0) {
@@ -204,19 +204,19 @@
             } 
         });
 
-        $.form137.required_fields();
+        $.transcriptrecord.required_fields();
     },
 
-    form137.prototype.reload_classes = function($type, $batch) 
+    transcriptrecord.prototype.reload_classes = function($type, $batch) 
     {   
         var $section = $('#section_info_id');
         $section.find('option').remove();
         $section.append('<option value="">select a class</option>'); 
 
-        console.log(base_url + 'academics/grading-sheets/form-137/reload-classes?type=' + $type + '&batch=' + $batch);
+        console.log(base_url + 'academics/grading-sheets/transcript-of-record/reload-classes?type=' + $type + '&batch=' + $batch);
         $.ajax({
             type: "GET",
-            url: base_url + 'academics/grading-sheets/form-137/reload-classes?type=' + $type + '&batch=' + $batch,
+            url: base_url + 'academics/grading-sheets/transcript-of-record/reload-classes?type=' + $type + '&batch=' + $batch,
             success: function(response) {
                 var data = JSON.parse(response);
                 $.each(data.sections, function(i, item) {
@@ -226,15 +226,15 @@
             } 
         });
 
-        $.form137.required_fields();
+        $.transcriptrecord.required_fields();
     },
 
-    form137.prototype.fetch_transmutations = function()
+    transcriptrecord.prototype.fetch_transmutations = function()
     {   
         if (activeSubSubModule == 'edit') {
             $.ajax({
                 type: 'GET',
-                url: base_url + 'academics/grading-sheets/all-form137/fetch-transmutations/' + $('#type').text(),
+                url: base_url + 'academics/grading-sheets/all-transcriptrecord/fetch-transmutations/' + $('#type').text(),
                 success: function(response) {
                     transmutations = JSON.parse(response);
                 },
@@ -245,15 +245,15 @@
         }
     },
 
-    form137.prototype.fetch_students = function()
+    transcriptrecord.prototype.fetch_students = function()
     {  
         var $student = $('#student_id');
         $student.find('option').remove();
 
-        console.log(base_url + 'academics/grading-sheets/form-137/fetch-students');
+        console.log(base_url + 'academics/grading-sheets/transcript-of-record/fetch-students');
         $.ajax({
             type: "GET",
-            url: base_url + 'academics/grading-sheets/form-137/fetch-students',
+            url: base_url + 'academics/grading-sheets/transcript-of-record/fetch-students',
             success: function(response) {
                 var data = JSON.parse(response);
                 if (data.students.length > 0) {
@@ -269,15 +269,15 @@
 
     },
 
-    form137.prototype.init = function()
+    transcriptrecord.prototype.init = function()
     {   
-        $.form137.fetch_students();
+        $.transcriptrecord.fetch_students();
 
         this.$body.on('click', '.export-btn', function (e){
             e.preventDefault();
             var $self = $(this);
-            var $form = $('form[name="form137_form"]');
-            var $error = $.form137.validate($form, 0);
+            var $form = $('form[name="transcriptrecord_form"]');
+            var $error = $.transcriptrecord.validate($form, 0);
             var $student_id = $form.find('select[name="student_id"]').val();
             var $type_id = $form.find('select[name="education_type_id"]').val();
             //var $section_info_id = $form.find('select[name="section_info_id"]').val();
@@ -296,7 +296,7 @@
                 });
                 window.onkeydown = null;
                 window.onfocus = null;   
-                $.form137.required_fields();
+                $.transcriptrecord.required_fields();
             } else {
                 var win = window.open($url, '_blank');
                 win.focus();
@@ -304,7 +304,7 @@
         });
 
         /*
-        $.form137.fetch_transmutations();
+        $.transcriptrecord.fetch_transmutations();
         */
         /*
         | ---------------------------------
@@ -370,7 +370,7 @@
             var batch = $('#batch_id').val();
 
             if (self != '') {
-                $.form137.reload_classes(self, batch);
+                $.transcriptrecord.reload_classes(self, batch);
             }
         });
         this.$body.on('change', '#batch_id', function (e){
@@ -379,7 +379,7 @@
             var type = $('#education_type_id').val();
 
             if (self != '') {
-                $.form137.reload_classes(type, self);
+                $.transcriptrecord.reload_classes(type, self);
             }
         });
 
@@ -389,15 +389,15 @@
             var batch = $('#batch_id').val();
 
             if (self != '') {
-                $.form137.reload_students(self, batch);
+                $.transcriptrecord.reload_students(self, batch);
             }
         });
 
         this.$body.on('click', '.export-btn', function (e){
             e.preventDefault();
             var $self = $(this);
-            var $form = $('form[name="form137_form"]');
-            var $error = $.form137.validate($form, 0);
+            var $form = $('form[name="transcriptrecord_form"]');
+            var $error = $.transcriptrecord.validate($form, 0);
             var $student_id = $form.find('select[name="student_id"]').val();
             var $section_info_id = $form.find('select[name="section_info_id"]').val();
             var $batch_id = $form.find('select[name="batch_id"]').val();
@@ -415,14 +415,14 @@
                 });
                 window.onkeydown = null;
                 window.onfocus = null;   
-                $.form137.required_fields();
+                $.transcriptrecord.required_fields();
             } else {
                 var win = window.open($url, '_blank');
                 win.focus();
             }
         });
         */
-       this.$body.on('click', '#preview-btn', function (e){
+        this.$body.on('click', '#preview-btn', function (e){
             e.preventDefault();
             var w = window.innerWidth;
             var h = window.innerHeight;
@@ -431,7 +431,7 @@
             a.document.write('<html>'); 
             a.document.write('<head>'); 
             a.document.write('<style>'); 
-            a.document.write('@media print{body *{ font-family: arial,sans-serif; }.col-md-6{position:relative;width:50%!important;float:left!important}.col-md-3{position:relative;width:25%!important;float:left!important}#form-137-table td{border:1px solid #575962!important; padding: 2px;}#form-137-table{table-layout:fixed;min-width:100%}.table-responsive>.table-bordered{border:0}.table-bordered{border:1px solid #f4f5f8}table{border-collapse:collapse}#form-137-table td{border:1px solid #575962!important;color:#212529!important;vertical-align:middle}.text-center{text-align:center}#form-137-table td.border-0{border:1px solid transparent!important}#form-137-table td.border-bottom{border-bottom:1px solid #575962!important}#form-137-table td.p-b-0{font-size:.85rem}p{margin-bottom:0!important;margin-top:0!important}.m-t-30{margin-top:30px !important}.border-top{border-top:1px solid #575962!important}.m-b-0{margin-bottom:0!important}.text-right{text-align:right}h5{margin: 0 !important;font-size: 1.2rem;font-weight: normal;}.m-bottom-1{margin-bottom: 1.2rem !important;}}'); 
+            a.document.write('@media print{body *{ font-family: arial,sans-serif; }.col-md-6{position:relative;width:50%!important;float:left!important}.col-md-3{position:relative;width:25%!important;float:left!important}#transcript-record-table td{border:1px solid #575962!important; padding: 2px;}#transcript-record-table{table-layout:fixed;min-width:100%}.table-responsive>.table-bordered{border:0}.table-bordered{border:1px solid #f4f5f8}table{border-collapse:collapse}#transcript-record-table td{border:1px solid #575962!important;color:#212529!important;vertical-align:middle}.text-center{text-align:center}#transcript-record-table td.border-0{border:1px solid transparent!important}#transcript-record-table td.border-bottom{border-bottom:1px solid #575962!important}#transcript-record-table td.p-b-0{font-size:.85rem}p{margin-bottom:0!important;margin-top:0!important}.m-t-30{margin-top:30px !important}.border-top{border-top:1px solid #575962!important}.m-b-0{margin-bottom:0!important}.text-right{text-align:right}h5{margin: 0 !important;font-size: 1.2rem;font-weight: normal;}.m-bottom-1{margin-bottom: 1.2rem !important;}}'); 
             a.document.write('</style>'); 
             a.document.write('</head>'); 
             a.document.write('<body>'); 
@@ -443,14 +443,14 @@
         });
     }
 
-    //init form137
-    $.form137 = new form137, $.form137.Constructor = form137
+    //init transcriptrecord
+    $.transcriptrecord = new transcriptrecord, $.transcriptrecord.Constructor = transcriptrecord
 
 }(window.jQuery),
 
-//initializing form137
+//initializing transcriptrecord
 function($) {
     "use strict";
-    $.form137.required_fields();
-    $.form137.init();
+    $.transcriptrecord.required_fields();
+    $.transcriptrecord.init();
 }(window.jQuery);

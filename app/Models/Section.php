@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\SectionInfo;
 use App\Models\Component;
+use App\Models\Batch;
 
 class Section extends Model
 {
@@ -172,10 +173,9 @@ class Section extends Model
     {
         $sections = self::where('is_active', 1)->where('level_id', $level)->where('education_type_id', $type)
         ->whereNotIn('id',function($query) {
-            $query->select('section_id')->from('sections_info');
+            $query->select('section_id')->where('batch_id', (new Batch)->get_current_batch() )->from('sections_info');
         })->orderBy('id', 'asc')->get();
         
-
         $secs = array();
         $secs[] = array('0' => 'select a section');
 
