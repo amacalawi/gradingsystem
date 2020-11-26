@@ -673,65 +673,44 @@
             var batchID = $('#batch_id').val();
             var componentID = $(this).attr('component_id'); 
             var componentTitle = $(this).attr('component_title'); 
-            modal.modal({
-                'show': true,
-                'backdrop': 'static',
-                'keyboard': false
-            });
-            modalBody.empty();
-            modal.find('.components-title').text(componentTitle);
-            modal.find('.component_id').text(componentID);
-            modal.find('.section_info_id').text(sectioninfoID);
-            modal.find('.quarter_id').text(quarterID);
-            modal.find('.subject_id').text(subjectID);
-            modal.find('.batch_id').text(batchID);
+            var componentLock = $(this).attr('component_lock'); 
 
-            console.log(base_url + 'academics/grading-sheets/all-gradingsheets/get-activity-components?gradingsheet_id=' + gradingsheetID + '&subject_id=' + subjectID + '&component_id=' + componentID + '&quarter_id=' + quarterID + '&section_info_id=' + sectioninfoID + '&batch_id=' + batchID);
-            $.ajax({
-                type: 'GET',
-                url: base_url + 'academics/grading-sheets/all-gradingsheets/get-activity-components?gradingsheet_id=' + gradingsheetID + '&subject_id=' + subjectID + '&component_id=' + componentID + '&quarter_id=' + quarterID + '&section_info_id=' + sectioninfoID + '&batch_id=' + batchID,
-                success: function(response) {
-                    var data = response;
-                    var htmlData = '';
-                    $.each(data.data, function(i, item) {
-                        var itemValue = (item.value !== null) ? item.value : '';
-                        var itemActivity = (item.activity !== null) ? item.activity : '';
-                        var itemDescription = (item.description !== null) ? item.description : '';
-                        if (i >= 1) {
-                            htmlData += '' +
-                            '<div class="row activity-panel-layout">' +
-                                '<div class="col-md-11">' +
-                                    '<div class="row">' +
-                                        '<div class="col-md-4">' +
-                                            '<div class="form-group m-form__group required">' +
-                                                '<label for="activity_name" class="">Code</label>' +
-                                                '<input class="form-control form-control-lg m-input m-input--solid required" name="activity_name[]" type="text" value="' + itemActivity + '">' +
-                                                '<span class="m-form__help m--font-danger"></span>' +
-                                            '</div>' +
-                                        '</div>' +
-                                        '<div class="col-md-4">' +
-                                            '<div class="form-group m-form__group required">' +
-                                                '<label for="activity_value" class="">Value</label>' +
-                                                '<input class="numeric-double form-control form-control-lg m-input m-input--solid required" name="activity_value[]" value="' + itemValue + '" type="text">' +
-                                                '<span class="m-form__help m--font-danger"></span>' + 
-                                            '</div>' +
-                                        '</div>' +
-                                        '<div class="col-md-4">' +
-                                            '<div class="form-group m-form__group required">' +
-                                                '<label for="activity_description" class="">Description</label>' +
-                                                '<input class="form-control form-control-lg m-input m-input--solid required" name="activity_description[]" type="text" value="' + itemDescription + '">' +
-                                                '<span class="m-form__help m--font-danger">' +
-                                                '</span>' +
-                                            '</div>' +
-                                        '</div>' +
-                                    '</div>' +
-                                '</div>' +
-                                '<div class="col-md-1">' +
-                                    '<div class="row"><div class="col-md-12"><button type="button" class="minus-activity btn"><i class="la la-minus"></i></button></div></div>' +
-                                '</div>' +
-                            '</div>';
-                        } else {
-                            htmlData += '' +
+            if (componentLock > 0) {
+                swal({
+                    title: "Oops...",
+                    text: "Unable to toggle! \nThe gradingsheet has already been locked.",
+                    type: "warning",
+                    showCancelButton: false,
+                    closeOnConfirm: true,
+                    confirmButtonClass: "btn btn-warning btn-focus m-btn m-btn--pill m-btn--air m-btn--custom"
+                });
+            } else {
+                modal.modal({
+                    'show': true,
+                    'backdrop': 'static',
+                    'keyboard': false
+                });
+                modalBody.empty();
+                modal.find('.components-title').text(componentTitle);
+                modal.find('.component_id').text(componentID);
+                modal.find('.section_info_id').text(sectioninfoID);
+                modal.find('.quarter_id').text(quarterID);
+                modal.find('.subject_id').text(subjectID);
+                modal.find('.batch_id').text(batchID);
+
+                console.log(base_url + 'academics/grading-sheets/all-gradingsheets/get-activity-components?gradingsheet_id=' + gradingsheetID + '&subject_id=' + subjectID + '&component_id=' + componentID + '&quarter_id=' + quarterID + '&section_info_id=' + sectioninfoID + '&batch_id=' + batchID);
+                $.ajax({
+                    type: 'GET',
+                    url: base_url + 'academics/grading-sheets/all-gradingsheets/get-activity-components?gradingsheet_id=' + gradingsheetID + '&subject_id=' + subjectID + '&component_id=' + componentID + '&quarter_id=' + quarterID + '&section_info_id=' + sectioninfoID + '&batch_id=' + batchID,
+                    success: function(response) {
+                        var data = response;
+                        var htmlData = '';
+                        $.each(data.data, function(i, item) {
+                            var itemValue = (item.value !== null) ? item.value : '';
+                            var itemActivity = (item.activity !== null) ? item.activity : '';
+                            var itemDescription = (item.description !== null) ? item.description : '';
+                            if (i >= 1) {
+                                htmlData += '' +
                                 '<div class="row activity-panel-layout">' +
                                     '<div class="col-md-11">' +
                                         '<div class="row">' +
@@ -759,21 +738,55 @@
                                             '</div>' +
                                         '</div>' +
                                     '</div>' +
-                                    '<div class="col-md-1"></div>' +
-                                    '</div>';
-                        }
-                    }); 
-                    var htmlData2 = '<div class="row">' +
-                                    '<div class="col-md-12">' +
-                                        '<button id="add-activity" type="button" class="btn btn-brand">' +
-                                            '<i class="la la-plus"></i>&nbsp;Add Activity' +
-                                        '</button>' +
+                                    '<div class="col-md-1">' +
+                                        '<div class="row"><div class="col-md-12"><button type="button" class="minus-activity btn"><i class="la la-minus"></i></button></div></div>' +
                                     '</div>' +
                                 '</div>';
-                    modalBody.append('<div id="activity-panel">' + htmlData + '</div>' + htmlData2);
-                },
-                async: false
-            });
+                            } else {
+                                htmlData += '' +
+                                    '<div class="row activity-panel-layout">' +
+                                        '<div class="col-md-11">' +
+                                            '<div class="row">' +
+                                                '<div class="col-md-4">' +
+                                                    '<div class="form-group m-form__group required">' +
+                                                        '<label for="activity_name" class="">Code</label>' +
+                                                        '<input class="form-control form-control-lg m-input m-input--solid required" name="activity_name[]" type="text" value="' + itemActivity + '">' +
+                                                        '<span class="m-form__help m--font-danger"></span>' +
+                                                    '</div>' +
+                                                '</div>' +
+                                                '<div class="col-md-4">' +
+                                                    '<div class="form-group m-form__group required">' +
+                                                        '<label for="activity_value" class="">Value</label>' +
+                                                        '<input class="numeric-double form-control form-control-lg m-input m-input--solid required" name="activity_value[]" value="' + itemValue + '" type="text">' +
+                                                        '<span class="m-form__help m--font-danger"></span>' + 
+                                                    '</div>' +
+                                                '</div>' +
+                                                '<div class="col-md-4">' +
+                                                    '<div class="form-group m-form__group required">' +
+                                                        '<label for="activity_description" class="">Description</label>' +
+                                                        '<input class="form-control form-control-lg m-input m-input--solid required" name="activity_description[]" type="text" value="' + itemDescription + '">' +
+                                                        '<span class="m-form__help m--font-danger">' +
+                                                        '</span>' +
+                                                    '</div>' +
+                                                '</div>' +
+                                            '</div>' +
+                                        '</div>' +
+                                        '<div class="col-md-1"></div>' +
+                                        '</div>';
+                            }
+                        }); 
+                        var htmlData2 = '<div class="row">' +
+                                        '<div class="col-md-12">' +
+                                            '<button id="add-activity" type="button" class="btn btn-brand">' +
+                                                '<i class="la la-plus"></i>&nbsp;Add Activity' +
+                                            '</button>' +
+                                        '</div>' +
+                                    '</div>';
+                        modalBody.append('<div id="activity-panel">' + htmlData + '</div>' + htmlData2);
+                    },
+                    async: false
+                });
+            }
         });
 
         this.$body.on('hidden.bs.modal', '#gradingsheet-components', function (e) {

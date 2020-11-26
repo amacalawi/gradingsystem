@@ -464,6 +464,7 @@ span[aria-expanded="true"]:before {
 
 .m-badge--metal {
     background: #c4c5d6 !important;
+    color: #444 !important;
 }
 
 .class-record {
@@ -1016,6 +1017,11 @@ a[data-dismiss="modal"] {
 	top: 50%;
 	margin-top: -50px;
 	margin-left: -50px;
+}
+
+#all-gradingsheets- .m-datatable__table .m-badge {
+    width: 64px !important;
+    text-align: center !important;
 }
 
 @media print {

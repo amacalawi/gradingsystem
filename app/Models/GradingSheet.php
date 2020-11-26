@@ -71,7 +71,7 @@ class GradingSheet extends Model
                 'subject_id' => ($grading->subject_id) ? $grading->subject_id : '',
                 'subject_name' => ($grading->subject->name) ? $grading->subject->name : '',
                 'level_name' => ($grading->section_info->level_name) ? $grading->section_info->level_name : '',
-                // 'type' => ($grading->section_info->type) ? $grading->section_info->type : '',
+                'locked' => ($grading->is_locked) ? $grading->is_locked : '',
                 'type' => '',
                 'section_info_id' => $grading->section_info->id,
                 'education_type_id' => ($grading->education_type_id) ? $grading->education_type_id : '',

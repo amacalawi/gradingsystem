@@ -58,8 +58,8 @@
                                 $score = $gradings->get_component_score_via_component($component->id, $student->student_id, $grading->id);
                             @endphp
                             <td group="{{ $component->id }}" percentage="{{ $component->percentage }} " maxvalue="100" class="quarter-bg fixed freeze_vertical text-center scrolling_table_1">
-                                <input value="{{ $component->id.'_'.$student->student_id }}" name="component[]" class="hidden text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>    
-                                <input maxvalue="100" value="{{ $score }}" name="score[]" class="numeric-double component-cell text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
+                                <input {{ ($grading->locked > 0) ? 'disabled="disabled"' : '' }} value="{{ $component->id.'_'.$student->student_id }}" name="component[]" class="hidden text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>    
+                                <input {{ ($grading->locked > 0) ? 'disabled="disabled"' : '' }} maxvalue="100" value="{{ $score }}" name="score[]" class="numeric-double component-cell text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
                             </td>
                         @endforeach
                         <td class="shaded fixed freeze_vertical text-center scrolling_table_1 initial-cell hidden">
@@ -69,11 +69,11 @@
                             {{ $gradings->get_colum_via_gradingsheet_student('quarter_grade', $grading->id, $student->student_id) }}
                         </td>
                         <td class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell hidden">
-                            <input maxvalue="100" name="init_grade[]" value="{{ $gradings->get_colum_via_gradingsheet_student('initial_grade', $grading->id, $student->student_id) }}" class="hidden numeric-double text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
-                            <input maxvalue="100" name="quarter_grade[]" value="{{ $gradings->get_colum_via_gradingsheet_student('quarter_grade', $grading->id, $student->student_id) }}" class="hidden numeric-double text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
-                            <input maxvalue="100" name="tc_score[]" value="{{ $gradings->get_colum_via_gradingsheet_student('adjustment_grade', $grading->id, $student->student_id) }}" class="numeric-double text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
-                            <input name="rating[]" value="{{ $gradings->get_colum_via_gradingsheet_student('rating', $grading->id, $student->student_id) }}" class="hidden text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
-                            <input name="ranking[]" value="{{ $gradings->get_colum_via_gradingsheet_student('ranking', $grading->id, $student->student_id) }}" class="hidden text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
+                            <input {{ ($grading->locked > 0) ? 'disabled="disabled"' : '' }} maxvalue="100" name="init_grade[]" value="{{ $gradings->get_colum_via_gradingsheet_student('initial_grade', $grading->id, $student->student_id) }}" class="hidden numeric-double text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
+                            <input {{ ($grading->locked > 0) ? 'disabled="disabled"' : '' }} maxvalue="100" name="quarter_grade[]" value="{{ $gradings->get_colum_via_gradingsheet_student('quarter_grade', $grading->id, $student->student_id) }}" class="hidden numeric-double text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
+                            <input {{ ($grading->locked > 0) ? 'disabled="disabled"' : '' }} maxvalue="100" name="tc_score[]" value="{{ $gradings->get_colum_via_gradingsheet_student('adjustment_grade', $grading->id, $student->student_id) }}" class="numeric-double text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
+                            <input {{ ($grading->locked > 0) ? 'disabled="disabled"' : '' }} name="rating[]" value="{{ $gradings->get_colum_via_gradingsheet_student('rating', $grading->id, $student->student_id) }}" class="hidden text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
+                            <input {{ ($grading->locked > 0) ? 'disabled="disabled"' : '' }} name="ranking[]" value="{{ $gradings->get_colum_via_gradingsheet_student('ranking', $grading->id, $student->student_id) }}" class="hidden text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
                         </td>
                         <td class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding rating-cell">
                             {{ $gradings->get_colum_via_gradingsheet_student('rating', $grading->id, $student->student_id) }}
@@ -114,8 +114,8 @@
                                 $score = $gradings->get_component_score_via_component($component->id, $student->student_id, $grading->id);
                             @endphp
                             <td group="{{ $component->id }}" percentage="{{ $component->percentage }} " maxvalue="100" class="quarter-bg fixed freeze_vertical text-center scrolling_table_1">
-                                <input value="{{ $component->id.'_'.$student->student_id }}" name="component[]" class="hidden text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>    
-                                <input maxvalue="100" value="{{ $score }}" name="score[]" class="numeric-double component-cell text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
+                                <input {{ ($grading->locked > 0) ? 'disabled="disabled"' : '' }} value="{{ $component->id.'_'.$student->student_id }}" name="component[]" class="hidden text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>    
+                                <input {{ ($grading->locked > 0) ? 'disabled="disabled"' : '' }} maxvalue="100" value="{{ $score }}" name="score[]" class="numeric-double component-cell text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
                             </td>
                         @endforeach
                         <td class="shaded fixed freeze_vertical text-center scrolling_table_1 initial-cell hidden">
@@ -125,11 +125,11 @@
                             {{ $gradings->get_colum_via_gradingsheet_student('quarter_grade', $grading->id, $student->student_id) }}
                         </td>
                         <td class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding tc-cell hidden">
-                            <input maxvalue="100" name="init_grade[]" value="{{ $gradings->get_colum_via_gradingsheet_student('initial_grade', $grading->id, $student->student_id) }}" class="hidden numeric-double text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
-                            <input maxvalue="100" name="quarter_grade[]" value="{{ $gradings->get_colum_via_gradingsheet_student('quarter_grade', $grading->id, $student->student_id) }}" class="hidden numeric-double text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
-                            <input maxvalue="100" name="tc_score[]" value="{{ $gradings->get_colum_via_gradingsheet_student('adjustment_grade', $grading->id, $student->student_id) }}" class="numeric-double text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
-                            <input name="rating[]" value="{{ $gradings->get_colum_via_gradingsheet_student('rating', $grading->id, $student->student_id) }}" class="hidden text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
-                            <input name="ranking[]" value="{{ $gradings->get_colum_via_gradingsheet_student('ranking', $grading->id, $student->student_id) }}" class="hidden text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
+                            <input {{ ($grading->locked > 0) ? 'disabled="disabled"' : '' }} maxvalue="100" name="init_grade[]" value="{{ $gradings->get_colum_via_gradingsheet_student('initial_grade', $grading->id, $student->student_id) }}" class="hidden numeric-double text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
+                            <input {{ ($grading->locked > 0) ? 'disabled="disabled"' : '' }} maxvalue="100" name="quarter_grade[]" value="{{ $gradings->get_colum_via_gradingsheet_student('quarter_grade', $grading->id, $student->student_id) }}" class="hidden numeric-double text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
+                            <input {{ ($grading->locked > 0) ? 'disabled="disabled"' : '' }} maxvalue="100" name="tc_score[]" value="{{ $gradings->get_colum_via_gradingsheet_student('adjustment_grade', $grading->id, $student->student_id) }}" class="numeric-double text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
+                            <input {{ ($grading->locked > 0) ? 'disabled="disabled"' : '' }} name="rating[]" value="{{ $gradings->get_colum_via_gradingsheet_student('rating', $grading->id, $student->student_id) }}" class="hidden text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
+                            <input {{ ($grading->locked > 0) ? 'disabled="disabled"' : '' }} name="ranking[]" value="{{ $gradings->get_colum_via_gradingsheet_student('ranking', $grading->id, $student->student_id) }}" class="hidden text-cell" {{ ($segment == 'edit') ? '' : 'disabled="disabled"'}} type="text"/>
                         </td>
                         <td class="shaded fixed freeze_vertical text-center scrolling_table_1 no-padding rating-cell">
                             {{ $gradings->get_colum_via_gradingsheet_student('rating', $grading->id, $student->student_id) }}

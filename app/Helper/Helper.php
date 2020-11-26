@@ -24,7 +24,7 @@ class Helper
             ->get();
 
             if ($sub_module->count() > 0) {
-                $privileges = RoleSubModule::where(['role_id' => $role->first()->id, 'sub_module_id' => $sub_module->first()->id, 'is_active' => 1])->get();
+                $privileges = RoleSubModule::where(['role_id' => $role->first()->role_id, 'sub_module_id' => $sub_module->first()->id, 'is_active' => 1])->get();
                 if ($privileges->count() > 0) {
                     return $privileges->first()->permissions;
                 }

@@ -73,8 +73,19 @@ var DatatableDataLocalDemo = function () {
 			field: "gradingModified",
 			title: "Last Modified",
 		}, {
+			field: "gradingStatus",
+			title: "Status",
+			// callback function support for column rendering
+			template: function (row) {
+				var type = {
+					0 : {'class': 'childhood-bg'},
+					1 : {'class': 'm-badge--metal'}
+				};
+				return '<span class="m-badge ' + type[row.gradingStatusID].class + ' m-badge--wide">' + row.gradingStatus + '</span>';
+			}
+		}, {
 			field: "Actions",
-			width: 90,
+			width: 120,
 			title: "Actions",
 			sortable: false,
 			ordering: false,
@@ -83,10 +94,34 @@ var DatatableDataLocalDemo = function () {
 				var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
 				var $privileges = _privileges.split(',');
 				if ($privileges[2] == 1) {
-					return '\
-						<a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/grading-sheets/all-gradingsheets/edit/' + row.gradingID + '"><i class="la la-edit"></i></a>\
-						<a title="export this" class=" m-portlet__nav-link btn m-btn m-btn--hover-success m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/grading-sheets/all-gradingsheets/export-gradingsheet/' + row.gradingID + '"><i class="la la-download"></i></a>\
-					';
+					if (user_role == 'administrator' || row.gradingAdviser > 0) {
+						if (row.gradingStatusID > 0) {
+							return '\
+								<a title="1edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/grading-sheets/all-gradingsheets/edit/' + row.gradingID + '"><i class="la la-edit"></i></a>\
+								<a title="export this" class=" m-portlet__nav-link btn m-btn m-btn--hover-success m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/grading-sheets/all-gradingsheets/export-gradingsheet/' + row.gradingID + '"><i class="la la-download"></i></a>\
+								<a title="unlock this" action="Unlock" data-row-id="' + row.gradingID + '"  class="toggle-status m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-unlock-alt"></i></a>\
+							';
+						} else {
+							return '\
+								<a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/grading-sheets/all-gradingsheets/edit/' + row.gradingID + '"><i class="la la-edit"></i></a>\
+								<a title="export this" class=" m-portlet__nav-link btn m-btn m-btn--hover-success m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/grading-sheets/all-gradingsheets/export-gradingsheet/' + row.gradingID + '"><i class="la la-download"></i></a>\
+								<a title="lock this" action="Lock" data-row-id="' + row.gradingID + '" class="toggle-status m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-unlock"></i></a>\
+							';
+						}
+					} else {
+						if (row.gradingStatusID > 0) {
+							return '\
+								<a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/grading-sheets/all-gradingsheets/edit/' + row.gradingID + '"><i class="la la-edit"></i></a>\
+								<a title="export this" class=" m-portlet__nav-link btn m-btn m-btn--hover-success m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/grading-sheets/all-gradingsheets/export-gradingsheet/' + row.gradingID + '"><i class="la la-download"></i></a>\
+							';
+						} else {
+							return '\
+								<a title="edit this" class=" m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/grading-sheets/all-gradingsheets/edit/' + row.gradingID + '"><i class="la la-edit"></i></a>\
+								<a title="export this" class=" m-portlet__nav-link btn m-btn m-btn--hover-success m-btn--icon m-btn--icon-only m-btn--pill" href="' + base_url + 'academics/grading-sheets/all-gradingsheets/export-gradingsheet/' + row.gradingID + '"><i class="la la-download"></i></a>\
+								<a title="lock this" action="Lock" data-row-id="' + row.gradingID + '"  class="toggle-status m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill" href="javascript:;"><i class="la la-unlock"></i></a>\
+							';
+						}
+					}
 				}
 			}
 		}]
@@ -134,30 +169,49 @@ jQuery(document).ready(function () {
 	$body.on('click', '.toggle-status', function (e){
 		e.preventDefault();
 		var $rowID = $(this).attr('data-row-id');
-		console.log($rowID);
 		var $action = $(this).attr('action');
+		console.log($action);
 		var $url = base_url + 'academics/grading-sheets/all-gradingsheets/update-status/' + $rowID;
 		var items = []; items.push({ action: $action });
-
-		console.log($url);
-		$.ajax({
-			type: 'PUT',
-			url: $url,
-			data: { items },
-			success: function(response) {
-				var data = $.parseJSON(response);   
-				console.log(data);
-				swal({
-					"title": data.title, 
-					"text": data.text, 
-					"type": data.type,
-					"confirmButtonClass": "btn " + data.class + " m-btn m-btn--wide"
+		var $status = $(this).closest('tr').find('td[data-field="gradingStatus"] span.m-badge').text();
+		if ($status == 'Locked') { 
+			$status = 'unlocked'; 
+			var $statusSingular = 'unlock'; 
+		} else { 
+			$status = 'locked'; 
+			var $statusSingular = 'lock'; 
+		}
+		
+		swal({
+			title: 'Are you sure?',
+			text: "The gradingsheet status will be " + $status + "!",
+			type: 'warning',
+			showCancelButton: true,
+			confirmButtonClass: "btn btn-brand m-btn m-btn--wide",
+			confirmButtonText: 'Yes, ' + $statusSingular + ' it!'
+		}).then(function(result) {
+			if (result.value) {
+				console.log($url);
+				$.ajax({
+					type: 'PUT',
+					url: $url,
+					data: { items },
+					success: function(response) {
+						var data = $.parseJSON(response);   
+						console.log(data);
+						swal({
+							"title": data.title, 
+							"text": data.text, 
+							"type": data.type,
+							"confirmButtonClass": "btn " + data.class + " m-btn m-btn--wide"
+						});
+						DatatableDataLocalDemo.reload();
+					}, 
+					complete: function() {
+						window.onkeydown = null;
+						window.onfocus = null;
+					}
 				});
-				DatatableDataLocalDemo.reload();
-			}, 
-			complete: function() {
-				window.onkeydown = null;
-				window.onfocus = null;
 			}
 		});
 	});
