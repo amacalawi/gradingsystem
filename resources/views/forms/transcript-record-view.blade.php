@@ -27,17 +27,17 @@
                     </div>
                 </div>
 
-                <div class="table-responsive pt-3">
-                    <table id="transcript-record-table" class="w-100 border-1">
-                        <thead>
+                <div class="">
+                    <table id="" class="w-100 border-1">
+                        <tbody>
                             <tr>
-                                <td class=""><h6><b>Pangalan</b></h6></td>
-                                <td class=""><h6>{{$student->student->lastname}}</h6></td>
-                                <td class=""><h6>{{$student->student->firstname}}</h6></td>
-                                <td class=""><h6>{{$student->student->middlename}}</h6></td>
-                                <td class=""><h6><b>Sangay</b></h6></td>
-                                <td class=""><h6>{{--$student->student->--}}</h6></td>
-                                <td class=""><h6><b>Paaralan</b></h6></td>
+                                <td width="100"><h6><b>Pangalan</b></h6></td>
+                                <td width="200"><h6>{{$student->student->lastname}}</h6></td>
+                                <td width="200"><h6>{{$student->student->firstname}}</h6></td>
+                                <td width="200"><h6>{{$student->student->middlename}}</h6></td>
+                                <td width="100" class="pl-3"><h6><b>Sangay</b></h6></td>
+                                <td width="200"><h6></h6></td>
+                                <td width="100" class="pl-3"><h6><b>Paaralan</b></h6></td>
                                 <td class=""><h6>{{--$student->student->--}}</h6></td>
                             </tr>
                             <tr style="font-size:12px;">
@@ -45,39 +45,56 @@
                                 <td class="border-top">Apelyido</td>
                                 <td class="border-top">Unang pangalan</td>
                                 <td class="border-top">M.I.</td>
-                                <td colspan="2">(Division)</td>
-                                <td colspan="2">(School)</td>
+                                <td width="100" class="pl-3">(Division)</td>
+                                <td class="border-top"></td>
+                                <td width="100" class="pl-3">(School)</td>
+                                <td class="border-top"></td>
                             </tr>
-
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-4">
+                    <table id="" class="w-100 border-1">
+                        <tbody>
                             <tr class="pt-25">
-                                <td><h6><b>Kasarian</b></h6></td>
-                                <td><h6>{{$student->student->gender}}</h6></td>
-                                <td><h6><b>Petsa ng kapanganakan</b></h6></td>
-                                <td><h6>{{$student->student->birthdate}}</h6></td>
-                                <td><h6><b>Pook</b></h6></td>
+                                <td width="100"><h6><b>Kasarian</b></h6></td>
+                                <td width="200"><h6>{{$student->student->gender}}</h6></td>
+                                <td width="200" class="pl-3"><h6><b>Petsa ng kapanganakan</b></h6></td>
+                                <td width="200"><h6>{{$student->student->birthdate}}</h6></td>
+                                <td width="250" class="pl-3"><h6><b>Pook</b></h6></td>
                                 <td><h6></h6></td>
-                                <td><h6><b>Petsa ng Pagpasok</b></h6></td>
+                                <td width="150" class="pl-3"><h6><b>Petsa ng Pagpasok</b></h6></td>
                                 <td><h6>{{$student->student->admitted_date}}</h6></td>
                             </tr>
                             <tr style="font-size:12px;">
-                                <td colspan="2">(Sex)</td>
-                                <td colspan="2">(Date of birth)</td>
-                                <td colspan="2">Bayan/Lalawigan/Lunsod (Town)</td>
-                                <td colspan="2">(Date of Entrance)</td>
+                                <td width="100">(Sex)</td>
+                                <td class="border-top"></td>
+                                <td class="pl-3">(Date of birth)</td>
+                                <td class="border-top"></td>
+                                <td width="250" class="pl-3">Bayan/Lalawigan/Lunsod (Town)</td>
+                                <td width="250" class="border-top"></td>
+                                <td class="pl-3">(Date of Entrance)</td>
+                                <td class="border-top"></td>
                             </tr>
-
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-4">
+                    <table id="" class="w-100 border-1">
+                        <tbody>
                             <tr>
-                                <td><h6><b>Magulang/Tagapag-alaga</b></h6></td>
-                                <td colspan="7"></td>
+                                <td width="200"><h6><b>Magulang/Tagapag-alaga</b></h6></td>
+                                <td colspan=""></td>
+                                <td colspan=""></td>
+                                <td colspan=""></td>
                             </tr>
                             <tr style="font-size:12px;">
-                                <td>(Parent/Guardian)</td>
-                                <td></td>
-                                <td colspan="2">Pangalan (Name)</td>
-                                <td colspan="2">Tirahan (Address)</td>
-                                <td colspan="2">Hanapbuhay (Occupation)</td>
+                                <td width="100">(Parent/Guardian)</td>
+                                <td width="200" class="border-top pl-3">Pangalan (Name)</td>
+                                <td width="550" class="border-top pl-3">Tirahan (Address)</td>
+                                <td width="150" class="border-top pl-3">Hanapbuhay (Occupation)</td>
                             </tr>
-                        </thead>
+                        </tbody>
                     </table>
                 </div>
 
@@ -96,6 +113,23 @@
                         @endphp
                         <div class="col-md-6 pt-5">
                             <div class="table-responsive">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td style="width:300px;" colspan="16" class="text-right"><strong>Elegible for Admission to Grade: </strong></td>
+                                            <td style="width:500px;" class="pl-5" colspan="{{ (count($quarterDetails)+2) }}"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:300px;" colspan="16" class="text-right"><strong>Grade School: </strong></td>
+                                            <td style="width:500px;" class="border-top pl-5" colspan="{{ (count($quarterDetails)+2) }}">{{$levels_section_info->level_name}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:300px;" colspan="16" class="text-right"><strong>School Year: </strong></td>
+                                            <td style="width:500px;" class="border-top pl-5" colspan="{{ (count($quarterDetails)+2) }}">{{$levels_section_info->batch_name}}</td>
+                                        </tr>
+                                    <tbody>
+                                </table>
+
                                 <table id="report-card-table" class="table-bordered">
                                     <tbody>
                                         <tr>
@@ -208,25 +242,45 @@
                                 </table>
                             </div>
                         </div>
-
                     @endforeach                    
                 </div>
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="col-md-3">
-                            <p class="text-center m-t-30 m-b-0"><em>{{ ucwords($student->section_info->adviser_firstname).' '.ucwords($student->section_info->adviser_lastname) }}</em></p>
-                            <p class="text-center border-top"><strong>CLASS ADVISER</strong></p>
+                <div class="w-100 m-5">
+                    <div class="row">
+                        <div class="col-md-12 pt-5">
+                            <h5 class="text-center">CERTIFICATE OF TRANSFER</h5>
                         </div>
-                        <div class="col-md-5">
-                            &nbsp;
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 pt-5">
+                            <h5 class="text-left">To WHOM IT MAY CONCERN</h5>
+                            <p class="text-center">
+                                This is to certify that this is a true record of the Elementary School Permanent Record of <span style="border-bottom: 1px solid #000; width:300px;">&nbsp;</span>. He/She is eligible for transfer and admission of
+                                Grade Year <span style="border-bottom: 1px solid #000; width:300px;">&nbsp;</span>
+                            </p>
                         </div>
-                        <div class="col-md-3">
-                            <p class="text-center m-t-30 m-b-0">&nbsp;</p>
-                            <p class="text-center border-top"><strong>PRINCIPAL</strong></p>
+                    </div>
+                    <div class="row col-md-12">
+                        <div class="col-md-4"> </div>
+                        <div class="col-md-4"> </div>
+                        <div class="col-md-4">
+                            <p class="text-center m-t-30 m-b-0"><em></em></p>
+                            <p class="text-center border-top"><strong>Signature</strong></p>
+                        </div>
+                    </div>
+                    <div class="row col-md-12">
+                        <div class="col-md-4">
+                            <p class="text-center m-t-30 m-b-0"><em></em></p>
+                            <p class="text-center border-top"><strong>Date</strong></p>
+                        </div>
+                        <div class="col-md-4"> </div>
+                        <div class="col-md-4">
+                            <p class="text-center m-t-30 m-b-0"><em></em></p>
+                            <p class="text-center border-top"><strong>Designation</strong></p>
                         </div>
                     </div>
                 </div>
+
                 @endforeach
             </div>
         </div>

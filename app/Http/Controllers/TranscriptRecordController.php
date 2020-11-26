@@ -102,6 +102,8 @@ class TranscriptRecordController extends Controller
         ->orderBy('id', 'ASC')->get();
 
         $quarters = (new QuarterEducationType)->all_quarters_via_type($request->get('type_id'));
+        
+        $levels = Level::where('education_type_id', $request->get('type_id'));
 
         $levels_section_infos = Level::select('levels.name as level_name', 'batches.name as batch_name', 'batches.id as batch_id', 'quarters.name as quarter_name', 'sections_info.id as section_info_id')
         ->join('sections_info', 'sections_info.level_id', 'levels.id')
