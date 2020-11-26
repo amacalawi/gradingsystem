@@ -418,6 +418,7 @@ Route::prefix('academics')->group(function () {
         Route::get('all-gradingsheets/view/{id?}', 'GradingSheetsController@view')->name('gradingsheets.view');
         Route::post('all-gradingsheets/store', 'GradingSheetsController@store')->name('gradingsheets.store');
         Route::put('all-gradingsheets/update/{id}', 'GradingSheetsController@update')->name('gradingsheets.update');
+        Route::put('all-gradingsheets/update-status/{id}', 'GradingSheetsController@update_status')->name('gradingsheets.update.status');
         Route::get('all-gradingsheets/update-rows/{id}', 'GradingSheetsController@update_rows')->name('gradingsheets.update_rows');
         Route::get('all-gradingsheets', 'GradingSheetsController@manage')->name('gradingsheets.manage.active');
         Route::get('all-gradingsheets/inactive', 'GradingSheetsController@inactive')->name('gradingsheets.manage.inactive');
@@ -425,7 +426,6 @@ Route::prefix('academics')->group(function () {
         Route::post('all-gradingsheets/restore', 'GradingSheetsController@restore')->name('gradingsheets.restore');
         Route::get('all-gradingsheets/all-active', 'GradingSheetsController@all_active')->name('gradingsheets.all.active');
         Route::get('all-gradingsheets/all-inactive', 'GradingSheetsController@all_inactive')->name('gradingsheets.all.inactive');
-        Route::put('all-gradingsheets/update-status/{id}', 'GradingSheetsController@update_status')->name('gradingsheets.update.status');
         Route::get('all-gradingsheets/reload/{id}', 'GradingSheetsController@reload')->name('gradingsheets.reload.all');
         Route::get('all-gradingsheets/reload-subject/{id}', 'GradingSheetsController@reload_subject')->name('gradingsheets.reload.subject');
         Route::get('all-gradingsheets/fetch-transmutations/{id}', 'GradingSheetsController@fetch_transmutations')->name('gradingsheets.fetch.transmutation');
