@@ -91,12 +91,24 @@ class GradingSheetImport implements ToModel, WithCalculatedFormulas, WithMappedC
                     $col++;
                     $score = $col.$row;
                     if($rows[$score] !== NULL){
-                        $gradingActivtity = GradingSheetActivity::where('activity_id', '=', $activity->id)->where('student_id', '=', $student->student_id)
-                        ->update([
-                            'score' => $rows[$score],
-                            'updated_at' => $timestamp,
-                            'updated_by' => Auth::user()->id
-                        ]);
+                        $gradingActivtity_exist = GradingSheetActivity::where('activity_id', '=', $activity->id)->where('student_id', '=', $student->student_id)->count();
+                        if($gradingActivtity_exist > 0){
+                            $gradingActivtity = GradingSheetActivity::where('activity_id', '=', $activity->id)->where('student_id', '=', $student->student_id)
+                            ->update([
+                                'score' => $rows[$score],
+                                'updated_at' => $timestamp,
+                                'updated_by' => Auth::user()->id
+                            ]);
+                        }else {
+                            $gradingActivtity = GradingSheetActivity::create([
+                                'gradingsheet_id' => $this->id,
+                                'activity_id' => $activity->id,
+                                'student_id' => $student->student_id,
+                                'score' => $rows[$score],
+                                'created_at' => $timestamp,
+                                'created_by' => Auth::user()->id,
+                            ]);
+                        }
                     }
                 }
                 $col = $this->increment($col, 4);
@@ -118,12 +130,24 @@ class GradingSheetImport implements ToModel, WithCalculatedFormulas, WithMappedC
                     $col++;
                     $score = $col.$row;
                     if($rows[$score] !== NULL){
-                        $gradingActivtity = GradingSheetActivity::where('activity_id', '=', $activity->id)->where('student_id', '=', $student->student_id)
-                        ->update([
-                            'score' => $rows[$score],
-                            'updated_at' => $timestamp,
-                            'updated_by' => Auth::user()->id
-                        ]);
+                        $gradingActivtity_exist = GradingSheetActivity::where('activity_id', '=', $activity->id)->where('student_id', '=', $student->student_id)->count();
+                        if($gradingActivtity_exist){
+                            $gradingActivtity = GradingSheetActivity::where('activity_id', '=', $activity->id)->where('student_id', '=', $student->student_id)
+                            ->update([
+                                'score' => $rows[$score],
+                                'updated_at' => $timestamp,
+                                'updated_by' => Auth::user()->id
+                            ]);
+                        }else {
+                            $gradingActivtity = GradingSheetActivity::create([
+                                'gradingsheet_id' => $this->id,
+                                'activity_id' => $activity->id,
+                                'student_id' => $student->student_id,
+                                'score' => $rows[$score],
+                                'created_at' => $timestamp,
+                                'created_by' => Auth::user()->id,
+                            ]);
+                        }
                     }
                 }
                 $col = $this->increment($col, 4);
