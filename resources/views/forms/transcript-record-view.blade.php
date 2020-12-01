@@ -189,7 +189,7 @@
                                                 <td colspan="16">MAPEH</td>
                                                 @foreach($quarterDetails as $quarterDetail)
                                                     @php 
-                                                        $quarterGrade = $transcriptrecords->get_column_grade('quarter_grade', $type, $levels_section_info->batch_id, $quarterDetail->id, $student->section_info_id, $subject->subject_id, $student->student->id, $subject->material, 1, 0); 
+                                                        $quarterGrade = $transcriptrecords->get_column_grade('quarter_grade', $type, $levels_section_info->batch_id, $quarterDetail->id, $levels_section_info->section_info_id, $subject->subject_id, $student->student->id, $subject->material, 1, 0); 
                                                         if ($quarterGrade !== '') {
                                                             $finalGrade += floatval($quarterGrade);
                                                             $subjectCounter++;
@@ -205,8 +205,8 @@
                                                 @php $finalGrade = 0; $unit++; $subjectCounter = 0; @endphp
                                                 <td colspan="16">ICT/LE</td>
                                                 @foreach($quarterDetails as $quarterDetail)
-                                                    @php 
-                                                        $quarterGrade = $transcriptrecords->get_column_grade('quarter_grade', $type, $levels_section_info->batch_id, $quarterDetail->id, $student->section_info_id, $subject->subject_id, $student->student->id, $subject->material, 0, 1); 
+                                                    @php
+                                                        $quarterGrade = $transcriptrecords->get_column_grade('quarter_grade', $type, $levels_section_info->batch_id, $quarterDetail->id, $levels_section_info->section_info_id, $subject->subject_id, $student->student->id, $subject->material, 0, 1); 
                                                         if ($quarterGrade !== '') {
                                                             $finalGrade += floatval($quarterGrade);
                                                             $subjectCounter++;
@@ -234,9 +234,24 @@
                                         <tr>
                                             <td colspan="16">GENERAL AVERAGE</td>
                                             @foreach($quarterDetails as $quarterDetail)
-                                                <td class="text-center">{{--general average--}}</td>
+                                            @php $general_avg = 0;@endphp
+                                                @foreach($student->subjects as $subject)
+                                                    @php 
+                                                        $quarterGrade = $transcriptrecords->get_column_grade('quarter_grade', $type, $levels_section_info->batch_id, $quarterDetail->id, $levels_section_info->section_info_id, $subject->subject_id, $student->student->id, $subject->material, 0, 0);
+                                                        if ($quarterGrade !== '') {
+                                                            $general_avg += floatval($quarterGrade);
+                                                        }
+                                                    @endphp
+                                                @endforeach
+                                                <td class="text-center">
+                                                    @php
+                                                        $general_avg = $general_avg / count($student->subjects);
+                                                        $general_avg = number_format((float)$general_avg, 2, '.', ''); 
+                                                    @endphp
+                                                    {{$general_avg}}
+                                                </td>
                                             @endforeach
-                                            <td class="text-center" > </td>
+                                            <td class="text-center"></td>
                                         </tr>
                                     </tfoot>
                                 </table>
