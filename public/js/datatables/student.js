@@ -185,6 +185,8 @@ jQuery(document).ready(function () {
 
 	$('#import-student-dropzone').dropzone({
 		acceptedFiles: accept,
+		maxFilesize: 209715200,
+		timeout: 0,
 		init: function () {
 		this.on("processing", function(file) {
 			this.options.url = base_url + 'memberships/students/import';
@@ -199,7 +201,11 @@ jQuery(document).ready(function () {
 					$('.m_datatable').mDatatable().reload();
 				}
 			}
-		});  
+		}).on("totaluploadprogress", function (progress) {
+			var progressElement = $("[data-dz-uploadprogress]");
+			progressElement.width(progress + '%');
+			progressElement.find('.progress-text').text(progress + '%');
+		});
 		this.on("error", function(file){if (!file.accepted) this.removeFile(file);});            
 		}
 	});

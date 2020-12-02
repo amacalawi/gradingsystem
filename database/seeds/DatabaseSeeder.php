@@ -2302,98 +2302,98 @@ class DatabaseSeeder extends Seeder
 
         $levels = [
             [
-                'code' => "Nursery",
+                'code' => "nursery",
                 'name' => "Nursery",
                 'description' => "Nursery (4 years old by October 31)",
                 'education_type_id' => 1,
                 'created_by' => 1
             ], 
             [
-                'code' => "Kinder",
+                'code' => "kinder",
                 'name' => "Kinder",
                 'description' => "Kinder (5 years old by October 31)",
                 'education_type_id' => 1,
                 'created_by' => 1
             ],
             [
-                'code' => "Grade 1",
+                'code' => "grade-1",
                 'name' => "Grade 1",
                 'description' => "Grade 1 (6 years old by October 31)",
                 'education_type_id' => 2,
                 'created_by' => 1
             ],
             [
-                'code' => "Grade 2",
+                'code' => "grade-2",
                 'name' => "Grade 2",
                 'description' => "Grade 2",
                 'education_type_id' => 2,
                 'created_by' => 1
             ],
             [
-                'code' => "Grade 3",
+                'code' => "grade-3",
                 'name' => "Grade 3",
                 'description' => "Grade 3",
                 'education_type_id' => 2,
                 'created_by' => 1
             ],
             [
-                'code' => "Grade 4",
+                'code' => "grade-4",
                 'name' => "Grade 4",
                 'description' => "Grade 4",
                 'education_type_id' => 2,
                 'created_by' => 1
             ],
             [
-                'code' => "Grade 5",
+                'code' => "grade-5",
                 'name' => "Grade 5",
                 'description' => "Grade 5",
                 'education_type_id' => 2,
                 'created_by' => 1
             ],
             [
-                'code' => "Grade 6",
+                'code' => "grade-6",
                 'name' => "Grade 6",
                 'description' => "Grade 6",
                 'education_type_id' => 2,
                 'created_by' => 1
             ],
             [
-                'code' => "Grade 7",
+                'code' => "grade-7",
                 'name' => "Grade 7",
                 'description' => "Grade 7",
                 'education_type_id' => 2,
                 'created_by' => 1
             ],
             [
-                'code' => "Grade 8",
+                'code' => "grade-8",
                 'name' => "Grade 8",
                 'description' => "Grade 8",
                 'education_type_id' => 2,
                 'created_by' => 1
             ],
             [
-                'code' => "Grade 9",
+                'code' => "grade-9",
                 'name' => "Grade 9",
                 'description' => "Grade 9",
                 'education_type_id' => 2,
                 'created_by' => 1
             ],
             [
-                'code' => "Grade 10",
+                'code' => "grade-10",
                 'name' => "Grade 10",
                 'description' => "Grade 10",
                 'education_type_id' => 2,
                 'created_by' => 1
             ],
             [
-                'code' => "Junior High",
+                'code' => "junior-high",
                 'name' => "Junior High",
                 'description' => "Junior High",
                 'education_type_id' => 3,
                 'created_by' => 1
             ],
             [
-                'code' => "Senior High",
+                'code' => "senior-high",
                 'name' => "Senior High",
                 'description' => "Senior High",
                 'education_type_id' => 4,

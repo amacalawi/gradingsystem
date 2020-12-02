@@ -185,6 +185,8 @@ jQuery(document).ready(function () {
 
 	$('#import-staff-dropzone').dropzone({
 		acceptedFiles: accept,
+		maxFilesize: 209715200,
+		timeout: 0,
 		init: function () {
 		this.on("processing", function(file) {
 			this.options.url = base_url + 'memberships/staffs/import';

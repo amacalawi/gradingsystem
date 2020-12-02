@@ -150,6 +150,12 @@ jQuery(document).ready(function () {
 	DatatableDataLocalDemo.init();
 	var $body = $("body");
 
+	$('#import-section').on('hidden.bs.modal', function (e) {
+		var progressElement = $("[data-dz-uploadprogress]");
+		progressElement.width(0);
+		progressElement.find('.progress-text').text('');
+	})
+
 	$body.on('click', '.toggle-status', function (e){
 		e.preventDefault();
 		var $rowID = $(this).attr('data-row-id');
@@ -186,6 +192,8 @@ jQuery(document).ready(function () {
 
 	$('#import-section-dropzone').dropzone({
 		acceptedFiles: accept,
+		maxFilesize: 209715200,
+		timeout: 0,
 		init: function () {
 		this.on("processing", function(file) {
 			this.options.url = base_url + '/academics/academics/sections/import';
@@ -200,7 +208,11 @@ jQuery(document).ready(function () {
 					$('.m_datatable').mDatatable().reload();
 				}
 			}
-		});  
+		}).on("totaluploadprogress", function (progress) {
+			var progressElement = $("[data-dz-uploadprogress]");
+			progressElement.width(progress + '%');
+			progressElement.find('.progress-text').text(progress + '%');
+		});
 		this.on("error", function(file){if (!file.accepted) this.removeFile(file);});          
 		}
 	});

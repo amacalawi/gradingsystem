@@ -16,7 +16,7 @@ class Controller extends BaseController
     use FlashMessages;
 
     public function load_menus()
-    {
+    {   
         $menus = (new UserRole)->load_menus(Auth::user()->id);
         return $menus;
     }

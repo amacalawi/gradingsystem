@@ -16,7 +16,8 @@ class CreateEnrollmentsTable extends Migration
         Schema::create('enrollments', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('batch_id')->unsigned();
-            $table->integer('schedule_id')->nullable();
+            $table->integer('schedule_id', 10)->nullable();
+            $table->integer('section_info_id', 10)->nullable();
             $table->string('student_email', 40);
             $table->boolean('is_new')->default(1);
             $table->string('student_no', 40)->nullable();
