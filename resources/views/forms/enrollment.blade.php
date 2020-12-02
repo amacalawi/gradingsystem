@@ -2612,11 +2612,28 @@
                                             </div>
                                         </div>
                                         <div class="{{ !empty($enroll) ? '' : 'hidden' }} form-group m-form__group row">
-                                            <div class="col-lg-12 m-form__group-sub">
+                                            <div class="col-lg-12">
+                                                <div class="m-form__section m-form__section--first">
+                                                    <div class="m-form__heading">
+                                                        <h3 class="m-form__heading-title">
+                                                            Assessment
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 m-form__group-sub">
                                                 <label class="form-control-label">
-                                                    * Check if fully assessed:
+                                                   Assign class section
                                                 </label>
-                                                <div class="m-checkbox-list">
+                                                {{
+                                                    Form::select('section_info_id', $sections, !empty($enroll) ? $enroll->section_info_id : '', ['id' => 'section_info_id', 'data-live-search' => 'true', 'class' => 'form-control form-control-lg m-input m-input--solid m-bootstrap-select m_selectpicker'])
+                                                }}
+                                            </div>
+                                            <div class="col-lg-6 m-form__group-sub">
+                                                <label class="form-control-label">
+                                                   Check if fully assessed:
+                                                </label>
+                                                <div class="m-checkbox-list" style="margin-top: 15px">
                                                     <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
                                                         @if (!empty($enroll) && $enroll->status == 'assessed')
                                                             {{ Form::checkbox('student_status', 'assessed', true, array('')) }}

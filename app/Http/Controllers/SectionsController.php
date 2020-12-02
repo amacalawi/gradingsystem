@@ -313,7 +313,8 @@ class SectionsController extends Controller
                                     $section->code = $data[0];
                                     $section->name = $data[1];
                                     $section->description = $data[2];
-                                    $section->education_type_id = EducationType::where('code', $data[3])->first()->id;
+                                    $section->education_type_id = EducationType::where('code', strtolower($data[3]))->first()->id;
+                                    $section->level_id = Level::where('code', strtolower($data[4]))->first()->id;
                                     $section->updated_at = $timestamp;
                                     $section->updated_by = Auth::user()->id;
                                     $section->update();
@@ -323,8 +324,8 @@ class SectionsController extends Controller
                                         'code' => $data[0],
                                         'name' => $data[1],
                                         'description' => $data[2],
-                                        'education_type_id' => EducationType::where('code', $data[3])->first()->id,
-                                        'level_id' => Level::where('code', $data[4])->first()->id,
+                                        'education_type_id' => EducationType::where('code', strtolower($data[3]))->first()->id,
+                                        'level_id' => Level::where('code', strtolower($data[4]))->first()->id,
                                         'created_at' => $timestamp,
                                         'created_by' => Auth::user()->id
                                     ]);

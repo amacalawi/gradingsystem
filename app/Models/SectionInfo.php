@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Batch;
 use App\Models\Subject;
+use App\Models\Enrollment;
 use App\Models\SectionsSubjects;
 use DB;
 
@@ -124,6 +126,42 @@ class SectionInfo extends Model
 
         $classx = array();
         $classx[] = array('' => 'select a class');
+        foreach ($classes as $class) {
+            $classx[] = array(
+                $class->id  => $class->level->name.' - '.$class->section->name,
+            );
+        }
+
+        $classes = array();
+        foreach($classx as $class) {
+            foreach($class as $key => $val) {
+                $classes[$key] = $val;
+            }
+        }
+
+        return $classes;
+    }
+
+    public function get_all_section_via_enrollment($id) 
+    {	
+    	$classes = self::with([
+            'section' =>  function($q) { 
+                $q->select(['id', 'name', 'description']);
+            },
+            'level' =>  function($q) { 
+                $q->select(['id', 'name', 'description']);
+            }
+        ])
+        ->where([
+            'batch_id' => (new Batch)->get_current_batch(),
+            'level_id' => Enrollment::find($id)->level_id,
+            'is_active' => 1
+        ])
+        ->orderBy('id', 'asc')
+        ->get();
+
+        $classx = array();
+        $classx[] = array('' => 'select a class section');
         foreach ($classes as $class) {
             $classx[] = array(
                 $class->id  => $class->level->name.' - '.$class->section->name,

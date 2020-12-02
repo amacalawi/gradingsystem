@@ -10,6 +10,11 @@
                 </h5>
             </div>
             <div class="modal-body">
+                <div class="progress m--margin-bottom-20">
+                    <div class="progress-bar bg-accent" role="progressbar" data-dz-uploadprogress>
+                        <span class="progress-text"></span>
+                    </div>
+                </div>
                 <form method="POST" action="{{ url('/memberships/students/import') }}" class="dropzone dz-clickable" id="import-student-dropzone">
                     @csrf
                     <div class="dz-default dz-message"><span>Drop files here to upload</span></div>

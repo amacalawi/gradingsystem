@@ -13,6 +13,8 @@ use App\Models\Batch;
 use App\Models\Student;
 use App\Models\PaymentTerm;
 use App\Models\PaymentOption;
+use App\Models\SectionInfo;
+use App\Models\Admission;
 use App\User;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -39,7 +41,7 @@ class EnrollmentController extends Controller
     }
 
     public function index(Request $request)
-    {
+    {   
         $levels = (new Level)->get_all_levels_with_empty();
         $enroll = array();
         $payment_terms = PaymentTerm::where('is_active', 1)->get();
@@ -52,10 +54,11 @@ class EnrollmentController extends Controller
         $this->middleware('auth');
         $this->is_permitted(1);    
         $levels = (new Level)->get_all_levels_with_empty();
+        $sections = (new SectionInfo)->get_all_section_via_enrollment($id);
         $enroll = Enrollment::find($id);
         $payment_terms = PaymentTerm::where('is_active', 1)->get();
         $payment_options = PaymentOption::where('is_active', 1)->get();
-        return view('modules/enrollments/edit')->with(compact('levels', 'enroll', 'payment_terms', 'payment_options'));
+        return view('modules/enrollments/edit')->with(compact('levels', 'sections', 'enroll', 'payment_terms', 'payment_options'));
     }
 
     public function all_active(Request $request)
@@ -484,10 +487,102 @@ class EnrollmentController extends Controller
         $enrollment->student_acknowledge_3 = $request->student_acknowledge_3;
         $enrollment->student_acknowledge_4 = $request->student_acknowledge_4;
         $enrollment->status = ($request->student_status == 'assessed') ? $request->student_status : 'enlisted';
+        $enrollment->section_info_id = !empty($request->section_info_id) ? $request->section_info_id : NULL;
         $enrollment->updated_at = $timestamp;
         $enrollment->updated_by = Auth::user()->id;
 
-        if ($enrollment->update()) {
+        if ($enrollment->update()) 
+        {
+            if ($enrollment->section_info_id !== NULL && $request->student_status == 'assessed') {
+                $student = Student::where([
+                    'learners_reference_no' => $request->lrn_no,
+                    'is_active' => 1
+                ]);
+                if ($student->count() > 0) {
+                    $student = $student->first();
+                    Student::where('id', $student->id)
+                    ->update([
+                        'identification_no' => !empty($enrollment->student_no) ? $enrollment->student_no : $enrollment->student_lrn,
+                        'learners_reference_no' => $enrollment->student_lrn,
+                        'firstname' =>  $request->student_firstname,
+                        'middlename' => $request->student_middlename,
+                        'lastname' => $request->student_lastname,
+                        'suffix' => NULL,
+                        'gender' => $request->student_gender,
+                        'marital_status' => NULL,
+                        'birthdate' => date('Y-m-d', strtotime($request->student_birthdate)),
+                        'current_address' => $request->student_address,
+                        'permanent_address' => $request->student_address,
+                        'mobile_no' => $request->guardian_contact,
+                        'telephone_no' => NULL,
+                        'admitted_date' => date('Y-m-d'),
+                        'special_remarks' => NULL, 
+                        'is_guardian' => 1, 
+                        'is_sibling' => 0, 
+                        'avatar' => NULL,
+                        'updated_at' => $timestamp,
+                        'updated_by' => Auth::user()->id
+                    ]);
+                    $user = User::where('id', $student->user_id)
+                    ->update([
+                        'name' => $request->student_firstname.' '.$request->student_lastname,
+                        'updated_at' => $timestamp
+                    ]);
+                } else {
+                    $student_no = ($request->student_number !== NULL) ? 'S'.$request->student_number : 'S'.$request->lrn_no;
+                    $user = User::create([
+                        'name' => $request->student_firstname.' '.$request->student_lastname,
+                        'username' => $student_no,
+                        'email' => $enrollment->student_email,
+                        'password' => 'password',
+                        'type' => 'student'
+                    ]);
+                    $student = Student::create([
+                        'user_id' => $user->id,
+                        'role_id' => 4,
+                        'identification_no' => !empty($enrollment->student_no) ? $enrollment->student_no : $enrollment->student_lrn,
+                        'learners_reference_no' => $enrollment->student_lrn,
+                        'firstname' =>  $request->student_firstname,
+                        'middlename' => $request->student_middlename,
+                        'lastname' => $request->student_lastname,
+                        'suffix' => NULL,
+                        'gender' => $request->student_gender,
+                        'marital_status' => NULL,
+                        'birthdate' => date('Y-m-d', strtotime($request->student_birthdate)),
+                        'current_address' => $request->student_address,
+                        'permanent_address' => $request->student_address,
+                        'mobile_no' => $request->guardian_contact,
+                        'telephone_no' => NULL,
+                        'admitted_date' => date('Y-m-d'),
+                        'special_remarks' => NULL, 
+                        'is_guardian' => 1, 
+                        'is_sibling' => 0, 
+                        'avatar' => NULL,
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+                }
+
+                $checkstudent = Admission::where('batch_id', (new Batch)->get_current_batch())->where('student_id', $student->id)->count();
+                if ($checkstudent) {   
+                    $enliststudent = Admission::where('student_id', $student->id)
+                    ->update([
+                        'section_info_id' => $enrollment->section_info_id ,
+                        'status' => 'admit',
+                        'updated_at' => $timestamp,
+                        'updated_by' => Auth::user()->id,
+                    ]);
+                } else {   
+                    $sections_subjects = Admission::create([
+                        'batch_id' => (new Batch)->get_current_batch(),
+                        'section_info_id' => $enrollment->section_info_id ,
+                        'student_id' => $student->id,
+                        'status' => 'admit',
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+                }
+            }
 
             $data = array(
                 'title' => 'Well done!',

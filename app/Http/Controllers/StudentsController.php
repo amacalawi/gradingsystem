@@ -27,6 +27,7 @@ class StudentsController extends Controller
 
     public function __construct()
     {   
+        ini_set('max_execution_time', 0);
         date_default_timezone_set('Asia/Manila');
         $this->middleware('auth');
     }
@@ -791,6 +792,11 @@ class StudentsController extends Controller
                     $row++; 
                     if ($row > 1) {   
                         if ($data[0] !== '') {
+                            $mobile_no = ($data[12] !== '') ? (strlen($data[12]) > 10) ? $data[12] : '0'.$data[12] : NULL;
+                            $mother_mobile = ($data[20] !== '') ? (strlen($data[20]) > 10) ? $data[20] : '0'.$data[20] : NULL;
+                            $father_mobile = ($data[26] !== '') ? (strlen($data[26]) > 10) ? $data[26] : '0'.$data[26] : NULL;
+                            $mother_email = ($data[21] !== '') ? $data[21] : NULL;
+                            $father_email = ($data[27] !== '') ? $data[27] : NULL;
                             $exist = Student::where('identification_no', $data[0])->get();
                             if ($exist->count() > 0) {
                                 $student = Student::find($exist->first()->id);
@@ -805,7 +811,7 @@ class StudentsController extends Controller
                                 $student->birthdate = date('Y-m-d', strtotime($data[7]));
                                 $student->current_address = $data[9];
                                 $student->permanent_address = ($data[10] !== '') ? $data[10] : NULL;
-                                $student->mobile_no = ($data[12] !== '') ? $data[12] : NULL;
+                                $student->mobile_no = $mobile_no;
                                 $student->telephone_no = ($data[11] !== '') ? $data[11] : NULL;
                                 $student->admitted_date = date('Y-m-d');
                                 $student->special_remarks = ($data[13] !== '') ? $data[13] : NULL;
@@ -855,15 +861,15 @@ class StudentsController extends Controller
                                             'mother_firstname' => $data[17],
                                             'mother_middlename' => ($data[18] !== '') ? $data[18] : NULL, 
                                             'mother_lastname' => $data[19],
-                                            'mother_contact_no' => $data[20],
-                                            'mother_email' => $data[21],
+                                            'mother_contact_no' => $mother_mobile,
+                                            'mother_email' => $mother_email,
                                             'mother_address' => ($data[22] !== '') ? $data[22] : NULL, 
                                             'mother_selected' => ($data[29] == 'Mother') ? 1 : 0,
                                             'father_firstname' => $data[23],
                                             'father_middlename' => ($data[24] !== '') ? $data[24] : NULL, 
                                             'father_lastname' => $data[25],
-                                            'father_contact_no' => $data[26],
-                                            'father_email' => $data[27],
+                                            'father_contact_no' => $father_mobile,
+                                            'father_email' => $father_email,
                                             'father_address' => ($data[28] !== '') ? $data[28] : NULL, 
                                             'father_selected' => ($data[29] == 'Father') ? 1 : 0,
                                             'updated_at' => $timestamp,
@@ -880,7 +886,7 @@ class StudentsController extends Controller
                                         ])
                                         ->update([
                                             'name' => $data[17].' '.$data[19],
-                                            'email' => $data[21],
+                                            'email' => $mother_email,
                                             'updated_at' => $timestamp
                                         ]);
                                         $mother_user = User::where(['username' => 'M'.$student->identification_no])->get();
@@ -903,7 +909,7 @@ class StudentsController extends Controller
                                         ])
                                         ->update([
                                             'name' => $data[23].' '.$data[25],
-                                            'email' => $data[27],
+                                            'email' => $father_email,
                                             'updated_at' => $timestamp
                                         ]);
                                         $father_user = User::where(['username' => 'F'.$student->identification_no])->get();
@@ -980,7 +986,7 @@ class StudentsController extends Controller
                                     'birthdate' => date('Y-m-d', strtotime($data[7])),
                                     'current_address' => $data[9],
                                     'permanent_address' => ($data[10] !== '') ? $data[10] : NULL,
-                                    'mobile_no' => ($data[12] !== '') ? $data[12] : NULL,
+                                    'mobile_no' => $mobile_no,
                                     'telephone_no' => ($data[11] !== '') ? $data[11] : NULL,
                                     'admitted_date' => date('Y-m-d'),
                                     'special_remarks' => ($data[13] !== '') ? $data[13] : NULL, 
@@ -997,16 +1003,16 @@ class StudentsController extends Controller
                                         'mother_firstname' => $data[17],
                                         'mother_middlename' => ($data[18] !== '') ? $data[18] : NULL, 
                                         'mother_lastname' => $data[19],
-                                        'mother_contact_no' => $data[20],
-                                        'mother_email' => $data[21],
+                                        'mother_contact_no' => $mother_mobile,
+                                        'mother_email' => $mother_email,
                                         'mother_address' => ($data[22] !== '') ? $data[22] : NULL,
                                         'mother_avatar' => NULL,
                                         'mother_selected' => ($data[29] == 'Mother') ? 1 : 0,
                                         'father_firstname' => $data[23],
                                         'father_middlename' => ($data[24] !== '') ? $data[24] : NULL, 
                                         'father_lastname' => $data[25],
-                                        'father_contact_no' => $data[26],
-                                        'father_email' => $data[27],
+                                        'father_contact_no' => $father_mobile,
+                                        'father_email' => $father_email,
                                         'father_address' => ($data[28] !== '') ? $data[28] : NULL,
                                         'father_avatar' => NULL,
                                         'father_selected' => ($data[29] == 'Father') ? 1 : 0,
@@ -1019,7 +1025,7 @@ class StudentsController extends Controller
                                     $mother_user = User::create([
                                         'name' => $data[17].' '.$data[19],
                                         'username' => 'M'.$student->identification_no,
-                                        'email' => ($data[21] !== NULL) ? $data[21] : NULL,
+                                        'email' => $mother_email,
                                         'password' => (new Student)->random(),
                                         'type' => 'parent'
                                     ]);
@@ -1046,7 +1052,7 @@ class StudentsController extends Controller
                                     $father_user = User::create([
                                         'name' => $data[23].' '.$data[25],
                                         'username' => 'F'.$student->identification_no,
-                                        'email' => ($data[27] !== NULL) ? $data[27] : NULL,
+                                        'email' => $father_email,
                                         'password' => (new Student)->random(),
                                         'type' => 'parent'
                                     ]);
