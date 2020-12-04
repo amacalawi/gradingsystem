@@ -623,6 +623,13 @@ Route::prefix('dashboard')->group(function () {
     Route::get('update-current/{id}', 'DashboardController@update_current')->name('dashboard.update');
 });
 
+Route::prefix('settings')->group(function () {
+    Route::get('', 'SettingsController@index')->name('settings');
+    Route::post('update', 'SettingsController@update')->name('settings.update');
+    Route::post('uploads', 'SettingsController@uploads')->name('settings.uploads');
+});
+
+
 /* Guest Routes */
 Route::get('upload-id', 'GuestController@index')->name('guest.upload');
 Route::post('upload-data', 'GuestController@upload_data')->name('guest.uploads');

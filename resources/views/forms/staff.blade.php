@@ -640,7 +640,7 @@
                                 <div class="avatar-preview">
                                     @if (!empty($staff))
                                         @if ($staff->avatar!= '')
-                                            <div class="avatar_preview" id="staffPreview" style="background-image: url({{ asset('images/staffs/'.$staff->identification_no.'/'.$staff->avatar) }})">
+                                            <div class="avatar_preview" id="staffPreview" style="background-image: url('./images/staffs/{{ $staff->identification_no }}');">
                                             </div>
                                         @else
                                             <div class="avatar_preview" id="staffPreview">

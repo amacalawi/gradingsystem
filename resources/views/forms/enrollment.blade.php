@@ -2551,7 +2551,7 @@
                                         <div class="form-group m-form__group row">
                                             <div class="col-lg-12 m-form__group-sub">
                                                 <label class="form-control-label">
-                                                    * I also acknowledge that all official transactions and inquiries must be made via admission@sasmanila.edu.ph. I understand that the information shall be used by St. Anthony School, Manila for legitimate purposes and shall be processed by authorized personnel in accordance with the Data Privacy Policies of the School:
+                                                    * I also acknowledge that all official transactions and inquiries must be made via {{ $settings->email }}. I understand that the information shall be used by {{ ucwords($settings->name) }} for legitimate purposes and shall be processed by authorized personnel in accordance with the Data Privacy Policies of the School:
                                                 </label>
                                                 <div class="m-radio-list">
                                                     <label class="m-radio m-radio--solid m-radio--brand">
@@ -2572,7 +2572,7 @@
                                         <div class="form-group m-form__group row">
                                             <div class="col-lg-12 m-form__group-sub">
                                                 <label class="form-control-label">
-                                                    * I will wait for the verification email from the Admissions Office (admission@sasmanila.edu.ph), that email will indicate the schedule of my interview (if any), school enrollment fees, and payment procedures:
+                                                    * I will wait for the verification email from the Admissions Office ({{ $settings->email }}), that email will indicate the schedule of my interview (if any), school enrollment fees, and payment procedures:
                                                 </label>
                                                 <div class="m-radio-list">
                                                     <label class="m-radio m-radio--solid m-radio--brand">
@@ -2593,7 +2593,7 @@
                                         <div class="form-group m-form__group row">
                                             <div class="col-lg-12 m-form__group-sub">
                                                 <label class="form-control-label">
-                                                    * I understand that all official transactions, inquiries, and corrections (if any) will be made via admission@sasmanila.edu.ph ONLY:
+                                                    * I understand that all official transactions, inquiries, and corrections (if any) will be made via {{ $settings->email }} ONLY:
                                                 </label>
                                                 <div class="m-radio-list">
                                                     <label class="m-radio m-radio--solid m-radio--brand">
@@ -2623,7 +2623,7 @@
                                             </div>
                                             <div class="col-lg-6 m-form__group-sub">
                                                 <label class="form-control-label">
-                                                   Assign class section
+                                                   Assign a class section
                                                 </label>
                                                 {{
                                                     Form::select('section_info_id', $sections, !empty($enroll) ? $enroll->section_info_id : '', ['id' => 'section_info_id', 'data-live-search' => 'true', 'class' => 'form-control form-control-lg m-input m-input--solid m-bootstrap-select m_selectpicker'])
@@ -2631,9 +2631,17 @@
                                             </div>
                                             <div class="col-lg-6 m-form__group-sub">
                                                 <label class="form-control-label">
+                                                   Assign a schedule
+                                                </label>
+                                                {{
+                                                    Form::select('schedule_id', $schedules, !empty($enroll) ? $enroll->schedule_id : '', ['id' => 'section_info_id', 'data-live-search' => 'true', 'class' => 'form-control form-control-lg m-input m-input--solid m-bootstrap-select m_selectpicker'])
+                                                }}
+                                            </div>
+                                            <div class="col-lg-6 m-form__group-sub">
+                                                <label class="form-control-label" style="margin-top: 15px">
                                                    Check if fully assessed:
                                                 </label>
-                                                <div class="m-checkbox-list" style="margin-top: 15px">
+                                                <div class="m-checkbox-list">
                                                     <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
                                                         @if (!empty($enroll) && $enroll->status == 'assessed')
                                                             {{ Form::checkbox('student_status', 'assessed', true, array('')) }}
