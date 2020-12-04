@@ -216,12 +216,22 @@ class DatabaseSeeder extends Seeder
             ],
             [   
                 'header_id' => '2',
+                'code' => 'calendars',
+                'name' => 'calendars',
+                'description' => 'Calendars Description',
+                'slug' => 'calendars',
+                'icon' => 'fa fa-calendar',
+                'order' => '8',
+                'created_by' => 1
+            ],
+            [   
+                'header_id' => '2',
                 'code' => 'menus',
                 'name' => 'Menus',
                 'description' => 'Menus Description',
                 'slug' => 'menus',
                 'icon' => 'fa fa-list',
-                'order' => '8',
+                'order' => '9',
                 'created_by' => 1
             ],
             [   
@@ -231,7 +241,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Students Description',
                 'slug' => 'students',
                 'icon' => 'la la-user',
-                'order' => '9',
+                'order' => '10',
                 'created_by' => 1
             ],
             [   
@@ -241,7 +251,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Staffs Description',
                 'slug' => 'staffs',
                 'icon' => 'fa fa-user-secret',
-                'order' => '10',
+                'order' => '11',
                 'created_by' => 1
             ],
             [   
@@ -251,7 +261,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Users Description',
                 'slug' => 'users',
                 'icon' => 'la la-users',
-                'order' => '11',
+                'order' => '12',
                 'created_by' => 1
             ],
             [   
@@ -261,7 +271,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Messaging Description',
                 'slug' => 'messaging',
                 'icon' => 'la la-comments',
-                'order' => '12',
+                'order' => '13',
                 'created_by' => 1
             ],
             [   
@@ -271,7 +281,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'CSV Management Description',
                 'slug' => 'csv-management',
                 'icon' => 'la la-file-excel-o',
-                'order' => '13',
+                'order' => '14',
                 'created_by' => 1
             ],
             [   
@@ -281,7 +291,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'File Management Description',
                 'slug' => 'file-management',
                 'icon' => 'la la-file-pdf-o',
-                'order' => '14',
+                'order' => '15',
                 'created_by' => 1
             ],
             [   
@@ -291,7 +301,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'ID Management Description',
                 'slug' => 'id-management',
                 'icon' => 'la la-file-photo-o',
-                'order' => '15',
+                'order' => '16',
                 'created_by' => 1
             ]
         ];
@@ -512,132 +522,143 @@ class DatabaseSeeder extends Seeder
             ],
             [   
                 'module_id' => '8',
+                'code' => 'all-active-calendars',
+                'name' => 'All Active Calendars',
+                'description' => 'All Active Calendars Description',
+                'slug' => '',
+                'icon' => '',
+                'order' => '22',
+                'created_by' => 1
+            ],
+
+            [   
+                'module_id' => '9',
                 'code' => 'headers',
                 'name' => 'Headers',
                 'description' => 'Headers Description',
                 'slug' => 'headers',
                 'icon' => '',
-                'order' => '22',
-                'created_by' => 1
-            ],
-            [   
-                'module_id' => '8',
-                'code' => 'modules',
-                'name' => 'Modules',
-                'description' => 'Modules Description',
-                'slug' => 'modules',
-                'icon' => '',
                 'order' => '23',
                 'created_by' => 1
             ],
             [   
-                'module_id' => '8',
-                'code' => 'sub-modules',
-                'name' => 'Sub Modules',
-                'description' => 'Sub Modules Description',
-                'slug' => 'sub-modules',
+                'module_id' => '9',
+                'code' => 'modules',
+                'name' => 'Modules',
+                'description' => 'Modules Description',
+                'slug' => 'modules',
                 'icon' => '',
                 'order' => '24',
                 'created_by' => 1
             ],
             [   
                 'module_id' => '9',
-                'code' => 'all-active-students',
-                'name' => 'All Active Students',
-                'description' => 'All Active Students Description',
-                'slug' => '',
+                'code' => 'sub-modules',
+                'name' => 'Sub Modules',
+                'description' => 'Sub Modules Description',
+                'slug' => 'sub-modules',
                 'icon' => '',
                 'order' => '25',
                 'created_by' => 1
             ],
             [   
-                'module_id' => '9',
-                'code' => 'all-inactive-students',
-                'name' => 'All Inactive Students',
-                'description' => 'All Inactive Students Description',
-                'slug' => 'inactive',
+                'module_id' => '10',
+                'code' => 'all-active-students',
+                'name' => 'All Active Students',
+                'description' => 'All Active Students Description',
+                'slug' => '',
                 'icon' => '',
                 'order' => '26',
                 'created_by' => 1
             ],
             [   
                 'module_id' => '10',
-                'code' => 'all-active-staffs',
-                'name' => 'All Active Staffs',
-                'description' => 'All Active Staffs Description',
-                'slug' => '',
+                'code' => 'all-inactive-students',
+                'name' => 'All Inactive Students',
+                'description' => 'All Inactive Students Description',
+                'slug' => 'inactive',
                 'icon' => '',
                 'order' => '27',
                 'created_by' => 1
             ],
             [   
-                'module_id' => '10',
-                'code' => 'all-inactive-staffs',
-                'name' => 'All Inactive Staffs',
-                'description' => 'All Inactive Staffs Description',
-                'slug' => 'inactive',
+                'module_id' => '11',
+                'code' => 'all-active-staffs',
+                'name' => 'All Active Staffs',
+                'description' => 'All Active Staffs Description',
+                'slug' => '',
                 'icon' => '',
                 'order' => '28',
                 'created_by' => 1
             ],
             [   
                 'module_id' => '11',
-                'code' => 'accounts',
-                'name' => 'Accounts',
-                'description' => 'Accounts Description',
-                'slug' => 'accounts',
+                'code' => 'all-inactive-staffs',
+                'name' => 'All Inactive Staffs',
+                'description' => 'All Inactive Staffs Description',
+                'slug' => 'inactive',
                 'icon' => '',
                 'order' => '29',
                 'created_by' => 1
             ],
             [   
-                'module_id' => '11',
-                'code' => 'roles-and-permissions',
-                'name' => 'Roles And Permissions',
-                'description' => 'Roles And Permissions Description',
-                'slug' => 'roles',
+                'module_id' => '12',
+                'code' => 'accounts',
+                'name' => 'Accounts',
+                'description' => 'Accounts Description',
+                'slug' => 'accounts',
                 'icon' => '',
                 'order' => '30',
                 'created_by' => 1
             ],
             [   
                 'module_id' => '12',
-                'code' => 'infoblast',
-                'name' => 'Infoblast',
-                'description' => 'Infoblast Description',
-                'slug' => 'infoblast',
+                'code' => 'roles-and-permissions',
+                'name' => 'Roles And Permissions',
+                'description' => 'Roles And Permissions Description',
+                'slug' => 'roles',
                 'icon' => '',
                 'order' => '31',
                 'created_by' => 1
             ],
             [   
-                'module_id' => '12',
-                'code' => 'emailblast',
-                'name' => 'Emailblast',
-                'description' => 'Emailblast Description',
-                'slug' => 'emailblast',
+                'module_id' => '13',
+                'code' => 'infoblast',
+                'name' => 'Infoblast',
+                'description' => 'Infoblast Description',
+                'slug' => 'infoblast',
                 'icon' => '',
                 'order' => '32',
                 'created_by' => 1
             ],
             [   
-                'module_id' => '12',
-                'code' => 'systemblast',
-                'name' => 'Systemblast',
-                'description' => 'Systemblast Description',
-                'slug' => 'systemblast',
+                'module_id' => '13',
+                'code' => 'emailblast',
+                'name' => 'Emailblast',
+                'description' => 'Emailblast Description',
+                'slug' => 'emailblast',
                 'icon' => '',
                 'order' => '33',
                 'created_by' => 1
             ],
             [   
-                'module_id' => '12',
+                'module_id' => '13',
+                'code' => 'systemblast',
+                'name' => 'Systemblast',
+                'description' => 'Systemblast Description',
+                'slug' => 'systemblast',
+                'icon' => '',
+                'order' => '34',
+                'created_by' => 1
+            ],
+            [   
+                'module_id' => '13',
                 'code' => 'configuration',
                 'name' => 'Configuration',
                 'description' => 'Configuration Description',
                 'slug' => 'configuration',
                 'icon' => '',
-                'order' => '34',
+                'order' => '35',
                 'created_by' => 1
             ],
             [   
@@ -647,7 +668,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Education Types',
                 'slug' => 'education-types',
                 'icon' => '',
-                'order' => '35',
+                'order' => '36',
                 'created_by' => 1
             ],
             [   
@@ -657,7 +678,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Print',
                 'slug' => 'print-id',
                 'icon' => '',
-                'order' => '36',
+                'order' => '37',
                 'created_by' => 1
             ],
             [   
@@ -667,7 +688,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Settings',
                 'slug' => 'settings-id',
                 'icon' => '',
-                'order' => '37',
+                'order' => '38',
                 'created_by' => 1
             ],
             [   
@@ -677,7 +698,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'SOA Template 01 Description',
                 'slug' => 'soa-template-01',
                 'icon' => '',
-                'order' => '38',
+                'order' => '39',
                 'created_by' => 1
             ],
             [   
@@ -687,7 +708,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Gradingsheet Template 01 Description',
                 'slug' => 'gradingsheet-template-01',
                 'icon' => '',
-                'order' => '39',
+                'order' => '40',
                 'created_by' => 1
             ],
             [   
@@ -697,7 +718,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'SOA Description',
                 'slug' => 'soa',
                 'icon' => '',
-                'order' => '40',
+                'order' => '41',
                 'created_by' => 1
             ],
             [   
@@ -707,7 +728,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Gradingsheet Description',
                 'slug' => 'gradingsheet',
                 'icon' => '',
-                'order' => '41',
+                'order' => '42',
                 'created_by' => 1
             ],
             [   
@@ -717,7 +738,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Payslip Description',
                 'slug' => 'payslip',
                 'icon' => '',
-                'order' => '42',
+                'order' => '43',
                 'created_by' => 1
             ],
             [   
@@ -727,7 +748,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Enrollments Description',
                 'slug' => 'enrollments',
                 'icon' => '',
-                'order' => '4',
+                'order' => '44',
                 'created_by' => 1
             ],
             [   
@@ -737,7 +758,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Report Card Description',
                 'slug' => 'report-card',
                 'icon' => '',
-                'order' => '44',
+                'order' => '45',
                 'created_by' => 1
             ],
             [   
@@ -747,7 +768,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Transcript of Record Description',
                 'slug' => 'transcript-of-record',
                 'icon' => '',
-                'order' => '45',
+                'order' => '46',
                 'created_by' => 1
             ]
         ];
@@ -856,6 +877,11 @@ class DatabaseSeeder extends Seeder
             [   
                 'role_id' => '1',
                 'module_id' => '15',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'module_id' => '16',
                 'created_by' => 1
             ]
         ];
@@ -1132,6 +1158,12 @@ class DatabaseSeeder extends Seeder
             [   
                 'role_id' => '1',
                 'sub_module_id' => '45',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '1',
+                'sub_module_id' => '46',
                 'permissions' => '1,1,1,1',
                 'created_by' => 1
             ]
