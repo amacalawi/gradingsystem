@@ -139,6 +139,14 @@
     // Attach image editor custom events
     imageEditor.once('loadImage', function() {
         imageEditor.clearUndoStack();
+        swal({
+            title: "Message",
+            text: "This feature is still in development.",
+            type: "warning",
+            showCancelButton: false,
+            closeOnConfirm: true,
+            confirmButtonClass: "btn btn-warning btn-focus m-btn m-btn--pill m-btn--air m-btn--custom"
+        });
     });
 
     var resizeEditor = function() {
