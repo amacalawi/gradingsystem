@@ -39,11 +39,12 @@ class Schedule extends Model
         return $schedule;
     }
 
-    public function all_schedule(){
+    public function get_all_schedules_with_empty()
+    {
     	$schedules = self::where('is_active', 1)->orderBy('id', 'asc')->get();
 
         $schs = array();
-        $schs[] = array('' => 'select a shedule');
+        $schs[] = array('' => 'please select a schedule');
         foreach ($schedules as $schedule) {
             $schs[] = array(
                 $schedule->id => $schedule->name

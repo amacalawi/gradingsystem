@@ -423,7 +423,7 @@
                                     <div class="avatar-preview">
                                         @if (!empty($student))
                                             @if ($student->mother_avatar!= '')
-                                                <div class="avatar_preview" id="motherPreview" style="background-image: url({{ asset('images/students/'.$student->identification_no.'/'.$student->mother_avatar) }})">
+                                                <div class="avatar_preview" id="motherPreview" style="background-image: url('{{ asset('images/students') }}/{{ $student->identification_no }}/{{ $student->mother_avatar }}');">
                                                 </div>
                                             @else
                                                 <div class="avatar_preview" id="motherPreview">
@@ -547,7 +547,7 @@
                                     <div class="avatar-preview">
                                         @if (!empty($student))
                                             @if ($student->father_avatar!= '')
-                                                <div class="avatar_preview" id="fatherPreview" style="background-image: url({{ asset('images/students/'.$student->identification_no.'/'.$student->father_avatar) }})">
+                                                <div class="avatar_preview" id="fatherPreview" style="background-image: url('{{ asset('images/students') }}/{{ $student->identification_no }}/{{ $student->father_avatar }}');">
                                                 </div>
                                             @else
                                                 <div class="avatar_preview" id="fatherPreview">
@@ -759,7 +759,7 @@
                                 <div class="avatar-preview">
                                     @if (!empty($student))
                                         @if ($student->avatar!= '')
-                                            <div class="avatar_preview" id="studentPreview" style="background-image: url({{ asset('images/students/'.$student->identification_no.'/'.$student->avatar) }})">
+                                            <div class="avatar_preview" id="studentPreview" style="background-image: url('{{ asset('images/students') }}/{{ $student->identification_no }}/{{ $student->avatar }}');">
                                             </div>
                                         @else
                                             <div class="avatar_preview" id="studentPreview">

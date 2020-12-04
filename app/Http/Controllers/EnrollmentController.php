@@ -15,6 +15,8 @@ use App\Models\PaymentTerm;
 use App\Models\PaymentOption;
 use App\Models\SectionInfo;
 use App\Models\Admission;
+use App\Models\Setting;
+use App\Models\Schedule;
 use App\User;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -43,10 +45,12 @@ class EnrollmentController extends Controller
     public function index(Request $request)
     {   
         $levels = (new Level)->get_all_levels_with_empty();
+        $schedules = (new Schedule)->get_all_schedules_with_empty();
         $enroll = array();
         $payment_terms = PaymentTerm::where('is_active', 1)->get();
         $payment_options = PaymentOption::where('is_active', 1)->get();
-        return view('modules/enrollments/index')->with(compact('levels', 'enroll', 'payment_terms', 'payment_options'));
+        $settings = Setting::where('is_active', 1)->first();
+        return view('modules/enrollments/index')->with(compact('schedules', 'settings', 'levels', 'enroll', 'payment_terms', 'payment_options'));
     }
 
     public function edit(Request $request, $id)
@@ -54,11 +58,13 @@ class EnrollmentController extends Controller
         $this->middleware('auth');
         $this->is_permitted(1);    
         $levels = (new Level)->get_all_levels_with_empty();
+        $schedules = (new Schedule)->get_all_schedules_with_empty();
         $sections = (new SectionInfo)->get_all_section_via_enrollment($id);
         $enroll = Enrollment::find($id);
         $payment_terms = PaymentTerm::where('is_active', 1)->get();
         $payment_options = PaymentOption::where('is_active', 1)->get();
-        return view('modules/enrollments/edit')->with(compact('levels', 'sections', 'enroll', 'payment_terms', 'payment_options'));
+        $settings = Setting::where('is_active', 1)->first();
+        return view('modules/enrollments/edit')->with(compact('schedules', 'settings', 'levels', 'sections', 'enroll', 'payment_terms', 'payment_options'));
     }
 
     public function all_active(Request $request)
@@ -488,6 +494,7 @@ class EnrollmentController extends Controller
         $enrollment->student_acknowledge_4 = $request->student_acknowledge_4;
         $enrollment->status = ($request->student_status == 'assessed') ? $request->student_status : 'enlisted';
         $enrollment->section_info_id = !empty($request->section_info_id) ? $request->section_info_id : NULL;
+        $enrollment->schedule_id = !empty($request->schedule_id) ? $request->schedule_id : NULL;
         $enrollment->updated_at = $timestamp;
         $enrollment->updated_by = Auth::user()->id;
 
