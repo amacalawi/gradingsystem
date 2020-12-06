@@ -2942,5 +2942,36 @@ class DatabaseSeeder extends Seeder
         foreach ($subject_education_types as $subject_education_type) {
             DB::table('subjects_education_types')->insert($subject_education_type);
         }
+
+        $preset_messages = [
+            [
+                'message' => 'Infoblast: <DATE> YOUR CHILD <STUD_NAME> HAS SAFELY ARRIVED AT CAMPUS <TIME>.',
+                'created_by' => 1
+            ],
+            [
+                'message' => 'Infoblast: <DATE> YOUR CHILD <STUD_NAME> HAS LEFT CAMPUS <TIME>.',
+                'created_by' => 1
+            ],
+            [
+                'message' => 'Infoblast: <DATE> YOUR CHILD <STUD_NAME> HAS LEFT CAMPUS <TIME>.',
+                'created_by' => 1
+            ],
+            [
+                'message' => 'Infoblast: <DATE> YOUR CHILD <STUD_NAME> HAS SAFELY ARRIVED AT CAMPUS <TIME>.',
+                'created_by' => 1
+            ],
+            [
+                'message' => 'Infoblast: <DATE> YOUR CHILD <STUD_NAME> HAS LEFT CAMPUS <TIME>.',
+                'created_by' => 1
+            ],
+            [
+                'message' => 'Infoblast: <DATE> YOUR CHILD <STUD_NAME> LEFT/ENTERED CAMPUS <TIME>.',
+                'created_by' => 1
+            ]
+        ];
+        foreach ($preset_messages as $preset_message) {
+            DB::table('preset_messages')->insert($preset_message);
+        }
+
     }
 }
