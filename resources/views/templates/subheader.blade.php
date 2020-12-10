@@ -33,18 +33,21 @@
                         Import {{ substr(ucwords(str_replace('-',' ', Request::segment(2))), 0, -1) }}
                 </a>
                 @endif
-                <a href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/add') }}" class="btn m-btn--pill btn-brand add-btn m-btn--custom">
-                    <i class="la la-commenting"></i> 
-                    @php 
-                        $string = substr(ucwords(Request::segment(2)), 0, -1);
-                        $exemptions = ['modules', 'sub-modules'];
-                    @endphp
-                    @if (substr($string, -1) == 'e' && !in_array(Request::segment(2), $exemptions))
-                        Add New {{ substr(ucwords(str_replace('-',' ', Request::segment(2))), 0, -2) }}
-                    @else
-                        Add New {{ substr(ucwords(str_replace('-',' ', Request::segment(2))), 0, -1) }}
-                    @endif
-                </a>
+
+                @if(Request::segment(2) != 'calendars')
+                    <a href="{{ url('/'.Request::segment(1).'/'.Request::segment(2).'/add') }}" class="btn m-btn--pill btn-brand add-btn m-btn--custom">
+                        <i class="la la-commenting"></i> 
+                        @php 
+                            $string = substr(ucwords(Request::segment(2)), 0, -1);
+                            $exemptions = ['modules', 'sub-modules', 'schedules'];
+                        @endphp
+                        @if (substr($string, -1) == 'e' && !in_array(Request::segment(2), $exemptions))
+                            Add New {{ substr(ucwords(str_replace('-',' ', Request::segment(2))), 0, -2) }}
+                        @else
+                            Add New {{ substr(ucwords(str_replace('-',' ', Request::segment(2))), 0, -1) }}
+                        @endif
+                    </a>
+                @endif
             </div>
         </div>
     </div>

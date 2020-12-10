@@ -14,6 +14,7 @@
 @push('styles')
     <link href="{{ asset('fullcalendar/dist/fullcalendar.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('fullcalendar/dist/app.min.2.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('fullcalendar/dist/material-design-iconic-font.min.css') }}" rel="stylesheet" type="text/css" >
 @endpush
 
 @push('scripts')
