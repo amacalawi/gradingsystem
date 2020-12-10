@@ -34,7 +34,7 @@ class PresetMessage extends Model
     	$preset_messages = self::where('is_active', 1)->orderBy('id', 'asc')->get();
 
         $pmgs = array();
-        $pmgs[] = array('' => 'select a preset message');
+        $pmgs[] = array('0' => 'select a preset message');
         foreach ($preset_messages as $preset_message) {
             $pmgs[] = array(
                 $preset_message->id => $preset_message->message

@@ -19,8 +19,8 @@ class CreateCalendarsSettingsTable extends Migration
             $table->integer('presetmsg_id')->unsigned();
             $table->integer('mode')->unsigned();
             $table->string('name', 100);
-            $table->dateTime('time_from', 0);
-            $table->dateTime('time_to', 0);
+            $table->time('time_from')->default('08:00:00');
+            $table->time('time_to')->default('15:00:00');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('created_by')->unsigned();
             $table->timestamp('updated_at')->nullable();
