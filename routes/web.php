@@ -150,10 +150,10 @@ Route::prefix('components')->group(function () {
     Route::get('calendars', 'CalendarsController@manage')->name('calendars.manage.active');
     Route::get('calendars/add', 'CalendarsController@add')->name('calendars.add');
     Route::get('calendars/edit/{id?}', 'CalendarsController@edit')->name('calendars.edit');
-    Route::post('calendars/store', 'CalendarsController@store')->name('calendars.store');
+    Route::get('calendars/store', 'CalendarsController@store')->name('calendars.store');
     Route::put('calendars/update/{id}', 'CalendarsController@update')->name('calendars.update');
     Route::put('calendars/update-status/{id}', 'CalendarsController@update_status')->name('calendars.update.status');
-    Route::post('calendars/remove', 'CalendarsController@remove')->name('calendars.remove');
+    Route::get('calendars/remove/{id?}', 'CalendarsController@remove')->name('calendars.remove');
     Route::post('calendars/restore', 'CalendarsController@restore')->name('calendars.restore');
     Route::get('calendars/all-active', 'CalendarsController@all_active')->name('calendars.all.active');
     Route::get('calendars/inactive', 'CalendarsController@inactive')->name('calendars.manage.inactive');

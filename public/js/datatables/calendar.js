@@ -28,7 +28,6 @@ function reloadCalendar()
         url: base_url + 'components/calendars/get-calendar',
         success: function (data) {
             var data = $.parseJSON(data);
-            alert(data);
             calendarData = data;
         },
         error: function( jqXhr ) {
@@ -108,15 +107,18 @@ function swAlert($type, $form) {
     }
     else if($type == "remove-calendar" && $form == "") 
     {
+        /*
         setTimeout(function(){     
-            swal({   
-                title: "Sweet!",   
-                text: "The information has been sucessfully removed.",   
-                imageUrl: base_url('assets/img/thumbs-up.png'), 
-                timer: 500,   
-                showConfirmButton: false
+            swal({
+                title: "Success...",
+                text: "Something went wrong! \nPlease fill the required fields to continue..",
+                type: "sucess",
+                showCancelButton: false,
+                closeOnConfirm: true,
+                timer: 500,
             }); 
         }, 1000);
+        */
     }
 }
 
@@ -233,21 +235,20 @@ $(document).ready(function() {
         eventRender: function(event, element) {
             $(element).click(function(e) {
                 e.preventDefault();
-
                 console.log(event);
 
                 swal({
                     title: "Do you like to remove this now?",
-                    text: "The information will be removed to the database.",
-                    type: "info",
+                    text:  "The information will be removed to the database.",
+                    type:  "warning",
                     confirmButtonText: "Yes, please!",
                     cancelButtonText: "No, thanks!",
-                    showCancelButton: true,   
-                    closeOnConfirm: false,   
-                    showLoaderOnConfirm: true,
-                }, function(isConfirm){
-                    if (isConfirm) {   
-
+                    showCancelButton: true,
+                    closeOnConfirm: true,
+                    confirmButtonClass: "btn btn-danger btn-focus m-btn m-btn--custom"
+                }).then((confirmed) => {
+                    if(confirmed.value){
+                        
                         var me = $(this);
 
                         if ( me.data('requestRunning') ) {
@@ -255,11 +256,10 @@ $(document).ready(function() {
                         }
 
                         me.data('requestRunning', true);
-
-                        console.log(base_url('schedules/deleteCalendar/' + event.id));
+                        
                         $.ajax({
                             type: "GET",
-                            url: base_url('schedules/deleteCalendar/' + event.id),
+                            url: base_url + 'components/calendars/remove/'+ event.id,
                             success: function (data) { 
 
                                 var data = $.parseJSON(data);   
@@ -276,13 +276,12 @@ $(document).ready(function() {
                             async: false
                         });
                     }
-                }); 
-                
+                });
             });
             // $(element).tooltip({title: event.title});             
         },
         //On Day Select
-        select: function(start, end, allDay) {            
+        select: function(start, end, allDay) {
             $('#addNew-event').modal('show');   
             $('#addNew-event input:text').val('');
             var d = new Date(end);
@@ -359,8 +358,8 @@ $(document).ready(function() {
     //Add new Event
     $('body').on('click', '#addEvent', function(){
         var eventName = $('#eventName').val();
-        var tagColor  = $('.event-tag > span.selected').attr('data-tag');
-        var urls      = base_url('schedules/saveCalendar');
+        var tagColor  = $('#palette').val();
+        var urls      = base_url + 'components/calendars/store';
         var form      = $('#EventForm');
         var error     = 0;
         var errors    = validate(form, error);
@@ -370,7 +369,7 @@ $(document).ready(function() {
         } else {                
             $.ajax({
                 type: form.attr("method"),
-                url: urls + '?colors=' + tagColor,
+                url: urls,
                 data: form.serialize(),
                 success: function (data) {
                     var data = $.parseJSON(data);
@@ -412,7 +411,7 @@ $(document).ready(function() {
 
                     refresh(form);
                     hideModal($('#addNew-event'));
-                    notify(data.message, data.type, 4000);
+                    //notify(data.message, data.type, 4000);
 
                     location.reload();
                 },
