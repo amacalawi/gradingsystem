@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Batch;
 use App\Models\Enrollment;
+use App\Models\Calendar;
+use App\Models\Level;
 use App\User;
 
 class DashboardController extends Controller
@@ -97,7 +99,6 @@ class DashboardController extends Controller
         $res2 = Enrollment::select('*')
         ->where([
             'batch_id' => (new Batch)->get_current_batch(),
-            'is_new' => 1,
             'is_active' => 1
         ])
         ->orderBy('id', 'DESC')
@@ -106,7 +107,6 @@ class DashboardController extends Controller
         $res = Enrollment::selectRaw('count(*) as total, student_gender')
         ->where([
             'batch_id' => (new Batch)->get_current_batch(),
-            'is_new' => 1,
             'is_active' => 1
         ])
         ->orderBy('id', 'DESC')
@@ -117,6 +117,68 @@ class DashboardController extends Controller
             return [
                 'label' => $enroll->student_gender,
                 'value' => number_format((($enroll->total / $res2) * 100), 0)
+            ];
+        });
+
+        $data = array(
+            'data' => $res,
+            'title' => 'Well done!',
+            'text' => 'The batch has been successfully saved.',
+            'type' => 'success',
+            'class' => 'btn-brand'
+        );
+
+        echo json_encode( $data ); exit();
+    }
+
+    public function get_calendar(Request $request)
+    {
+        $res = Calendar::select('*')
+        ->where([
+            'batch_id' => (new Batch)->get_current_batch(),
+            'is_active' => 1
+        ])
+        ->orderBy('id', 'DESC')
+        ->get();
+
+        $res = $res->map(function($calendar) {
+            return [
+                'title' => $calendar->name,
+                'start' => $calendar->start_date,
+                'end' => $calendar->end_date,
+                'className' => 'm-fc-event--light '.$calendar->color,
+                'description' => $calendar->description
+            ];
+        });
+
+        $data = array(
+            'data' => $res,
+            'title' => 'Well done!',
+            'text' => 'The batch has been successfully saved.',
+            'type' => 'success',
+            'class' => 'btn-brand'
+        );
+
+        echo json_encode( $data ); exit();
+    }
+
+    public function get_active_students_per_level(Request $request)
+    {
+        $res = Level::select('*')
+        ->where([
+            'is_active' => 1
+        ])
+        ->orderBy('id', 'ASC')
+        ->get();
+        
+        $res = $res->map(function($level) {
+            return [
+                'labels' => $level->name,
+                'dataset' => Enrollment::where([
+                    'level_id' => $level->id,
+                    'batch_id' => (new Batch)->get_current_batch(),
+                    'is_active' => 1
+                ])->count()
             ];
         });
 

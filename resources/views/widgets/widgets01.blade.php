@@ -76,14 +76,12 @@
                         <div class="m-widget14__legends">
                             <div class="m-widget14__legend">
                                 <span class="m-widget14__legend-bullet m--bg-accent"></span>
-                                <span class="m-widget14__legend-text">
-                                    60% Male
+                                <span id="male_students" class="m-widget14__legend-text">
                                 </span>
                             </div>
                             <div class="m-widget14__legend">
                                 <span class="m-widget14__legend-bullet m--bg-danger"></span>
-                                <span class="m-widget14__legend-text">
-                                    40% Female
+                                <span id="female_students" class="m-widget14__legend-text">
                                 </span>
                             </div>
                         </div>
@@ -104,7 +102,7 @@
                     </span>
                 </div>
                 <div class="m-widget14__chart" style="height:120px;">
-                    <canvas  id="m_chart_daily_sales"></canvas>
+                    <canvas id="widgets03"></canvas>
                 </div>
             </div>
             <!--end:: Widgets/Profit Share-->

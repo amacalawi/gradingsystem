@@ -12,6 +12,6 @@
         </div>
     </div>
     <div class="m-portlet__body">
-        <div id="m_calendar"></div>
+        <div id="widgets06"></div>
     </div>
 </div>

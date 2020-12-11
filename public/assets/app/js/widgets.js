@@ -125,6 +125,7 @@
             success: function(response) {
                 var data = $.parseJSON(response);   
                 $('#new-students').text(data.data);
+
             },
             async: false
         });
@@ -157,8 +158,14 @@
             success: function(response) {
                 var data = $.parseJSON(response);   
                 widgets02 = data.data;
-                console.log(widgets02);
-                console.log(moment('2017-09-15'));
+                $.each(data.data, function(i, item) {
+                    if (item.label == 'Male') {
+                        $('#male_students').text(item.value + '% Male');
+                    } 
+                    if (item.label == 'Female') {
+                        $('#female_students').text(item.value + '% Female');
+                    }
+                }); 
                 Morris.Donut({
                     element: 'm_widgets_02',
                     data: widgets02,
@@ -172,12 +179,142 @@
         });
     },
 
+    widgets.prototype.get_calendar = function() {
+        var widgets06 = []; 
+
+        if ($('#widgets06').length === 0) {
+            return;
+        }
+        
+        var todayDate = moment().startOf('day');
+        var YM = todayDate.format('YYYY-MM');
+        var YESTERDAY = todayDate.clone().subtract(1, 'day').format('YYYY-MM-DD');
+        var TODAY = todayDate.format('YYYY-MM-DD');
+        var TOMORROW = todayDate.clone().add(1, 'day').format('YYYY-MM-DD');
+
+        console.log(base_url + "dashboard/get-calendar");
+        $.ajax({
+            type: "GET",
+            url: base_url + "dashboard/get-calendar",
+            success: function(response) {
+                var data = $.parseJSON(response);   
+                widgets06 = data.data;
+            },
+            async: false
+        });
+
+        $('#widgets06').fullCalendar({
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay,listWeek'
+            },
+            // editable: true,
+            eventLimit: true, // allow "more" link when too many events
+            navLinks: true,
+            defaultDate: moment(),
+            events: widgets06,
+    
+            eventRender: function(event, element) {
+                if (element.hasClass('fc-day-grid-event')) {
+                    element.data('content', event.description);
+                    element.data('placement', 'top');
+                    mApp.initPopover(element);
+                } else if (element.hasClass('fc-time-grid-event')) {
+                    element.find('.fc-title').append('<div class="fc-description">' + event.description + '</div>');
+                } else if (element.find('.fc-list-item-title').lenght !== 0) {
+                    element.find('.fc-list-item-title').append('<div class="fc-description">' + event.description + '</div>');
+                }
+            }
+    });
+
+    },
+
+    widgets.prototype.get_active_students_per_level = function() {
+        var chartContainer = $('#widgets03');
+        var widgets03Labels = [];
+        var widgets03Datasets = [];
+
+        if (chartContainer.length == 0) {
+            return;
+        }
+
+        console.log(base_url + "dashboard/get-active-students-per-level");
+        $.ajax({
+            type: "GET",
+            url: base_url + "dashboard/get-active-students-per-level",
+            success: function(response) {
+                var data = $.parseJSON(response);   
+                $.each(data.data, function(i, item) {
+                    widgets03Labels.push(item.labels);
+                    widgets03Datasets.push(item.dataset);
+                });
+                console.log(widgets03Labels);
+
+                var chartData = {
+                    labels: widgets03Labels,
+                    datasets: [{
+                        //label: 'Dataset 1',
+                        backgroundColor: mUtil.getColor('success'),
+                        data: widgets03Datasets
+                    }]
+                };
+        
+                var chart = new Chart(chartContainer, {
+                    type: 'bar',
+                    data: chartData,
+                    options: {
+                        title: {
+                            display: false,
+                        },
+                        tooltips: {
+                            intersect: false,
+                            mode: 'nearest',
+                            xPadding: 10,
+                            yPadding: 10,
+                            caretPadding: 10
+                        },
+                        legend: {
+                            display: false
+                        },
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        barRadius: 4,
+                        scales: {
+                            xAxes: [{
+                                display: false,
+                                gridLines: false,
+                                stacked: true
+                            }],
+                            yAxes: [{
+                                display: false,
+                                stacked: true,
+                                gridLines: false
+                            }]
+                        },
+                        layout: {
+                            padding: {
+                                left: 0,
+                                right: 0,
+                                top: 0,
+                                bottom: 0
+                            }
+                        }
+                    }
+                });
+            },
+            async: false
+        });
+    },
+
     widgets.prototype.init = function()
     {   
         $.widgets.get_returned_students();
         $.widgets.get_new_students();
         $.widgets.get_active_users();
         $.widgets.get_active_students_per_malefemale();
+        $.widgets.get_calendar();
+        $.widgets.get_active_students_per_level();
     }
 
     //init widgets
