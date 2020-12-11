@@ -562,6 +562,19 @@ Route::prefix('academics')->group(function () {
         });
         /* End Student Attendance Settings */        
 
+        /* Start For Approval */
+        Route::get('attendance-report', 'AttendanceReportController@manage')->name('attendancereport.manage.active');
+        Route::get('attendance-report/export-view', 'AttendanceReportController@export_view')->name('attendancereport.export_view');
+
+        Route::get('attendance-report/add', 'AttendanceReportController@add')->name('attendancereport.add');
+        Route::get('attendance-report/edit/{id?}', 'AttendanceReportController@edit')->name('attendancereport.edit');
+        Route::post('attendance-report/store', 'AttendanceReportController@store')->name('attendancereport.store');
+        Route::put('attendance-report/update/{id}', 'AttendanceReportController@update')->name('attendancereport.update');
+        Route::get('attendance-report/all-active', 'AttendanceReportController@all_active')->name('attendancereport.all.active');
+        Route::put('attendance-report/update-status/{id}', 'AttendanceReportController@update_status')->name('attendancereport.update.status');
+        /* End For Approval */    
+
+        /* Start For Approval */
         Route::get('for-approval', 'AttendanceSheetController@manage')->name('attendancesheet.manage.active');
         Route::get('for-approval/add', 'AttendanceSheetController@add')->name('attendancesheet.add');
         Route::get('for-approval/edit/{id?}', 'AttendanceSheetController@edit')->name('attendancesheet.edit');
@@ -569,7 +582,7 @@ Route::prefix('academics')->group(function () {
         Route::put('for-approval/update/{id}', 'AttendanceSheetController@update')->name('attendancesheet.update');
         Route::get('for-approval/all-active', 'AttendanceSheetController@all_active')->name('attendancesheet.all.active');
         Route::put('for-approval/update-status/{id}', 'AttendanceSheetController@update_status')->name('attendancesheet.update.status');
-
+        /* End For Approval */   
     });
     /* End Attendance Sheets */
 });
