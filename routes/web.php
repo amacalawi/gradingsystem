@@ -651,6 +651,12 @@ Route::prefix('dashboard')->group(function () {
     Route::get('', 'DashboardController@index')->name('dashboard');
     Route::get('get-all-open-batches', 'DashboardController@open_batches')->name('dashboard.open');
     Route::get('update-current/{id}', 'DashboardController@update_current')->name('dashboard.update');
+    Route::get('get-returned-students', 'DashboardController@get_returned_students')->name('dashboard.return.students');
+    Route::get('get-new-students', 'DashboardController@get_new_students')->name('dashboard.new.students');
+    Route::get('get-active-users', 'DashboardController@get_active_users')->name('dashboard.active.users');
+    Route::get('get-active-students-per-malefemale', 'DashboardController@get_active_students_per_malefemale')->name('dashboard.active.students.male_female');
+    Route::get('get-calendar', 'DashboardController@get_calendar')->name('dashboard.calendar');
+    Route::get('get-active-students-per-level', 'DashboardController@get_active_students_per_level')->name('dashboard.active.students.level');
 });
 
 Route::prefix('settings')->group(function () {

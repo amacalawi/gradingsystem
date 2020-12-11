@@ -7,15 +7,15 @@
                     <div class="row m-row--no-padding align-items-center">
                         <div class="col">
                             <h3 class="m-widget1__title">
-                                Member Profit
+                                Returned Students
                             </h3>
                             <span class="m-widget1__desc">
-                                Awerage Weekly Profit
+                                total numbers of return students
                             </span>
                         </div>
                         <div class="col m--align-right">
-                            <span class="m-widget1__number m--font-brand">
-                                +$17,800
+                            <span id="returned-students" class="m-widget1__number m--font-brand">
+                                0
                             </span>
                         </div>
                     </div>
@@ -24,15 +24,15 @@
                     <div class="row m-row--no-padding align-items-center">
                         <div class="col">
                             <h3 class="m-widget1__title">
-                                Orders
+                                New Students
                             </h3>
                             <span class="m-widget1__desc">
-                                Weekly Customer Orders
+                                total number of new student
                             </span>
                         </div>
                         <div class="col m--align-right">
-                            <span class="m-widget1__number m--font-danger">
-                                +1,800
+                            <span id="new-students" class="m-widget1__number m--font-danger">
+                                0
                             </span>
                         </div>
                     </div>
@@ -41,15 +41,15 @@
                     <div class="row m-row--no-padding align-items-center">
                         <div class="col">
                             <h3 class="m-widget1__title">
-                                Issue Reports
+                                Active Users
                             </h3>
                             <span class="m-widget1__desc">
-                                System bugs and issues
+                                total number of active users
                             </span>
                         </div>
                         <div class="col m--align-right">
-                            <span class="m-widget1__number m--font-success">
-                                -27,49%
+                            <span id="active-users" class="m-widget1__number m--font-success">
+                                0
                             </span>
                         </div>
                     </div>
@@ -62,34 +62,26 @@
             <div class="m-widget14">
                 <div class="m-widget14__header">
                     <h3 class="m-widget14__title">
-                        Revenue Change
+                        Active Students
                     </h3>
                     <span class="m-widget14__desc">
-                        Revenue change breakdown by cities
+                        total percentage enrolled this year
                     </span>
                 </div>
                 <div class="row  align-items-center">
                     <div class="col">
-                        <div id="m_chart_revenue_change" class="m-widget14__chart1" style="height: 180px"></div>
+                        <div id="m_widgets_02" class="m-widget14__chart1" style="height: 180px"></div>
                     </div>
                     <div class="col">
                         <div class="m-widget14__legends">
                             <div class="m-widget14__legend">
                                 <span class="m-widget14__legend-bullet m--bg-accent"></span>
-                                <span class="m-widget14__legend-text">
-                                    +10% New York
+                                <span id="male_students" class="m-widget14__legend-text">
                                 </span>
                             </div>
                             <div class="m-widget14__legend">
-                                <span class="m-widget14__legend-bullet m--bg-warning"></span>
-                                <span class="m-widget14__legend-text">
-                                    -7% London
-                                </span>
-                            </div>
-                            <div class="m-widget14__legend">
-                                <span class="m-widget14__legend-bullet m--bg-brand"></span>
-                                <span class="m-widget14__legend-text">
-                                    +20% California
+                                <span class="m-widget14__legend-bullet m--bg-danger"></span>
+                                <span id="female_students" class="m-widget14__legend-text">
                                 </span>
                             </div>
                         </div>
@@ -101,44 +93,16 @@
         <div class="col-xl-4">
             <!--begin:: Widgets/Profit Share-->
             <div class="m-widget14">
-                <div class="m-widget14__header">
+                <div class="m-widget14__header m--margin-bottom-30">
                     <h3 class="m-widget14__title">
-                        Profit Share
+                        Active Students
                     </h3>
                     <span class="m-widget14__desc">
-                        Profit Share between customers
+                        total number of students per level
                     </span>
                 </div>
-                <div class="row  align-items-center">
-                    <div class="col">
-                        <div id="m_chart_profit_share" class="m-widget14__chart" style="height: 160px">
-                            <div class="m-widget14__stat">
-                                45
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="m-widget14__legends">
-                            <div class="m-widget14__legend">
-                                <span class="m-widget14__legend-bullet m--bg-accent"></span>
-                                <span class="m-widget14__legend-text">
-                                    37% Sport Tickets
-                                </span>
-                            </div>
-                            <div class="m-widget14__legend">
-                                <span class="m-widget14__legend-bullet m--bg-warning"></span>
-                                <span class="m-widget14__legend-text">
-                                    47% Business Events
-                                </span>
-                            </div>
-                            <div class="m-widget14__legend">
-                                <span class="m-widget14__legend-bullet m--bg-brand"></span>
-                                <span class="m-widget14__legend-text">
-                                    19% Others
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+                <div class="m-widget14__chart" style="height:120px;">
+                    <canvas id="widgets03"></canvas>
                 </div>
             </div>
             <!--end:: Widgets/Profit Share-->

@@ -1024,6 +1024,48 @@ a[data-dismiss="modal"] {
     text-align: center !important;
 }
 
+.m-fc-event--solid-lime {
+    background: #8BC34A !important;
+}
+.m-fc-event--solid-info {
+    background: #36a3f7 !important;
+}
+.m-fc-event--solid-purple {
+    background: #BA68C8 !important;
+}
+.m-fc-event--solid-amber {
+    background: #ffc107 !important;
+}
+.m-fc-event--solid-lemon {
+    background: #FFD600 !important;
+}
+.m-fc-event--solid-secondary {
+    background: #eaeaea !important;
+}
+
+.m-fc-event--solid-lime .fc-time, 
+.m-fc-event--solid-lime .fc-title,
+.m-fc-event--solid-purple .fc-time, 
+.m-fc-event--solid-purple .fc-title {
+    color: #fff !important;
+}
+
+.m-fc-event--solid-metal .fc-time, 
+.m-fc-event--solid-metal .fc-title {
+    color: #333439 !important;
+}
+
+.fc-unthemed .fc-event.fc-start.m-fc-event--solid-secondary .fc-content:before, 
+.fc-unthemed .fc-event-dot.fc-start.m-fc-event.m-fc-event--solid-secondary .fc-content:before,
+.fc-unthemed .fc-event.fc-start.m-fc-event--solid-amber .fc-content:before, 
+.fc-unthemed .fc-event-dot.fc-start.m-fc-event--solid-amber .fc-content:before,
+.fc-unthemed .fc-event.fc-start.m-fc-event--solid-lemon .fc-content:before, 
+.fc-unthemed .fc-event-dot.fc-start.m-fc-event--solid-lemon .fc-content:before,
+.fc-unthemed .fc-event.fc-start.m-fc-event--solid-metal .fc-content:before, 
+.fc-unthemed .fc-event-dot.fc-start.m-fc-event--solid-metal .fc-content:before  {
+    background: #333439 !important;
+}
+
 @media print {
     .col-md-6 {
         position: relative;

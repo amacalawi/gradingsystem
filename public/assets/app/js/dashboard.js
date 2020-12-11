@@ -670,16 +670,12 @@ var Dashboard = function() {
         Morris.Donut({
             element: 'm_chart_revenue_change',
             data: [{
-                    label: "New York",
-                    value: 10
+                    label: "Male",
+                    value: 60
                 },
                 {
-                    label: "London",
-                    value: 7
-                },
-                {
-                    label: "Paris",
-                    value: 20
+                    label: "Female",
+                    value: 40
                 }
             ],
             colors: [
