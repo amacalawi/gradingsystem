@@ -28,5 +28,4 @@
 
 @push('scripts')
     <script src="{{ asset('js/datatables/calendar.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('fullcalendar/dist/fullcalendar.min.js') }}" type="text/javascript"></script>
 @endpush
