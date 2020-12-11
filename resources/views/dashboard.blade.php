@@ -10,24 +10,14 @@
     
     <!--Begin::Section-->
     <div class="row">
-        <div class="col-xl-6">
-            @include('widgets.widgets02')
-        </div>
-        <div class="col-xl-6">
-            @include('widgets.widgets03')
+        <div class="col-xl-12">
+            @include('widgets.widgets06')
         </div>
     </div>
     <!--End::Section-->
-
-    <!--Begin::Section-->
-    <div class="row">
-        <div class="col-xl-8">
-            @include('widgets.widgets04')
-        </div>
-        <div class="col-xl-4">
-            @include('widgets.widgets05')
-        </div>
-    </div>
-    <!--End::Section-->
-
+                        
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('assets/app/js/widgets.js') }}" type="text/javascript"></script>
+@endpush
