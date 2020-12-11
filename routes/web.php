@@ -146,6 +146,23 @@ Route::prefix('components')->group(function () {
     Route::get('schedules/preset-message/all-inactive', 'PresetMessageController@all_inactive')->name('presetmsg.all.inactive');
     /*End Preset Message */
 
+    /* Start Calendars Routes */
+    Route::get('calendars', 'CalendarsController@manage')->name('calendars.manage.active');
+    Route::get('calendars/add', 'CalendarsController@add')->name('calendars.add');
+    Route::get('calendars/edit/{id?}', 'CalendarsController@edit')->name('calendars.edit');
+    Route::get('calendars/store', 'CalendarsController@store')->name('calendars.store');
+    Route::put('calendars/update/{id}', 'CalendarsController@update')->name('calendars.update');
+    Route::put('calendars/update-status/{id}', 'CalendarsController@update_status')->name('calendars.update.status');
+    Route::get('calendars/remove/{id?}', 'CalendarsController@remove')->name('calendars.remove');
+    Route::post('calendars/restore', 'CalendarsController@restore')->name('calendars.restore');
+    Route::get('calendars/all-active', 'CalendarsController@all_active')->name('calendars.all.active');
+    Route::get('calendars/inactive', 'CalendarsController@inactive')->name('calendars.manage.inactive');
+    Route::get('calendars/all-inactive', 'CalendarsController@all_inactive')->name('calendars.all.inactive');
+    Route::get('calendars/get-calendar', 'CalendarsController@get_calendar')->name('calendars.get.calendar');
+    //Route::get('calendars/all-member', 'CalendarsController@all_member')->name('calendars.all.member');
+    //Route::get('calendars/get-this-calendar/{id?}', 'CalendarsController@get_this_calendar');
+    /* End Calendars Routes */
+    
     /* Menus Routes */
     Route::prefix('menus')->group(function () {
         /* Start Headers Routes */
