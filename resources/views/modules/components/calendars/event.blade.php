@@ -1,6 +1,7 @@
         <!-- Add event -->
-        <div class="modal fade w-100" id="addNew-event" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog">
+        <div class="modal fade" id="addNew-event">
+        {{--<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="importClassStudent" id="addNew-event">--}}
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header theme-bg-css">
                         <h4 class="modal-title c-black">Add an Event</h4>
@@ -22,7 +23,6 @@
                                             }}
                                             <span class="m-form__help m--font-danger"></span>
                                         </div>
-                                        <small class="help-block"></small>
                                     </div>
                                 </div>
                             </div>
@@ -41,7 +41,6 @@
                                                 )) 
                                             }}
                                         </div>
-                                        <small class="help-block"></small>
                                     </div>
                                 </div>
                             </div>
@@ -70,7 +69,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-12 m-b-5">
+                                <div class="col-sm-6 m-b-5">
                                     <div class="form-group required">
                                         <div class="fg-line">
                                             {{ Form::label('eventStart', 'Event start', ['class' => 'c-black text-uppercase ']) }}
@@ -84,12 +83,9 @@
                                             <span class="m-form__help m--font-danger">
                                             </span>
                                         </div>
-                                        <small class="help-block"></small>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12 m-b-5">
+                                <div class="col-sm-6 m-b-5">
                                     <div class="form-group required">
                                         <div class="fg-line">
                                             {{ Form::label('eventEnd', 'Event end', ['class' => 'c-black text-uppercase ']) }}
@@ -103,9 +99,11 @@
                                             <span class="m-form__help m--font-danger">
                                             </span>
                                         </div>
-                                        <small class="help-block"></small>
                                     </div>
                                 </div>
+
+                            </div>
+                            <div class="row">
 
                                 <div id="custom_event" style="display: none;"> <!-- custom day -->
 
@@ -277,51 +275,60 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-sm-12 m-b-5">
+                                <div class="col-sm-12">
                                         <div class="form-group required">
-                                            <label for="palette" class="">Palette</label>
+                                            {{ Form::label('palette', 'Palette', ['class' => '']) }}
                                             <div class="col-md-12">
                                                 <div class="row">
                                                         <div class="m-radio-list col-md-4">
                                                             <label class="m-radio">
-                                                                <input class="colour" name="palette" type="radio" value="m-badge--secondary">
+                                                                {{ Form::radio('palette', 'm-fc-event--solid-light', '', array('class' => 'colour',)) }}
                                                                 <em class="m-right-05 m-badge m-badge--secondary"></em> Light
+                                                                <span></span>
                                                             </label>
                                                             <label class="m-radio">
-                                                                <input class="colour" name="palette" type="radio" value="m-badge--metal">
+                                                                {{ Form::radio('palette', 'm-fc-event--solid-metal', '', array('class' => 'colour')) }}
                                                                 <em class="m-right-05 m-badge m-badge--metal"></em> Metal
+                                                                <span></span>
                                                             </label>
                                                             <label class="m-radio">
-                                                                <input class="colour" name="palette" type="radio" value="m-badge--lemon">
+                                                                {{ Form::radio('palette', 'm-fc-event--solid-lemon', '', array('class' => 'colour')) }}
                                                                 <em class="m-right-05 m-badge m-badge--lemon"></em> Lemon
+                                                                <span></span>
                                                             </label>
                                                         </div>
                                                         <div class="m-radio-list col-md-4">
                                                             <label class="m-radio">
-                                                                <input class="colour" name="palette" type="radio" value="m-badge--amber">
+                                                                {{ Form::radio('palette', 'm-fc-event--solid-amber', '', array('class' => 'colour')) }}
                                                                 <em class="m-right-05 m-badge m-badge--amber"></em> Amber
+                                                                <span></span>
                                                             </label>
                                                             <label class="m-radio">
-                                                                <input class="colour" name="palette" type="radio" value="m-badge--lime">
+                                                                {{ Form::radio('palette', 'm-fc-event--solid-lime', '', array('class' => 'colour')) }}
                                                                 <em class="m-right-05 m-badge m-badge--lime"></em> Lime
+                                                                <span></span>
                                                             </label>
                                                             <label class="m-radio">
-                                                                <input class="colour" name="palette" type="radio" value="m-badge--success">
+                                                                {{ Form::radio('palette', 'm-fc-event--solid-leaf', '', array('class' => 'colour')) }}
                                                                 <em class="m-right-05 m-badge m-badge--success"></em> Leaf
+                                                                <span></span>
                                                             </label>
                                                         </div>
                                                         <div class="m-radio-list col-md-4">
                                                             <label class="m-radio">
-                                                                <input class="colour" name="palette" type="radio" value="m-badge--info">
+                                                                {{ Form::radio('palette', 'm-fc-event--solid-sky', '', array('class' => 'colour')) }}
                                                                 <em class="m-right-05 m-badge m-badge--info"></em> Sky
+                                                                <span></span>
                                                             </label>
                                                             <label class="m-radio">
-                                                                <input class="colour" name="palette" type="radio" value="m-badge--accent">
+                                                                {{ Form::radio('palette', 'm-fc-event--solid-azure', '', array('class' => 'colour')) }}
                                                                 <em class="m-right-05 m-badge m-badge--accent"></em> Azure
+                                                                <span></span>
                                                             </label>
                                                             <label class="m-radio">
-                                                                <input class="colour" name="palette" type="radio" value="m-badge--purple">
+                                                                {{ Form::radio('palette', 'm-fc-event--solid-purple', '', array('class' => 'colour')) }}
                                                                 <em class="m-right-05 m-badge m-badge--purple"></em> Purple
+                                                                <span></span>
                                                             </label>
                                                         </div>
                                                     </div>

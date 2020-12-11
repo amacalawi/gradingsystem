@@ -17,6 +17,15 @@ class Calendar extends Model
     {
         $calendars = self::where('is_active', 1)->where('batch_id', (New Batch)->get_current_batch() )->get();
         
+        $arr[] = array (
+            'id' => 0,
+            'title' => 'sample',
+            'start' => '1994-02-03 08:00:00',
+            'end' => '1994-02-03 17:00:00',
+            'allDay'    => true,
+            'className' => 'm-fc-event--solid-light'
+        );
+
         foreach ($calendars as $calendar)
         {
             $arr[] = array (
