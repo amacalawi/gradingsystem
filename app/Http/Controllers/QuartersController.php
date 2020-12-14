@@ -305,6 +305,103 @@ class QuartersController extends Controller
         }   
     }
 
+    public function import(Request $request)
+    {   
+        $this->is_permitted(0);
+        foreach($_FILES as $file)
+        {   
+            $row = 0; $timestamp = date('Y-m-d H:i:s');
+            if (($files = fopen($file['tmp_name'], "r")) !== FALSE) 
+            {
+                while (($data = fgetcsv($files, 3000, ",")) !== FALSE) 
+                {
+                    $row++; 
+                    if ($row > 1) 
+                    {  
+                        $exist = Quarter::where('code', $data[0])->get();
+                        if ($exist->count() > 0) {
+                            $quarter = Quarter::find($exist->first()->id);
+                            $quarter->code = $data[0];
+                            $quarter->name = $data[1];
+                            $quarter->description = $data[2];
+                            $quarter->date_start = date('Y-m-d', strtotime($data[3]));
+                            $quarter->date_end = date('Y-m-d', strtotime($data[4]));
+                            $quarter->updated_at = $timestamp;
+                            $quarter->updated_by = Auth::user()->id;
+
+                            if ($quarter->update()) {
+                                QuarterEducationType::where('quarter_id', $exist->first()->id)->update(['updated_at' => $timestamp, 'updated_by' => Auth::user()->id,'is_active' => 0]);
+                                $education_types = explode(',',$data[5]);
+                                foreach ($education_types as $education_type) {
+                                    $education_type_id = EducationType::where('code', $education_type)->first()->id;
+                                    $quarter_education_type = QuarterEducationType::where(['quarter_id' => $exist->first()->id, 'education_type_id' => $education_type_id])
+                                    ->update([
+                                        'education_type_id' => $education_type_id,
+                                        'updated_at' => $timestamp,
+                                        'updated_by' => Auth::user()->id,
+                                        'is_active' => 1
+                                    ]);
+                                    $quarter_education_type = QuarterEducationType::where(['quarter_id' => $exist->first()->id, 'education_type_id' => $education_type_id, 'is_active' => 1])->get();
+                                    if ($quarter_education_type->count() > 0) {
+                                        $this->audit_logs('quarters_education_types', $quarter_education_type->first()->id, 'has modified a quarter education type.', QuarterEducationType::find($quarter_education_type->first()->id), $timestamp, Auth::user()->id);
+                                    } else {
+                                        $quarter_education_type = QuarterEducationType::create([
+                                            'quarter_id' => $exist->first()->id,
+                                            'education_type_id' => $education_type_id,
+                                            'created_at' => $timestamp,
+                                            'created_by' => Auth::user()->id
+                                        ]);
+                                        $this->audit_logs('quarters_education_types', $quarter_education_type->id, 'has inserted a new quarter education type.', QuarterEducationType::find($quarter_education_type->id), $timestamp, Auth::user()->id);
+                                    }
+                                }
+
+                                $this->audit_logs('quarters', $exist->first()->id, 'has modified a quarter.', Quarter::find($exist->first()->id), $timestamp, Auth::user()->id);
+                            }
+                        } else {
+                            $quarter = Quarter::create([
+                                'batch_id' => (new Batch)->get_current_batch(),
+                                'code' => $data[0],
+                                'name' => $data[1],
+                                'description' => $data[2],
+                                'date_start' => date('Y-m-d', strtotime($data[3])),
+                                'date_end' => date('Y-m-d', strtotime($data[4])),
+                                'created_at' => $timestamp,
+                                'created_by' => Auth::user()->id
+                            ]);
+                    
+                            if (!$quarter) {
+                                throw new NotFoundHttpException();
+                            }
+                            
+                            $education_types = explode(',',$data[5]);
+                            foreach ($education_types as $education_type) {
+                                $education_type_id = EducationType::where('code', $education_type)->first()->id;
+                                $quarter_education_type = QuarterEducationType::create([
+                                    'quarter_id' => $quarter->id,
+                                    'education_type_id' => $education_type_id,
+                                    'created_at' => $timestamp,
+                                    'created_by' => Auth::user()->id
+                                ]);
+                                $this->audit_logs('quarters_education_types', $quarter_education_type->id, 'has inserted a new quarter education type.', QuarterEducationType::find($quarter_education_type->id), $timestamp, Auth::user()->id);
+                            }
+                    
+                            $this->audit_logs('quarters', $quarter->id, 'has inserted a new quarter.', Quarter::find($quarter->id), $timestamp, Auth::user()->id);
+                        }
+                    } // close for if $row > 1 condition   
+                }
+                fclose($files);
+            }
+        }
+
+        $data = array(
+            'message' => 'success'
+        );
+
+        echo json_encode( $data );
+
+        exit();
+    }
+
     public function audit_logs($entity, $entity_id, $description, $data, $timestamp, $user)
     {
         $auditLogs = AuditLog::create([

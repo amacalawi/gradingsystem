@@ -175,7 +175,7 @@
                 @if (Request::segment(3) == 'components' && Auth::user()->type  != 'administrator')
                 @elseif (!in_array(Request::segment(3), $invisibles))
                     @php 
-                        $imports = ['levels', 'sections', 'subjects', 'classes', 'soa-template-01', 'gradingsheet-template-01', 'soa', 'gradingsheet', 'payslip'];
+                        $imports = ['departments', 'designations', 'quarters', 'levels', 'sections', 'subjects', 'classes', 'soa-template-01', 'gradingsheet-template-01', 'soa', 'gradingsheet', 'payslip'];
                         $inFile = ['soa', 'gradingsheet', 'payslip'];
                         $privileges = explode(',', strtolower(\Helper::get_privileges()));
                     @endphp

@@ -309,19 +309,19 @@
                                                                 <span></span>
                                                             </label>
                                                             <label class="m-radio">
-                                                                {{ Form::radio('palette', 'm-fc-event--solid-leaf', '', array('class' => 'colour')) }}
+                                                                {{ Form::radio('palette', 'm-fc-event--solid-success', '', array('class' => 'colour')) }}
                                                                 <em class="m-right-05 m-badge m-badge--success"></em> Leaf
                                                                 <span></span>
                                                             </label>
                                                         </div>
                                                         <div class="m-radio-list col-md-4">
                                                             <label class="m-radio">
-                                                                {{ Form::radio('palette', 'm-fc-event--solid-sky', '', array('class' => 'colour')) }}
+                                                                {{ Form::radio('palette', 'm-fc-event--solid-info', '', array('class' => 'colour')) }}
                                                                 <em class="m-right-05 m-badge m-badge--info"></em> Sky
                                                                 <span></span>
                                                             </label>
                                                             <label class="m-radio">
-                                                                {{ Form::radio('palette', 'm-fc-event--solid-azure', '', array('class' => 'colour')) }}
+                                                                {{ Form::radio('palette', 'm-fc-event--solid-accent', '', array('class' => 'colour')) }}
                                                                 <em class="m-right-05 m-badge m-badge--accent"></em> Azure
                                                                 <span></span>
                                                             </label>

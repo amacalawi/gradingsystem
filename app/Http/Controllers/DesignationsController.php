@@ -290,6 +290,98 @@ class DesignationsController extends Controller
         }   
     }
 
+    public function import(Request $request)
+    {   
+        $this->is_permitted(0);
+        foreach($_FILES as $file)
+        {   
+            $row = 0; $timestamp = date('Y-m-d H:i:s');
+            if (($files = fopen($file['tmp_name'], "r")) !== FALSE) 
+            {
+                while (($data = fgetcsv($files, 3000, ",")) !== FALSE) 
+                {
+                    $row++; 
+                    if ($row > 1) 
+                    {  
+                        $exist = Designation::where('code', $data[0])->get();
+                        if ($exist->count() > 0) {
+                            $designation = Designation::find($exist->first()->id);
+                            $designation->code = $data[0];
+                            $designation->name = $data[1];
+                            $designation->description = $data[2];
+                            $designation->updated_at = $timestamp;
+                            $designation->updated_by = Auth::user()->id;
+
+                            if ($designation->update()) {
+                                DesignationEducationType::where('designation_id', $exist->first()->id)->update(['updated_at' => $timestamp, 'updated_by' => Auth::user()->id,'is_active' => 0]);
+                                $education_types = explode(',',$data[3]);
+                                foreach ($education_types as $education_type) {
+                                    $education_type_id = EducationType::where('code', $education_type)->first()->id;
+                                    $designation_education_type = DesignationEducationType::where(['designation_id' => $exist->first()->id, 'education_type_id' => $education_type_id])
+                                    ->update([
+                                        'education_type_id' => $education_type_id,
+                                        'updated_at' => $timestamp,
+                                        'updated_by' => Auth::user()->id,
+                                        'is_active' => 1
+                                    ]);
+                                    $designation_education_type = DesignationEducationType::where(['designation_id' => $exist->first()->id, 'education_type_id' => $education_type_id, 'is_active' => 1])->get();
+                                    if ($designation_education_type->count() > 0) {
+                                        $this->audit_logs('designations_education_types', $designation_education_type->first()->id, 'has modified a designation education type.', DesignationEducationType::find($designation_education_type->first()->id), $timestamp, Auth::user()->id);
+                                    } else {
+                                        $designation_education_type = DesignationEducationType::create([
+                                            'designation_id' => $exist->first()->id,
+                                            'education_type_id' => $education_type_id,
+                                            'created_at' => $timestamp,
+                                            'created_by' => Auth::user()->id
+                                        ]);
+                                        $this->audit_logs('designations_education_types', $designation_education_type->id, 'has inserted a new designation education type.', DesignationEducationType::find($designation_education_type->id), $timestamp, Auth::user()->id);
+                                    }
+                                }
+
+                                $this->audit_logs('designations', $exist->first()->id, 'has modified a designation.', Designation::find($exist->first()->id), $timestamp, Auth::user()->id);
+                            }
+                        } else {
+                            $designation = Designation::create([
+                                'code' => $data[0],
+                                'name' => $data[1],
+                                'description' => $data[2],
+                                'created_at' => $timestamp,
+                                'created_by' => Auth::user()->id
+                            ]);
+                    
+                            if (!$designation) {
+                                throw new NotFoundHttpException();
+                            }
+                            
+                            $education_types = explode(',',$data[3]);
+                            foreach ($education_types as $education_type) {
+                                $education_type_id = EducationType::where('code', $education_type)->first()->id;
+                                $designation_education_type = DesignationEducationType::create([
+                                    'designation_id' => $designation->id,
+                                    'education_type_id' => $education_type_id,
+                                    'created_at' => $timestamp,
+                                    'created_by' => Auth::user()->id
+                                ]);
+                                $this->audit_logs('designations_education_types', $designation_education_type->id, 'has inserted a new designation education type.', DesignationEducationType::find($designation_education_type->id), $timestamp, Auth::user()->id);
+                            }
+                    
+                            $this->audit_logs('designations', $designation->id, 'has inserted a new designation.', Designation::find($designation->id), $timestamp, Auth::user()->id);
+                        }
+                    } // close for if $row > 1 condition   
+                }
+                fclose($files);
+            }
+        }
+
+        $data = array(
+            'message' => 'success'
+        );
+
+        echo json_encode( $data );
+
+        exit();
+    }
+
     public function audit_logs($entity, $entity_id, $description, $data, $timestamp, $user)
     {
         $auditLogs = AuditLog::create([
