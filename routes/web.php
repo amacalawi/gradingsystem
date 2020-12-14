@@ -42,6 +42,7 @@ Route::prefix('components')->group(function () {
         /* End Batches Routes */
 
         /* Start Quarters Routes */
+        Route::post('quarters/import', 'QuartersController@import')->name('quarters.import');
         Route::get('quarters/add', 'QuartersController@add')->name('quarters.add');
         Route::get('quarters/edit/{id?}', 'QuartersController@edit')->name('quarters.edit');
         Route::post('quarters/store', 'QuartersController@store')->name('quarters.store');
@@ -56,6 +57,7 @@ Route::prefix('components')->group(function () {
         /* End Quarters Routes */
 
         /* Start Departments Routes */
+        Route::post('departments/import', 'DepartmentsController@import')->name('departments.import');
         Route::get('departments/add', 'DepartmentsController@add')->name('departments.add');
         Route::get('departments/edit/{id?}', 'DepartmentsController@edit')->name('departments.edit');
         Route::post('departments/store', 'DepartmentsController@store')->name('departments.store');
@@ -70,6 +72,7 @@ Route::prefix('components')->group(function () {
         /* End Departments Routes */
 
         /* Start Designations Routes */
+        Route::post('designations/import', 'DesignationsController@import')->name('designations.import');
         Route::get('designations/add', 'DesignationsController@add')->name('designations.add');
         Route::get('designations/edit/{id?}', 'DesignationsController@edit')->name('designations.edit');
         Route::post('designations/store', 'DesignationsController@store')->name('designations.store');

@@ -201,4 +201,34 @@ jQuery(document).ready(function () {
 			}
 		});
 	});
+
+	Dropzone.autoDiscover = false;
+	var accept = ".csv";
+
+	$('#import-department-dropzone').dropzone({
+		acceptedFiles: accept,
+		maxFilesize: 209715200,
+		timeout: 0,
+		init: function () {
+		this.on("processing", function(file) {
+			this.options.url = base_url + 'components/schools/departments/import';
+			console.log(this.options.url);
+		}).on("queuecomplete", function (file, response) {
+			// console.log(response);
+		}).on("success", function (file, response) {
+			console.log(response);
+			var data = $.parseJSON(response);
+			if (data.message == 'success') {
+				if ( $('.m_datatable').length ) {
+					$('.m_datatable').mDatatable().reload();
+				}
+			}
+		}).on("totaluploadprogress", function (progress) {
+			var progressElement = $("[data-dz-uploadprogress]");
+			progressElement.width(progress + '%');
+			progressElement.find('.progress-text').text(progress + '%');
+		});
+		this.on("error", function(file){if (!file.accepted) this.removeFile(file);});            
+		}
+	});
 });

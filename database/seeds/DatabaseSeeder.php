@@ -210,14 +210,14 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Schedules',
                 'description' => 'Schedules Description',
                 'slug' => 'schedules',
-                'icon' => 'fa fa-calendar',
+                'icon' => 'fa fa-calendar-o',
                 'order' => '7',
                 'created_by' => 1
             ],
             [   
                 'header_id' => '2',
                 'code' => 'calendars',
-                'name' => 'calendars',
+                'name' => 'Calendars',
                 'description' => 'Calendars Description',
                 'slug' => 'calendars',
                 'icon' => 'fa fa-calendar',
