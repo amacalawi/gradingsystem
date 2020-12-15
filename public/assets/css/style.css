@@ -1066,6 +1066,30 @@ a[data-dismiss="modal"] {
     background: #333439 !important;
 }
 
+#gradingsheet-table td,
+#gradingsheet-table th {
+    font-size: .9rem;
+}
+
+.fullscreen {
+    color: #333;
+    text-decoration: none;
+}
+
+.fullscreen:hover {
+    text-decoration: none;
+}
+
+#gradingsheet-layer.active {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    overflow-y: scroll;
+}
+
 @media print {
     .col-md-6 {
         position: relative;

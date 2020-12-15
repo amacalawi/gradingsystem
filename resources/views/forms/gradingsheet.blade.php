@@ -84,11 +84,15 @@
     <div class="row">
         <div class="col-md-12">
             <!-- BASIC INFOS START -->
-            <div class="m-portlet m-portlet--tab">
+            <div id="gradingsheet-layer" class="m-portlet m-portlet--tab">
                 <div class="m-portlet__body">
                     <div class="row">
                         <div class="col-md-12">
-                            <h4 class="m-bottom-1">Grading Sheet Information</h4>
+                            <h4 class="m-bottom-1">Grading Sheet Information 
+                                <a class="pull-right fullscreen" title="toggle to fullscreen" href="javascript:;">
+                                    <i class="la la-arrows-alt"></i>
+                                </a>
+                            </h4>
                             <div class="row hidden">
                                 <h5 id="type">{{ $grading->education_type_id }}</h5>
                                 <div class="col-md-12 hidden">
