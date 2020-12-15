@@ -8,11 +8,11 @@
                 @foreach ($components as $component)
                     <th class="{{ $component->palette }} fixed freeze_vertical text-center scrolling_table_1 component-header" colspan="{{ $component->columns }}" title="{{ $component->description }}">{{ $component->name }} <a component_lock="{{ $grading->locked }}" component_title="{{ $component->name }}" component_id="{{ $component->id }}" data-toggle="m-tooltip" data-placement="bottom" title="add/edit components" href="javascript:;" class="edit-components pull-right"><i class="flaticon-file-1"></i></a></th>
                 @endforeach
-                <th class="shaded fixed freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="initial grade">Initial</th>
-                <th class="shaded fixed freeze_vertical text-center scrolling_table_1 quarter-bg" data-toggle="m-tooltip" data-placement="bottom" title="quarterly grade">QG</th>
-                <th class="shaded fixed freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="transmutation value">TC</th>
-                <th class="shaded fixed freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="rating value">Rating</th>
-                <th class="shaded fixed freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="ranking value">Ranking</th>
+                <th class="shaded fixed freeze_horizontal freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="initial grade">Initial</th>
+                <th class="shaded fixed freeze_horizontal freeze_vertical text-center scrolling_table_1 quarter-bg" data-toggle="m-tooltip" data-placement="bottom" title="quarterly grade">QG</th>
+                <th class="shaded fixed freeze_horizontal freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="transmutation value">TC</th>
+                <th class="shaded fixed freeze_horizontal freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="rating value">Rating</th>
+                <th class="shaded fixed freeze_horizontal freeze_vertical text-center scrolling_table_1" data-toggle="m-tooltip" data-placement="bottom" title="ranking value">Ranking</th>
             </tr>
             <tr>
                 <th class="shaded fixed freeze text-center scrolling_table_1">-</th>

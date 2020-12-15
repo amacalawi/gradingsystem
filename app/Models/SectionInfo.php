@@ -144,21 +144,38 @@ class SectionInfo extends Model
 
     public function get_all_section_via_enrollment($id) 
     {	
-    	$classes = self::with([
-            'section' =>  function($q) { 
-                $q->select(['id', 'name', 'description']);
-            },
-            'level' =>  function($q) { 
-                $q->select(['id', 'name', 'description']);
-            }
-        ])
-        ->where([
-            'batch_id' => (new Batch)->get_current_batch(),
-            'level_id' => Enrollment::find($id)->level_id,
-            'is_active' => 1
-        ])
-        ->orderBy('id', 'asc')
-        ->get();
+        if ($id !== '') {
+            $classes = self::with([
+                'section' =>  function($q) { 
+                    $q->select(['id', 'name', 'description']);
+                },
+                'level' =>  function($q) { 
+                    $q->select(['id', 'name', 'description']);
+                }
+            ])
+            ->where([
+                'batch_id' => (new Batch)->get_current_batch(),
+                'level_id' => Enrollment::find($id)->level_id,
+                'is_active' => 1
+            ])
+            ->orderBy('id', 'asc')
+            ->get();
+        } else {
+            $classes = self::with([
+                'section' =>  function($q) { 
+                    $q->select(['id', 'name', 'description']);
+                },
+                'level' =>  function($q) { 
+                    $q->select(['id', 'name', 'description']);
+                }
+            ])
+            ->where([
+                'batch_id' => (new Batch)->get_current_batch(),
+                'is_active' => 1
+            ])
+            ->orderBy('id', 'asc')
+            ->get();
+        }
 
         $classx = array();
         $classx[] = array('' => 'select a class section');

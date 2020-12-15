@@ -173,6 +173,11 @@
             var self = $(this);
             self.closest(".form-group").find(".m-form__help").text("");
         });
+
+        this.$body.on('click', '.fullscreen', function (e){
+            e.preventDefault();
+            $('#gradingsheet-layer').toggleClass('active');
+        });
         
         $.utility.schoolyear_utilities();
 

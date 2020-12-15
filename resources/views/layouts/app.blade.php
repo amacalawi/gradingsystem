@@ -87,7 +87,7 @@
         <script src="{{ asset('assets/custom/components/base/sweetalert2.js') }}" type="text/javascript"></script>
         <script src="{{ asset('assets/custom/components/forms/widgets/select2.js') }}" type="text/javascript"></script>
         <script src="{{ asset('js/moment.js') }}" type="text/javascript"></script>
-        @if (\Request::is('dashboard') || \Request::is('applications/*'))  
+        @if (\Request::is('dashboard') || \Request::is('academics/grading-sheets/all-gradingsheets/*') || \Request::is('applications/*'))  
         @else
             <script src="{{ asset('js/fixheader.js') }}" type="text/javascript"></script>
         @endif

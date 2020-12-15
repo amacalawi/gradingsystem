@@ -46,11 +46,12 @@ class EnrollmentController extends Controller
     {   
         $levels = (new Level)->get_all_levels_with_empty();
         $schedules = (new Schedule)->get_all_schedules_with_empty();
+        $sections = (new SectionInfo)->get_all_section_via_enrollment('');
         $enroll = array();
         $payment_terms = PaymentTerm::where('is_active', 1)->get();
         $payment_options = PaymentOption::where('is_active', 1)->get();
         $settings = Setting::where('is_active', 1)->first();
-        return view('modules/enrollments/index')->with(compact('schedules', 'settings', 'levels', 'enroll', 'payment_terms', 'payment_options'));
+        return view('modules/enrollments/index')->with(compact('schedules', 'settings', 'levels', 'sections', 'enroll', 'payment_terms', 'payment_options'));
     }
 
     public function edit(Request $request, $id)

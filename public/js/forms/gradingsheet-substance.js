@@ -6,6 +6,7 @@
     };
 
     var $required = 0; var files = []; var transmutations = [];
+    var $edit = false;
 
     var $activity_layer = '<div class="row activity-panel-layout">' +
         '<div class="col-md-11">' +
@@ -477,26 +478,25 @@
         //     $.gradingsheet.compute(self.closest('tr'), self.closest('td').attr('group'));
         // });
 
-        // this.$body.on('keyup', 'input[name="tc_score[]"]', function (e){
-        //     e.preventDefault();
-        //     var rows = $(this).closest('tr');
-        //     var self = $(this);
-        //     var maxValue = $(this).attr('maxvalue');
-        //     alert('sss');
+        this.$body.on('keyup', 'input[name="tc_score[]"]', function (e){
+            e.preventDefault();
+            var rows = $(this).closest('tr');
+            var self = $(this);
+            var maxValue = $(this).attr('maxvalue');
 
-        //     if (parseFloat(self.val()) > parseFloat(maxValue)) {
-        //         swal({
-        //             title: "Oops...",
-        //             text: "the input value must be less than or equal to the HPS",
-        //             type: "warning",
-        //             showCancelButton: false,
-        //             closeOnConfirm: true,
-        //             confirmButtonClass: "btn btn-warning btn-focus m-btn m-btn--pill m-btn--air m-btn--custom"
-        //         });
-        //         self.val('');
-        //     }
-        //     $.gradingsheet.compute(self.closest('tr'), '');
-        // });
+            if (parseFloat(self.val()) > parseFloat(maxValue)) {
+                swal({
+                    title: "Oops...",
+                    text: "the input value must be less than or equal to the HPS",
+                    type: "warning",
+                    showCancelButton: false,
+                    closeOnConfirm: true,
+                    confirmButtonClass: "btn btn-warning btn-focus m-btn m-btn--pill m-btn--air m-btn--custom"
+                });
+                self.val('');
+            }
+            $.gradingsheet.compute(self.closest('tr'), '');
+        });
 
         this.$body.on('change', '#education_type_id', function (e){
             e.preventDefault();
@@ -626,6 +626,16 @@
             });
         });
 
+        this.$body.on('keypress', 'input[name="score[]"]', function (e){
+            var keycode = e.keyCode || e.which;
+            var parents = $(this).closest('tr');
+            var column = $(this).parents('td').attr('column');
+            var group = $(this).parents('td').attr('group');
+            if(keycode == '13') {
+                parents.next().find('td[column="'+ column +'"][group="'+ group +'"] input[name="score[]"]').focus();
+            }
+        });
+
         this.$body.on('blur', 'input[name="score[]"]', function (e){
             e.preventDefault();
             var self = $(this);
@@ -717,7 +727,7 @@
                                             '<div class="col-md-4">' +
                                                 '<div class="form-group m-form__group required">' +
                                                     '<label for="activity_name" class="">Code</label>' +
-                                                    '<input class="form-control form-control-lg m-input m-input--solid required" name="activity_name[]" type="text" value="' + itemActivity + '">' +
+                                                    '<input maxlength="3" class="form-control form-control-lg m-input m-input--solid required" name="activity_name[]" type="text" value="' + itemActivity + '">' +
                                                     '<span class="m-form__help m--font-danger"></span>' +
                                                 '</div>' +
                                             '</div>' +
@@ -750,7 +760,7 @@
                                                 '<div class="col-md-4">' +
                                                     '<div class="form-group m-form__group required">' +
                                                         '<label for="activity_name" class="">Code</label>' +
-                                                        '<input class="form-control form-control-lg m-input m-input--solid required" name="activity_name[]" type="text" value="' + itemActivity + '">' +
+                                                        '<input maxlength="3" class="form-control form-control-lg m-input m-input--solid required" name="activity_name[]" type="text" value="' + itemActivity + '">' +
                                                         '<span class="m-form__help m--font-danger"></span>' +
                                                     '</div>' +
                                                 '</div>' +
@@ -792,7 +802,10 @@
         this.$body.on('hidden.bs.modal', '#gradingsheet-components', function (e) {
             var $self = $(this);
             $self.find('.variables').text('');
-            window.location.reload();
+            if ($edit == true) {
+                $edit = false;
+                window.location.reload();
+            }
         });
 
         this.$body.on('click', '.minus-activity', function (e) {
@@ -836,6 +849,7 @@
                 window.onfocus = null;   
                 $.gradingsheet.required_fields();
             } else {
+                $edit = true;
                 $self.prop('disabled', true).html('wait.....').addClass('m-btn--custom m-loader m-loader--light m-loader--right');
                 console.log($url);
                 $.ajax({
@@ -854,9 +868,7 @@
                                     type: data.type,
                                     confirmButtonClass: "btn " + data.class + " btn-focus m-btn m-btn--pill m-btn--air m-btn--custom",
                                     onClose: () => {
-                                        if ($form.find("input[name='method']").val() == 'add') {
-                                            window.location.replace(base_url + 'components/schools/departments');
-                                        }
+                                        $modal.modal('hide');
                                     }
                                 });
                             }, 500 + 300 * (Math.random() * 5));
