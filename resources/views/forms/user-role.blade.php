@@ -121,7 +121,6 @@
                                                             {{ $module['name'] }}
                                                         <span></span>
                                                     </label>
-
                                                     @foreach ($header['sub_modules'][$module['id']] as $sub_module)
                                                         <div class="m-left-2 m-checkbox-list">
                                                             <label class="m-checkbox">
