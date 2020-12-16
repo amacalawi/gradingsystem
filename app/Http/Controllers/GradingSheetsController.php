@@ -785,28 +785,30 @@ class GradingSheetsController extends Controller
                 $students[] = $activities[1];
             }
 
-            $row = GradingSheetActivity::where([
-                'gradingsheet_id' => $id,
-                'activity_id' => $activities[0],
-                'student_id' => $activities[1]
-            ])->get();
-
-            if ($row->count() > 0) {
-                $gradingActivtity = GradingSheetActivity::where('id', '=', $row->first()->id)
-                ->update([
-                    'score' => ($request->get('score') !== NULL) ? $request->get('score') : NULL,
-                    'updated_at' => $timestamp,
-                    'updated_by' => Auth::user()->id
-                ]);
-            } else {
-                $gradingActivtity = GradingSheetActivity::create([
+            if ($request->get('score') !== 'tc') {
+                $row = GradingSheetActivity::where([
                     'gradingsheet_id' => $id,
                     'activity_id' => $activities[0],
-                    'student_id' => $activities[1],
-                    'score' => ($request->get('score') !== NULL) ? $request->get('score') : NULL,
-                    'created_at' => $timestamp,
-                    'created_by' => Auth::user()->id
-                ]);
+                    'student_id' => $activities[1]
+                ])->get();
+
+                if ($row->count() > 0) {
+                    $gradingActivtity = GradingSheetActivity::where('id', '=', $row->first()->id)
+                    ->update([
+                        'score' => ($request->get('score') !== NULL) ? $request->get('score') : NULL,
+                        'updated_at' => $timestamp,
+                        'updated_by' => Auth::user()->id
+                    ]);
+                } else {
+                    $gradingActivtity = GradingSheetActivity::create([
+                        'gradingsheet_id' => $id,
+                        'activity_id' => $activities[0],
+                        'student_id' => $activities[1],
+                        'score' => ($request->get('score') !== NULL) ? $request->get('score') : NULL,
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+                }
             }
         }
         else
@@ -817,28 +819,30 @@ class GradingSheetsController extends Controller
                 $students[] = $components[1];
             }
 
-            $row = GradingSheetHomeroom::where([
-                'gradingsheet_id' => $id,
-                'component_id' => $components[0],
-                'student_id' => $components[1]
-            ])->get();
-
-            if ($row->count() > 0) {
-                $gradingActivtity = GradingSheetHomeroom::where('id', '=', $row->first()->id)
-                ->update([
-                    'score' => ($request->get('score') !== NULL) ? $request->get('score') : NULL,
-                    'updated_at' => $timestamp,
-                    'updated_by' => Auth::user()->id
-                ]);
-            } else {
-                $gradingActivtity = GradingSheetHomeroom::create([
+            if ($request->get('score') !== 'tc') {
+                $row = GradingSheetHomeroom::where([
                     'gradingsheet_id' => $id,
                     'component_id' => $components[0],
-                    'student_id' => $components[1],
-                    'score' => ($request->get('score') !== NULL) ? $request->get('score') : NULL,
-                    'created_at' => $timestamp,
-                    'created_by' => Auth::user()->id
-                ]);
+                    'student_id' => $components[1]
+                ])->get();
+
+                if ($row->count() > 0) {
+                    $gradingActivtity = GradingSheetHomeroom::where('id', '=', $row->first()->id)
+                    ->update([
+                        'score' => ($request->get('score') !== NULL) ? $request->get('score') : NULL,
+                        'updated_at' => $timestamp,
+                        'updated_by' => Auth::user()->id
+                    ]);
+                } else {
+                    $gradingActivtity = GradingSheetHomeroom::create([
+                        'gradingsheet_id' => $id,
+                        'component_id' => $components[0],
+                        'student_id' => $components[1],
+                        'score' => ($request->get('score') !== NULL) ? $request->get('score') : NULL,
+                        'created_at' => $timestamp,
+                        'created_by' => Auth::user()->id
+                    ]);
+                }
             }
         }
 
@@ -881,7 +885,6 @@ class GradingSheetsController extends Controller
         }
 
         $data = array(
-            'data' => $row,
             'title' => 'Well done!',
             'text' => 'The grading sheet has been successfully updated.',
             'type' => 'success',

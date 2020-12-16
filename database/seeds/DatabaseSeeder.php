@@ -93,6 +93,18 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Parent',
                 'description' => 'Parent Role',
                 'created_by' => 1
+            ],
+            [
+                'code' => 'registrar',
+                'name' => 'Registrar',
+                'description' => 'Registrar Role',
+                'created_by' => 1
+            ],
+            [
+                'code' => 'accounting',
+                'name' => 'Accounting',
+                'description' => 'Accounting Role',
+                'created_by' => 1
             ]
         ];
         foreach ($roles as $role) {
@@ -672,7 +684,7 @@ class DatabaseSeeder extends Seeder
                 'created_by' => 1
             ],
             [   
-                'module_id' => '15',
+                'module_id' => '16',
                 'code' => 'print-id',
                 'name' => 'Print',
                 'description' => 'Print',
@@ -682,7 +694,7 @@ class DatabaseSeeder extends Seeder
                 'created_by' => 1
             ],
             [   
-                'module_id' => '15',
+                'module_id' => '16',
                 'code' => 'settings-id',
                 'name' => 'Settings',
                 'description' => 'Settings',
@@ -692,7 +704,7 @@ class DatabaseSeeder extends Seeder
                 'created_by' => 1
             ],
             [   
-                'module_id' => '13',
+                'module_id' => '14',
                 'code' => 'soa-template-01',
                 'name' => 'SOA Template 01',
                 'description' => 'SOA Template 01 Description',
@@ -702,7 +714,7 @@ class DatabaseSeeder extends Seeder
                 'created_by' => 1
             ],
             [   
-                'module_id' => '13',
+                'module_id' => '14',
                 'code' => 'gradingsheet-template-01',
                 'name' => 'Gradingsheet Template 01',
                 'description' => 'Gradingsheet Template 01 Description',
@@ -712,7 +724,7 @@ class DatabaseSeeder extends Seeder
                 'created_by' => 1
             ],
             [   
-                'module_id' => '14',
+                'module_id' => '15',
                 'code' => 'soa',
                 'name' => 'SOA',
                 'description' => 'SOA Description',
@@ -722,7 +734,7 @@ class DatabaseSeeder extends Seeder
                 'created_by' => 1
             ],
             [   
-                'module_id' => '14',
+                'module_id' => '15',
                 'code' => 'gradingsheet',
                 'name' => 'Gradingsheet',
                 'description' => 'Gradingsheet Description',
@@ -732,7 +744,7 @@ class DatabaseSeeder extends Seeder
                 'created_by' => 1
             ],
             [   
-                'module_id' => '14',
+                'module_id' => '15',
                 'code' => 'payslip',
                 'name' => 'Payslip',
                 'description' => 'Payslip Description',
@@ -794,6 +806,86 @@ class DatabaseSeeder extends Seeder
             ], 
             [   
                 'role_id' => '1',
+                'header_id' => '4',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '2',
+                'header_id' => '1',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '2',
+                'header_id' => '2',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '2',
+                'header_id' => '3',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '2',
+                'header_id' => '4',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '3',
+                'header_id' => '1',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '3',
+                'header_id' => '2',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '3',
+                'header_id' => '4',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '4',
+                'header_id' => '1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '5',
+                'header_id' => '1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'header_id' => '1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'header_id' => '2',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'header_id' => '3',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'header_id' => '4',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '7',
+                'header_id' => '1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '7',
+                'header_id' => '2',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '7',
                 'header_id' => '4',
                 'created_by' => 1
             ]
@@ -882,6 +974,221 @@ class DatabaseSeeder extends Seeder
             [   
                 'role_id' => '1',
                 'module_id' => '16',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '2',
+                'module_id' => '1',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '2',
+                'module_id' => '2',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '2',
+                'module_id' => '3',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '2',
+                'module_id' => '4',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '2',
+                'module_id' => '5',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '2',
+                'module_id' => '6',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '2',
+                'module_id' => '7',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '2',
+                'module_id' => '8',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '2',
+                'module_id' => '9',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '2',
+                'module_id' => '10',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '2',
+                'module_id' => '11',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '2',
+                'module_id' => '12',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '2',
+                'module_id' => '13',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '2',
+                'module_id' => '14',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '2',
+                'module_id' => '15',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '2',
+                'module_id' => '16',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '3',
+                'module_id' => '3',
+                'created_by' => 1
+            ], 
+            [   
+                'role_id' => '3',
+                'module_id' => '4',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '3',
+                'module_id' => '13',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '3',
+                'module_id' => '14',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '3',
+                'module_id' => '15',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '4',
+                'module_id' => '3',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '4',
+                'module_id' => '4',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '5',
+                'module_id' => '3',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '5',
+                'module_id' => '4',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'module_id' => '1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'module_id' => '2',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'module_id' => '3',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'module_id' => '4',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'module_id' => '5',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'module_id' => '10',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'module_id' => '11',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'module_id' => '13',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'module_id' => '14',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'module_id' => '15',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'module_id' => '16',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '7',
+                'module_id' => '2',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '7',
+                'module_id' => '4',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '7',
+                'module_id' => '10',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '7',
+                'module_id' => '11',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '7',
+                'module_id' => '13',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '7',
+                'module_id' => '14',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '7',
+                'module_id' => '15',
                 'created_by' => 1
             ]
         ];
@@ -1164,6 +1471,390 @@ class DatabaseSeeder extends Seeder
             [   
                 'role_id' => '1',
                 'sub_module_id' => '46',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '3',
+                'sub_module_id' => '5',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '3',
+                'sub_module_id' => '6',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '3',
+                'sub_module_id' => '7',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '3',
+                'sub_module_id' => '8',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '3',
+                'sub_module_id' => '10',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '3',
+                'sub_module_id' => '11',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '3',
+                'sub_module_id' => '12',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '3',
+                'sub_module_id' => '32',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '3',
+                'sub_module_id' => '33',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '3',
+                'sub_module_id' => '39',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '3',
+                'sub_module_id' => '40',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '3',
+                'sub_module_id' => '41',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '3',
+                'sub_module_id' => '42',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '3',
+                'sub_module_id' => '43',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '4',
+                'sub_module_id' => '9',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '4',
+                'sub_module_id' => '12',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '4',
+                'sub_module_id' => '45',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '5',
+                'sub_module_id' => '9',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '5',
+                'sub_module_id' => '12',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '5',
+                'sub_module_id' => '45',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '1',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '2',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '3',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '4',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '7',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '8',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '10',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '12',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '13',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '14',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '15',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '16',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '26',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '27',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '28',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '29',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '32',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '33',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '36',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '37',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '38',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '39',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '40',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '41',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '42',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '43',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '44',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '45',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '6',
+                'sub_module_id' => '46',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '7',
+                'sub_module_id' => '4',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '7',
+                'sub_module_id' => '10',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '7',
+                'sub_module_id' => '12',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '7',
+                'sub_module_id' => '26',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '7',
+                'sub_module_id' => '27',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '7',
+                'sub_module_id' => '28',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '7',
+                'sub_module_id' => '29',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '7',
+                'sub_module_id' => '32',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '7',
+                'sub_module_id' => '33',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '7',
+                'sub_module_id' => '39',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '7',
+                'sub_module_id' => '40',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '7',
+                'sub_module_id' => '41',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '7',
+                'sub_module_id' => '42',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '7',
+                'sub_module_id' => '43',
+                'permissions' => '1,1,1,1',
+                'created_by' => 1
+            ],
+            [   
+                'role_id' => '7',
+                'sub_module_id' => '44',
                 'permissions' => '1,1,1,1',
                 'created_by' => 1
             ]

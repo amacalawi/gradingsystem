@@ -455,28 +455,15 @@
             $.gradingsheet.compute(self.closest('tr'), self.closest('td').attr('group'), '', '');
         });
 
-        // this.$body.on('blur', '.activity-cell', function (e){
-        //     e.preventDefault();
-        //     var self = $(this);
-        //     var maxValue = $(this).attr('maxvalue');
-
-        //     if (maxValue != '') { 
-        //         if (parseFloat(self.val()) > parseFloat(maxValue)) {
-        //             swal({
-        //                 title: "Oops...",
-        //                 text: "the input value must be less than or equal to the HPS",
-        //                 type: "warning",
-        //                 showCancelButton: false,
-        //                 closeOnConfirm: true,
-        //                 confirmButtonClass: "btn btn-warning btn-focus m-btn m-btn--pill m-btn--air m-btn--custom"
-        //             });
-        //             self.val('');
-        //         }
-        //     } else {
-        //         self.val('');
-        //     }
-        //     $.gradingsheet.compute(self.closest('tr'), self.closest('td').attr('group'));
-        // });
+        this.$body.on('keypress', 'input[name="tc_score[]"]', function (e){
+            var keycode = e.keyCode || e.which;
+            var parents = $(this).closest('tr');
+            var column = $(this).parents('td').attr('column');
+            var group = $(this).parents('td').attr('group');
+            if(keycode == '13') {
+                parents.next().find('td[column="'+ column +'"][group="'+ group +'"] input[name="tc_score[]"]').focus();
+            }
+        });
 
         this.$body.on('keyup', 'input[name="tc_score[]"]', function (e){
             e.preventDefault();
@@ -496,6 +483,26 @@
                 self.val('');
             }
             $.gradingsheet.compute(self.closest('tr'), '');
+        });
+        this.$body.on('blur', 'input[name="tc_score[]"]', function (e){
+            e.preventDefault();
+            var rows = $(this).closest('tr');
+            var self = $(this);
+            var rowActivity = rows.find('input[name="activity[]"]').val();
+            var maxValue = $(this).attr('maxvalue');
+
+            if (parseFloat(self.val()) > parseFloat(maxValue)) {
+                swal({
+                    title: "Oops...",
+                    text: "the input value must be less than or equal to the HPS",
+                    type: "warning",
+                    showCancelButton: false,
+                    closeOnConfirm: true,
+                    confirmButtonClass: "btn btn-warning btn-focus m-btn m-btn--pill m-btn--air m-btn--custom"
+                });
+                self.val('');
+            }
+            $.gradingsheet.compute(self.closest('tr'), '', 'tc', rowActivity);
         });
 
         this.$body.on('change', '#education_type_id', function (e){

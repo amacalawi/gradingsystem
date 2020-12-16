@@ -233,7 +233,7 @@
                                                             <div class="m-menu__submenu " style="">
                                                                 <span class="m-menu__arrow"></span>
                                                                 <ul class="m-menu__subnav">
-                                                                    <li class="m-menu__item" slug="new" aria-haspopup="true" data-redirect="true">
+                                                                    <!-- <li class="m-menu__item" slug="new" aria-haspopup="true" data-redirect="true">
                                                                         <a href="{{ url($menu['slug'].'/'.$module['slug'].'/'.$submodule['slug'].'/template') }}" class="m-menu__link ">
                                                                             <i class="m-menu__link-icon flaticon-list-1"></i>
                                                                             <span class="m-menu__link-title">
@@ -246,7 +246,7 @@
                                                                                 </span>
                                                                             </span>
                                                                         </a>
-                                                                    </li>
+                                                                    </li> -->
                                                                     <li class="m-menu__item" slug="new" aria-haspopup="true" data-redirect="true">
                                                                         <a href="{{ url($menu['slug'].'/'.$module['slug'].'/'.$submodule['slug'].'/export') }}" class="m-menu__link ">
                                                                             <i class="m-menu__link-icon flaticon-interface-4"></i>
